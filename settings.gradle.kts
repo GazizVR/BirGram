@@ -20,5 +20,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "BirGram-android"
+rootProject.name = "BirGram"
 include(":app")
+ 

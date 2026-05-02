@@ -1,24 +1,25 @@
 [versions]
-agp = "8.13.2"
-coilNetworkOkhttp = "3.3.0"
-coilCompose = "3.3.0"
-datastorePreferences = "1.2.0"
-kotlin = "2.3.0"
-coreKtx = "1.17.0"
+agp = "9.0.0-alpha06"
+coilNetworkOkhttp = "3.4.0"
+composeShimmer = "1.4.0"
+coreKtx = "1.18.0"
+datastorePreferences = "1.2.1"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.10.0"
-activityCompose = "1.12.2"
-composeBom = "2025.12.01"
-tdlibAndroid = "1.8.58"
-navigationCompose = "2.9.6"
+activityCompose = "1.13.0"
+kotlin = "2.3.21"
+composeBom = "2026.04.01"
+tdlibAndroid = "1.8.61"
+navigationCompose = "2.9.8"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
-coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilNetworkOkhttp" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilNetworkOkhttp" }
+compose-shimmer = { module = "com.valentinilk.shimmer:compose-shimmer", version.ref = "composeShimmer" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -37,6 +38,5 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 

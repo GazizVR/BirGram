@@ -1,21 +1,19 @@
-
-import java.io.FileInputStream
-import java.util.Properties
+import java.util.*
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
 
 val properties = Properties().apply {
-    load(FileInputStream(rootProject.file("local.properties")))
+   load(rootProject.file("local.properties").inputStream())
 }
+
 val apiId = properties.getProperty("api_id") ?: ""
 val apiHash = properties.getProperty("api_hash") ?: ""
 
 android {
-    namespace = "org.lolli.birgram"
+    namespace = "org.gaziz.birgram"
     compileSdk {
         version = release(36)
     }
@@ -26,9 +24,9 @@ android {
     }
 
     defaultConfig {
-        buildConfigField("String","API_ID",apiId)
-        buildConfigField("String","API_HASH",apiHash)
-        applicationId = "org.lolli.birgram"
+        buildConfigField("String", "API_ID", apiId)
+        buildConfigField("String", "API_HASH", apiHash)
+        applicationId = "org.gaziz.birgram"
         minSdk = 26
         targetSdk = 36
         versionCode = 1
@@ -40,15 +38,12 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 }
 
@@ -70,11 +65,13 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
+    //Tdlib
     implementation(libs.tdlib.android)
-
+    //DataStore
+    implementation(libs.androidx.datastore.preferences)
+    //Coil
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
-
-    implementation(libs.androidx.datastore.preferences)
-    implementation("com.valentinilk.shimmer:compose-shimmer:1.3.3")
+    //Ui utils
+    implementation(libs.compose.shimmer)
 }
