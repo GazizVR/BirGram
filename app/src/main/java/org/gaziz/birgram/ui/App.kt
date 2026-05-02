@@ -1,4 +1,4 @@
-package org.gaziz.birgram
+package org.gaziz.birgram.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,10 +22,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.data.AuthData
+import org.gaziz.birgram.R
+import org.gaziz.birgram.domain.model.auth.AuthData
 import org.gaziz.birgram.presentation.TGViewModel
-import org.gaziz.birgram.presentation.components.AuthTopBar
-import org.gaziz.birgram.presentation.components.ChatsTopBar
+import org.gaziz.birgram.presentation.auth.components.AuthTopBar
+import org.gaziz.birgram.presentation.chatList.components.ChatListTopBar
+import org.gaziz.birgram.ui.navigation.Navigation
+import org.gaziz.birgram.ui.navigation.Route
 
 @Composable
 fun BackArrow(
@@ -140,7 +143,7 @@ fun App(tgViewModel: TGViewModel) {
                         AuthTopBar(navController, tgViewModel)
                     }
                     Route.Chats.route -> {
-                        ChatsTopBar(tgViewModel)
+                        ChatListTopBar(tgViewModel)
                     }
                     else -> {}
                 }
@@ -191,7 +194,7 @@ fun App(tgViewModel: TGViewModel) {
             },
             modifier = Modifier.fillMaxSize()
         ) { paddingValues ->
-            Navigation(navController, tgViewModel,paddingValues)
+            Navigation(navController, tgViewModel, paddingValues)
         }
         if(loginState.javaClass == TdApi.AuthorizationStateWaitEmailCode::class.java){
             Dialog(

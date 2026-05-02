@@ -1,53 +1,21 @@
-package org.gaziz.birgram.presentation
+package org.gaziz.birgram.presentation.auth.screen
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.*
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkHorizontally
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.material3.VerticalDivider
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -64,29 +32,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
-import kotlinx.coroutines.delay
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.R
-import org.gaziz.birgram.Route
-import org.gaziz.birgram.data.AuthData
-import org.gaziz.birgram.presentation.components.auth.BaseAuth
-import org.gaziz.birgram.presentation.components.auth.BaseTextField
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
+import org.gaziz.birgram.domain.model.auth.AuthData
+import org.gaziz.birgram.presentation.auth.components.AuthTextField
+import org.gaziz.birgram.presentation.auth.components.BaseAuth
+import org.gaziz.birgram.presentation.auth.viewModel.AuthViewModel
+import org.gaziz.birgram.ui.navigation.Route
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AuthScreen(
-    viewModel: TGViewModel,
+    viewModel: AuthViewModel,
     navController: NavController
 ){
     val loginState by viewModel.loginState.collectAsState()
     val cnt = stringArrayResource(R.array.login_cnt)
-    val apiState by viewModel.apiState.collectAsState()
+    val requestState by viewModel.requestState.collectAsState()
     var phoneNumber by rememberSaveable { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
     LaunchedEffect(Unit){
-        viewModel.nextLoginStep(TdApi.AuthorizationStateWaitTdlibParameters(), AuthData.TDLibParameters)
+        viewModel.nextLoginStep(TdApi.AuthorizationStateWaitTdlibParameters(), AuthData.Parameters)
     }
     LaunchedEffect(loginState){
         viewModel.addAuthToHistory()
@@ -136,10 +102,10 @@ fun AuthScreen(
                                     labelText = cnt[4],
                                     onNext = {
                                         focusManager.clearFocus()
-                                        viewModel.isPhoneNumber = Pair(true,phoneNumber)
+                                        viewModel.isPhoneNumber = Pair(true, phoneNumber)
                                     },
                                     isVisible = phoneNumber.length > 9,
-                                    apiState = apiState,
+                                    apiState = requestState,
                                     leftContent = {
                                         Text(
                                             "+",
@@ -179,13 +145,14 @@ fun AuthScreen(
                                 Button(
                                     onClick = { viewModel.isNumber = true },
                                     modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
-                                    enabled = apiState is ApiState.Init || apiState is ApiState.Error
-                                ) {
-                                    Text(
-                                        text = cnt[1],
-                                        style = MaterialTheme.typography.bodyLarge
-                                    )
-                                }
+                                    enabled = requestState is RequestState.Init || requestState is RequestState.Error,
+                                    content = {
+                                        Text(
+                                            text = cnt[1],
+                                            style = MaterialTheme.typography.bodyLarge
+                                        )
+                                    }
+                                )
                             }
                         }
                     }
@@ -251,15 +218,17 @@ fun AuthScreen(
                             )
                         },
                         isVisible = code.length > 3,
-                        apiState = apiState,
-                        callBack = if(counter < 1 && authState.codeInfo.nextType != null){
+                        apiState = requestState,
+                        callBack = if (counter < 1 && authState.codeInfo.nextType != null) {
                             {
                                 code = ""
                                 focusManager.clearFocus()
                                 viewModel.resendCode()
                             }
                         } else null,
-                        callColor = if (counter < 1 && authState.codeInfo.nextType != null) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground.copy(0.5f),
+                        callColor = if (counter < 1 && authState.codeInfo.nextType != null) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground.copy(
+                            0.5f
+                        ),
                         callText = nextString
                     )
                 }
@@ -272,7 +241,7 @@ fun AuthScreen(
                         customTextField = {
                             OutlinedTextField(
                                 value = textFieldState,
-                                onValueChange = {textFieldState = it},
+                                onValueChange = { textFieldState = it },
                                 singleLine = true,
                                 label = {
                                     Text(
@@ -280,8 +249,8 @@ fun AuthScreen(
                                         style = MaterialTheme.typography.labelMedium
                                     )
                                 },
-                                enabled = apiState is ApiState.Init || apiState is ApiState.Error,
-                                isError = apiState is ApiState.Error,
+                                enabled = requestState is ApiState.Init || requestState is ApiState.Error,
+                                isError = requestState is ApiState.Error,
                                 shape = RoundedCornerShape(12.dp),
                                 modifier = Modifier.padding(horizontal = 8.dp),
                                 textStyle = MaterialTheme.typography.labelMedium,
@@ -309,7 +278,7 @@ fun AuthScreen(
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         AnimatedVisibility(
-                                            visible = textFieldState.length > 5 && apiState !is ApiState.Loading,
+                                            visible = textFieldState.length > 5 && requestState !is ApiState.Loading,
                                             enter = slideInVertically(tween(350, 50)) { it } +
                                                     expandVertically(
                                                         tween(250, 50),
@@ -322,11 +291,11 @@ fun AuthScreen(
                                             VerticalDivider(
                                                 thickness = 2.dp,
                                                 modifier = Modifier.height(56.dp),
-                                                color = if (apiState is ApiState.Error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                                                color = if (requestState is ApiState.Error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
                                             )
                                         }
                                         AnimatedVisibility(
-                                            visible = textFieldState.length > 5 && apiState !is ApiState.Loading,
+                                            visible = textFieldState.length > 5 && requestState !is ApiState.Loading,
                                             enter = slideInHorizontally(
                                                 spring(
                                                     dampingRatio = Spring.DampingRatioMediumBouncy,
@@ -350,7 +319,7 @@ fun AuthScreen(
                                                     LinearOutSlowInEasing
                                                 ), targetWidth = { it })
                                         ) {
-                                            if (apiState is ApiState.Loading) {
+                                            if (requestState is ApiState.Loading) {
                                                 CircularProgressIndicator(
                                                     modifier = Modifier.size(24.dp),
                                                     color = MaterialTheme.colorScheme.primary,
@@ -366,13 +335,13 @@ fun AuthScreen(
                                                     },
                                                 ) {
                                                     Icon(
-                                                        imageVector = if (apiState is ApiState.Error) ImageVector.vectorResource(
+                                                        imageVector = if (requestState is ApiState.Error) ImageVector.vectorResource(
                                                             R.drawable.replay_24px
                                                         ) else ImageVector.vectorResource(R.drawable.arrow_back),
                                                         contentDescription = "",
                                                         modifier = Modifier.size(26.dp)
                                                             .graphicsLayer { scaleX = -1f },
-                                                        tint = if (apiState is ApiState.Error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.tertiary
+                                                        tint = if (requestState is ApiState.Error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.tertiary
                                                     )
                                                 }
                                             }
@@ -384,14 +353,14 @@ fun AuthScreen(
                         callBack = {
                             textFieldState = ""
                             focusManager.clearFocus()
-                            if((loginState as TdApi.AuthorizationStateWaitPassword).hasRecoveryEmailAddress) {
+                            if ((loginState as TdApi.AuthorizationStateWaitPassword).hasRecoveryEmailAddress) {
                                 viewModel.passwordRecovery(onOk = { navController.navigate(Route.PasswordRecovery.route) })
                             } else {
                                 viewModel.isAccountDelete = true
                             }
                         },
                         callText = cnt[16],
-                        apiState = apiState
+                        apiState = requestState
                     )
                 }
                 is TdApi.AuthorizationStateWaitEmailAddress -> {
@@ -402,7 +371,7 @@ fun AuthScreen(
                         description = cnt[27],
                         customTextField = null,
                         textFieldValue = email,
-                        onChange = {email = it},
+                        onChange = { email = it },
                         labelText = cnt[28],
                         onNext = {
                             focusManager.clearFocus()
@@ -412,7 +381,7 @@ fun AuthScreen(
                             )
                         },
                         isVisible = email.isNotBlank(),
-                        apiState = apiState
+                        apiState = requestState
                     )
                 }
                 is TdApi.AuthorizationStateWaitEmailCode -> {
@@ -422,7 +391,7 @@ fun AuthScreen(
                         title = cnt[29],
                         description = "${cnt[30]} ${authState.codeInfo?.emailAddressPattern}",
                         textFieldValue = code,
-                        onChange = {code = it},
+                        onChange = { code = it },
                         labelText = cnt[31],
                         onNext = {
                             focusManager.clearFocus()
@@ -433,16 +402,20 @@ fun AuthScreen(
                         },
                         isVisible = code.length >= (authState.codeInfo?.length ?: 3),
                         callBack = {
-                            when(authState.emailAddressResetState) {
-                                is TdApi.EmailAddressResetStatePending -> viewModel.isPendingRecovery = authState.emailAddressResetState as TdApi.EmailAddressResetStatePending
-                                is TdApi.EmailAddressResetStateAvailable -> viewModel.isAvailableRecovery = authState.emailAddressResetState as TdApi.EmailAddressResetStateAvailable
+                            when (authState.emailAddressResetState) {
+                                is TdApi.EmailAddressResetStatePending -> viewModel.isPendingRecovery =
+                                    authState.emailAddressResetState as TdApi.EmailAddressResetStatePending
+
+                                is TdApi.EmailAddressResetStateAvailable -> viewModel.isAvailableRecovery =
+                                    authState.emailAddressResetState as TdApi.EmailAddressResetStateAvailable
+
                                 else -> viewModel.isAccountDelete = true
                             }
                         },
-                        callText = if(authState.emailAddressResetState is TdApi.EmailAddressResetStatePending) cnt[41] else cnt[32],
-                        apiState = apiState,
+                        callText = if (authState.emailAddressResetState is TdApi.EmailAddressResetStatePending) cnt[41] else cnt[32],
+                        apiState = requestState,
                         custom = {
-                            if(authState.emailAddressResetState is TdApi.EmailAddressResetStatePending){
+                            if (authState.emailAddressResetState is TdApi.EmailAddressResetStatePending) {
                                 Spacer(Modifier.height(8.dp))
                                 Text(
                                     text = "${cnt[37]} ${(authState.emailAddressResetState as TdApi.EmailAddressResetStatePending).resetIn} ${cnt[38]}",
@@ -488,31 +461,31 @@ fun AuthScreen(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            BaseTextField(
+                            AuthTextField(
                                 value = viewModel.firstName,
-                                onChange = {viewModel.firstName = it},
+                                onChange = { viewModel.firstName = it },
                                 label = cnt[44],
-                                apiState = apiState
+                                apiState = requestState
                             )
                             Spacer(Modifier.width(12.dp))
-                            BaseTextField(
+                            AuthTextField(
                                 value = viewModel.lastName,
-                                onChange = {viewModel.lastName = it},
+                                onChange = { viewModel.lastName = it },
                                 label = cnt[45],
-                                apiState = apiState
+                                apiState = requestState
                             )
                         }
-                        if(apiState is ApiState.Error){
+                        if(requestState is ApiState.Error){
                             Spacer(Modifier.height(8.dp))
                         }
                         AnimatedVisibility(
-                            visible = apiState is ApiState.Error,
+                            visible = requestState is ApiState.Error,
                             enter = expandVertically(spring(Spring.DampingRatioHighBouncy,Spring.StiffnessMediumLow)),
                             exit = shrinkHorizontally()
                         ) {
-                            if(apiState is ApiState.Error){
+                            if(requestState is ApiState.Error){
                                 Text(
-                                    text = (apiState as ApiState.Error).message,
+                                    text = (requestState as ApiState.Error).message,
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.error,
                                     modifier = Modifier.fillMaxWidth(),

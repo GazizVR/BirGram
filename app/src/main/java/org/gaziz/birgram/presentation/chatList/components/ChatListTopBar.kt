@@ -1,106 +1,27 @@
-package org.gaziz.birgram.presentation.components
+package org.gaziz.birgram.presentation.chatList.components
 
 import android.util.Log
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.BackArrow
 import org.gaziz.birgram.R
-import org.gaziz.birgram.Route
 import org.gaziz.birgram.presentation.Direction
 import org.gaziz.birgram.presentation.TGViewModel
 
 @Composable
-fun FolderSection(
-   isSelected: Boolean = false,
-   onSelected: () -> Unit,
-   title: String,
-   icon: ImageVector,
-   unreadCount: Int
-){
-    val contentHeight = 40.dp
-    val color by animateColorAsState(if(isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground.copy(0.5f))
-    var width by rememberSaveable { mutableIntStateOf(0) }
-    Box(
-        modifier = Modifier.clickable{ onSelected() }
-    ){
-        Column(
-            modifier = Modifier.padding(8.dp).fillMaxHeight(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.onGloballyPositioned{width = it.size.width}
-            ) {
-                Icon(
-                    imageVector = icon,
-                    tint = color,
-                    contentDescription = title,
-                    modifier = Modifier.size(24.dp),
-                )
-                Spacer(Modifier.width(6.dp))
-                if(isSelected){
-                    Text(
-                        text = title,
-                        color = color,
-                        style = MaterialTheme.typography.labelSmall
-                    )
-                }
-                if(unreadCount > 0) {
-                    Spacer(Modifier.width(2.dp))
-                    Box(
-                        modifier =
-                            Modifier
-                                .clip(CircleShape)
-                                .background(color)
-                                .size((contentHeight / 2) + 3.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "$unreadCount",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            style = MaterialTheme.typography.labelSmall,
-                            fontSize = 8.sp,
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-                }
-            }
-            if(isSelected){
-                Spacer(Modifier.weight(1f))
-                HorizontalDivider(
-                    thickness = 3.dp,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.width((width/3).dp)
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun ChatsTopBar(
+fun ChatListTopBar(
     viewModel: TGViewModel
 ){
     val folders by viewModel.folders.collectAsState()
@@ -164,7 +85,7 @@ fun ChatsTopBar(
                             else -> ImageVector.vectorResource(R.drawable.folder)
                         }
 
-                        FolderSection(
+                        ChatFolderSection(
                             isSelected = selected == index,
                             onSelected = {
                                 if(selected != index){
@@ -209,49 +130,4 @@ fun ChatsTopBar(
             }
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AuthTopBar(
-    navController: NavController,
-    tgViewModel: TGViewModel
-){
-    val currentBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = currentBackStackEntry?.destination?.route
-    val loginState by tgViewModel.loginState.collectAsState()
-    val authHistory by tgViewModel.authHistory.collectAsState()
-    val isDark by tgViewModel.isDarkTheme.collectAsState()
-    TopAppBar(
-        title = {},
-        navigationIcon = {
-            if(currentRoute == Route.PasswordRecovery.route){
-                BackArrow { navController.navigate(Route.Auth.route) }
-            }
-            if(authHistory.size > 1 && currentRoute != Route.PasswordRecovery.route){
-                if (
-                    loginState.javaClass != TdApi.AuthorizationStateWaitPhoneNumber::class.java &&
-                    loginState.javaClass != TdApi.AuthorizationStateWaitRegistration::class.java &&
-                    authHistory[authHistory.lastIndex-1] !is TdApi.AuthorizationStateWaitTdlibParameters
-                ) {
-                    BackArrow { tgViewModel.previousAuthHistory() }
-                }
-            }
-        },
-        actions = {
-            if (loginState is TdApi.AuthorizationStateWaitPhoneNumber && !tgViewModel.isNumber) {
-                IconButton(
-                    onClick = {tgViewModel.switchIsDark()}
-                ) {
-                    Icon(
-                        imageVector = if(isDark) ImageVector.vectorResource(R.drawable.light_mode) else ImageVector.vectorResource(R.drawable.dark_mode),
-                        contentDescription = "",
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(32.dp)
-                    )
-                }
-            }
-        },
-        modifier = Modifier.fillMaxWidth()
-    )
 }

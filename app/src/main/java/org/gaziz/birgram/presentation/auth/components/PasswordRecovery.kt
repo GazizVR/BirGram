@@ -1,4 +1,4 @@
-package org.gaziz.birgram.presentation.components.auth
+package org.gaziz.birgram.presentation.auth.components
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween

@@ -1,19 +1,14 @@
-package org.gaziz.birgram.data
+package org.gaziz.birgram.data.local
 
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import org.gaziz.birgram.domain.repository.UserPreferencesRepository
 
-val Context.dataStore by preferencesDataStore("userPreferences")
-
-interface UserPreferencesRepo {
-    val isDark: Flow<Boolean>
-    suspend fun switchIsDark(isDark: Boolean)
-}
-
-class UserPreferencesRepository(context: Context): UserPreferencesRepo {
+class UserPreferences(context: Context): UserPreferencesRepository {
+    val Context.dataStore by preferencesDataStore("userPreferences")
     private companion object {
         val IS_DARK = booleanPreferencesKey("is_dark")
     }

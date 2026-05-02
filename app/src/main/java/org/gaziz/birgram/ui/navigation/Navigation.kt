@@ -1,4 +1,4 @@
-package org.gaziz.birgram
+package org.gaziz.birgram.ui.navigation
 
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.layout.PaddingValues
@@ -6,10 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import org.gaziz.birgram.presentation.AuthScreen
-import org.gaziz.birgram.presentation.ChatsScreen
 import org.gaziz.birgram.presentation.TGViewModel
-import org.gaziz.birgram.presentation.components.auth.PasswordRecovery
+import org.gaziz.birgram.presentation.auth.components.PasswordRecovery
+import org.gaziz.birgram.presentation.auth.screen.AuthScreen
+import org.gaziz.birgram.presentation.chatList.screen.ChatListScreen
 
 @Composable
 fun Navigation(
@@ -35,7 +35,7 @@ fun Navigation(
         composable(
             route = Route.Chats.route
         ) {
-            ChatsScreen(tgViewModel,padding)
+            ChatListScreen(tgViewModel,padding)
         }
     }
 }

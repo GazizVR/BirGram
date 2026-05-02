@@ -1,4 +1,4 @@
-package org.gaziz.birgram.presentation.components.auth
+package org.gaziz.birgram.presentation.auth.components
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -29,7 +29,7 @@ import org.gaziz.birgram.R
 import org.gaziz.birgram.presentation.ApiState
 
 @Composable
-fun BaseTextField(
+fun AuthTextField(
     value: String,
     onChange: (String) -> Unit,
     label: String,
@@ -49,6 +49,7 @@ fun BaseTextField(
         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
     )
 }
+
 @Composable
 fun BaseAuth(
     title: String,
