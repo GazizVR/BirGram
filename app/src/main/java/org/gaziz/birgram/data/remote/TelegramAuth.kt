@@ -25,7 +25,6 @@ class TelegramAuth @Inject constructor(private val manager: TelegramManager): Au
             systemLanguageCode = "${Locale.getDefault().language}-${Locale.getDefault().country}"
             deviceModel = Build.MODEL
             applicationVersion = "0.1"
-            useTestDc = true
         }
         manager.sendRequest(parameters, onError)
     }

@@ -20,6 +20,17 @@ class AuthViewModel @Inject constructor(
     init {
         eventLoopRepository.createEventLoop()
     }
+    val isRegistered = userPreferencesRepository.isRegistered.stateIn(
+        viewModelScope,
+        SharingStarted.Eagerly,
+        false
+    )
+
+    fun switchIsRegister(register: Boolean) {
+        viewModelScope.launch {
+            userPreferencesRepository.switchRegistered(register)
+        }
+    }
     val isDarkTheme = userPreferencesRepository.isDark.stateIn(
         viewModelScope,
         SharingStarted.Eagerly,
@@ -32,17 +43,28 @@ class AuthViewModel @Inject constructor(
         }
     }
     val authState = eventLoopRepository.authState
-    val isRegistered = userPreferencesRepository.isRegistered.stateIn(
-        viewModelScope,
-        SharingStarted.Eagerly,
-        false
-    )
     fun setParams(databasePath: String) {
-       authRepository.setParameters(
-           databasePath
-       ) {
+       authRepository.setParameters(databasePath) {
            eventLoopRepository.setErrorMessage(it)
        }
+    }
+
+    fun setPhoneNumber(number: String){
+       authRepository.setPhoneNumber(number) {
+           eventLoopRepository.setErrorMessage(it)
+       }
+    }
+
+    fun setCode(code: String){
+        authRepository.checkAuthCode(code){
+            eventLoopRepository.setErrorMessage(it)
+        }
+    }
+
+    fun setPassword(password: String){
+        authRepository.setPassword(password) {
+            eventLoopRepository.setErrorMessage(it)
+        }
     }
 
 }

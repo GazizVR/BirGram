@@ -24,23 +24,18 @@ class TelegramManager @Inject constructor(){
     fun sendRequest(
         query: TdApi.Function<*>,
         onError: (String) -> Unit,
-        onOk: () -> Unit = {},
     ) {
         if(client == null) {
             Log.e("TDLib", "Client is null")
-            onError("TDLib Client is null")
+            onError("Client is null")
             return
         }
         client?.send(
             query,
             {
-                when (it.javaClass) {
-                    TdApi.Error::class.java -> {
-                        val err = it as TdApi.Error
-                        Log.e("TDLib", "${err.code}, ${err.message}")
-                        onError(err.message)
-                    }
-                    TdApi.Ok::class.java -> onOk()
+                if(it is TdApi.Error) {
+                    Log.e("TDLib", "${it.code}, ${it.message}")
+                    onError(it.message)
                 }
             },
             {

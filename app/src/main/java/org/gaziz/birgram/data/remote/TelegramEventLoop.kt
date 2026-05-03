@@ -8,7 +8,6 @@ import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.domain.model.auth.AuthState
 import org.gaziz.birgram.domain.repository.EventLoopRepository
 import javax.inject.Inject
-import javax.inject.Singleton
 
 class TelegramEventLoop @Inject constructor(private val manager: TelegramManager): EventLoopRepository {
     private val _authState = MutableStateFlow<AuthState>(AuthState.WaitParams)
@@ -17,7 +16,7 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
     private val _errorMessage = MutableStateFlow<String?>(null)
     override val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
 
-    override fun setErrorMessage(errorMessage: String) {
+    override fun setErrorMessage(errorMessage: String?) {
         _errorMessage.value = errorMessage
     }
 
@@ -39,6 +38,10 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                             is TdApi.AuthorizationStateReady -> AuthState.Ready
                             else -> AuthState.Other(event.authorizationState.toString())
                         }
+                    }
+
+                    is TdApi.Ok -> {
+                        setErrorMessage(null)
                     }
                 }
             },

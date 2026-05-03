@@ -15,6 +15,7 @@ composeBom = "2026.04.01"
 tdlibAndroid = "1.8.61"
 navigationCompose = "2.9.8"
 ui = "1.11.0"
+foundationLayout = "1.11.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -40,6 +41,7 @@ androidx-compose-material3 = { group = "androidx.compose.material3", name = "mat
 tdlib-android = { module = "com.github.fazilus:tdlib-android", version.ref = "tdlibAndroid" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
+androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
