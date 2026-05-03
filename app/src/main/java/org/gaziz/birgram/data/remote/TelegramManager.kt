@@ -3,17 +3,35 @@ package org.gaziz.birgram.data.remote
 import android.util.Log
 import org.drinkless.tdlib.Client
 import org.drinkless.tdlib.TdApi
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object Helper {
+@Singleton
+class TelegramManager @Inject constructor(){
     var client: Client? = null
+
+    fun createClient(
+        updateHandler: (TdApi.Object) -> Unit,
+        exceptionHandler: (Throwable) -> Unit
+    ) {
+        client = Client.create(
+            { updateHandler(it) },
+            { exceptionHandler(it) },
+            null
+        )
+    }
 
     fun sendRequest(
         query: TdApi.Function<*>,
         onError: (String) -> Unit,
         onOk: () -> Unit = {},
-        client: Client
     ) {
-        client.send(
+        if(client == null) {
+            Log.e("TDLib", "Client is null")
+            onError("TDLib Client is null")
+            return
+        }
+        client?.send(
             query,
             {
                 when (it.javaClass) {

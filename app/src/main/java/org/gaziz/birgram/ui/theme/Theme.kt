@@ -1,4 +1,4 @@
-package org.gaziz.birgram.presentation.theme
+package org.gaziz.birgram.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

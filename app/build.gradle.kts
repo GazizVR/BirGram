@@ -1,12 +1,14 @@
-import java.util.*
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp") version "2.3.7"
+    id("com.google.dagger.hilt.android")
 }
 
 val properties = Properties().apply {
-   load(rootProject.file("local.properties").inputStream())
+    load(rootProject.file("local.properties").inputStream())
 }
 
 val apiId = properties.getProperty("api_id") ?: ""
@@ -57,7 +59,6 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.ui)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -73,6 +74,8 @@ dependencies {
     //Coil
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
-    //Ui utils
-    implementation(libs.compose.shimmer)
+    //Hilt
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    ksp(libs.hilt.android.compiler)
 }
