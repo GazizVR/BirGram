@@ -18,10 +18,6 @@ class AuthViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository
 ): ViewModel() {
 
-    init {
-        eventLoopRepository.createEventLoop()
-    }
-
     val isRegistered = userPreferencesRepository.isRegistered.stateIn(
         viewModelScope,
         SharingStarted.Eagerly,
