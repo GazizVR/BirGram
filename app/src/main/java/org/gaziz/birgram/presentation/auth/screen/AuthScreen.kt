@@ -21,21 +21,34 @@ fun AuthScreen() {
     val authState by viewModel.authState.collectAsState()
     val isRegister by viewModel.isRegistered.collectAsState()
     val isDarkTheme by viewModel.isDarkTheme.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
     when(authState) {
         AuthState.WaitParams -> {
             if(!isRegister){
                 WaitParams(
                     { viewModel.setParams(it) },
                     {viewModel.switchTheme(!isDarkTheme)},
-                    isDarkTheme
+                    isDarkTheme,
+                    errorMessage
                 )
             } else {
                 WaitDefault()
             }
         }
-        AuthState.WaitPhoneNumber -> WaitPhoneNumber({viewModel.setPhoneNumber(it)})
-        AuthState.WaitCode -> WaitCode({viewModel.setCode(it)})
-        AuthState.WaitPassword -> WaitPassword({viewModel.setPassword(it)})
+        AuthState.WaitPhoneNumber -> WaitPhoneNumber({viewModel.setPhoneNumber(it)},errorMessage)
+        is AuthState.WaitCode -> WaitCode(
+            {viewModel.setCode(it)},
+            errorMessage,
+            {viewModel.restartAuth()},
+            (authState as AuthState.WaitCode).codeInfo,
+            { viewModel.resendCode() }
+        )
+        is AuthState.WaitPassword -> WaitPassword(
+            {viewModel.setPassword(it)},
+            errorMessage,
+            {viewModel.restartAuth()},
+            (authState as AuthState.WaitPassword).passwordInfo
+        )
         is AuthState.Other -> {
             val state = (authState as AuthState.Other).state
             WaitOther(state)

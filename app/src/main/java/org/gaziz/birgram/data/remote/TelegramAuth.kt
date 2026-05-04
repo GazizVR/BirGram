@@ -11,7 +11,7 @@ class TelegramAuth @Inject constructor(private val manager: TelegramManager): Au
 
     override fun setParameters(
         databasePath: String,
-        onError: (String) -> Unit
+        onError: (String?) -> Unit
     ) {
         val parameters = TdApi.SetTdlibParameters().apply {
             apiId = BuildConfig.API_ID.toInt()
@@ -31,7 +31,7 @@ class TelegramAuth @Inject constructor(private val manager: TelegramManager): Au
 
     override fun setPhoneNumber(
         phoneNumber: String,
-        onError: (String) -> Unit
+        onError: (String?) -> Unit
     ) {
         val phoneNumber = TdApi.SetAuthenticationPhoneNumber().apply {
             this.phoneNumber = phoneNumber
@@ -40,9 +40,9 @@ class TelegramAuth @Inject constructor(private val manager: TelegramManager): Au
         manager.sendRequest(phoneNumber, onError)
     }
 
-    override fun checkAuthCode(
+    override fun checkCode(
         code: String,
-        onError: (String) -> Unit
+        onError: (String?) -> Unit
     ) {
         val code = TdApi.CheckAuthenticationCode().apply {
             this.code = code
@@ -52,7 +52,7 @@ class TelegramAuth @Inject constructor(private val manager: TelegramManager): Au
 
     override fun resendCode(
         isUser: Boolean,
-        onError: (String) -> Unit
+        onError: (String?) -> Unit
     ) {
         val parameters = TdApi.ResendAuthenticationCode().apply {
             reason = if (isUser) TdApi.ResendCodeReasonUserRequest()
@@ -61,9 +61,9 @@ class TelegramAuth @Inject constructor(private val manager: TelegramManager): Au
         manager.sendRequest(parameters, onError)
     }
 
-    override fun setPassword(
+    override fun checkPassword(
         password: String,
-        onError: (String) -> Unit
+        onError: (String?) -> Unit
     ) {
         val parameters = TdApi.CheckAuthenticationPassword().apply {
             this.password = password

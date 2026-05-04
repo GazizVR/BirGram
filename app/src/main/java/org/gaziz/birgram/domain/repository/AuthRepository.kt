@@ -4,27 +4,27 @@ interface AuthRepository {
 
     fun setParameters(
         databasePath: String,
-        onError: (String) -> Unit
+        onError: (String?) -> Unit
     )
 
     fun setPhoneNumber(
         phoneNumber: String,
-        onError: (String) -> Unit
+        onError: (String?) -> Unit
     )
 
-    fun checkAuthCode(
+    fun checkCode(
        code: String,
-       onError: (String) -> Unit
+       onError: (String?) -> Unit
     )
 
-    fun setPassword(
+    fun checkPassword(
         password: String,
-        onError: (String) -> Unit
+        onError: (String?) -> Unit
     )
 
     fun resendCode(
         isUser: Boolean,
-        onError: (String) -> Unit
+        onError: (String?) -> Unit
     )
 
 }

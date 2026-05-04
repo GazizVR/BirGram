@@ -43,6 +43,7 @@ class AuthViewModel @Inject constructor(
         }
     }
     val authState = eventLoopRepository.authState
+    val errorMessage = eventLoopRepository.errorMessage
     fun setParams(databasePath: String) {
        authRepository.setParameters(databasePath) {
            eventLoopRepository.setErrorMessage(it)
@@ -56,15 +57,26 @@ class AuthViewModel @Inject constructor(
     }
 
     fun setCode(code: String){
-        authRepository.checkAuthCode(code){
+        authRepository.checkCode(code){
+            eventLoopRepository.setErrorMessage(it)
+        }
+    }
+
+    fun resendCode() {
+        authRepository.resendCode(true) {
             eventLoopRepository.setErrorMessage(it)
         }
     }
 
     fun setPassword(password: String){
-        authRepository.setPassword(password) {
+        authRepository.checkPassword(password) {
             eventLoopRepository.setErrorMessage(it)
         }
+    }
+
+    fun restartAuth() {
+        eventLoopRepository.setErrorMessage(null)
+        eventLoopRepository.restartAuth()
     }
 
 }

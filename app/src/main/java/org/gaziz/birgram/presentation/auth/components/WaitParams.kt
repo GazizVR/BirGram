@@ -1,24 +1,26 @@
 package org.gaziz.birgram.presentation.auth.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,39 +34,34 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.gaziz.birgram.R
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WaitParams(
     onStart: (String) -> Unit,
     onTheme: () -> Unit,
-    isDark: Boolean
+    isDark: Boolean,
+    errorMessage: String?
 ) {
     val context = LocalContext.current
     val cnt = stringArrayResource(R.array.login_cnt)
     Scaffold(
         topBar = {
-            TopAppBar(
-                actions = {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        IconButton(
-                            onClick = { onTheme() }
-                        ) {
-                            Icon(
-                                imageVector = if (isDark) ImageVector.vectorResource(R.drawable.light_mode) else ImageVector.vectorResource(
-                                    R.drawable.dark_mode
-                                ),
-                                contentDescription = "",
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(32.dp)
-                            )
-                        }
-                    }
-                },
-                title = {}
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(WindowInsets.statusBars.asPaddingValues()),
+                horizontalArrangement = Arrangement.End
+            ) {
+                IconButton(
+                    onClick = { onTheme() }
+                ) {
+                    Icon(
+                        imageVector = if (isDark) ImageVector.vectorResource(R.drawable.light_mode) else ImageVector.vectorResource(
+                            R.drawable.dark_mode
+                        ),
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
+            }
         },
         modifier = Modifier.background(MaterialTheme.colorScheme.background)
     ) {
@@ -102,6 +99,15 @@ fun WaitParams(
                 Text(
                     text = cnt[1],
                     style = MaterialTheme.typography.bodyLarge
+                )
+            }
+            Spacer(Modifier.height(16.dp))
+            AnimatedVisibility(errorMessage != null) {
+                Text(
+                    errorMessage.toString(),
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.labelSmall
                 )
             }
         }

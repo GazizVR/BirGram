@@ -23,13 +23,14 @@ class TelegramManager @Inject constructor(){
 
     fun sendRequest(
         query: TdApi.Function<*>,
-        onError: (String) -> Unit,
+        onError: (String?) -> Unit,
     ) {
         if(client == null) {
             Log.e("TDLib", "Client is null")
             onError("Client is null")
             return
         }
+        onError(null)
         client?.send(
             query,
             {

@@ -12,7 +12,7 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val isDark: GetIsDarkTheme
 ): ViewModel() {
-    val isDarkTheme = isDark.invoke().stateIn(
+    val isDarkTheme = isDark().stateIn(
         viewModelScope,
         SharingStarted.Eagerly,
         true

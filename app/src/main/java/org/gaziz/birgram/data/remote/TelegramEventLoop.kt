@@ -5,11 +5,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.drinkless.tdlib.TdApi
+import org.gaziz.birgram.domain.model.auth.AuthCodeInfo
+import org.gaziz.birgram.domain.model.auth.AuthCodeType
+import org.gaziz.birgram.domain.model.auth.AuthPasswordInfo
 import org.gaziz.birgram.domain.model.auth.AuthState
+import org.gaziz.birgram.domain.model.auth.CodeType
 import org.gaziz.birgram.domain.repository.EventLoopRepository
 import javax.inject.Inject
 
 class TelegramEventLoop @Inject constructor(private val manager: TelegramManager): EventLoopRepository {
+
+    private companion object {
+        private const val DEFAULT_CODE_LENGTH = 5
+    }
+
     private val _authState = MutableStateFlow<AuthState>(AuthState.WaitParams)
     override val authState: StateFlow<AuthState> = _authState.asStateFlow()
 
@@ -33,8 +42,34 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                         _authState.value = when (event.authorizationState) {
                             is TdApi.AuthorizationStateWaitTdlibParameters -> AuthState.WaitParams
                             is TdApi.AuthorizationStateWaitPhoneNumber -> AuthState.WaitPhoneNumber
-                            is TdApi.AuthorizationStateWaitCode -> AuthState.WaitCode
-                            is TdApi.AuthorizationStateWaitPassword -> AuthState.WaitPassword
+                            is TdApi.AuthorizationStateWaitCode -> {
+                                val codeInfo = (event.authorizationState as TdApi.AuthorizationStateWaitCode).codeInfo
+                                val codeType: (TdApi.AuthenticationCodeType) -> AuthCodeType = {
+                                    when(it) {
+                                        is TdApi.AuthenticationCodeTypeCall -> AuthCodeType(CodeType.Call,it.length)
+                                        is TdApi.AuthenticationCodeTypeTelegramMessage -> AuthCodeType(CodeType.Telegram,it.length)
+                                        is TdApi.AuthenticationCodeTypeSms -> AuthCodeType(CodeType.SMS,it.length)
+                                        is TdApi.AuthenticationCodeTypeFlashCall -> AuthCodeType(CodeType.FlashCall,DEFAULT_CODE_LENGTH)
+                                        is TdApi.AuthenticationCodeTypeMissedCall -> AuthCodeType(CodeType.MissedCall,it.length)
+                                        is TdApi.AuthenticationCodeTypeFragment -> AuthCodeType(CodeType.Fragment,it.length)
+                                        is TdApi.AuthenticationCodeTypeFirebaseAndroid -> AuthCodeType(CodeType.FireBaseAndroid,it.length)
+                                        is TdApi.AuthenticationCodeTypeFirebaseIos -> AuthCodeType(CodeType.FireBaseIos,it.length)
+                                        else -> AuthCodeType(CodeType.Other,DEFAULT_CODE_LENGTH)
+                                    }
+                                }
+                                AuthState.WaitCode(
+                                    AuthCodeInfo(
+                                        type = codeType(codeInfo.type),
+                                        nextType = if(codeInfo.nextType != null) codeType(codeInfo.nextType!!) else null,
+                                        timeout = codeInfo.timeout
+                                    )
+                                )
+                            }
+                            is TdApi.AuthorizationStateWaitPassword -> AuthState.WaitPassword(
+                                AuthPasswordInfo(
+                                    (event.authorizationState as TdApi.AuthorizationStateWaitPassword).passwordHint
+                                )
+                            )
                             is TdApi.AuthorizationStateReady -> AuthState.Ready
                             else -> AuthState.Other(event.authorizationState.toString())
                         }
@@ -43,6 +78,7 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                     is TdApi.Ok -> {
                         setErrorMessage(null)
                     }
+
                 }
             },
             { throwable ->
@@ -51,5 +87,9 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                 setErrorMessage(message)
             },
         )
+    }
+
+    override fun restartAuth() {
+        _authState.value = AuthState.WaitPhoneNumber
     }
 }

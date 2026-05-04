@@ -31,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
@@ -43,12 +42,14 @@ import androidx.compose.ui.unit.dp
 import org.gaziz.birgram.R
 
 @Composable
-fun WaitPhoneNumber(setNumber: (String) -> Unit) {
+fun WaitPhoneNumber(
+    setNumber: (String) -> Unit,
+    errorMessage: String?
+) {
     val cnt = stringArrayResource(R.array.login_cnt)
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
     var phoneNumber by rememberSaveable { mutableStateOf("") }
-    var isFocused by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(Unit){
         focusRequester.requestFocus()
     }
@@ -78,11 +79,11 @@ fun WaitPhoneNumber(setNumber: (String) -> Unit) {
             onValueChange = { phoneNumber = it },
             label = { Text(cnt[4], style = MaterialTheme.typography.labelMedium) },
             singleLine = true,
+            isError = errorMessage != null,
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier
                 .padding(horizontal = 6.dp)
-                .focusRequester(focusRequester)
-                .onFocusChanged({isFocused = it.isFocused}),
+                .focusRequester(focusRequester),
             textStyle = MaterialTheme.typography.labelMedium,
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Phone,
@@ -98,12 +99,15 @@ fun WaitPhoneNumber(setNumber: (String) -> Unit) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    VerticalDivider(
-                        thickness = 1.dp,
-                        modifier = Modifier.height(56.dp),
-                        color = if(isFocused) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground.copy(0.35f)
-                    )
-                    AnimatedVisibility(phoneNumber.length > 8) {
+                    val isVisible = phoneNumber.length > 6
+                    AnimatedVisibility(isVisible) {
+                        VerticalDivider(
+                            thickness = 1.dp,
+                            modifier = Modifier.height(56.dp),
+                            color = if(errorMessage != null)MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    AnimatedVisibility(isVisible) {
                         IconButton(
                             onClick = {
                                 focusManager.clearFocus()
@@ -112,11 +116,10 @@ fun WaitPhoneNumber(setNumber: (String) -> Unit) {
                             },
                         ) {
                             Icon(
-                                imageVector = ImageVector.vectorResource(
-                                    R.drawable.arrow_back
-                                ),
+                                imageVector = ImageVector.vectorResource(R.drawable.arrow_back),
                                 contentDescription = "",
-                                modifier = Modifier.size(26.dp)
+                                modifier = Modifier
+                                    .size(26.dp)
                                     .graphicsLayer { scaleX = -1f },
                                 tint = MaterialTheme.colorScheme.tertiary
                             )
@@ -131,5 +134,14 @@ fun WaitPhoneNumber(setNumber: (String) -> Unit) {
                 )
             }
         )
+        Spacer(Modifier.height(16.dp))
+        AnimatedVisibility(errorMessage != null) {
+            Text(
+                errorMessage.toString(),
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.labelSmall
+            )
+        }
     }
 }

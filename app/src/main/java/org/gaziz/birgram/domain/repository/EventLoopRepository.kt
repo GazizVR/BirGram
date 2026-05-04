@@ -8,4 +8,5 @@ interface EventLoopRepository {
     val errorMessage: StateFlow<String?>
     fun setErrorMessage(errorMessage: String?)
     fun createEventLoop()
+    fun restartAuth()
 }
