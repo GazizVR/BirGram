@@ -22,6 +22,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -39,10 +44,16 @@ fun WaitParams(
     onStart: (String) -> Unit,
     onTheme: () -> Unit,
     isDark: Boolean,
-    errorMessage: String?
+    errorMessage: String?,
 ) {
+    var isLoading by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
     val cnt = stringArrayResource(R.array.login_cnt)
+    LaunchedEffect(errorMessage) {
+        if(errorMessage != null) {
+            isLoading = false
+        }
+    }
     Scaffold(
         topBar = {
             Row(
@@ -93,8 +104,12 @@ fun WaitParams(
             )
             Spacer(Modifier.height(60.dp))
             Button(
-                onClick = { onStart("${context.filesDir.absolutePath}/tdlib") },
+                onClick = {
+                    isLoading = true
+                    onStart("${context.filesDir.absolutePath}/tdlib")
+                },
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                enabled = !isLoading
             ) {
                 Text(
                     text = cnt[1],

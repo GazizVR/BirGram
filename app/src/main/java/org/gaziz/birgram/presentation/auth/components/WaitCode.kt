@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -55,7 +56,7 @@ fun WaitCode(
     errorMessage: String?,
     onBack: () -> Unit,
     codeInfo: AuthCodeInfo,
-    resendCode: () -> Unit
+    resendCode: () -> Unit,
 ){
     val cnt = stringArrayResource(R.array.login_cnt)
     val focusRequester = remember { FocusRequester() }
@@ -63,11 +64,17 @@ fun WaitCode(
     var code by rememberSaveable { mutableStateOf("") }
     val codeType = stringArrayResource(R.array.code_type)[codeInfo.type.type.ordinal]
     var counter by rememberSaveable { mutableIntStateOf(codeInfo.timeout) }
+    var isLoading by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(Unit){
         focusRequester.requestFocus()
         while(counter > 0) {
             counter--
             delay(1000)
+        }
+    }
+    LaunchedEffect(errorMessage) {
+        if(errorMessage != null) {
+            isLoading = false
         }
     }
     Scaffold(
@@ -113,6 +120,7 @@ fun WaitCode(
             Spacer(Modifier.height(16.dp))
             OutlinedTextField(
                 value = code,
+                enabled = !isLoading,
                 isError = errorMessage != null,
                 onValueChange = { code = it },
                 label = { Text(cnt[12], style = MaterialTheme.typography.labelMedium) },
@@ -128,6 +136,7 @@ fun WaitCode(
                 keyboardActions = KeyboardActions(
                     onDone = {
                         focusManager.clearFocus()
+                        isLoading = true
                         setCode(code)
                         code = ""
                     }
@@ -136,30 +145,48 @@ fun WaitCode(
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        val isVisible = code.length >= codeInfo.type.length
+                        val isVisible = code.length >= codeInfo.type.length || isLoading
                         AnimatedVisibility(isVisible) {
                             VerticalDivider(
                                 thickness = 1.dp,
                                 modifier = Modifier.height(56.dp),
-                                color = if(errorMessage != null)MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                                color = when {
+                                    isLoading -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+                                    errorMessage != null -> MaterialTheme.colorScheme.error
+                                    else -> MaterialTheme.colorScheme.primary
+                                }
                             )
                         }
                         AnimatedVisibility(isVisible) {
-                            IconButton(
-                                onClick = {
-                                    focusManager.clearFocus()
-                                    setCode(code)
-                                    code = ""
-                                },
-                            ) {
-                                Icon(
-                                    imageVector = ImageVector.vectorResource(R.drawable.arrow_back),
-                                    contentDescription = "",
-                                    modifier = Modifier
-                                        .size(26.dp)
-                                        .graphicsLayer { scaleX = -1f },
-                                    tint = MaterialTheme.colorScheme.tertiary
-                                )
+                            if(isLoading) {
+                                IconButton(
+                                    onClick = {},
+                                    enabled = false
+                                ) {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.size(24.dp),
+                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+                                        strokeWidth = 3.dp
+                                    )
+                                }
+                            } else {
+                                IconButton(
+                                    onClick = {
+                                        focusManager.clearFocus()
+                                        isLoading = true
+                                        setCode(code)
+                                        code = ""
+                                    },
+                                ) {
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(R.drawable.arrow_back),
+                                        contentDescription = "",
+                                        modifier = Modifier
+                                            .size(26.dp)
+                                            .graphicsLayer { scaleX = -1f },
+                                        tint = MaterialTheme.colorScheme.tertiary
+                                    )
+                                }
                             }
                         }
                     }

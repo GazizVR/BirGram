@@ -1,7 +1,6 @@
 package org.gaziz.birgram.presentation.auth.components
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -46,6 +46,7 @@ fun WaitPhoneNumber(
     setNumber: (String) -> Unit,
     errorMessage: String?
 ) {
+    var isLoading by rememberSaveable { mutableStateOf(false) }
     val cnt = stringArrayResource(R.array.login_cnt)
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -53,8 +54,13 @@ fun WaitPhoneNumber(
     LaunchedEffect(Unit){
         focusRequester.requestFocus()
     }
+    LaunchedEffect(errorMessage) {
+        if(errorMessage != null) {
+            isLoading = false
+        }
+    }
     Column(
-        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -77,6 +83,7 @@ fun WaitPhoneNumber(
         OutlinedTextField(
             value = phoneNumber,
             onValueChange = { phoneNumber = it },
+            enabled = !isLoading,
             label = { Text(cnt[4], style = MaterialTheme.typography.labelMedium) },
             singleLine = true,
             isError = errorMessage != null,
@@ -91,6 +98,7 @@ fun WaitPhoneNumber(
             keyboardActions = KeyboardActions(
                 onDone = {
                     focusManager.clearFocus()
+                    isLoading = true
                     setNumber(phoneNumber)
                     phoneNumber = ""
                 }
@@ -99,40 +107,53 @@ fun WaitPhoneNumber(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    val isVisible = phoneNumber.length > 6
+                    val isVisible = phoneNumber.length > 6 || isLoading
                     AnimatedVisibility(isVisible) {
                         VerticalDivider(
                             thickness = 1.dp,
                             modifier = Modifier.height(56.dp),
-                            color = if(errorMessage != null)MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                            color = when {
+                                isLoading -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+                                errorMessage != null -> MaterialTheme.colorScheme.error
+                                else -> MaterialTheme.colorScheme.primary
+                            }
                         )
                     }
                     AnimatedVisibility(isVisible) {
-                        IconButton(
-                            onClick = {
-                                focusManager.clearFocus()
-                                setNumber(phoneNumber)
-                                phoneNumber = ""
-                            },
-                        ) {
-                            Icon(
-                                imageVector = ImageVector.vectorResource(R.drawable.arrow_back),
-                                contentDescription = "",
-                                modifier = Modifier
-                                    .size(26.dp)
-                                    .graphicsLayer { scaleX = -1f },
-                                tint = MaterialTheme.colorScheme.tertiary
-                            )
+                        if(isLoading) {
+                            IconButton(
+                                onClick = {},
+                                enabled = false
+                            ) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(24.dp),
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+                                    strokeWidth = 3.dp
+                                )
+                            }
+                        } else {
+                            IconButton(
+                                onClick = {
+                                    focusManager.clearFocus()
+                                    isLoading = true
+                                    setNumber(phoneNumber)
+                                    phoneNumber = ""
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(R.drawable.arrow_back),
+                                    contentDescription = "",
+                                    modifier = Modifier
+                                        .size(26.dp)
+                                        .graphicsLayer { scaleX = -1f },
+                                    tint = MaterialTheme.colorScheme.tertiary
+                                )
+                            }
                         }
                     }
                 }
             },
-            leadingIcon = {
-                Text(
-                    "+",
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-            }
+            leadingIcon = { Text("+") }
         )
         Spacer(Modifier.height(16.dp))
         AnimatedVisibility(errorMessage != null) {

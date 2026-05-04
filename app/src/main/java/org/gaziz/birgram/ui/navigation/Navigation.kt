@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.gaziz.birgram.presentation.auth.screen.AuthScreen
+import org.gaziz.birgram.presentation.chatList.ChatList
 
 @Composable
 fun Navigation(
@@ -14,12 +15,12 @@ fun Navigation(
         navController = navController,
         startDestination = Route.Auth.route
     ){
-        composable(Route.Auth.route){
-            AuthScreen()
-        }
+        composable(Route.Auth.route) { AuthScreen { navController.navigate(Route.ChatList.route) } }
+        composable(Route.ChatList.route) { ChatList() }
     }
 }
 
 sealed class Route(val route: String) {
     object Auth: Route("auth")
+    object ChatList: Route("chatList")
 }

@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -51,14 +52,20 @@ fun WaitPassword(
     setPassword: (String) -> Unit,
     errorMessage: String?,
     onBack: () -> Unit,
-    passwordInfo: AuthPasswordInfo
+    passwordInfo: AuthPasswordInfo,
 ) {
     val cnt = stringArrayResource(R.array.login_cnt)
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
     var password by rememberSaveable { mutableStateOf("") }
+    var isLoading by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(Unit){
         focusRequester.requestFocus()
+    }
+    LaunchedEffect(errorMessage) {
+        if(errorMessage != null) {
+            isLoading = false
+        }
     }
     Scaffold(
         topBar = {
@@ -105,6 +112,7 @@ fun WaitPassword(
                 value = password,
                 onValueChange = { password = it },
                 placeholder = { Text(passwordInfo.passwordHint) },
+                enabled = !isLoading,
                 isError = errorMessage != null,
                 label = { Text(cnt[15], style = MaterialTheme.typography.labelMedium) },
                 singleLine = true,
@@ -121,6 +129,7 @@ fun WaitPassword(
                 keyboardActions = KeyboardActions(
                     onDone = {
                         focusManager.clearFocus()
+                        isLoading = true
                         setPassword(password)
                         password = ""
                     }
@@ -129,32 +138,50 @@ fun WaitPassword(
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        val isVisible = password.isNotEmpty()
+                        val isVisible = password.isNotEmpty() || isLoading
                         AnimatedVisibility(isVisible) {
                             VerticalDivider(
                                 thickness = 1.dp,
                                 modifier = Modifier.height(56.dp),
-                                color = if(errorMessage != null)MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                                color = when {
+                                    isLoading -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+                                    errorMessage != null -> MaterialTheme.colorScheme.error
+                                    else -> MaterialTheme.colorScheme.primary
+                                }
                             )
                         }
                         AnimatedVisibility(isVisible) {
-                            IconButton(
-                                onClick = {
-                                    focusManager.clearFocus()
-                                    setPassword(password)
-                                    password = ""
-                                },
-                            ) {
-                                Icon(
-                                    imageVector = ImageVector.vectorResource(
-                                        R.drawable.arrow_back
-                                    ),
-                                    contentDescription = "",
-                                    modifier = Modifier
-                                        .size(26.dp)
-                                        .graphicsLayer { scaleX = -1f },
-                                    tint = MaterialTheme.colorScheme.tertiary
-                                )
+                            if(isLoading) {
+                                IconButton(
+                                    onClick = {},
+                                    enabled = false
+                                ) {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.size(24.dp),
+                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+                                        strokeWidth = 3.dp
+                                    )
+                                }
+                            } else {
+                                IconButton(
+                                    onClick = {
+                                        focusManager.clearFocus()
+                                        isLoading = true
+                                        setPassword(password)
+                                        password = ""
+                                    },
+                                ) {
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(
+                                            R.drawable.arrow_back
+                                        ),
+                                        contentDescription = "",
+                                        modifier = Modifier
+                                            .size(26.dp)
+                                            .graphicsLayer { scaleX = -1f },
+                                        tint = MaterialTheme.colorScheme.tertiary
+                                    )
+                                }
                             }
                         }
                     }
