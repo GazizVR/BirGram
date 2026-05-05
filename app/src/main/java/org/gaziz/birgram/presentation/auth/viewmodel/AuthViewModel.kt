@@ -40,8 +40,11 @@ class AuthViewModel @Inject constructor(
             userPreferencesRepository.switchIsDark(isDark)
         }
     }
+
     val authState = eventLoopRepository.authState
+
     val errorMessage = eventLoopRepository.errorMessage
+
     fun setParams(databasePath: String) {
        authRepository.setParameters(databasePath) {
            eventLoopRepository.setErrorMessage(it)

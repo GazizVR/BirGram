@@ -12,7 +12,7 @@ import javax.inject.Singleton
 
 @Singleton
 class UserPreferences @Inject constructor(
-    @ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context
 ): UserPreferencesRepository {
     val Context.dataStore by preferencesDataStore("userPreferences")
     private companion object {

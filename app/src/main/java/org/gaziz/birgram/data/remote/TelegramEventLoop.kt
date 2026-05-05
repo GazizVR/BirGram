@@ -10,6 +10,10 @@ import org.gaziz.birgram.domain.model.auth.AuthCodeType
 import org.gaziz.birgram.domain.model.auth.AuthPasswordInfo
 import org.gaziz.birgram.domain.model.auth.AuthState
 import org.gaziz.birgram.domain.model.auth.CodeType
+import org.gaziz.birgram.domain.model.chatList.ChatData
+import org.gaziz.birgram.domain.model.chatList.ChatListType
+import org.gaziz.birgram.domain.model.chatList.ChatPhoto
+import org.gaziz.birgram.domain.model.chatList.ChatPosition
 import org.gaziz.birgram.domain.repository.EventLoopRepository
 import javax.inject.Inject
 
@@ -29,6 +33,9 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
         _errorMessage.value = errorMessage
     }
 
+    private val _chatList = MutableStateFlow(emptyMap<Long,ChatData>())
+    override val chatList: StateFlow<Map<Long,ChatData>> = _chatList.asStateFlow()
+
     override fun createEventLoop() {
         manager.createClient(
             { event ->
@@ -36,6 +43,44 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                     is TdApi.Error -> {
                         Log.e("TDLib", "${event.code}: ${event.message}")
                         setErrorMessage(event.message)
+                    }
+
+                    is TdApi.Ok -> {
+                        setErrorMessage(null)
+                    }
+
+                    is TdApi.UpdateNewChat -> {
+                        val chat = event.chat
+                        val chatPhoto = ChatPhoto(
+                            chat.photo?.minithumbnail?.data
+                        )
+                        val chatPositions = mutableListOf<ChatPosition>().apply {
+                            chat.positions.forEach {
+                                add(ChatPosition(
+                                    listType = when(it.list){
+                                        is TdApi.ChatListArchive -> ChatListType.Archive
+                                        is TdApi.ChatListFolder -> ChatListType.Folder((it.list as TdApi.ChatListFolder).chatFolderId)
+                                        else -> ChatListType.Main
+                                    },
+                                    order = it.order,
+                                    isPinned = it.isPinned
+                                ))
+                            }
+                        }.toList()
+                        _chatList.value = chatList.value.toMutableMap().apply {
+                            put(
+                                chat.id,
+                                ChatData(
+                                    id = chat.id,
+                                    title = chat.title,
+                                    photo = chatPhoto,
+                                    positions = chatPositions,
+                                    unreadCount = chat.unreadCount,
+                                    mentionCount = chat.unreadMentionCount,
+                                    reactionCount = chat.unreadReactionCount
+                                )
+                            )
+                        }.toMap()
                     }
 
                     is TdApi.UpdateAuthorizationState -> {
@@ -73,10 +118,6 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                             is TdApi.AuthorizationStateReady -> AuthState.Ready
                             else -> AuthState.Other(event.authorizationState.toString())
                         }
-                    }
-
-                    is TdApi.Ok -> {
-                        setErrorMessage(null)
                     }
 
                 }

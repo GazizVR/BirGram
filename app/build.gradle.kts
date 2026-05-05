@@ -82,4 +82,6 @@ dependencies {
     ksp(libs.hilt.android.compiler)
     //Material
     implementation(libs.material)
+    //Coil
+    implementation(libs.coil.compose)
 }

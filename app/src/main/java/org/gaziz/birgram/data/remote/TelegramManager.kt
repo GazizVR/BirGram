@@ -3,6 +3,7 @@ package org.gaziz.birgram.data.remote
 import android.util.Log
 import org.drinkless.tdlib.Client
 import org.drinkless.tdlib.TdApi
+import org.gaziz.birgram.domain.model.chatList.RequestResponse
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,11 +24,11 @@ class TelegramManager @Inject constructor(){
 
     fun sendRequest(
         query: TdApi.Function<*>,
-        onError: (String?) -> Unit,
+        onError: (RequestResponse.Error?) -> Unit,
     ) {
         if(client == null) {
             Log.e("TDLib", "Client is null")
-            onError("Client is null")
+            onError(RequestResponse.Error(500,"Client is null"))
             return
         }
         onError(null)
@@ -36,13 +37,13 @@ class TelegramManager @Inject constructor(){
             {
                 if(it is TdApi.Error) {
                     Log.e("TDLib", "${it.code}, ${it.message}")
-                    onError(it.message)
+                    onError(RequestResponse.Error(it.code,it.message))
                 }
             },
             {
                 val message = it.localizedMessage ?: it.message ?: "unknown request exception"
                 Log.e("TDLib", message)
-                onError(message)
+                onError(RequestResponse.Error(500,message))
             }
         )
     }
