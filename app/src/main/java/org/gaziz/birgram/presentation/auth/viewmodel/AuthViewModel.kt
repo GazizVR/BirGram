@@ -21,7 +21,7 @@ class AuthViewModel @Inject constructor(
     val isRegistered = userPreferencesRepository.isRegistered.stateIn(
         viewModelScope,
         SharingStarted.Eagerly,
-        false
+        true
     )
 
     fun switchIsRegister(register: Boolean) {

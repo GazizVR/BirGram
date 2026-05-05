@@ -4,6 +4,7 @@ import android.util.Log
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.domain.model.auth.AuthCodeInfo
 import org.gaziz.birgram.domain.model.auth.AuthCodeType
@@ -36,6 +37,38 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
     private val _chatList = MutableStateFlow(emptyMap<Long,ChatData>())
     override val chatList: StateFlow<Map<Long,ChatData>> = _chatList.asStateFlow()
 
+    private val toChatListType: (TdApi.ChatList) -> ChatListType = {
+        when(it){
+            is TdApi.ChatListArchive -> ChatListType.Archive
+            is TdApi.ChatListFolder -> ChatListType.Folder(it.chatFolderId)
+            else -> ChatListType.Main
+        }
+    }
+
+    private val changePosition: (Long,TdApi.ChatPosition) -> Unit = { chatId, position ->
+        _chatList.update { currentMap ->
+            val newMap = currentMap.toMutableMap()
+
+            val chat = newMap[chatId]
+            if (chat != null) {
+                val newPositions = chat.positions.filter { it.listType != toChatListType(position.list) } +
+                        ChatPosition(
+                            listType = toChatListType(position.list),
+                            order = position.order,
+                            isPinned = position.isPinned
+                        )
+
+                if (position.order == 0L) {
+                    newMap.remove(chatId)
+                } else {
+                    newMap[chatId] = chat.copy(positions = newPositions)
+                }
+            }
+
+            newMap.toMap()
+        }
+    }
+
     override fun createEventLoop() {
         manager.createClient(
             { event ->
@@ -57,30 +90,38 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                         val chatPositions = mutableListOf<ChatPosition>().apply {
                             chat.positions.forEach {
                                 add(ChatPosition(
-                                    listType = when(it.list){
-                                        is TdApi.ChatListArchive -> ChatListType.Archive
-                                        is TdApi.ChatListFolder -> ChatListType.Folder((it.list as TdApi.ChatListFolder).chatFolderId)
-                                        else -> ChatListType.Main
-                                    },
+                                    listType = toChatListType(it.list),
                                     order = it.order,
                                     isPinned = it.isPinned
                                 ))
                             }
                         }.toList()
-                        _chatList.value = chatList.value.toMutableMap().apply {
-                            put(
-                                chat.id,
-                                ChatData(
-                                    id = chat.id,
-                                    title = chat.title,
-                                    photo = chatPhoto,
-                                    positions = chatPositions,
-                                    unreadCount = chat.unreadCount,
-                                    mentionCount = chat.unreadMentionCount,
-                                    reactionCount = chat.unreadReactionCount
+                        _chatList.update { map ->
+                            map.toMutableMap().apply {
+                                put(
+                                    chat.id,
+                                    ChatData(
+                                        id = chat.id,
+                                        title = chat.title,
+                                        photo = chatPhoto,
+                                        positions = chatPositions,
+                                        unreadCount = chat.unreadCount,
+                                        mentionCount = chat.unreadMentionCount,
+                                        reactionCount = chat.unreadReactionCount
+                                    )
                                 )
-                            )
-                        }.toMap()
+                            }.toMap()
+                        }
+                    }
+
+                    is TdApi.UpdateChatPosition -> {
+                        changePosition(event.chatId,event.position)
+                    }
+
+                    is TdApi.UpdateChatLastMessage -> {
+                        event.positions.forEach {
+                            changePosition(event.chatId,it)
+                        }
                     }
 
                     is TdApi.UpdateAuthorizationState -> {

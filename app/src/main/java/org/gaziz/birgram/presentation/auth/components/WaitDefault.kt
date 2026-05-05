@@ -1,11 +1,9 @@
 package org.gaziz.birgram.presentation.auth.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -27,11 +25,7 @@ fun WaitDefault(
         delay(500)
         onInit("${context.filesDir.absolutePath}/tdlib")
     }
-    Box(
-        Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-    ){
+    Box(Modifier.fillMaxSize()){
         Image(
             painterResource(R.drawable.app_launcher),
             contentDescription = null,

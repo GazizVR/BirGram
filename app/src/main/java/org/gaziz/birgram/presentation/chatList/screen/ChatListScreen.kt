@@ -1,5 +1,6 @@
 package org.gaziz.birgram.presentation.chatList.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -18,6 +19,7 @@ import org.gaziz.birgram.presentation.chatList.viewmodel.ChatListViewModel
 
 @Composable
 fun ChatListScreen() {
+    BackHandler { }
     val viewModel = hiltViewModel<ChatListViewModel>()
     val chatList by viewModel.chatList.collectAsState()
     Scaffold(
