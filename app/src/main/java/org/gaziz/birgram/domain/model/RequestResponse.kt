@@ -1,4 +1,4 @@
-package org.gaziz.birgram.domain.model.chatList
+package org.gaziz.birgram.domain.model
 
 sealed class RequestResponse {
     object OK: RequestResponse()

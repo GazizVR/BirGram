@@ -3,7 +3,7 @@ package org.gaziz.birgram.data.remote
 import android.util.Log
 import org.drinkless.tdlib.Client
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.domain.model.chatList.RequestResponse
+import org.gaziz.birgram.domain.model.RequestResponse
 import javax.inject.Inject
 import javax.inject.Singleton
 

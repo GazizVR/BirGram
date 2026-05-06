@@ -15,6 +15,7 @@ import org.gaziz.birgram.domain.model.chatList.ChatData
 import org.gaziz.birgram.domain.model.chatList.ChatListType
 import org.gaziz.birgram.domain.model.chatList.ChatPhoto
 import org.gaziz.birgram.domain.model.chatList.ChatPosition
+import org.gaziz.birgram.domain.model.chatList.MessageData
 import org.gaziz.birgram.domain.repository.EventLoopRepository
 import javax.inject.Inject
 
@@ -45,28 +46,12 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
         }
     }
 
-    private val changePosition: (Long,TdApi.ChatPosition) -> Unit = { chatId, position ->
-        _chatList.update { currentMap ->
-            val newMap = currentMap.toMutableMap()
-
-            val chat = newMap[chatId]
-            if (chat != null) {
-                val newPositions = chat.positions.filter { it.listType != toChatListType(position.list) } +
-                        ChatPosition(
-                            listType = toChatListType(position.list),
-                            order = position.order,
-                            isPinned = position.isPinned
-                        )
-
-                if (position.order == 0L) {
-                    newMap.remove(chatId)
-                } else {
-                    newMap[chatId] = chat.copy(positions = newPositions)
-                }
-            }
-
-            newMap.toMap()
-        }
+    private val toChatPositon: (TdApi.ChatPosition) -> ChatPosition = {
+        ChatPosition(
+            listType = toChatListType(it.list),
+            order = it.order,
+            isPinned = it.isPinned
+        )
     }
 
     override fun createEventLoop() {
@@ -87,15 +72,11 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                         val chatPhoto = ChatPhoto(
                             chat.photo?.minithumbnail?.data
                         )
-                        val chatPositions = mutableListOf<ChatPosition>().apply {
-                            chat.positions.forEach {
-                                add(ChatPosition(
-                                    listType = toChatListType(it.list),
-                                    order = it.order,
-                                    isPinned = it.isPinned
-                                ))
+                        val chatPositions = mutableListOf<ChatPosition>()
+                            .apply {
+                                chat.positions.forEach { add(toChatPositon(it)) }
                             }
-                        }.toList()
+                            .toList()
                         _chatList.update { map ->
                             map.toMutableMap().apply {
                                 put(
@@ -104,6 +85,7 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                                         id = chat.id,
                                         title = chat.title,
                                         photo = chatPhoto,
+                                        lastMessage = MessageData(""),
                                         positions = chatPositions,
                                         unreadCount = chat.unreadCount,
                                         mentionCount = chat.unreadMentionCount,
@@ -115,12 +97,50 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                     }
 
                     is TdApi.UpdateChatPosition -> {
-                        changePosition(event.chatId,event.position)
+                        _chatList.update { map ->
+                            val newMap = map.toMutableMap()
+                            val chat = newMap[event.chatId]
+                            if(chat != null) {
+                                val position = toChatPositon(event.position)
+                                if(position.order == 0L) {
+                                   newMap.remove(event.chatId)
+                                } else {
+                                   newMap[event.chatId] = chat.copy(
+                                       positions = chat.positions.filter {
+                                           it.listType != position.listType
+                                       } + position
+                                   )
+                                }
+                            }
+                            newMap.toMap()
+                        }
                     }
 
                     is TdApi.UpdateChatLastMessage -> {
-                        event.positions.forEach {
-                            changePosition(event.chatId,it)
+                        _chatList.update { map ->
+                            val newMap = map.toMutableMap()
+                            val chat = newMap[event.chatId]
+                            if(chat != null){
+                                val positions = mutableListOf<ChatPosition>()
+                                    .apply { event.positions.forEach { add(toChatPositon(it)) } }
+                                    .toList()
+                                newMap[event.chatId] = chat.copy(positions = positions)
+                            }
+                            newMap.toMap()
+                        }
+                    }
+
+                    is TdApi.UpdateChatDraftMessage -> {
+                        _chatList.update { map ->
+                            val newMap = map.toMutableMap()
+                            val chat = newMap[event.chatId]
+                            if(chat != null){
+                                val positions = mutableListOf<ChatPosition>()
+                                    .apply { event.positions.forEach { add(toChatPositon(it)) } }
+                                    .toList()
+                                newMap[event.chatId] = chat.copy(positions = positions)
+                            }
+                            newMap.toMap()
                         }
                     }
 

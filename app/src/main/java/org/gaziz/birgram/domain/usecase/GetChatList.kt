@@ -11,12 +11,13 @@ class GetChatList @Inject constructor(
     private val eventLoopRepository: EventLoopRepository
 ) {
     operator fun invoke(type: ChatListType): Flow<List<ChatData>> {
-        return eventLoopRepository.chatList.map { m ->
-            m.toList().apply{
-                filter { me -> me.second.positions.any { it == type } }
-                sortedByDescending { me -> me.second.positions.find { it == type }?.order }
-                sortedByDescending { me -> me.second.positions.find { it == type }?.isPinned }
-            }.toMap().values.toList()
+        return eventLoopRepository.chatList.map { map ->
+            map
+                .toList()
+                .map { it.second }
+                .filter { me -> me.positions.find { it.listType == type } != null }
+                .sortedByDescending { me -> me.positions.find { it.listType == type }?.isPinned }
+                .sortedByDescending { me -> me.positions.find { it.listType == type }?.order }
         }
     }
 }

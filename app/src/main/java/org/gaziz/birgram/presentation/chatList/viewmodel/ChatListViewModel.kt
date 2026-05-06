@@ -18,7 +18,7 @@ class ChatListViewModel @Inject constructor(
     init {
         loadAllChats(ChatListType.Main)
     }
-    val chatList = getChatList(ChatListType.Main).stateIn(
+    val mainChatList = getChatList(ChatListType.Main).stateIn(
         viewModelScope,
         SharingStarted.Eagerly,
         emptyList()

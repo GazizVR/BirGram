@@ -21,7 +21,7 @@ import org.gaziz.birgram.presentation.chatList.viewmodel.ChatListViewModel
 fun ChatListScreen() {
     BackHandler { }
     val viewModel = hiltViewModel<ChatListViewModel>()
-    val chatList by viewModel.chatList.collectAsState()
+    val chatList by viewModel.mainChatList.collectAsState()
     Scaffold(
         topBar = { ChatListTopBar() }
     ) {

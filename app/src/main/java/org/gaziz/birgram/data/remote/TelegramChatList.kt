@@ -2,7 +2,7 @@ package org.gaziz.birgram.data.remote
 
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.domain.model.chatList.ChatListType
-import org.gaziz.birgram.domain.model.chatList.RequestResponse
+import org.gaziz.birgram.domain.model.RequestResponse
 import org.gaziz.birgram.domain.repository.ChatListRepository
 import javax.inject.Inject
 
