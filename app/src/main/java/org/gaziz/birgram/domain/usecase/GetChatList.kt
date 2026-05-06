@@ -13,8 +13,7 @@ class GetChatList @Inject constructor(
     operator fun invoke(type: ChatListType): Flow<List<ChatData>> {
         return eventLoopRepository.chatList.map { map ->
             map
-                .toList()
-                .map { it.second }
+                .map { it.value }
                 .filter { me -> me.positions.find { it.listType == type } != null }
                 .sortedByDescending { me -> me.positions.find { it.listType == type }?.isPinned }
                 .sortedByDescending { me -> me.positions.find { it.listType == type }?.order }

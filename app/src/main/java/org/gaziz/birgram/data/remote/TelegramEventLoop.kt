@@ -15,6 +15,7 @@ import org.gaziz.birgram.domain.model.chatList.ChatData
 import org.gaziz.birgram.domain.model.chatList.ChatListType
 import org.gaziz.birgram.domain.model.chatList.ChatPhoto
 import org.gaziz.birgram.domain.model.chatList.ChatPosition
+import org.gaziz.birgram.domain.model.chatList.FileData
 import org.gaziz.birgram.domain.model.chatList.MessageData
 import org.gaziz.birgram.domain.repository.EventLoopRepository
 import javax.inject.Inject
@@ -54,6 +55,27 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
         )
     }
 
+    private val toFileData: (TdApi.File) -> FileData = {
+        FileData(
+            id = it.id,
+            path = it.local.path,
+            canDownload = it.local.canBeDownloaded,
+            isDownloading = it.local.isDownloadingActive,
+            isCompleted = it.local.isDownloadingCompleted
+        )
+    }
+
+    private val toChatPhoto: (TdApi.ChatPhotoInfo?) -> ChatPhoto? = {
+        if(it != null) {
+            ChatPhoto(
+                miniThumbnail = it.minithumbnail?.data,
+                small = toFileData(it.small)
+            )
+        } else {
+            null
+        }
+    }
+
     override fun createEventLoop() {
         manager.createClient(
             { event ->
@@ -69,9 +91,6 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
 
                     is TdApi.UpdateNewChat -> {
                         val chat = event.chat
-                        val chatPhoto = ChatPhoto(
-                            chat.photo?.minithumbnail?.data
-                        )
                         val chatPositions = mutableListOf<ChatPosition>()
                             .apply {
                                 chat.positions.forEach { add(toChatPositon(it)) }
@@ -84,7 +103,7 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                                     ChatData(
                                         id = chat.id,
                                         title = chat.title,
-                                        photo = chatPhoto,
+                                        photo = toChatPhoto(chat.photo),
                                         lastMessage = MessageData(""),
                                         positions = chatPositions,
                                         unreadCount = chat.unreadCount,
@@ -141,6 +160,39 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                                 newMap[event.chatId] = chat.copy(positions = positions)
                             }
                             newMap.toMap()
+                        }
+                    }
+
+                    is TdApi.UpdateChatPhoto -> {
+                        _chatList.update {
+                            val newMap = it.toMutableMap()
+                            val chat = newMap[event.chatId]
+                            if(chat != null) {
+                                newMap[event.chatId] = chat.copy(photo = toChatPhoto(event.photo))
+                            }
+                            newMap.toMap()
+                        }
+                    }
+
+                    is TdApi.UpdateFile -> {
+                        if(event.file.local.isDownloadingCompleted) {
+                            _chatList.update { map ->
+                                val newMap = map.toMutableMap()
+                                for(chat in newMap.map { it.value }){
+                                    if(chat.photo != null) {
+                                        if(chat.photo.small.id == event.file.id) {
+                                            newMap[chat.id] = chat.copy(
+                                                photo = ChatPhoto(
+                                                    chat.photo.miniThumbnail,
+                                                    toFileData(event.file)
+                                                )
+                                            )
+                                            break
+                                        }
+                                    }
+                                }
+                                newMap.toMap()
+                            }
                         }
                     }
 

@@ -30,7 +30,10 @@ fun ChatListScreen() {
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             items(chatList) { chat ->
-                ChatCard(chat)
+                ChatCard(
+                    chat,
+                    { viewModel.downloadChatPhoto(it) }
+                )
             }
         }
     }
