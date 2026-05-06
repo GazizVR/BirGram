@@ -3,8 +3,11 @@ package org.gaziz.birgram.presentation.chatList.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -27,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import org.gaziz.birgram.R
 import org.gaziz.birgram.domain.model.chatList.ChatData
+import org.gaziz.birgram.domain.model.chatList.MessageContent
 
 @Composable
 fun PhotoPlaceholder(
@@ -43,7 +47,7 @@ fun PhotoPlaceholder(
         if(title.isNotEmpty()) {
             Text(
                 title[0].toString(),
-                style = MaterialTheme.typography.labelLarge,
+                style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center,
             )
@@ -73,69 +77,116 @@ fun ChatCard(
             }
         }
     }
-    val containerSize = 60.dp
+    val containerSize = 55.dp
+    val cardHeight = 80.dp
+    val secondWeight = 0.2f
+    val primaryWeight = 0.6f
     Card(
         shape = RoundedCornerShape(0),
-        onClick = {}
+        onClick = {},
+        modifier = Modifier.height(cardHeight)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            modifier = Modifier.fillMaxWidth().padding(12.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            if(chatData.photo != null) {
-                if(chatData.photo.small.isCompleted) {
-                    Box(
-                        modifier = Modifier.clip(CircleShape)
-                    ) {
+            Box(Modifier.weight(secondWeight)) {
+                if (chatData.photo != null) {
+                    if (chatData.photo.small.isCompleted) {
                         AsyncImage(
                             model = chatData.photo.small.path,
                             contentDescription = null,
                             contentScale = ContentScale.Crop,
-                            modifier = Modifier.size(containerSize)
+                            modifier = Modifier
+                                .size(containerSize)
+                                .clip(CircleShape)
                         )
-                    }
-                } else {
-                    if(chatData.photo.miniThumbnail != null) {
-                        Box(
-                            modifier = Modifier.clip(CircleShape)
-                        ) {
+                    } else {
+                        if (chatData.photo.miniThumbnail != null) {
                             AsyncImage(
                                 model = chatData.photo.miniThumbnail,
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop,
-                                modifier = Modifier.size(containerSize)
+                                modifier = Modifier
+                                    .size(containerSize)
+                                    .clip(CircleShape)
                             )
+                        } else {
+                            PhotoPlaceholder(containerSize, chatData.title)
                         }
-                    } else {
-                        PhotoPlaceholder(containerSize,chatData.title)
                     }
+                } else {
+                    PhotoPlaceholder(containerSize, chatData.title)
                 }
-            } else {
-                PhotoPlaceholder(containerSize,chatData.title)
             }
-            Text(
-                chatData.title,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onBackground,
-            )
-            if(
-                chatData.unreadCount > 0 &&
-                chatData.reactionCount > 0 &&
-                chatData.mentionCount > 0
+            Column(
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier.weight(primaryWeight)
             ) {
-                Box(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surfaceContainer)
-                        .size(containerSize),
-                    contentAlignment = Alignment.Center
-                ) {
+                Text(
+                    chatData.title,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    maxLines = 1
+                )
+                if(chatData.lastMessage != null) {
+                    when(chatData.lastMessage.content) {
+                        is MessageContent.Other -> Text(
+                            chatData.lastMessage.content.type,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        is MessageContent.Text -> Text(
+                            chatData.lastMessage.content.text,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        else -> Text(
+                            chatData.lastMessage.content.toString(),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                } else {
+                    Spacer(Modifier)
+                }
+            }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.weight(secondWeight)
+            ) {
+                if(chatData.lastMessage != null) {
                     Text(
-                        "●",
-                        color = MaterialTheme.colorScheme.onSecondaryContainer,
-                        modifier = Modifier.padding(4.dp)
+                        chatData.lastMessage.date.toString(),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1
                     )
+                } else {
+                    Spacer(Modifier)
+                }
+                if(
+                    chatData.unreadCount > 0 &&
+                    chatData.reactionCount > 0 &&
+                    chatData.mentionCount > 0
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.surfaceContainer)
+                            .size(containerSize),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            "●",
+                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                            modifier = Modifier.padding(4.dp)
+                        )
+                    }
+                } else {
+                    Spacer(Modifier)
                 }
             }
         }

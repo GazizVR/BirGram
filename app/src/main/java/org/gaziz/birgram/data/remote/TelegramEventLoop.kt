@@ -16,8 +16,11 @@ import org.gaziz.birgram.domain.model.chatList.ChatListType
 import org.gaziz.birgram.domain.model.chatList.ChatPhoto
 import org.gaziz.birgram.domain.model.chatList.ChatPosition
 import org.gaziz.birgram.domain.model.chatList.FileData
+import org.gaziz.birgram.domain.model.chatList.MessageContent
 import org.gaziz.birgram.domain.model.chatList.MessageData
 import org.gaziz.birgram.domain.repository.EventLoopRepository
+import java.time.Instant
+import java.time.ZoneId
 import javax.inject.Inject
 
 class TelegramEventLoop @Inject constructor(private val manager: TelegramManager): EventLoopRepository {
@@ -76,6 +79,32 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
         }
     }
 
+    private val toMessage: (TdApi.Message?) -> MessageData? = {
+        if(it != null) {
+            val messageContent = when(it.content) {
+                is TdApi.MessageText -> MessageContent.Text((it.content as TdApi.MessageText).text.text)
+                is TdApi.MessagePhoto -> MessageContent.Photo
+                is TdApi.MessageVideo -> MessageContent.Video
+                is TdApi.MessageAudio -> MessageContent.Audio
+                is TdApi.MessageDocument -> MessageContent.Document
+
+                is TdApi.MessageSticker -> MessageContent.Sticker
+                is TdApi.MessageVoiceNote -> MessageContent.VoiceNote
+                is TdApi.MessageVideoNote -> MessageContent.VideoNote
+                is TdApi.MessageAnimation -> MessageContent.GIF
+                is TdApi.MessageCall -> MessageContent.Call
+
+                else -> MessageContent.Other(it.content.toString())
+            }
+            MessageData(
+                id = it.id,
+                content = messageContent,
+                date = Instant.ofEpochSecond(it.date.toLong()).atZone(ZoneId.systemDefault()).toLocalDateTime()
+            )
+        }
+        null
+    }
+
     override fun createEventLoop() {
         manager.createClient(
             { event ->
@@ -104,7 +133,7 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                                         id = chat.id,
                                         title = chat.title,
                                         photo = toChatPhoto(chat.photo),
-                                        lastMessage = MessageData(""),
+                                        lastMessage = toMessage(chat.lastMessage),
                                         positions = chatPositions,
                                         unreadCount = chat.unreadCount,
                                         mentionCount = chat.unreadMentionCount,
@@ -143,7 +172,10 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                                 val positions = mutableListOf<ChatPosition>()
                                     .apply { event.positions.forEach { add(toChatPositon(it)) } }
                                     .toList()
-                                newMap[event.chatId] = chat.copy(positions = positions)
+                                newMap[event.chatId] = chat.copy(
+                                    positions = positions,
+                                    lastMessage = toMessage(event.lastMessage)
+                                )
                             }
                             newMap.toMap()
                         }
