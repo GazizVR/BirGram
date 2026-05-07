@@ -1,7 +1,7 @@
 package org.gaziz.birgram.data.mapper
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.domain.model.chatList.FileData
+import org.gaziz.birgram.domain.model.FileData
 
 fun TdApi.File.toFileData(): FileData {
     return FileData(

@@ -1,5 +1,7 @@
 package org.gaziz.birgram.domain.model.chatList
 
+import org.gaziz.birgram.domain.model.FileData
+
 data class ChatPosition(
     val listType: ChatListType,
     val order: Long,

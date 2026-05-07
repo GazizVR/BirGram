@@ -23,7 +23,9 @@ import androidx.compose.ui.unit.dp
 import org.gaziz.birgram.R
 
 @Composable
-fun ChatListTopBar() {
+fun ChatListTopBar(
+    navigateToSearch: () -> Unit
+) {
     val appName = stringResource(R.string.app_name)
     Row(
         modifier = Modifier
@@ -49,7 +51,7 @@ fun ChatListTopBar() {
             style = MaterialTheme.typography.labelLarge
         )
         IconButton(
-            onClick = {},
+            onClick = { navigateToSearch() },
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.search),

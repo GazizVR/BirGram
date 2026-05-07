@@ -18,12 +18,14 @@ import org.gaziz.birgram.presentation.chatList.components.ChatListTopBar
 import org.gaziz.birgram.presentation.chatList.viewmodel.ChatListViewModel
 
 @Composable
-fun ChatListScreen() {
+fun ChatListScreen(
+    navigateToSearch: () -> Unit
+) {
     BackHandler { }
     val viewModel = hiltViewModel<ChatListViewModel>()
     val chatList by viewModel.mainChatList.collectAsState()
     Scaffold(
-        topBar = { ChatListTopBar() }
+        topBar = { ChatListTopBar(navigateToSearch) }
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(it),
