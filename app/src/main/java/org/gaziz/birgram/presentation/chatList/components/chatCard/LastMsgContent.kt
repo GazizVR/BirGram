@@ -1,4 +1,4 @@
-package org.gaziz.birgram.presentation.chatList.components
+package org.gaziz.birgram.presentation.chatList.components.chatCard
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -26,8 +26,8 @@ fun LastMsgContent(
         verticalAlignment = Alignment.CenterVertically
     ) {
         when(val cnt = lastMessage.content) {
-            is LastMessageContent.Other -> ChatCardText(Modifier,cnt.type)
-            is LastMessageContent.Text -> ChatCardText(Modifier,cnt.text)
+            is LastMessageContent.Other -> CardText(Modifier,cnt.type)
+            is LastMessageContent.Text -> CardText(Modifier,cnt.text)
             is LastMessageContent.Photo -> {
                 if(cnt.miniThumbNail != null) {
                     AsyncImage(
@@ -37,9 +37,9 @@ fun LastMsgContent(
                     )
                 }
                 if(cnt.caption.isNotEmpty()) {
-                    ChatCardText(Modifier,cnt.caption)
+                    CardText(Modifier,cnt.caption)
                 } else {
-                    ChatCardText(Modifier,msgType[0],color = MaterialTheme.colorScheme.primary)
+                    CardText(Modifier,msgType[0],color = MaterialTheme.colorScheme.primary)
                 }
             }
             is LastMessageContent.Document -> {
@@ -47,7 +47,7 @@ fun LastMsgContent(
                 if(cnt.caption.isNotEmpty()) {
                     text = "\uD83D\uDCC4 ${cnt.caption}"
                 }
-                ChatCardText(
+                CardText(
                     Modifier,
                     text,
                     color = MaterialTheme.colorScheme.primary
@@ -58,7 +58,7 @@ fun LastMsgContent(
                 if(cnt.caption.isNotEmpty()) {
                     text = "🎵 ${cnt.caption}"
                 }
-                ChatCardText(
+                CardText(
                     Modifier,
                     text,
                     color = MaterialTheme.colorScheme.primary
@@ -69,23 +69,23 @@ fun LastMsgContent(
                 if(cnt.caption.isNotEmpty()) {
                     text = "🎥 ${cnt.caption}"
                 }
-                ChatCardText(
+                CardText(
                     Modifier,
                     text,
                     color = MaterialTheme.colorScheme.primary
                 )
             }
             is LastMessageContent.Sticker -> {
-               ChatCardText(Modifier, "${cnt.emoji} ${msgType[1]}", color = MaterialTheme.colorScheme.primary)
+               CardText(Modifier, "${cnt.emoji} ${msgType[1]}", color = MaterialTheme.colorScheme.primary)
             }
             is LastMessageContent.VoiceNote -> {
-                ChatCardText(Modifier, msgType[2], color = MaterialTheme.colorScheme.primary)
+                CardText(Modifier, msgType[2], color = MaterialTheme.colorScheme.primary)
             }
             is LastMessageContent.VideoNote -> {
-                ChatCardText(Modifier, msgType[3], color = MaterialTheme.colorScheme.primary)
+                CardText(Modifier, msgType[3], color = MaterialTheme.colorScheme.primary)
             }
             is LastMessageContent.GIF -> {
-                ChatCardText(Modifier, msgType[4], color = MaterialTheme.colorScheme.primary)
+                CardText(Modifier, msgType[4], color = MaterialTheme.colorScheme.primary)
             }
         }
     }

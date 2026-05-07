@@ -1,4 +1,4 @@
-package org.gaziz.birgram.presentation.chatList.components
+package org.gaziz.birgram.presentation.chatList.components.chatCard
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -11,16 +11,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import org.gaziz.birgram.R
+import org.gaziz.birgram.domain.model.chatList.ChatPhoto
+
+@Composable
+fun ChatPhoto(
+    photoModel: Any,
+    iconSize: Dp
+) {
+    AsyncImage(
+        model = photoModel,
+        contentDescription = null,
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .size(iconSize)
+            .clip(CircleShape)
+    )
+}
 
 @Composable
 fun PhotoPlaceholder(
@@ -53,36 +66,25 @@ fun PhotoPlaceholder(
 }
 
 @Composable
-fun ChatPhoto(
-    photoModel: Any,
+fun CardPhoto(
+    modifier: Modifier = Modifier,
+    photo: ChatPhoto?,
+    chatTitle: String,
     iconSize: Dp
 ) {
-    AsyncImage(
-        model = photoModel,
-        contentDescription = null,
-        contentScale = ContentScale.Crop,
-        modifier = Modifier
-            .size(iconSize)
-            .clip(CircleShape)
-    )
-}
-
-@Composable
-fun ChatCardText(
-    modifier: Modifier = Modifier,
-    text: String,
-    alpha: Float = 0.5f,
-    textAlign: TextAlign = TextAlign.Center,
-    color: Color = MaterialTheme.colorScheme.onSurface.copy(alpha)
-){
-    Text(
-        text,
-        style = MaterialTheme.typography.labelSmall,
-        color = color,
-        fontSize = 10.sp,
-        maxLines = 1,
-        textAlign = textAlign,
-        overflow = TextOverflow.Ellipsis,
-        modifier = modifier
-    )
+    Box(modifier = modifier) {
+        if (photo != null) {
+            if (photo.small.isCompleted) {
+                ChatPhoto(photo.small.path,iconSize)
+            } else {
+                if (photo.miniThumbnail != null) {
+                    ChatPhoto(photo.miniThumbnail,iconSize)
+                } else {
+                    PhotoPlaceholder(iconSize, chatTitle)
+                }
+            }
+        } else {
+            PhotoPlaceholder(iconSize, chatTitle)
+        }
+    }
 }
