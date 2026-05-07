@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,12 +24,33 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import org.gaziz.birgram.R
 import org.gaziz.birgram.domain.model.chatList.ChatData
 import org.gaziz.birgram.domain.model.chatList.MessageContent
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
+
+fun LocalDateTime.formatForChatList(locale: Locale = Locale.getDefault()): String {
+    val now = LocalDate.now()
+    val date = toLocalDate()
+
+    return when {
+        date == now -> format(DateTimeFormatter.ofPattern("HH:mm"))
+
+        date.isAfter(now.minusDays(7)) -> format(DateTimeFormatter.ofPattern("EEE", locale))
+
+        date.year == now.year -> format(DateTimeFormatter.ofPattern("d MMM", locale))
+
+        else -> format(DateTimeFormatter.ofPattern("dd.MM.yy"))
+    }
+}
 
 @Composable
 fun PhotoPlaceholder(
@@ -61,6 +81,26 @@ fun PhotoPlaceholder(
         }
     }
 }
+
+@Composable
+fun ChatCardText(
+    modifier: Modifier = Modifier,
+    text: String,
+    alpha: Float = 0.5f,
+    textAlign: TextAlign = TextAlign.Center,
+){
+    Text(
+        text,
+        style = MaterialTheme.typography.labelSmall,
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha),
+        fontSize = 10.sp,
+        maxLines = 1,
+        textAlign = textAlign,
+        overflow = TextOverflow.Ellipsis,
+        modifier = modifier
+    )
+}
+
 @Composable
 fun ChatCard(
     chatData: ChatData,
@@ -77,19 +117,19 @@ fun ChatCard(
             }
         }
     }
-    val containerSize = 55.dp
-    val cardHeight = 80.dp
+    val containerHeight = 80.dp
+    val iconSize = 60.dp
     val secondWeight = 0.2f
-    val primaryWeight = 0.6f
+    val primaryWeight = 0.8f
     Card(
         shape = RoundedCornerShape(0),
         onClick = {},
-        modifier = Modifier.height(cardHeight)
+        modifier = Modifier.height(containerHeight)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(12.dp),
+            modifier = Modifier.fillMaxWidth().padding(8.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
+            horizontalArrangement = Arrangement.spacedBy(3.dp)
         ) {
             Box(Modifier.weight(secondWeight)) {
                 if (chatData.photo != null) {
@@ -99,7 +139,7 @@ fun ChatCard(
                             contentDescription = null,
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
-                                .size(containerSize)
+                                .size(iconSize)
                                 .clip(CircleShape)
                         )
                     } else {
@@ -109,84 +149,69 @@ fun ChatCard(
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
-                                    .size(containerSize)
+                                    .size(iconSize)
                                     .clip(CircleShape)
                             )
                         } else {
-                            PhotoPlaceholder(containerSize, chatData.title)
+                            PhotoPlaceholder(iconSize, chatData.title)
                         }
                     }
                 } else {
-                    PhotoPlaceholder(containerSize, chatData.title)
+                    PhotoPlaceholder(iconSize, chatData.title)
                 }
             }
             Column(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier.weight(primaryWeight)
             ) {
-                Text(
-                    chatData.title,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    maxLines = 1
-                )
-                if(chatData.lastMessage != null) {
-                    when(chatData.lastMessage.content) {
-                        is MessageContent.Other -> Text(
-                            chatData.lastMessage.content.type,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        is MessageContent.Text -> Text(
-                            chatData.lastMessage.content.text,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        else -> Text(
-                            chatData.lastMessage.content.toString(),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurface
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ){
+                    Box(Modifier.weight(0.8f)) { ChatCardText(text = chatData.title, alpha = 1f) }
+                    if(chatData.lastMessage != null) {
+                        ChatCardText(
+                            Modifier.weight(0.25f),
+                            chatData.lastMessage.date.formatForChatList(),
+                            0.35f,
+                            TextAlign.End
                         )
                     }
-                } else {
-                    Spacer(Modifier)
                 }
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.weight(secondWeight)
-            ) {
-                if(chatData.lastMessage != null) {
-                    Text(
-                        chatData.lastMessage.date.toString(),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        maxLines = 1
-                    )
-                } else {
-                    Spacer(Modifier)
-                }
-                if(
-                    chatData.unreadCount > 0 &&
-                    chatData.reactionCount > 0 &&
-                    chatData.mentionCount > 0
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.surfaceContainer)
-                            .size(containerSize),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            "●",
-                            color = MaterialTheme.colorScheme.onSecondaryContainer,
-                            modifier = Modifier.padding(4.dp)
-                        )
+                    val isUnreadBox =
+                        chatData.unreadCount > 0 &&
+                        chatData.reactionCount > 0 &&
+                        chatData.mentionCount > 0
+
+                    if(chatData.lastMessage != null) {
+                        Box(Modifier.weight(if(isUnreadBox) primaryWeight else 1f)) {
+                            when(chatData.lastMessage.content) {
+                                is MessageContent.Other -> ChatCardText(Modifier,chatData.lastMessage.content.type)
+                                is MessageContent.Text -> ChatCardText(Modifier,chatData.lastMessage.content.text)
+                                else -> ChatCardText(Modifier,chatData.lastMessage.content.toString().substringAfterLast("."))
+                            }
+                        }
                     }
-                } else {
-                    Spacer(Modifier)
+
+                    if(isUnreadBox) {
+                        Box(
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .background(MaterialTheme.colorScheme.surfaceContainer)
+                                .size(containerHeight),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                "●",
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                modifier = Modifier.padding(4.dp)
+                            )
+                        }
+                    }
                 }
             }
         }

@@ -101,8 +101,9 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                 content = messageContent,
                 date = Instant.ofEpochSecond(it.date.toLong()).atZone(ZoneId.systemDefault()).toLocalDateTime()
             )
+        } else {
+            null
         }
-        null
     }
 
     override fun createEventLoop() {
@@ -172,9 +173,10 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                                 val positions = mutableListOf<ChatPosition>()
                                     .apply { event.positions.forEach { add(toChatPositon(it)) } }
                                     .toList()
+                                val lastMsg = toMessage(event.lastMessage)
                                 newMap[event.chatId] = chat.copy(
                                     positions = positions,
-                                    lastMessage = toMessage(event.lastMessage)
+                                    lastMessage = lastMsg ?: chat.lastMessage
                                 )
                             }
                             newMap.toMap()
