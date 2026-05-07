@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,86 +19,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
-import org.gaziz.birgram.R
 import org.gaziz.birgram.domain.model.chatList.ChatData
-import org.gaziz.birgram.domain.model.chatList.MessageContent
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Locale
-
-fun LocalDateTime.formatForChatList(locale: Locale = Locale.getDefault()): String {
-    val now = LocalDate.now()
-    val date = toLocalDate()
-
-    return when {
-        date == now -> format(DateTimeFormatter.ofPattern("HH:mm"))
-
-        date.isAfter(now.minusDays(7)) -> format(DateTimeFormatter.ofPattern("EEE", locale))
-
-        date.year == now.year -> format(DateTimeFormatter.ofPattern("d MMM", locale))
-
-        else -> format(DateTimeFormatter.ofPattern("dd.MM.yy"))
-    }
-}
-
-@Composable
-fun PhotoPlaceholder(
-    containerSize: Dp,
-    title: String
-) {
-    Box(
-        modifier = Modifier
-            .clip(CircleShape)
-            .background(if(title.isNotEmpty()) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)
-            .size(containerSize),
-        contentAlignment = Alignment.Center
-    ) {
-        if(title.isNotEmpty()) {
-            Text(
-                title[0].toString(),
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onBackground,
-                textAlign = TextAlign.Center,
-            )
-        } else {
-            Icon(
-                ImageVector.vectorResource(R.drawable.skull),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.size(containerSize/2)
-            )
-        }
-    }
-}
-
-@Composable
-fun ChatCardText(
-    modifier: Modifier = Modifier,
-    text: String,
-    alpha: Float = 0.5f,
-    textAlign: TextAlign = TextAlign.Center,
-){
-    Text(
-        text,
-        style = MaterialTheme.typography.labelSmall,
-        color = MaterialTheme.colorScheme.onSurface.copy(alpha),
-        fontSize = 10.sp,
-        maxLines = 1,
-        textAlign = textAlign,
-        overflow = TextOverflow.Ellipsis,
-        modifier = modifier
-    )
-}
 
 @Composable
 fun ChatCard(
@@ -131,27 +54,14 @@ fun ChatCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(3.dp)
         ) {
+            //ChatPhoto
             Box(Modifier.weight(secondWeight)) {
                 if (chatData.photo != null) {
                     if (chatData.photo.small.isCompleted) {
-                        AsyncImage(
-                            model = chatData.photo.small.path,
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .size(iconSize)
-                                .clip(CircleShape)
-                        )
+                        ChatPhoto(chatData.photo.small.path,iconSize)
                     } else {
                         if (chatData.photo.miniThumbnail != null) {
-                            AsyncImage(
-                                model = chatData.photo.miniThumbnail,
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .size(iconSize)
-                                    .clip(CircleShape)
-                            )
+                            ChatPhoto(chatData.photo.miniThumbnail,iconSize)
                         } else {
                             PhotoPlaceholder(iconSize, chatData.title)
                         }
@@ -160,10 +70,12 @@ fun ChatCard(
                     PhotoPlaceholder(iconSize, chatData.title)
                 }
             }
+            //Main content
             Column(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier.weight(primaryWeight)
             ) {
+                //Top Row
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -172,44 +84,52 @@ fun ChatCard(
                     if(chatData.lastMessage != null) {
                         ChatCardText(
                             Modifier.weight(0.25f),
-                            chatData.lastMessage.date.formatForChatList(),
+                            chatData.lastMessage.date,
                             0.35f,
                             TextAlign.End
                         )
                     }
                 }
+                //Bottom Row
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     val isUnreadBox =
-                        chatData.unreadCount > 0 &&
-                        chatData.reactionCount > 0 &&
+                        chatData.unreadCount > 0 ||
+                        chatData.reactionCount > 0 ||
                         chatData.mentionCount > 0
 
                     if(chatData.lastMessage != null) {
-                        Box(Modifier.weight(if(isUnreadBox) primaryWeight else 1f)) {
-                            when(chatData.lastMessage.content) {
-                                is MessageContent.Other -> ChatCardText(Modifier,chatData.lastMessage.content.type)
-                                is MessageContent.Text -> ChatCardText(Modifier,chatData.lastMessage.content.text)
-                                else -> ChatCardText(Modifier,chatData.lastMessage.content.toString().substringAfterLast("."))
-                            }
-                        }
+                        LastMsgContent(
+                            Modifier.weight(if(isUnreadBox) 0.8f else 1f),
+                            chatData.lastMessage
+                        )
                     }
 
                     if(isUnreadBox) {
                         Box(
-                            modifier = Modifier
-                                .clip(CircleShape)
-                                .background(MaterialTheme.colorScheme.surfaceContainer)
-                                .size(containerHeight),
-                            contentAlignment = Alignment.Center
+                            Modifier.weight(0.15f),
+                            contentAlignment = Alignment.CenterEnd
                         ) {
-                            Text(
-                                "●",
-                                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                                modifier = Modifier.padding(4.dp)
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .clip(CircleShape)
+                                    .background(MaterialTheme.colorScheme.surfaceContainer)
+                                    .size(26.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    when {
+                                        chatData.reactionCount > 0 -> "❤\uFE0F"
+                                        chatData.unreadCount > 0 -> chatData.unreadCount.toString()
+                                        else -> "•"
+                                    },
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontSize = 8.sp,
+                                )
+                            }
                         }
                     }
                 }
