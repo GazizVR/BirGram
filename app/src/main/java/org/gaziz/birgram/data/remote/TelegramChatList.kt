@@ -2,7 +2,7 @@ package org.gaziz.birgram.data.remote
 
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.domain.model.RequestResponse
-import org.gaziz.birgram.domain.model.chatList.ChatListType
+import org.gaziz.birgram.domain.model.chat.ChatListType
 import org.gaziz.birgram.domain.repository.ChatListRepository
 import javax.inject.Inject
 
@@ -22,12 +22,13 @@ class TelegramChatList @Inject constructor(
                     ChatListType.Archive ->  TdApi.ChatListArchive()
                     ChatListType.Main -> TdApi.ChatListMain()
                 }
+            },
+            {
+                if(it != null) {
+                    response = it
+                }
             }
-        ) {
-            if(it != null) {
-                response = it
-            }
-        }
+        )
         return response
     }
 
@@ -39,7 +40,8 @@ class TelegramChatList @Inject constructor(
                 this.limit = 0
                 this.offset = 0
                 this.synchronous = false
-            }
-        ) {}
+            },
+            {}
+        )
     }
 }

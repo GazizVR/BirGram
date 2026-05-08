@@ -1,4 +1,4 @@
-package org.gaziz.birgram.presentation.chatList.components.chatCard
+package org.gaziz.birgram.presentation.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -8,6 +8,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,7 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import coil3.compose.AsyncImage
 import org.gaziz.birgram.R
-import org.gaziz.birgram.domain.model.chatList.ChatPhoto
+import org.gaziz.birgram.domain.model.chat.ChatPhoto
 
 @Composable
 fun ChatPhoto(
@@ -70,8 +71,20 @@ fun CardPhoto(
     modifier: Modifier = Modifier,
     photo: ChatPhoto?,
     chatTitle: String,
-    iconSize: Dp
+    iconSize: Dp,
+    downloadPhoto: (Int) -> Unit
 ) {
+    LaunchedEffect(Unit) {
+        if(photo != null) {
+            if(
+                photo.small.canDownload &&
+                !photo.small.isDownloading &&
+                !photo.small.isCompleted
+            ) {
+                downloadPhoto(photo.small.id)
+            }
+        }
+    }
     Box(modifier = modifier) {
         if (photo != null) {
             if (photo.small.isCompleted) {

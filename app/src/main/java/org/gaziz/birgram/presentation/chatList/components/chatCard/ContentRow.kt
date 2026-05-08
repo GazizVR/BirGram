@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.gaziz.birgram.domain.model.chatList.LastMessageData
+import org.gaziz.birgram.domain.model.chat.LastMessageData
 
 @Composable
 fun UnreadBox(

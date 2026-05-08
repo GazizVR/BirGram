@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.drinkless.tdlib.TdApi
+import org.gaziz.birgram.data.mapper.toChatData
 import org.gaziz.birgram.data.mapper.toChatPosition
 import org.gaziz.birgram.data.mapper.toFileData
 import org.gaziz.birgram.data.mapper.toMessageData
@@ -15,9 +16,9 @@ import org.gaziz.birgram.domain.model.auth.AuthCodeType
 import org.gaziz.birgram.domain.model.auth.AuthPasswordInfo
 import org.gaziz.birgram.domain.model.auth.AuthState
 import org.gaziz.birgram.domain.model.auth.CodeType
-import org.gaziz.birgram.domain.model.chatList.ChatData
-import org.gaziz.birgram.domain.model.chatList.ChatPhoto
-import org.gaziz.birgram.domain.model.chatList.ChatPosition
+import org.gaziz.birgram.domain.model.chat.ChatData
+import org.gaziz.birgram.domain.model.chat.ChatPhoto
+import org.gaziz.birgram.domain.model.chat.ChatPosition
 import org.gaziz.birgram.domain.repository.EventLoopRepository
 import javax.inject.Inject
 
@@ -55,25 +56,8 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
 
                     is TdApi.UpdateNewChat -> {
                         val chat = event.chat
-                        val chatPositions = mutableListOf<ChatPosition>()
-                            .apply { chat.positions.forEach { add(it.toChatPosition()) } }
-                            .toList()
                         _chatList.update { map ->
-                            map.toMutableMap().apply {
-                                put(
-                                    chat.id,
-                                    ChatData(
-                                        id = chat.id,
-                                        title = chat.title,
-                                        photo = chat.photo.toPhotoInfo(),
-                                        lastMessage = chat.lastMessage.toMessageData(),
-                                        positions = chatPositions,
-                                        unreadCount = chat.unreadCount,
-                                        mentionCount = chat.unreadMentionCount,
-                                        reactionCount = chat.unreadReactionCount
-                                    )
-                                )
-                            }.toMap()
+                            map.toMutableMap().apply { put(chat.id, chat.toChatData()) }.toMap()
                         }
                     }
 

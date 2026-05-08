@@ -11,8 +11,8 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import org.gaziz.birgram.R
-import org.gaziz.birgram.domain.model.chatList.LastMessageContent
-import org.gaziz.birgram.domain.model.chatList.LastMessageData
+import org.gaziz.birgram.domain.model.chat.LastMessageContent
+import org.gaziz.birgram.domain.model.chat.LastMessageData
 
 @Composable
 fun LastMsgContent(

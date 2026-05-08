@@ -2,8 +2,8 @@ package org.gaziz.birgram.domain.usecase
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import org.gaziz.birgram.domain.model.chatList.ChatData
-import org.gaziz.birgram.domain.model.chatList.ChatListType
+import org.gaziz.birgram.domain.model.chat.ChatData
+import org.gaziz.birgram.domain.model.chat.ChatListType
 import org.gaziz.birgram.domain.repository.EventLoopRepository
 import javax.inject.Inject
 

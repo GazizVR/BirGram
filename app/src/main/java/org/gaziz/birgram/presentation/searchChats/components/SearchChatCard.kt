@@ -1,4 +1,4 @@
-package org.gaziz.birgram.presentation.chatList.components
+package org.gaziz.birgram.presentation.searchChats.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,17 +8,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.gaziz.birgram.domain.model.chat.ChatData
-import org.gaziz.birgram.presentation.chatList.components.chatCard.ContentRow
-import org.gaziz.birgram.presentation.chatList.components.chatCard.TitleRow
 import org.gaziz.birgram.presentation.common.CardPhoto
 
 @Composable
-fun ChatCard(
+fun SearchChatCard(
     chatData: ChatData,
     downloadPhoto: (Int) -> Unit
 ) {
@@ -47,15 +47,10 @@ fun ChatCard(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier.weight(primaryWeight)
             ) {
-                TitleRow(
-                    chatData.title,
-                    chatData.lastMessage
-                )
-                ContentRow(
-                    chatData.unreadCount,
-                    chatData.reactionCount,
-                    chatData.mentionCount,
-                    chatData.lastMessage
+                Text(
+                    text = chatData.title,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
         }

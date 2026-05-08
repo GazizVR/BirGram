@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
-import org.gaziz.birgram.domain.model.chatList.LastMessageData
+import org.gaziz.birgram.domain.model.chat.LastMessageData
 
 @Composable
 fun CardText(

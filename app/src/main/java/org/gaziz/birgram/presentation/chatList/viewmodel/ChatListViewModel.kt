@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.gaziz.birgram.domain.model.chatList.ChatListType
+import org.gaziz.birgram.domain.model.chat.ChatListType
 import org.gaziz.birgram.domain.repository.ChatListRepository
 import org.gaziz.birgram.domain.usecase.GetChatList
 import org.gaziz.birgram.domain.usecase.LoadAllChats

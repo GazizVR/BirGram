@@ -1,9 +1,11 @@
 package org.gaziz.birgram.data.mapper
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.domain.model.chatList.ChatListType
-import org.gaziz.birgram.domain.model.chatList.ChatPhoto
-import org.gaziz.birgram.domain.model.chatList.ChatPosition
+import org.gaziz.birgram.domain.model.chat.ChatData
+import org.gaziz.birgram.domain.model.chat.ChatListType
+import org.gaziz.birgram.domain.model.chat.ChatPhoto
+import org.gaziz.birgram.domain.model.chat.ChatPosition
+import org.gaziz.birgram.domain.model.chat.ChatType
 
 fun TdApi.ChatList.toChatListType(): ChatListType {
     return when(this){
@@ -30,4 +32,32 @@ fun TdApi.ChatPhotoInfo?.toPhotoInfo(): ChatPhoto? {
     } else {
         null
     }
+}
+
+fun TdApi.ChatType.toType(): ChatType {
+    return when(this) {
+        is TdApi.ChatTypeBasicGroup -> ChatType.BasicGroup(this.basicGroupId)
+        is TdApi.ChatTypePrivate -> ChatType.Private(this.userId)
+        is TdApi.ChatTypeSupergroup -> ChatType.SuperGroup(this.supergroupId,this.isChannel)
+        is TdApi.ChatTypeSecret -> ChatType.Secret(this.secretChatId,this.userId)
+        else -> ChatType.Other
+    }
+}
+
+fun TdApi.Chat.toChatData(): ChatData {
+    val chat = this
+    val chatPositions = mutableListOf<ChatPosition>()
+        .apply { chat.positions.forEach { add(it.toChatPosition()) } }
+        .toList()
+    return ChatData(
+        id = chat.id,
+        title = chat.title,
+        type = chat.type.toType(),
+        photo = chat.photo.toPhotoInfo(),
+        lastMessage = chat.lastMessage.toMessageData(),
+        positions = chatPositions,
+        unreadCount = chat.unreadCount,
+        mentionCount = chat.unreadMentionCount,
+        reactionCount = chat.unreadReactionCount
+    )
 }

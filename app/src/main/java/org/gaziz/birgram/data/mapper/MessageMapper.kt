@@ -1,8 +1,8 @@
 package org.gaziz.birgram.data.mapper
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.domain.model.chatList.LastMessageContent
-import org.gaziz.birgram.domain.model.chatList.LastMessageData
+import org.gaziz.birgram.domain.model.chat.LastMessageContent
+import org.gaziz.birgram.domain.model.chat.LastMessageData
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime

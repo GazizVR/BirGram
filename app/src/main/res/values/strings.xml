@@ -13,15 +13,12 @@
         <item>is this the correct phone number?</item>
         <item>Edit</item>
         <item>Yes</item>
-
         <!--9-->
         <item>No</item>
         <item>Are you sure you want to start over?</item>
-
         <!--11-->
         <item>Verification code</item>
         <item>Enter Code</item>
-
         <!--13-->
         <item>Your password</item>
         <item>Two-Step Verification enabled. Your account is protected with an additional password</item>
@@ -62,5 +59,7 @@
         <item>⭕ Video message</item>
         <item>GIF</item>
     </string-array>
+
+    <string name="search_placeholder">Search…</string>
 
 </resources>

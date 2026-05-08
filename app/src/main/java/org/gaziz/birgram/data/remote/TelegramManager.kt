@@ -25,6 +25,7 @@ class TelegramManager @Inject constructor(){
     fun sendRequest(
         query: TdApi.Function<*>,
         onError: (RequestResponse.Error?) -> Unit,
+        onResult: (TdApi.Object) -> Unit = {}
     ) {
         if(client == null) {
             Log.e("TDLib", "Client is null")
@@ -35,6 +36,7 @@ class TelegramManager @Inject constructor(){
         client?.send(
             query,
             {
+                onResult(it)
                 if(it is TdApi.Error) {
                     Log.e("TDLib", "${it.code}, ${it.message}")
                     onError(RequestResponse.Error(it.code,it.message))

@@ -2,7 +2,7 @@ package org.gaziz.birgram.domain.repository
 
 import kotlinx.coroutines.flow.StateFlow
 import org.gaziz.birgram.domain.model.auth.AuthState
-import org.gaziz.birgram.domain.model.chatList.ChatData
+import org.gaziz.birgram.domain.model.chat.ChatData
 
 interface EventLoopRepository {
     val authState: StateFlow<AuthState>

@@ -26,7 +26,7 @@ class TelegramAuth @Inject constructor(private val manager: TelegramManager): Au
             deviceModel = Build.MODEL
             applicationVersion = "0.1"
         }
-        manager.sendRequest(parameters) { if (it != null) onError(it.message) else onError(null) }
+        manager.sendRequest(parameters,{ if (it != null) onError(it.message) else onError(null) })
     }
 
     override fun setPhoneNumber(
@@ -37,7 +37,7 @@ class TelegramAuth @Inject constructor(private val manager: TelegramManager): Au
             this.phoneNumber = phoneNumber
             this.settings = null
         }
-        manager.sendRequest(phoneNumber) { if (it != null) onError(it.message) else onError(null) }
+        manager.sendRequest(phoneNumber,{ if (it != null) onError(it.message) else onError(null) })
     }
 
     override fun checkCode(
@@ -47,7 +47,7 @@ class TelegramAuth @Inject constructor(private val manager: TelegramManager): Au
         val code = TdApi.CheckAuthenticationCode().apply {
             this.code = code
         }
-        manager.sendRequest(code) { if (it != null) onError(it.message) else onError(null) }
+        manager.sendRequest(code,{ if (it != null) onError(it.message) else onError(null) })
     }
 
     override fun resendCode(
@@ -58,7 +58,7 @@ class TelegramAuth @Inject constructor(private val manager: TelegramManager): Au
             reason = if (isUser) TdApi.ResendCodeReasonUserRequest()
             else TdApi.ResendCodeReasonVerificationFailed()
         }
-        manager.sendRequest(parameters) { if (it != null) onError(it.message) else onError(null) }
+        manager.sendRequest(parameters,{ if (it != null) onError(it.message) else onError(null) })
     }
 
     override fun checkPassword(
@@ -68,7 +68,7 @@ class TelegramAuth @Inject constructor(private val manager: TelegramManager): Au
         val parameters = TdApi.CheckAuthenticationPassword().apply {
             this.password = password
         }
-        manager.sendRequest(parameters) { if (it != null) onError(it.message) else onError(null) }
+        manager.sendRequest(parameters,{ if (it != null) onError(it.message) else onError(null) })
     }
 
 }

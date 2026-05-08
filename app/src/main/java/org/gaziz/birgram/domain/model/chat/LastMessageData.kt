@@ -1,4 +1,4 @@
-package org.gaziz.birgram.domain.model.chatList
+package org.gaziz.birgram.domain.model.chat
 
 sealed class LastMessageContent {
     data class Text(val text: String): LastMessageContent()
