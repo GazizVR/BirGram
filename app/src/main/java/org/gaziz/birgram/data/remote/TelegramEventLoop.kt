@@ -107,21 +107,22 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                     is TdApi.UpdateChatDraftMessage -> {
                         _chatList.update { map ->
                             val newMap = map.toMutableMap()
-                            val chat = newMap[event.chatId]
+                            var chat = newMap[event.chatId]
                             if(chat != null){
                                 val positions = mutableListOf<ChatPosition>()
                                     .apply { event.positions.forEach { add(it.toChatPosition()) } }
                                     .toList()
-                                newMap[event.chatId] = chat.copy(positions = positions)
+                                chat = chat.copy(positions = positions)
                                 val lastMessage = event.draftMessage
                                 if(lastMessage != null) {
-                                    newMap[event.chatId] = chat.copy(
+                                    chat = chat.copy(
                                         lastMessage = chat.lastMessage?.copy(
                                             date = lastMessage.date.fromUnixTimeStamp().formatForChatList(),
                                             content = LastMessageContent.Draft
                                         )
                                     )
                                 }
+                                newMap[chat.id] = chat
                             }
                             newMap.toMap()
                         }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +18,7 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.gaziz.birgram.R
+import org.gaziz.birgram.domain.model.UserStatus
 import org.gaziz.birgram.domain.model.chat.ChatData
 import org.gaziz.birgram.domain.model.chat.ChatType
 import org.gaziz.birgram.presentation.common.CardPhoto
@@ -30,6 +32,7 @@ fun SearchChatCard(
     val iconSize = 60.dp
     val membersType = stringArrayResource(R.array.members_type)
     val groupType = stringArrayResource(R.array.group_type)
+    val cardColor = CardDefaults.cardColors().containerColor
     Card(
         shape = RoundedCornerShape(0),
         onClick = {},
@@ -44,7 +47,9 @@ fun SearchChatCard(
                 photo = chatData.photo,
                 chatTitle = chatData.title,
                 iconSize = iconSize,
-                downloadPhoto = downloadPhoto
+                downloadPhoto = downloadPhoto,
+                isOnline = if(chatData.type is ChatType.Private) chatData.type.userStatus is UserStatus.Online else false,
+                cardColor = cardColor
             )
             Column(
                 horizontalAlignment = Alignment.Start,

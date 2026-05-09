@@ -12,7 +12,7 @@ class TelegramManager @Inject constructor(){
     var client: Client? = null
 
     companion object {
-        const val LOG_TAG = "TELEGRAM"
+        const val LOG_TAG = "BG"
     }
 
     val logTag = LOG_TAG

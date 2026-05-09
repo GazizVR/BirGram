@@ -8,11 +8,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.gaziz.birgram.domain.model.UserStatus
 import org.gaziz.birgram.domain.model.chat.ChatData
+import org.gaziz.birgram.domain.model.chat.ChatType
 import org.gaziz.birgram.presentation.chatList.components.chatCard.ContentRow
 import org.gaziz.birgram.presentation.chatList.components.chatCard.TitleRow
 import org.gaziz.birgram.presentation.common.CardPhoto
@@ -24,6 +27,7 @@ fun ChatCard(
 ) {
     val containerHeight = 80.dp
     val iconSize = 60.dp
+    val cardColor = CardDefaults.cardColors().containerColor
     Card(
         shape = RoundedCornerShape(0),
         onClick = {},
@@ -38,7 +42,9 @@ fun ChatCard(
                 photo = chatData.photo,
                 chatTitle = chatData.title,
                 iconSize = iconSize,
-                downloadPhoto = downloadPhoto
+                downloadPhoto = downloadPhoto,
+                isOnline = if(chatData.type is ChatType.Private) chatData.type.userStatus is UserStatus.Online else false,
+                cardColor = cardColor
             )
             Column(
                 horizontalAlignment = Alignment.Start,
