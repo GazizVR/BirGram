@@ -24,8 +24,11 @@ class TelegramSearchChats @Inject constructor(
             newMap.toMap()
         }
     }
-    override fun searchLocal(query: String, limit: Int): List<Long> {
-        var result = listOf<Long>()
+    override fun searchLocal(
+        query: String,
+        limit: Int,
+        onResult: (List<Long>) -> Unit
+    ) {
         manager.sendRequest(
             TdApi.SearchChats().apply {
                 this.query = query
@@ -34,11 +37,12 @@ class TelegramSearchChats @Inject constructor(
             {},
             {
                 if(it is TdApi.Chats) {
-                   result = it.chatIds.toList()
+                    onResult(it.chatIds.toList())
+                } else {
+                    onResult(emptyList())
                 }
             }
         )
-        return result
     }
 
     override fun downloadPhoto(fileId: Int) {

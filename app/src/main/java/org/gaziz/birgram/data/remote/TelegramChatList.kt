@@ -11,9 +11,9 @@ class TelegramChatList @Inject constructor(
 ): ChatListRepository {
     override fun loadChats(
         limit: Int,
-        listType: ChatListType
-    ): RequestResponse {
-        var response: RequestResponse = RequestResponse.OK
+        listType: ChatListType,
+        onError: (RequestResponse.Error) -> Unit
+    ) {
         manager.sendRequest(
             TdApi.LoadChats().apply {
                 this.limit = limit
@@ -25,11 +25,10 @@ class TelegramChatList @Inject constructor(
             },
             {
                 if(it != null) {
-                    response = it
+                    onError(it)
                 }
             }
         )
-        return response
     }
 
     override fun downloadChatPhoto(fileId: Int) {

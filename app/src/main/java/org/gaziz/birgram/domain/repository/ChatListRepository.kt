@@ -6,7 +6,8 @@ import org.gaziz.birgram.domain.model.chat.ChatListType
 interface ChatListRepository {
     fun loadChats(
         limit: Int,
-        listType: ChatListType
-    ): RequestResponse
+        listType: ChatListType,
+        onError: (RequestResponse.Error) -> Unit
+    )
     fun downloadChatPhoto(fileId: Int)
 }

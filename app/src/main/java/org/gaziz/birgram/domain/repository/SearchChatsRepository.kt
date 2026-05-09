@@ -8,7 +8,8 @@ interface SearchChatsRepository {
     fun updateSearchChats(chat: ChatData?)
     fun searchLocal(
         query: String,
-        limit: Int
-    ): List<Long>
+        limit: Int,
+        onResult: (List<Long>) -> Unit
+    )
     fun downloadPhoto(fileId: Int)
 }

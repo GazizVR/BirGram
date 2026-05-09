@@ -12,15 +12,20 @@ class SendSearchQuery @Inject constructor(
         query: String,
         limit: Int
     ) {
-        val chatIds = searchChatsRepository.searchLocal(query,limit)
-        if(chatIds.isNotEmpty()) {
-            searchChatsRepository.updateSearchChats(null)
-            chatIds.forEach {
-                val chat = eventLoopRepository.chatList.value[it]
-                searchChatsRepository.updateSearchChats(chat)
+        searchChatsRepository.searchLocal(
+            query,
+            limit
+        ) { chatIds ->
+            if(chatIds.isNotEmpty()) {
+                searchChatsRepository.updateSearchChats(null)
+                chatIds.forEach { chatId ->
+                    eventLoopRepository.chatList.value[chatId]?.let {
+                        searchChatsRepository.updateSearchChats(it)
+                    }
+                }
+            } else {
+                searchChatsRepository.updateSearchChats(null)
             }
-        } else {
-           searchChatsRepository.updateSearchChats(null)
         }
     }
 }

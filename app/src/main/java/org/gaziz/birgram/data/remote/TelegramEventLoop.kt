@@ -46,7 +46,7 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
             { event ->
                 when (event) {
                     is TdApi.Error -> {
-                        Log.e("TDLib", "${event.code}: ${event.message}")
+                        Log.e(manager.logTag, "${event.code}: ${event.message}")
                         setErrorMessage(event.message)
                     }
 
@@ -150,7 +150,6 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                         _chatList.update {
                             val newMap = it.toMutableMap()
                             newMap[event.chatId]?.let { chat ->
-                                Log.d("FUCK","ITS WORKS")
                                 newMap[event.chatId] = chat.copy(unreadCount = event.unreadCount)
                             }
                             newMap.toMap()
@@ -218,7 +217,7 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
             },
             { throwable ->
                 val message = throwable.localizedMessage ?: throwable.message ?: "unknown update handler exception"
-                Log.e("TDLib", message)
+                Log.e(manager.logTag, message)
                 setErrorMessage(message)
             },
         )

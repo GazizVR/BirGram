@@ -11,6 +11,12 @@ import javax.inject.Singleton
 class TelegramManager @Inject constructor(){
     var client: Client? = null
 
+    companion object {
+        const val LOG_TAG = "TELEGRAM"
+    }
+
+    val logTag = LOG_TAG
+
     fun createClient(
         updateHandler: (TdApi.Object) -> Unit,
         exceptionHandler: (Throwable) -> Unit
@@ -28,7 +34,7 @@ class TelegramManager @Inject constructor(){
         onResult: (TdApi.Object) -> Unit = {}
     ) {
         if(client == null) {
-            Log.e("TDLib", "Client is null")
+            Log.e(LOG_TAG, "Client is null")
             onError(RequestResponse.Error(500,"Client is null"))
             return
         }
@@ -38,13 +44,13 @@ class TelegramManager @Inject constructor(){
             {
                 onResult(it)
                 if(it is TdApi.Error) {
-                    Log.e("TDLib", "${it.code}, ${it.message}")
+                    Log.e(LOG_TAG, "${it.code}, ${it.message}")
                     onError(RequestResponse.Error(it.code,it.message))
                 }
             },
             {
                 val message = it.localizedMessage ?: it.message ?: "unknown request exception"
-                Log.e("TDLib", message)
+                Log.e(LOG_TAG, message)
                 onError(RequestResponse.Error(500,message))
             }
         )
