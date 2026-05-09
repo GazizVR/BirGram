@@ -13,25 +13,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.domain.model.chat.LastMessageData
 
 @Composable
 fun UnreadBox(
-    modifier: Modifier = Modifier,
     unreadCount: Int,
     reactionCount: Int
 ) {
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.CenterEnd
-    ) {
+    Box(contentAlignment = Alignment.CenterEnd) {
         Box(
             modifier = Modifier
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.surfaceContainer)
-                .size(26.dp),
+                .size(32.dp),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -43,6 +40,7 @@ fun UnreadBox(
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                 style = MaterialTheme.typography.labelSmall,
                 fontSize = 8.sp,
+                textAlign = TextAlign.Center
             )
         }
     }
@@ -57,23 +55,19 @@ fun ContentRow(
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        val isUnreadBox =
-            unreadCount > 0 ||
-                    reactionCount > 0 ||
-                    mentionCount > 0
+        val isUnreadBox = unreadCount > 0 || reactionCount > 0 || mentionCount > 0
 
         if(lastMessage != null) {
             LastMsgContent(
-                Modifier.weight(if(isUnreadBox) 0.8f else 1f),
+                Modifier.weight(1f),
                 lastMessage
             )
         }
 
         if(isUnreadBox) {
             UnreadBox(
-                Modifier.weight(0.15f),
                 unreadCount,
                 reactionCount
             )

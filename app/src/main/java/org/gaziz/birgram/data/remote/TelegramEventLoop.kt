@@ -11,6 +11,7 @@ import org.gaziz.birgram.data.mapper.toChatPosition
 import org.gaziz.birgram.data.mapper.toFileData
 import org.gaziz.birgram.data.mapper.toMessageData
 import org.gaziz.birgram.data.mapper.toPhotoInfo
+import org.gaziz.birgram.data.mapper.toStatus
 import org.gaziz.birgram.domain.model.auth.AuthCodeInfo
 import org.gaziz.birgram.domain.model.auth.AuthCodeType
 import org.gaziz.birgram.domain.model.auth.AuthPasswordInfo
@@ -19,6 +20,7 @@ import org.gaziz.birgram.domain.model.auth.CodeType
 import org.gaziz.birgram.domain.model.chat.ChatData
 import org.gaziz.birgram.domain.model.chat.ChatPhoto
 import org.gaziz.birgram.domain.model.chat.ChatPosition
+import org.gaziz.birgram.domain.model.chat.ChatType
 import org.gaziz.birgram.domain.repository.EventLoopRepository
 import javax.inject.Inject
 
@@ -171,6 +173,101 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                             val newMap = it.toMutableMap()
                             newMap[event.chatId]?.let { chat ->
                                 newMap[event.chatId] = chat.copy(unreadCount = event.unreadReactionCount)
+                            }
+                            newMap.toMap()
+                        }
+                    }
+
+                    is TdApi.UpdateBasicGroup -> {
+                        manager.sendRequest(
+                            TdApi.CreateBasicGroupChat().apply {
+                                this.basicGroupId = event.basicGroup.id
+                                this.force = false
+                            },
+                            {}
+                        ) {
+                            if(it is TdApi.Chat){
+                                val respChat = it.toChatData()
+                                _chatList.update {
+                                    val newMap = it.toMutableMap()
+                                    val chat = newMap[respChat.id]
+                                    if(chat != null) {
+                                        newMap[respChat.id] = chat.copy(
+                                            type = ChatType.BasicGroup(event.basicGroup.id,event.basicGroup.memberCount)
+                                        )
+                                    }
+                                    newMap.toMap()
+                                }
+                            }
+                        }
+                    }
+
+                    is TdApi.UpdateSupergroup -> {
+                        manager.sendRequest(
+                            TdApi.CreateSupergroupChat().apply {
+                                this.supergroupId = event.supergroup.id
+                                this.force = false
+                            },
+                            {}
+                        ) {
+                            if(it is TdApi.Chat){
+                                val respChat = it.toChatData()
+                                _chatList.update {
+                                    val newMap = it.toMutableMap()
+                                    val chat = newMap[respChat.id]
+                                    if(chat != null) {
+                                        newMap[respChat.id] = chat.copy(
+                                            type = ChatType.SuperGroup(
+                                                event.supergroup.id,
+                                                event.supergroup.isChannel,
+                                                event.supergroup.memberCount
+                                            )
+                                        )
+                                    }
+                                    newMap.toMap()
+                                }
+                            }
+                        }
+                    }
+
+                    is TdApi.UpdateUserStatus -> {
+                        manager.sendRequest(
+                            TdApi.CreatePrivateChat().apply {
+                                this.userId = event.userId
+                                this.force = false
+                            },
+                            {}
+                        ) {
+                            if(it is TdApi.Chat){
+                                val respChat = it.toChatData()
+                                _chatList.update {
+                                    val newMap = it.toMutableMap()
+                                    val chat = newMap[respChat.id]
+                                    if(chat != null) {
+                                        newMap[respChat.id] = chat.copy(type =
+                                            ChatType.Private(
+                                                userId = event.userId,
+                                                userStatus = event.status.toStatus()
+                                            )
+                                        )
+                                    }
+                                    newMap.toMap()
+                                }
+                            }
+                        }
+
+                        _chatList.update { map ->
+                            val newMap = map.toMutableMap()
+                            for(chat in newMap) {
+                                val type = chat.value.type
+                                if(type is ChatType.Secret) {
+                                    if(type.userId == event.userId) {
+                                        newMap[chat.key] = chat.value.copy(
+                                            type = type.copy(userStatus = event.status.toStatus())
+                                        )
+                                        break
+                                    }
+                                }
                             }
                             newMap.toMap()
                         }

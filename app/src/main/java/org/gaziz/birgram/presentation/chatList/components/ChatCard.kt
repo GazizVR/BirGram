@@ -24,8 +24,6 @@ fun ChatCard(
 ) {
     val containerHeight = 80.dp
     val iconSize = 60.dp
-    val secondWeight = 0.2f
-    val primaryWeight = 0.8f
     Card(
         shape = RoundedCornerShape(0),
         onClick = {},
@@ -34,10 +32,9 @@ fun ChatCard(
         Row(
             modifier = Modifier.fillMaxWidth().padding(8.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(3.dp)
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             CardPhoto(
-                modifier = Modifier.weight(secondWeight),
                 photo = chatData.photo,
                 chatTitle = chatData.title,
                 iconSize = iconSize,
@@ -45,7 +42,7 @@ fun ChatCard(
             )
             Column(
                 horizontalAlignment = Alignment.Start,
-                modifier = Modifier.weight(primaryWeight)
+                modifier = Modifier.weight(1f)
             ) {
                 TitleRow(
                     chatData.title,

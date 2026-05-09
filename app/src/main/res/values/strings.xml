@@ -62,4 +62,32 @@
 
     <string name="search_placeholder">Search…</string>
 
+    <string-array name="members_type">
+        <item>members</item>
+        <item>subscribers</item>
+    </string-array>
+    
+    <string-array name="group_type">
+        <item>Basic group</item>
+        <item>Channel</item>
+        <item>Super group</item>
+    </string-array>
+
+    <string name="empty_search">Nothing to show</string>
+
+    <string-array name="last_seen_cnt">
+        <item>online</item>
+        <item>last seen</item>
+        <item>recently</item>
+        <item>within a week</item>
+        <item>within a month</item>
+        <item>a long time ago</item>
+    </string-array>
+
+    <string-array name="seen_offline">
+        <item>just now</item>
+        <item>at</item>
+        <item>yesterday</item>
+    </string-array>
+
 </resources>

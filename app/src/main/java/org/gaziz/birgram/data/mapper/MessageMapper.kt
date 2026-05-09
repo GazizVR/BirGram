@@ -3,27 +3,11 @@ package org.gaziz.birgram.data.mapper
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.domain.model.chat.LastMessageContent
 import org.gaziz.birgram.domain.model.chat.LastMessageData
-import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-fun LocalDateTime.formatForChatList(locale: Locale = Locale.getDefault()): String {
-    val now = LocalDate.now()
-    val date = toLocalDate()
-
-    return when {
-        date == now -> format(DateTimeFormatter.ofPattern("HH:mm"))
-
-        date.isAfter(now.minusDays(7)) -> format(DateTimeFormatter.ofPattern("EEE", locale))
-
-        date.year == now.year -> format(DateTimeFormatter.ofPattern("d MMM", locale))
-
-        else -> format(DateTimeFormatter.ofPattern("dd.MM.yy"))
-    }
-}
 
 fun TdApi.Message?.toMessageData(): LastMessageData? {
     return if(this != null) {
@@ -44,7 +28,7 @@ fun TdApi.Message?.toMessageData(): LastMessageData? {
         LastMessageData(
             id = this.id,
             content = lastMessageContent,
-            date = Instant.ofEpochSecond(this.date.toLong()).atZone(ZoneId.systemDefault()).toLocalDateTime().formatForChatList()
+            date = this.date.fromUnixTimeStamp().formatForChatList()
         )
     } else {
         null

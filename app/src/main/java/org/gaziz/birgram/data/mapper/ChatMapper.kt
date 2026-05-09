@@ -1,6 +1,7 @@
 package org.gaziz.birgram.data.mapper
 
 import org.drinkless.tdlib.TdApi
+import org.gaziz.birgram.domain.model.UserStatus
 import org.gaziz.birgram.domain.model.chat.ChatData
 import org.gaziz.birgram.domain.model.chat.ChatListType
 import org.gaziz.birgram.domain.model.chat.ChatPhoto
@@ -37,9 +38,9 @@ fun TdApi.ChatPhotoInfo?.toPhotoInfo(): ChatPhoto? {
 fun TdApi.ChatType.toType(): ChatType {
     return when(this) {
         is TdApi.ChatTypeBasicGroup -> ChatType.BasicGroup(this.basicGroupId)
-        is TdApi.ChatTypePrivate -> ChatType.Private(this.userId)
+        is TdApi.ChatTypePrivate -> ChatType.Private(this.userId, UserStatus.Recently)
         is TdApi.ChatTypeSupergroup -> ChatType.SuperGroup(this.supergroupId,this.isChannel)
-        is TdApi.ChatTypeSecret -> ChatType.Secret(this.secretChatId,this.userId)
+        is TdApi.ChatTypeSecret -> ChatType.Secret(this.secretChatId,this.userId,UserStatus.Recently)
         else -> ChatType.Other
     }
 }

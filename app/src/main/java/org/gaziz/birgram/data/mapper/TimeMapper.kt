@@ -1,0 +1,30 @@
+package org.gaziz.birgram.data.mapper
+
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Locale
+
+fun Int.fromUnixTimeStamp(zoneId: ZoneId = ZoneId.systemDefault()): LocalDateTime {
+    return Instant
+        .ofEpochSecond(this.toLong())
+        .atZone(zoneId)
+        .toLocalDateTime()
+}
+
+fun LocalDateTime.formatForChatList(locale: Locale = Locale.getDefault()): String {
+    val now = LocalDate.now()
+    val date = toLocalDate()
+
+    return when {
+        date == now -> format(DateTimeFormatter.ofPattern("HH:mm"))
+
+        date.isAfter(now.minusDays(7)) -> format(DateTimeFormatter.ofPattern("EEE", locale))
+
+        date.year == now.year -> format(DateTimeFormatter.ofPattern("d MMM", locale))
+
+        else -> format(DateTimeFormatter.ofPattern("dd.MM.yy"))
+    }
+}

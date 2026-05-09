@@ -7,16 +7,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.domain.model.chat.LastMessageData
 
 @Composable
 fun CardText(
-    modifier: Modifier = Modifier,
     text: String,
     alpha: Float = 0.5f,
     textAlign: TextAlign = TextAlign.Center,
@@ -30,7 +31,6 @@ fun CardText(
         maxLines = 1,
         textAlign = textAlign,
         overflow = TextOverflow.Ellipsis,
-        modifier = modifier
     )
 }
 
@@ -41,16 +41,16 @@ fun TitleRow(
 ){
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically
     ){
         Box(
-            modifier = Modifier.weight(0.8f)
+            modifier = Modifier.weight(1f)
         ) {
             CardText(text = chatTitle, alpha = 1f)
         }
         if(lastMessage != null) {
             CardText(
-                Modifier.weight(0.25f),
                 lastMessage.date,
                 0.35f,
                 TextAlign.End

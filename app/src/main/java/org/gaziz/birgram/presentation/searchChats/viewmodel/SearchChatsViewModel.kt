@@ -11,9 +11,6 @@ class SearchChatsViewModel @Inject constructor(
     private val sendSearchQuery: SendSearchQuery,
     private val searchChatsRepository: SearchChatsRepository
 ): ViewModel() {
-    init {
-        sendSearchQuery("",20)
-    }
     val searchChats = searchChatsRepository.searchedChats
     fun sendSearchQuery(
         query: String

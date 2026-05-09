@@ -22,7 +22,7 @@ import org.gaziz.birgram.R
 import org.gaziz.birgram.domain.model.chat.ChatPhoto
 
 @Composable
-fun ChatPhoto(
+fun ChatCardPhoto(
     photoModel: Any,
     iconSize: Dp
 ) {
@@ -68,7 +68,6 @@ fun PhotoPlaceholder(
 
 @Composable
 fun CardPhoto(
-    modifier: Modifier = Modifier,
     photo: ChatPhoto?,
     chatTitle: String,
     iconSize: Dp,
@@ -85,13 +84,13 @@ fun CardPhoto(
             }
         }
     }
-    Box(modifier = modifier) {
+    Box {
         if (photo != null) {
             if (photo.small.isCompleted) {
-                ChatPhoto(photo.small.path,iconSize)
+                ChatCardPhoto(photo.small.path,iconSize)
             } else {
                 if (photo.miniThumbnail != null) {
-                    ChatPhoto(photo.miniThumbnail,iconSize)
+                    ChatCardPhoto(photo.miniThumbnail,iconSize)
                 } else {
                     PhotoPlaceholder(iconSize, chatTitle)
                 }
