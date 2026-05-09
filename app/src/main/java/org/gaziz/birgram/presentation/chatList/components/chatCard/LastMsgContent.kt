@@ -26,8 +26,8 @@ fun LastMsgContent(
         verticalAlignment = Alignment.CenterVertically
     ) {
         when(val cnt = lastMessage.content) {
-            is LastMessageContent.Other -> CardText(cnt.type)
-            is LastMessageContent.Text -> CardText(cnt.text)
+            is LastMessageContent.Other -> CardText(cnt.type.trim())
+            is LastMessageContent.Text -> CardText(cnt.text.trim())
             is LastMessageContent.Photo -> {
                 if(cnt.miniThumbNail != null) {
                     AsyncImage(
@@ -36,30 +36,30 @@ fun LastMsgContent(
                         modifier = Modifier.size(25.dp)
                     )
                 }
-                if(cnt.caption.isNotEmpty()) {
-                    CardText(cnt.caption)
+                if(cnt.caption.isNotBlank()) {
+                    CardText(cnt.caption.trim())
                 } else {
                     CardText(msgType[0],color = MaterialTheme.colorScheme.primary)
                 }
             }
             is LastMessageContent.Document -> {
                 var text = "\uD83D\uDCC4 ${cnt.fileName}"
-                if(cnt.caption.isNotEmpty()) {
-                    text = "\uD83D\uDCC4 ${cnt.caption}"
+                if(cnt.caption.isNotBlank()) {
+                    text = "\uD83D\uDCC4 ${cnt.caption.trim()}"
                 }
                 CardText(text, color = MaterialTheme.colorScheme.primary)
             }
             is LastMessageContent.Audio -> {
                 var text = "🎵 ${cnt.fileName}"
-                if(cnt.caption.isNotEmpty()) {
-                    text = "🎵 ${cnt.caption}"
+                if(cnt.caption.isNotBlank()) {
+                    text = "🎵 ${cnt.caption.trim()}"
                 }
                 CardText(text, color = MaterialTheme.colorScheme.primary)
             }
             is LastMessageContent.Video -> {
                 var text = "🎥 ${cnt.fileName}"
-                if(cnt.caption.isNotEmpty()) {
-                    text = "🎥 ${cnt.caption}"
+                if(cnt.caption.isNotBlank()) {
+                    text = "🎥 ${cnt.caption.trim()}"
                 }
                 CardText(text, color = MaterialTheme.colorScheme.primary)
             }
@@ -74,6 +74,9 @@ fun LastMsgContent(
             }
             is LastMessageContent.GIF -> {
                 CardText( msgType[4], color = MaterialTheme.colorScheme.primary)
+            }
+            is LastMessageContent.Draft -> {
+                CardText( msgType[5], color = MaterialTheme.colorScheme.error)
             }
         }
     }

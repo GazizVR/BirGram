@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.drinkless.tdlib.TdApi
+import org.gaziz.birgram.data.mapper.formatForChatList
+import org.gaziz.birgram.data.mapper.fromUnixTimeStamp
 import org.gaziz.birgram.data.mapper.toChatData
 import org.gaziz.birgram.data.mapper.toChatPosition
 import org.gaziz.birgram.data.mapper.toFileData
@@ -21,6 +23,7 @@ import org.gaziz.birgram.domain.model.chat.ChatData
 import org.gaziz.birgram.domain.model.chat.ChatPhoto
 import org.gaziz.birgram.domain.model.chat.ChatPosition
 import org.gaziz.birgram.domain.model.chat.ChatType
+import org.gaziz.birgram.domain.model.chat.LastMessageContent
 import org.gaziz.birgram.domain.repository.EventLoopRepository
 import javax.inject.Inject
 
@@ -110,6 +113,15 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                                     .apply { event.positions.forEach { add(it.toChatPosition()) } }
                                     .toList()
                                 newMap[event.chatId] = chat.copy(positions = positions)
+                                val lastMessage = event.draftMessage
+                                if(lastMessage != null) {
+                                    newMap[event.chatId] = chat.copy(
+                                        lastMessage = chat.lastMessage?.copy(
+                                            date = lastMessage.date.fromUnixTimeStamp().formatForChatList(),
+                                            content = LastMessageContent.Draft
+                                        )
+                                    )
+                                }
                             }
                             newMap.toMap()
                         }

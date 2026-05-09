@@ -58,6 +58,7 @@
         <item>🎤 Voice message</item>
         <item>⭕ Video message</item>
         <item>GIF</item>
+        <item>Draft message</item>
     </string-array>
 
     <string name="search_placeholder">Search…</string>
