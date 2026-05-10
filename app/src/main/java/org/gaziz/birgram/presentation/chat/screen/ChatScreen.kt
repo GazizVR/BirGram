@@ -13,12 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import kotlinx.coroutines.flow.distinctUntilChanged
 import org.gaziz.birgram.domain.model.chat.ChatType
 import org.gaziz.birgram.presentation.chat.components.ChatTopBar
 import org.gaziz.birgram.presentation.chat.components.MessageCard
@@ -34,13 +34,27 @@ fun ChatScreen(
     val messages by viewModel.chatMessages(chatId).collectAsState()
     val containerColor = CardDefaults.cardColors().containerColor
     val lazyListState = rememberLazyListState()
-    val isNewLoad by remember {
-        derivedStateOf {
-            lazyListState.firstVisibleItemIndex <= 5
-        }
+
+    DisposableEffect(Unit) {
+        viewModel.openChat(chatId)
+        onDispose { viewModel.closeChat(chatId) }
     }
-    LaunchedEffect(isNewLoad) {
-        viewModel.loadMessages(chatId,messages.firstOrNull()?.id ?: 0)
+
+    LaunchedEffect(lazyListState) {
+        snapshotFlow {
+            lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index to
+                    lazyListState.layoutInfo.totalItemsCount
+        }
+            .distinctUntilChanged()
+            .collect { (lastVisible, total) ->
+                if (
+                    lastVisible != null &&
+                    total > 0 &&
+                    lastVisible >= total - 5
+                ) {
+                    viewModel.loadMessages(chatId, messages.lastOrNull()?.id ?: 0)
+                }
+            }
     }
 
     Scaffold(
@@ -57,6 +71,7 @@ fun ChatScreen(
     ) {
         if(messages.isNotEmpty()) {
             LazyColumn(
+                state = lazyListState,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(it)
@@ -69,9 +84,5 @@ fun ChatScreen(
                 }
             }
         }
-    }
-    DisposableEffect(Unit) {
-        viewModel.openChat(chatId)
-        onDispose { viewModel.closeChat(chatId) }
     }
 }

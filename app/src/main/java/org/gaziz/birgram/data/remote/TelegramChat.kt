@@ -38,7 +38,7 @@ class TelegramChat @Inject constructor(
                 this.chatId = chatId
                 this.fromMessageId = fromMessage
                 this.offset = 0
-                this.limit = 30
+                this.limit = 50
                 this.onlyLocal = false
             },
             { onMessages(emptyList()) }
