@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp") version "2.3.7"
     id("com.google.dagger.hilt.android")
+    kotlin("plugin.serialization") version "2.3.21"
 }
 
 val properties = Properties().apply {

@@ -4,7 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import org.gaziz.birgram.presentation.auth.screen.AuthScreen
+import org.gaziz.birgram.presentation.chat.screen.ChatScreen
 import org.gaziz.birgram.presentation.chatList.screen.ChatListScreen
 import org.gaziz.birgram.presentation.searchChats.screen.SearchChatsScreen
 
@@ -17,13 +19,21 @@ fun Navigation(
         startDestination = Route.Auth.route
     ){
         composable(Route.Auth.route) { AuthScreen { navController.navigate(Route.ChatList.route) } }
-        composable(Route.ChatList.route) { ChatListScreen { navController.navigate(Route.SearchChats.route) } }
-        composable(Route.SearchChats.route) { SearchChatsScreen { navController.popBackStack() } }
+        composable(Route.ChatList.route) {
+            ChatListScreen(
+                { navController.navigate(Route.SearchChats.route) },
+                { navController.navigate(ChatRoute(it)) }
+            )
+        }
+        composable(Route.SearchChats.route) {
+            SearchChatsScreen(
+                { navController.popBackStack() },
+                { navController.navigate(ChatRoute(it)) }
+            )
+        }
+        composable<ChatRoute> { backStackEntry ->
+            val chat = backStackEntry.toRoute<ChatRoute>()
+            ChatScreen(chat.chatId) { navController.popBackStack() }
+        }
     }
-}
-
-sealed class Route(val route: String) {
-    object Auth: Route("auth")
-    object ChatList: Route("chatList")
-    object SearchChats: Route("searchChats")
 }

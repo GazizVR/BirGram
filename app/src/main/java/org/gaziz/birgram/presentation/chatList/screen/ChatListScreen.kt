@@ -19,7 +19,8 @@ import org.gaziz.birgram.presentation.chatList.viewmodel.ChatListViewModel
 
 @Composable
 fun ChatListScreen(
-    navigateToSearch: () -> Unit
+    navigateToSearch: () -> Unit,
+    navigateToChat: (Long) -> Unit
 ) {
     BackHandler { }
     val viewModel = hiltViewModel<ChatListViewModel>()
@@ -34,7 +35,8 @@ fun ChatListScreen(
             items(chatList) { chat ->
                 ChatCard(
                     chat,
-                    { viewModel.downloadChatPhoto(it) }
+                    { viewModel.downloadChatPhoto(it) },
+                    navigateToChat
                 )
             }
         }

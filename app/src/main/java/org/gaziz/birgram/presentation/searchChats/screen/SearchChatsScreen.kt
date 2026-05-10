@@ -25,7 +25,8 @@ import org.gaziz.birgram.presentation.searchChats.viewmodel.SearchChatsViewModel
 
 @Composable
 fun SearchChatsScreen(
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    navigateToChat: (Long) -> Unit
 ){
     val viewModel = hiltViewModel<SearchChatsViewModel>()
     val chats by viewModel.searchChats.collectAsState()
@@ -39,7 +40,11 @@ fun SearchChatsScreen(
                 verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 items(chats.toList()) { chat ->
-                    SearchChatCard(chat.second) {viewModel.downloadPhoto(it)}
+                    SearchChatCard(
+                        chat.second,
+                        {viewModel.downloadPhoto(it)},
+                        navigateToChat
+                    )
                 }
             }
         } else {

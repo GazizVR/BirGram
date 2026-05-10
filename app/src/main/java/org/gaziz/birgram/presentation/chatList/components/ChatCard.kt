@@ -23,14 +23,15 @@ import org.gaziz.birgram.presentation.common.CardPhoto
 @Composable
 fun ChatCard(
     chatData: ChatData,
-    downloadPhoto: (Int) -> Unit
+    downloadPhoto: (Int) -> Unit,
+    onClick: (Long) -> Unit
 ) {
     val containerHeight = 80.dp
     val iconSize = 60.dp
     val cardColor = CardDefaults.cardColors().containerColor
     Card(
         shape = RoundedCornerShape(0),
-        onClick = {},
+        onClick = { onClick(chatData.id) },
         modifier = Modifier.height(containerHeight)
     ) {
         Row(
