@@ -1,9 +1,10 @@
-package org.gaziz.birgram.presentation.searchChats.components
+package org.gaziz.birgram.presentation.common
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.unit.TextUnit
 import org.gaziz.birgram.R
 import org.gaziz.birgram.domain.model.UserStatus
 import java.time.Duration
@@ -12,8 +13,9 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun LastSeenText(
-    userStatus: UserStatus
+fun LastOnlineText(
+    userStatus: UserStatus,
+    fontSize: TextUnit? = null
 ) {
     val lastSeenCnt = stringArrayResource(R.array.last_seen_cnt)
     val seenOffline = stringArrayResource(R.array.seen_offline)
@@ -59,6 +61,7 @@ fun LastSeenText(
         text = lastSeen,
         color = MaterialTheme.colorScheme.onBackground.copy(0.5f),
         style = MaterialTheme.typography.labelSmall,
-        maxLines = 1
+        maxLines = 1,
+        fontSize = fontSize ?: MaterialTheme.typography.labelSmall.fontSize
     )
 }

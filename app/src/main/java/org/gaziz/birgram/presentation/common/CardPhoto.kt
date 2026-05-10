@@ -55,7 +55,7 @@ fun PhotoPlaceholder(
         if(title.isNotEmpty()) {
             Text(
                 title[0].toString(),
-                style = MaterialTheme.typography.labelLarge,
+                style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center,
             )

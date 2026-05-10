@@ -1,25 +1,52 @@
 package org.gaziz.birgram.presentation.chat.components
 
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.R
+import org.gaziz.birgram.domain.model.UserStatus
+import org.gaziz.birgram.domain.model.chat.ChatPhoto
+import org.gaziz.birgram.domain.model.chat.ChatType
+import org.gaziz.birgram.presentation.common.CardPhoto
+import org.gaziz.birgram.presentation.common.ChatTypeCnt
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatTopBar(
+    photo: ChatPhoto?,
+    title: String,
+    type: ChatType,
     onBack: () -> Unit
 ){
-    TopAppBar(
-        title = {
-
-        },
-        navigationIcon = {
+    val iconSize = 40.dp
+    val cardColor = TopAppBarDefaults.topAppBarColors().containerColor
+    Card(
+        colors = CardDefaults.cardColors().copy(containerColor = cardColor),
+        modifier = Modifier.statusBarsPadding(),
+        shape = RoundedCornerShape(0.dp)
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ){
             IconButton(
                 onClick = onBack
             ) {
@@ -29,6 +56,43 @@ fun ChatTopBar(
                     tint = MaterialTheme.colorScheme.onBackground
                 )
             }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.weight(1f)
+            ) {
+                CardPhoto(
+                    photo = photo,
+                    chatTitle = title,
+                    iconSize = iconSize,
+                    downloadPhoto = {},
+                    isOnline = if(type is ChatType.Private) type.userStatus is UserStatus.Online else false,
+                    cardColor = cardColor
+                )
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.Start,
+                ) {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        fontSize = 10.sp
+                    )
+                    ChatTypeCnt(type,8.sp)
+                }
+            }
+            IconButton(
+                onClick = {}
+            ) {
+                Icon(
+                    ImageVector.vectorResource(R.drawable.more),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
+            }
         }
-    )
+    }
 }
