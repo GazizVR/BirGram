@@ -1,36 +1,45 @@
 package org.gaziz.birgram.data.mapper
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.domain.model.chat.LastMessageContent
 import org.gaziz.birgram.domain.model.chat.LastMessageData
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Locale
+import org.gaziz.birgram.domain.model.message.MessageContent
+import org.gaziz.birgram.domain.model.message.MessageData
 
+fun TdApi.MessageContent.toMessageCnt(): MessageContent {
+    return when(val cnt = this) {
+        is TdApi.MessageText -> MessageContent.Text(cnt.text.text)
+        is TdApi.MessagePhoto -> MessageContent.Photo(cnt.caption.text,cnt.photo.minithumbnail?.data)
+        is TdApi.MessageDocument -> MessageContent.Document(cnt.caption.text,cnt.document.fileName)
+        is TdApi.MessageAudio -> MessageContent.Audio(cnt.caption.text,cnt.audio.fileName)
+        is TdApi.MessageVideo -> MessageContent.Video(cnt.caption.text,cnt.video.fileName)
 
-fun TdApi.Message?.toMessageData(): LastMessageData? {
+        is TdApi.MessageSticker -> MessageContent.Sticker(cnt.sticker.emoji)
+        is TdApi.MessageVoiceNote -> MessageContent.VoiceNote
+        is TdApi.MessageVideoNote -> MessageContent.VideoNote
+        is TdApi.MessageAnimation -> MessageContent.GIF
+
+        else -> MessageContent.Other(this.toString())
+    }
+}
+
+fun TdApi.Message?.toLastMsgData(): LastMessageData? {
     return if(this != null) {
-        val lastMessageContent = when(val cnt = this.content) {
-            is TdApi.MessageText -> LastMessageContent.Text(cnt.text.text)
-            is TdApi.MessagePhoto -> LastMessageContent.Photo(cnt.caption.text,cnt.photo.minithumbnail?.data)
-            is TdApi.MessageDocument -> LastMessageContent.Document(cnt.caption.text,cnt.document.fileName)
-            is TdApi.MessageAudio -> LastMessageContent.Audio(cnt.caption.text,cnt.audio.fileName)
-            is TdApi.MessageVideo -> LastMessageContent.Video(cnt.caption.text,cnt.video.fileName)
-
-            is TdApi.MessageSticker -> LastMessageContent.Sticker(cnt.sticker.emoji)
-            is TdApi.MessageVoiceNote -> LastMessageContent.VoiceNote
-            is TdApi.MessageVideoNote -> LastMessageContent.VideoNote
-            is TdApi.MessageAnimation -> LastMessageContent.GIF
-
-            else -> LastMessageContent.Other(this.content.toString())
-        }
         LastMessageData(
             id = this.id,
-            content = lastMessageContent,
+            content = this.content.toMessageCnt(),
             date = this.date.fromUnixTimeStamp().formatForChatList()
         )
     } else {
         null
     }
+}
+
+fun TdApi.Message.toMessageData(): MessageData {
+    return MessageData(
+        id = this.id,
+        content = this.content.toMessageCnt(),
+        date = this.date.fromUnixTimeStamp(),
+        isMy = this.isOutgoing,
+        chatId = this.chatId
+    )
 }

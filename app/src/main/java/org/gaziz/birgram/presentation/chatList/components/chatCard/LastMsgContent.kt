@@ -11,7 +11,7 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import org.gaziz.birgram.R
-import org.gaziz.birgram.domain.model.chat.LastMessageContent
+import org.gaziz.birgram.domain.model.message.MessageContent
 import org.gaziz.birgram.domain.model.chat.LastMessageData
 
 @Composable
@@ -26,9 +26,9 @@ fun LastMsgContent(
         verticalAlignment = Alignment.CenterVertically
     ) {
         when(val cnt = lastMessage.content) {
-            is LastMessageContent.Other -> CardText(cnt.type.trim())
-            is LastMessageContent.Text -> CardText(cnt.text.trim())
-            is LastMessageContent.Photo -> {
+            is MessageContent.Other -> CardText(cnt.type.trim())
+            is MessageContent.Text -> CardText(cnt.text.trim())
+            is MessageContent.Photo -> {
                 if(cnt.miniThumbNail != null) {
                     AsyncImage(
                         model = cnt.miniThumbNail,
@@ -42,40 +42,40 @@ fun LastMsgContent(
                     CardText(msgType[0],color = MaterialTheme.colorScheme.primary)
                 }
             }
-            is LastMessageContent.Document -> {
+            is MessageContent.Document -> {
                 var text = "\uD83D\uDCC4 ${cnt.fileName}"
                 if(cnt.caption.isNotBlank()) {
                     text = "\uD83D\uDCC4 ${cnt.caption.trim()}"
                 }
                 CardText(text, color = MaterialTheme.colorScheme.primary)
             }
-            is LastMessageContent.Audio -> {
+            is MessageContent.Audio -> {
                 var text = "🎵 ${cnt.fileName}"
                 if(cnt.caption.isNotBlank()) {
                     text = "🎵 ${cnt.caption.trim()}"
                 }
                 CardText(text, color = MaterialTheme.colorScheme.primary)
             }
-            is LastMessageContent.Video -> {
+            is MessageContent.Video -> {
                 var text = "🎥 ${cnt.fileName}"
                 if(cnt.caption.isNotBlank()) {
                     text = "🎥 ${cnt.caption.trim()}"
                 }
                 CardText(text, color = MaterialTheme.colorScheme.primary)
             }
-            is LastMessageContent.Sticker -> {
+            is MessageContent.Sticker -> {
                CardText( "${cnt.emoji} ${msgType[1]}", color = MaterialTheme.colorScheme.primary)
             }
-            is LastMessageContent.VoiceNote -> {
+            is MessageContent.VoiceNote -> {
                 CardText( msgType[2], color = MaterialTheme.colorScheme.primary)
             }
-            is LastMessageContent.VideoNote -> {
+            is MessageContent.VideoNote -> {
                 CardText( msgType[3], color = MaterialTheme.colorScheme.primary)
             }
-            is LastMessageContent.GIF -> {
+            is MessageContent.GIF -> {
                 CardText( msgType[4], color = MaterialTheme.colorScheme.primary)
             }
-            is LastMessageContent.Draft -> {
+            is MessageContent.Draft -> {
                 CardText( msgType[5], color = MaterialTheme.colorScheme.error)
             }
         }

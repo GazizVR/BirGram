@@ -3,7 +3,7 @@ package org.gaziz.birgram.presentation.searchChats.viewmodel
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.gaziz.birgram.domain.repository.SearchChatsRepository
-import org.gaziz.birgram.domain.usecase.SendSearchQuery
+import org.gaziz.birgram.domain.usecase.searchChats.SendSearchQuery
 import javax.inject.Inject
 
 @HiltViewModel

@@ -11,6 +11,7 @@ import org.gaziz.birgram.data.mapper.fromUnixTimeStamp
 import org.gaziz.birgram.data.mapper.toChatData
 import org.gaziz.birgram.data.mapper.toChatPosition
 import org.gaziz.birgram.data.mapper.toFileData
+import org.gaziz.birgram.data.mapper.toLastMsgData
 import org.gaziz.birgram.data.mapper.toMessageData
 import org.gaziz.birgram.data.mapper.toPhotoInfo
 import org.gaziz.birgram.data.mapper.toStatus
@@ -23,7 +24,8 @@ import org.gaziz.birgram.domain.model.chat.ChatData
 import org.gaziz.birgram.domain.model.chat.ChatPhoto
 import org.gaziz.birgram.domain.model.chat.ChatPosition
 import org.gaziz.birgram.domain.model.chat.ChatType
-import org.gaziz.birgram.domain.model.chat.LastMessageContent
+import org.gaziz.birgram.domain.model.message.MessageContent
+import org.gaziz.birgram.domain.model.message.MessageData
 import org.gaziz.birgram.domain.repository.EventLoopRepository
 import javax.inject.Inject
 
@@ -45,6 +47,13 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
 
     private val _chatList = MutableStateFlow(emptyMap<Long,ChatData>())
     override val chatList: StateFlow<Map<Long,ChatData>> = _chatList.asStateFlow()
+
+    private val _messages = MutableStateFlow(emptyMap<Long, MessageData>())
+    override val messages: StateFlow<Map<Long, MessageData>> = _messages.asStateFlow()
+
+    override fun setMessages(map: Map<Long, MessageData>) {
+        _messages.update { map }
+    }
 
     override fun createEventLoop() {
         manager.createClient(
@@ -94,12 +103,20 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                                 val positions = mutableListOf<ChatPosition>()
                                     .apply { event.positions.forEach { add(it.toChatPosition()) } }
                                     .toList()
-                                val lastMsg = event.lastMessage.toMessageData()
+                                val lastMsg = event.lastMessage.toLastMsgData()
                                 newMap[event.chatId] = chat.copy(
                                     positions = positions,
                                     lastMessage = lastMsg ?: chat.lastMessage
                                 )
                             }
+                            newMap.toMap()
+                        }
+                    }
+
+                    is TdApi.UpdateNewMessage -> {
+                        _messages.update { map ->
+                            val newMap = map.toMutableMap()
+                            newMap[event.message.id] = event.message.toMessageData()
                             newMap.toMap()
                         }
                     }
@@ -118,7 +135,7 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                                     chat = chat.copy(
                                         lastMessage = chat.lastMessage?.copy(
                                             date = lastMessage.date.fromUnixTimeStamp().formatForChatList(),
-                                            content = LastMessageContent.Draft
+                                            content = MessageContent.Draft
                                         )
                                     )
                                 }
