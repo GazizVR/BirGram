@@ -52,4 +52,32 @@ class TelegramChat @Inject constructor(
             }
         }
     }
+
+    override fun sendMessage(
+        chatId: Long,
+        content: String,
+        onMessage: (MessageData?) -> Unit
+    ) {
+       manager.sendRequest(
+           TdApi.SendMessage().apply {
+               this.chatId = chatId
+               this.topicId = null
+               this.replyTo = null
+               this.options = null
+               this.replyMarkup = null
+               this.inputMessageContent = TdApi.InputMessageText().apply {
+                   this.text = TdApi.FormattedText().apply { this.text = content }
+                   this.linkPreviewOptions = null
+                   this.clearDraft = true
+               }
+           },
+           { onMessage(null) }
+       ){
+           if(it is TdApi.Message){
+               onMessage(it.toMessageData())
+           } else {
+               onMessage(null)
+           }
+       }
+    }
 }

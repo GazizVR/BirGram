@@ -19,10 +19,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.R
 
 @Composable
-fun MessageInputBar(){
+fun MessageInputBar(
+    onSend: (String) -> Unit
+){
     var message by rememberSaveable { mutableStateOf("") }
     val containerColor = TopAppBarDefaults.topAppBarColors().containerColor
     val indicatorColor = Color.Transparent
@@ -41,19 +44,21 @@ fun MessageInputBar(){
             unfocusedIndicatorColor = indicatorColor,
             errorIndicatorColor = indicatorColor
         ),
-        textStyle = MaterialTheme.typography.labelSmall,
+        textStyle = MaterialTheme.typography.labelSmall.copy(fontSize = 8.sp),
         placeholder = {
             Text(
                 text = placeHolder,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.labelSmall,
+                fontSize = 8.sp
             )
         },
         trailingIcon = {
             if(message.isNotBlank()){
                 IconButton(
                     onClick = {
-                         message = ""
+                        onSend(message)
+                        message = ""
                     },
                 ) {
                     Icon(

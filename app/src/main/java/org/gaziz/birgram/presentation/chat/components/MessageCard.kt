@@ -1,6 +1,7 @@
 package org.gaziz.birgram.presentation.chat.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,15 +13,47 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringArrayResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.R
 import org.gaziz.birgram.data.mapper.formatMessageCard
 import org.gaziz.birgram.domain.model.message.MessageContent
 import org.gaziz.birgram.domain.model.message.MessageData
+
+@Composable
+fun MessageText(
+    text: String,
+    date: String
+) {
+    Box {
+        Text(
+            buildAnnotatedString {
+                withStyle(SpanStyle(fontSize = 8.sp, color = MaterialTheme.colorScheme.onBackground)){
+                    append(text)
+                }
+                withStyle(SpanStyle(fontSize = 7.sp, color = Color.Transparent)){
+                    append(" 14:32")
+                }
+            },
+            style = MaterialTheme.typography.labelSmall,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Text(
+            text = date,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onBackground.copy(0.75f),
+            fontSize = 7.sp,
+            maxLines = 1,
+            modifier = Modifier.align(Alignment.BottomEnd)
+        )
+    }
+}
 
 @Composable
 fun MessageCard(
@@ -39,38 +72,11 @@ fun MessageCard(
                 contentColor = MaterialTheme.colorScheme.onBackground
             )
         ) {
-           Row(
-               modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
-               horizontalArrangement = Arrangement.spacedBy(4.dp),
-           ) {
+           Row(Modifier.padding(horizontal = 12.dp, vertical = 4.dp)) {
                when(msg.content) {
-                   is MessageContent.Text -> {
-                       Text(
-                           msg.content.text,
-                           style = MaterialTheme.typography.labelSmall,
-                           fontSize = 10.sp,
-                           textAlign = TextAlign.Start,
-                           overflow = TextOverflow.Ellipsis,
-                       )
-                   }
-                   else -> {
-                       Text(
-                           msgType[6],
-                           style = MaterialTheme.typography.labelSmall,
-                           fontSize = 10.sp,
-                           textAlign = TextAlign.Start,
-                           overflow = TextOverflow.Ellipsis,
-                       )
-                   }
+                   is MessageContent.Text -> { MessageText(msg.content.text,msg.date.formatMessageCard()) }
+                   else -> { MessageText(msgType[6],msg.date.formatMessageCard()) }
                }
-               Text(
-                   msg.date.formatMessageCard(),
-                   style = MaterialTheme.typography.labelSmall,
-                   color = MaterialTheme.colorScheme.onBackground.copy(0.75f),
-                   fontSize = 8.sp,
-                   maxLines = 1,
-                   textAlign = TextAlign.End
-               )
            }
         }
     }

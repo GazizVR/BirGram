@@ -13,4 +13,9 @@ interface ChatRepository {
         fromMessage: Long,
         onMessages: (List<MessageData>) -> Unit
     )
+    fun sendMessage(
+        chatId: Long,
+        content: String,
+        onMessage: (MessageData?) -> Unit
+    )
 }

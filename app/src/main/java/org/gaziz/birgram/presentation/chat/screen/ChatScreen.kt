@@ -90,7 +90,7 @@ fun ChatScreen(
             }
         },
         bottomBar = {
-            MessageInputBar()
+            MessageInputBar { viewModel.sendMessage(chatId, it) }
         },
         modifier = Modifier.padding(WindowInsets.ime.asPaddingValues())
     ) {

@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import org.gaziz.birgram.domain.model.chat.ChatData
 import org.gaziz.birgram.domain.model.message.MessageData
 import org.gaziz.birgram.domain.repository.ChatRepository
@@ -56,5 +57,14 @@ class ChatViewModel @Inject constructor(
             SharingStarted.Eagerly,
             emptyMap()
         )
+    }
+
+    fun sendMessage(
+        chatId: Long,
+        message: String
+    ) {
+        viewModelScope.launch {
+            chatRepository.sendMessage(chatId,message,{})
+        }
     }
 }
