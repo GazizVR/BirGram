@@ -23,9 +23,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,8 +57,6 @@ fun ChatScreen(
         onDispose { viewModel.closeChat(chatId) }
     }
 
-    var isLoading by rememberSaveable { mutableStateOf(false) }
-
     LaunchedEffect(lazyListState) {
         snapshotFlow {
             lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index to
@@ -74,13 +69,11 @@ fun ChatScreen(
                     total > 0 &&
                     lastVisible >= total - 10
                 ) {
-                    if(!isLoading){
-                        isLoading = true
-                        viewModel.loadMessages(
-                            chatId,
-                            messages.values.lastOrNull()?.lastOrNull()?.id ?: 0
-                        ) { isLoading = false }
-                    }
+                    val messageId = messages.values.lastOrNull()?.lastOrNull()?.id ?: 0
+                    viewModel.loadMessages(
+                        chatId,
+                        messageId
+                    )
                 }
             }
     }

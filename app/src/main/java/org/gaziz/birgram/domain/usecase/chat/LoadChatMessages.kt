@@ -21,6 +21,7 @@ class LoadChatMessages @Inject constructor(
                 chatId,
                 lastMessageId
             ) { resp ->
+                onResp()
                 val map = eventLoopRepository.messages.value.toMutableMap()
                 resp.forEach { map[it.id] = it }
                 eventLoopRepository.setMessages(map.toMap())
