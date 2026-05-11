@@ -26,5 +26,5 @@ sealed class MessageContent {
     object GIF: MessageContent()
 
     object Draft: MessageContent()
-    data class Other(val type: String): MessageContent()
+    object Other: MessageContent()
 }

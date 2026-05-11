@@ -12,6 +12,7 @@ import org.gaziz.birgram.domain.repository.ChatRepository
 import org.gaziz.birgram.domain.usecase.chat.GetChatByID
 import org.gaziz.birgram.domain.usecase.chat.GetChatMessages
 import org.gaziz.birgram.domain.usecase.chat.LoadChatMessages
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -48,11 +49,11 @@ class ChatViewModel @Inject constructor(
            null
        )
     }
-    fun chatMessages(chatId: Long): StateFlow<List<MessageData>> {
+    fun chatMessages(chatId: Long): StateFlow<Map<LocalDate,List<MessageData>>> {
         return getChatMessages(chatId).stateIn(
             viewModelScope,
             SharingStarted.Eagerly,
-            emptyList()
+            emptyMap()
         )
     }
 }

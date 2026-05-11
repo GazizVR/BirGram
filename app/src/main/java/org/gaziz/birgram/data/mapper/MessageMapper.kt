@@ -18,7 +18,7 @@ fun TdApi.MessageContent.toMessageCnt(): MessageContent {
         is TdApi.MessageVideoNote -> MessageContent.VideoNote
         is TdApi.MessageAnimation -> MessageContent.GIF
 
-        else -> MessageContent.Other(this.toString())
+        else -> MessageContent.Other
     }
 }
 
@@ -27,7 +27,7 @@ fun TdApi.Message?.toLastMsgData(): LastMessageData? {
         LastMessageData(
             id = this.id,
             content = this.content.toMessageCnt(),
-            date = this.date.fromUnixTimeStamp().formatForChatList()
+            date = this.date.fromUnixTimeStamp().formatChatCard()
         )
     } else {
         null

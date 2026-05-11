@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.data.mapper.formatForChatList
+import org.gaziz.birgram.data.mapper.formatChatCard
 import org.gaziz.birgram.data.mapper.fromUnixTimeStamp
 import org.gaziz.birgram.data.mapper.toChatData
 import org.gaziz.birgram.data.mapper.toChatPosition
@@ -134,7 +134,7 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                                 if(lastMessage != null) {
                                     chat = chat.copy(
                                         lastMessage = chat.lastMessage?.copy(
-                                            date = lastMessage.date.fromUnixTimeStamp().formatForChatList(),
+                                            date = lastMessage.date.fromUnixTimeStamp().formatChatCard(),
                                             content = MessageContent.Draft
                                         )
                                     )

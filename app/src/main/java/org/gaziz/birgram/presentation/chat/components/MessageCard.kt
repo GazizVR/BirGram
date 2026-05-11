@@ -12,11 +12,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.gaziz.birgram.data.mapper.formatForChatList
+import org.gaziz.birgram.R
+import org.gaziz.birgram.data.mapper.formatMessageCard
 import org.gaziz.birgram.domain.model.message.MessageContent
 import org.gaziz.birgram.domain.model.message.MessageData
 
@@ -24,6 +26,7 @@ import org.gaziz.birgram.domain.model.message.MessageData
 fun MessageCard(
     msg: MessageData
 ) {
+    val msgType = stringArrayResource(R.array.message_type)
     Row(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -40,21 +43,33 @@ fun MessageCard(
                modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
                horizontalArrangement = Arrangement.spacedBy(4.dp),
            ) {
+               when(msg.content) {
+                   is MessageContent.Text -> {
+                       Text(
+                           msg.content.text,
+                           style = MaterialTheme.typography.labelSmall,
+                           fontSize = 10.sp,
+                           textAlign = TextAlign.Start,
+                           overflow = TextOverflow.Ellipsis,
+                       )
+                   }
+                   else -> {
+                       Text(
+                           msgType[6],
+                           style = MaterialTheme.typography.labelSmall,
+                           fontSize = 10.sp,
+                           textAlign = TextAlign.Start,
+                           overflow = TextOverflow.Ellipsis,
+                       )
+                   }
+               }
                Text(
-                   if(msg.content is MessageContent.Text) msg.content.text else msg.content.toString(),
-                   style = MaterialTheme.typography.labelSmall,
-                   fontSize = 10.sp,
-                   textAlign = TextAlign.Start,
-                   overflow = TextOverflow.Ellipsis,
-               )
-               Text(
-                   msg.date.formatForChatList(),
+                   msg.date.formatMessageCard(),
                    style = MaterialTheme.typography.labelSmall,
                    color = MaterialTheme.colorScheme.onBackground.copy(0.75f),
                    fontSize = 8.sp,
                    maxLines = 1,
-                   textAlign = TextAlign.End,
-                   overflow = TextOverflow.Ellipsis,
+                   textAlign = TextAlign.End
                )
            }
         }

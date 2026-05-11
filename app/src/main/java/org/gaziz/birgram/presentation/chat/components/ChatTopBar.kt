@@ -56,33 +56,28 @@ fun ChatTopBar(
                     tint = MaterialTheme.colorScheme.onBackground
                 )
             }
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
+            CardPhoto(
+                photo = photo,
+                chatTitle = title,
+                iconSize = iconSize,
+                downloadPhoto = {},
+                isOnline = if(type is ChatType.Private) type.userStatus is UserStatus.Online else false,
+                cardColor = cardColor
+            )
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.Start,
                 modifier = Modifier.weight(1f)
             ) {
-                CardPhoto(
-                    photo = photo,
-                    chatTitle = title,
-                    iconSize = iconSize,
-                    downloadPhoto = {},
-                    isOnline = if(type is ChatType.Private) type.userStatus is UserStatus.Online else false,
-                    cardColor = cardColor
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    fontSize = 10.sp
                 )
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.Start,
-                ) {
-                    Text(
-                        text = title,
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        fontSize = 10.sp
-                    )
-                    ChatTypeCnt(type,8.sp)
-                }
+                ChatTypeCnt(type,8.sp)
             }
             IconButton(
                 onClick = {}

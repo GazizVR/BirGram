@@ -2,23 +2,31 @@ package org.gaziz.birgram.presentation.chat.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
+import org.gaziz.birgram.data.mapper.formatMessagesList
 import org.gaziz.birgram.domain.model.chat.ChatType
 import org.gaziz.birgram.presentation.chat.components.ChatTopBar
 import org.gaziz.birgram.presentation.chat.components.MessageCard
@@ -50,9 +58,9 @@ fun ChatScreen(
                 if (
                     lastVisible != null &&
                     total > 0 &&
-                    lastVisible >= total - 5
+                    lastVisible >= total - 10
                 ) {
-                    viewModel.loadMessages(chatId, messages.lastOrNull()?.id ?: 0)
+                    viewModel.loadMessages(chatId, messages.values.lastOrNull()?.lastOrNull()?.id ?: 0)
                 }
             }
     }
@@ -77,10 +85,22 @@ fun ChatScreen(
                     .padding(it)
                     .background(containerColor),
                 verticalArrangement = Arrangement.spacedBy(6.dp),
-                reverseLayout = true
+                reverseLayout = true,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                items(messages) { msg ->
-                    MessageCard(msg)
+                items(messages.toList()) { (date,messages) ->
+                    messages.forEach { msg ->
+                        MessageCard(msg)
+                        Spacer(Modifier.height(8.dp))
+                    }
+                    Text(
+                        text = date.formatMessagesList(),
+                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = MaterialTheme.typography.labelSmall,
+                        fontSize = 8.sp
+                    )
                 }
             }
         }
