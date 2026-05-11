@@ -47,6 +47,8 @@ class TelegramChat @Inject constructor(
                 val msgs = mutableListOf<MessageData>()
                 resp.messages.forEach { msgs.add(it.toMessageData()) }
                 onMessages(msgs.toList())
+            } else {
+                onMessages(emptyList())
             }
         }
     }

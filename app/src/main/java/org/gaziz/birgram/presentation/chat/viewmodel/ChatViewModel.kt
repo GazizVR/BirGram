@@ -29,7 +29,7 @@ class ChatViewModel @Inject constructor(
         chatRepository.openChat(
             chatId
         ) {
-            loadChatMessages(chatId)
+            loadChatMessages(chatId, onResp = {})
         }
     }
 
@@ -37,9 +37,10 @@ class ChatViewModel @Inject constructor(
 
     fun loadMessages(
         chatId: Long,
-        lastMessageId: Long
+        lastMessageId: Long,
+        onResp: () -> Unit
     )  {
-        loadChatMessages(chatId,lastMessageId)
+        loadChatMessages(chatId,lastMessageId,onResp)
     }
 
     fun getChat(chatId: Long): StateFlow<ChatData?> {

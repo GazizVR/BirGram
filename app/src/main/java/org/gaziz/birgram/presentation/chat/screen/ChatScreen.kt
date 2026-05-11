@@ -2,9 +2,7 @@ package org.gaziz.birgram.presentation.chat.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,6 +16,9 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,6 +49,8 @@ fun ChatScreen(
         onDispose { viewModel.closeChat(chatId) }
     }
 
+    var isLoading by rememberSaveable { mutableStateOf(false) }
+
     LaunchedEffect(lazyListState) {
         snapshotFlow {
             lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index to
@@ -60,7 +63,13 @@ fun ChatScreen(
                     total > 0 &&
                     lastVisible >= total - 10
                 ) {
-                    viewModel.loadMessages(chatId, messages.values.lastOrNull()?.lastOrNull()?.id ?: 0)
+                    if(!isLoading){
+                        isLoading = true
+                        viewModel.loadMessages(
+                            chatId,
+                            messages.values.lastOrNull()?.lastOrNull()?.id ?: 0
+                        ) { isLoading = false }
+                    }
                 }
             }
     }
@@ -88,19 +97,20 @@ fun ChatScreen(
                 reverseLayout = true,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                items(messages.toList()) { (date,messages) ->
-                    messages.forEach { msg ->
+                messages.forEach { (date, messages) ->
+                    items(messages) { msg ->
                         MessageCard(msg)
-                        Spacer(Modifier.height(8.dp))
                     }
-                    Text(
-                        text = date.formatMessagesList(),
-                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-                        textAlign = TextAlign.Center,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        style = MaterialTheme.typography.labelSmall,
-                        fontSize = 8.sp
-                    )
+                    item {
+                        Text(
+                            text = date.formatMessagesList(),
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            style = MaterialTheme.typography.labelSmall,
+                            fontSize = 8.sp
+                        )
+                    }
                 }
             }
         }
