@@ -15,5 +15,6 @@ data class ChatData(
     val positions: List<ChatPosition>,
     val unreadCount: Int,
     val mentionCount: Int,
-    val reactionCount: Int
+    val reactionCount: Int,
+    val canSendBasicMsg: Boolean
 )

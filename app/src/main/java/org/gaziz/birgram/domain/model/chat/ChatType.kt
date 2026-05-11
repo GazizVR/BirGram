@@ -14,7 +14,8 @@ sealed class ChatType {
     data class SuperGroup(
         val groupId: Long,
         val isChannel: Boolean,
-        val memberCont: Int = 0
+        val memberCont: Int = 0,
+        val canSendMessages: Boolean = false
     ): ChatType()
     data class Secret(
         val secretChatId: Int,

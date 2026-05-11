@@ -39,7 +39,7 @@ fun TdApi.ChatType.toType(): ChatType {
     return when(this) {
         is TdApi.ChatTypeBasicGroup -> ChatType.BasicGroup(this.basicGroupId)
         is TdApi.ChatTypePrivate -> ChatType.Private(this.userId, UserStatus.Recently)
-        is TdApi.ChatTypeSupergroup -> ChatType.SuperGroup(this.supergroupId,this.isChannel)
+        is TdApi.ChatTypeSupergroup -> ChatType.SuperGroup(this.supergroupId, this.isChannel)
         is TdApi.ChatTypeSecret -> ChatType.Secret(this.secretChatId,this.userId,UserStatus.Recently)
         else -> ChatType.Other
     }
@@ -59,6 +59,7 @@ fun TdApi.Chat.toChatData(): ChatData {
         positions = chatPositions,
         unreadCount = chat.unreadCount,
         mentionCount = chat.unreadMentionCount,
-        reactionCount = chat.unreadReactionCount
+        reactionCount = chat.unreadReactionCount,
+        canSendBasicMsg = chat.permissions.canSendBasicMessages
     )
 }

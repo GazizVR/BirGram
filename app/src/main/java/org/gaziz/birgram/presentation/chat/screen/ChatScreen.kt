@@ -90,7 +90,11 @@ fun ChatScreen(
             }
         },
         bottomBar = {
-            MessageInputBar { viewModel.sendMessage(chatId, it) }
+            if(
+                chat?.canSendBasicMsg == true ||
+                chat?.type is ChatType.SuperGroup &&
+                (chat?.type as ChatType.SuperGroup).canSendMessages
+            ) MessageInputBar { viewModel.sendMessage(chatId, it) }
         },
         modifier = Modifier.padding(WindowInsets.ime.asPaddingValues())
     ) {

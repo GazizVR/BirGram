@@ -69,9 +69,9 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                     }
 
                     is TdApi.UpdateNewChat -> {
-                        val chat = event.chat
+                        val chat = event.chat.toChatData()
                         _chatList.update { map ->
-                            map.toMutableMap().apply { put(chat.id, chat.toChatData()) }.toMap()
+                            map.toMutableMap().apply { put(chat.id, chat) }.toMap()
                         }
                     }
 
@@ -245,12 +245,20 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                                 _chatList.update {
                                     val newMap = it.toMutableMap()
                                     val chat = newMap[respChat.id]
+                                    val canSend = when (event.supergroup.status) {
+                                        is TdApi.ChatMemberStatusCreator -> true
+                                        is TdApi.ChatMemberStatusAdministrator -> {
+                                            (event.supergroup.status as TdApi.ChatMemberStatusAdministrator).rights.canPostMessages
+                                        }
+                                        else -> false
+                                    }
                                     if(chat != null) {
                                         newMap[respChat.id] = chat.copy(
                                             type = ChatType.SuperGroup(
                                                 event.supergroup.id,
                                                 event.supergroup.isChannel,
-                                                event.supergroup.memberCount
+                                                event.supergroup.memberCount,
+                                                canSend
                                             )
                                         )
                                     }
