@@ -92,4 +92,8 @@
         <item>yesterday</item>
     </string-array>
 
+    <string name="no_messages">No messages here yet…</string>
+
+    <string name="message_place_holder">Message</string>
+
 </resources>

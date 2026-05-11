@@ -2,11 +2,18 @@ package org.gaziz.birgram.presentation.chat.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -22,15 +29,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
+import org.gaziz.birgram.R
 import org.gaziz.birgram.data.mapper.formatMessagesList
 import org.gaziz.birgram.domain.model.chat.ChatType
 import org.gaziz.birgram.presentation.chat.components.ChatTopBar
 import org.gaziz.birgram.presentation.chat.components.MessageCard
+import org.gaziz.birgram.presentation.chat.components.MessageInputBar
 import org.gaziz.birgram.presentation.chat.viewmodel.ChatViewModel
 
 @Composable
@@ -43,6 +53,7 @@ fun ChatScreen(
     val messages by viewModel.chatMessages(chatId).collectAsState()
     val containerColor = CardDefaults.cardColors().containerColor
     val lazyListState = rememberLazyListState()
+    val noMessages = stringResource(R.string.no_messages)
 
     DisposableEffect(Unit) {
         viewModel.openChat(chatId)
@@ -84,7 +95,11 @@ fun ChatScreen(
                     type = chat?.type ?: ChatType.Other
                 )
             }
-        }
+        },
+        bottomBar = {
+            MessageInputBar()
+        },
+        modifier = Modifier.padding(WindowInsets.ime.asPaddingValues())
     ) {
         if(messages.isNotEmpty()) {
             LazyColumn(
@@ -111,6 +126,24 @@ fun ChatScreen(
                             fontSize = 8.sp
                         )
                     }
+                }
+            }
+        } else {
+            Box(
+                modifier = Modifier.statusBarsPadding().fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Card(
+                    shape = RoundedCornerShape(16.dp),
+                ) {
+                    Text(
+                        text = noMessages,
+                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = MaterialTheme.typography.labelSmall,
+                        fontSize = 8.sp
+                    )
                 }
             }
         }

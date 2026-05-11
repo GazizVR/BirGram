@@ -17,6 +17,7 @@ class GetChatMessages @Inject constructor(
             msgs
                 .map { it.value }
                 .filter { it.chatId == chatId }
+                .sortedByDescending { it.date }
                 .groupBy { it.date.toLocalDate() }
         }
     }
