@@ -12,7 +12,7 @@
 [![Jetpack Compose](https://img.shields.io/badge/UI-Jetpack%20Compose-4285F4?style=flat-square&logo=jetpackcompose&logoColor=white)](https://developer.android.com/compose)
 [![TDLib](https://img.shields.io/badge/API-TDLib%201.8.61-2CA5E0?style=flat-square&logo=telegram&logoColor=white)](https://core.telegram.org/tdlib)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.0.0-orange?style=flat-square)](https://github.com/your-username/BirGram/releases)
+[![Version](https://img.shields.io/badge/Version-1.0.0-orange?style=flat-square)](https://github.com/GazizVR/BirGram/releases)
 
 <br>
 
