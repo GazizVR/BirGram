@@ -22,7 +22,8 @@ fun Navigation(
         composable(Route.ChatList.route) {
             ChatListScreen(
                 { navController.navigate(Route.SearchChats.route) },
-                { navController.navigate(ChatRoute(it)) }
+                { navController.navigate(ChatRoute(it)) },
+                { navController.navigate(Route.Auth.route) }
             )
         }
         composable(Route.SearchChats.route) {

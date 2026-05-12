@@ -24,7 +24,8 @@ import org.gaziz.birgram.R
 @Composable
 fun ChatListMenu(
     isDark: Boolean,
-    switchIsDark: (Boolean) -> Unit
+    switchIsDark: (Boolean) -> Unit,
+    onLogOut: () -> Unit
 ) {
     val cnt = stringArrayResource(R.array.chat_list_menu_cnt)
     ModalDrawerSheet(
@@ -56,7 +57,7 @@ fun ChatListMenu(
             }
 
             Row(
-                modifier = Modifier.clickable { },
+                modifier = Modifier.clickable { onLogOut() },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {

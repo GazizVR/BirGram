@@ -80,4 +80,8 @@ class AuthViewModel @Inject constructor(
         eventLoopRepository.restartAuth()
     }
 
+    fun initClient() {
+        eventLoopRepository.createEventLoop()
+    }
+
 }

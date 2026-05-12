@@ -29,7 +29,9 @@ import org.gaziz.birgram.domain.model.message.MessageData
 import org.gaziz.birgram.domain.repository.EventLoopRepository
 import javax.inject.Inject
 
-class TelegramEventLoop @Inject constructor(private val manager: TelegramManager): EventLoopRepository {
+class TelegramEventLoop @Inject constructor(
+    private val manager: TelegramManager
+): EventLoopRepository {
 
     private companion object {
         private const val DEFAULT_CODE_LENGTH = 5
@@ -344,6 +346,9 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
                                 )
                             )
                             is TdApi.AuthorizationStateReady -> AuthState.Ready
+                            is TdApi.AuthorizationStateClosed -> AuthState.Closed
+                            is TdApi.AuthorizationStateClosing -> AuthState.LoggingOut
+                            is TdApi.AuthorizationStateLoggingOut -> AuthState.LoggingOut
                             else -> AuthState.Other(event.authorizationState.toString())
                         }
                     }
@@ -360,5 +365,18 @@ class TelegramEventLoop @Inject constructor(private val manager: TelegramManager
 
     override fun restartAuth() {
         _authState.value = AuthState.WaitPhoneNumber
+    }
+
+    override fun logOut(onOk: () -> Unit) {
+        manager.sendRequest(
+            TdApi.LogOut(),
+            {},
+        ) {
+            if(it is TdApi.Ok) {
+                _chatList.value = emptyMap()
+                _messages.value = emptyMap()
+                onOk()
+            }
+        }
     }
 }

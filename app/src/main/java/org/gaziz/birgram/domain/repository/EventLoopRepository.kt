@@ -14,4 +14,5 @@ interface EventLoopRepository {
     fun setMessages(map: Map<Long, MessageData>)
     fun createEventLoop()
     fun restartAuth()
+    fun logOut(onOk: () -> Unit)
 }

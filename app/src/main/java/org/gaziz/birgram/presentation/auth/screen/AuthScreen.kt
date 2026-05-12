@@ -22,7 +22,6 @@ fun AuthScreen(onReady: () -> Unit) {
     val isRegister by viewModel.isRegistered.collectAsState()
     val isDarkTheme by viewModel.isDarkTheme.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
-
     when(authState) {
         AuthState.WaitParams -> {
             if(!isRegister){
@@ -35,6 +34,12 @@ fun AuthScreen(onReady: () -> Unit) {
             } else {
                 WaitDefault { viewModel.setParams(it) }
             }
+        }
+        AuthState.LoggingOut -> {
+            WaitDefault { }
+        }
+        AuthState.Closed -> {
+            WaitDefault { viewModel.initClient() }
         }
         AuthState.WaitPhoneNumber -> {
             WaitPhoneNumber(

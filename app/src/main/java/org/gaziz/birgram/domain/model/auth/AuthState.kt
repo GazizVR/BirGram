@@ -8,4 +8,7 @@ sealed class AuthState {
     object Ready: AuthState()
 
     data class Other(val state: String): AuthState()
+
+    object LoggingOut: AuthState()
+    object Closed: AuthState()
 }
