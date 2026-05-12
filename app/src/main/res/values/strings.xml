@@ -96,4 +96,9 @@
 
     <string name="message_place_holder">Message</string>
 
+    <string-array name="chat_list_menu_cnt">
+        <item>Night Mode</item>
+        <item>Log out</item>
+    </string-array>
+
 </resources>

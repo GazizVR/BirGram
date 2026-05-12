@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import org.gaziz.birgram.domain.model.UserStatus
 import org.gaziz.birgram.domain.model.chat.ChatData
 import org.gaziz.birgram.domain.model.chat.ChatType
-import org.gaziz.birgram.presentation.common.CardPhoto
+import org.gaziz.birgram.presentation.common.ChatAvatar
 import org.gaziz.birgram.presentation.common.ChatTypeCnt
 
 @Composable
@@ -41,13 +41,13 @@ fun SearchChatCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            CardPhoto(
+            ChatAvatar(
                 photo = chatData.photo,
                 chatTitle = chatData.title,
                 iconSize = iconSize,
                 downloadPhoto = downloadPhoto,
                 isOnline = if(chatData.type is ChatType.Private) chatData.type.userStatus is UserStatus.Online else false,
-                cardColor = cardColor
+                parentColor = cardColor
             )
             Column(
                 horizontalAlignment = Alignment.Start,

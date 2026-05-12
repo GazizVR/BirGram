@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.DisableSelection
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -31,27 +33,31 @@ fun MessageText(
     text: String,
     date: String
 ) {
-    Box {
-        Text(
-            buildAnnotatedString {
-                withStyle(SpanStyle(fontSize = 8.sp, color = MaterialTheme.colorScheme.onBackground)){
-                    append(text)
-                }
-                withStyle(SpanStyle(fontSize = 7.sp, color = Color.Transparent)){
-                    append(" 14:32")
-                }
-            },
-            style = MaterialTheme.typography.labelSmall,
-            overflow = TextOverflow.Ellipsis,
-        )
-        Text(
-            text = date,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onBackground.copy(0.75f),
-            fontSize = 7.sp,
-            maxLines = 1,
-            modifier = Modifier.align(Alignment.BottomEnd)
-        )
+    SelectionContainer {
+        Box {
+            Text(
+                buildAnnotatedString {
+                    withStyle(SpanStyle(fontSize = 8.sp, color = MaterialTheme.colorScheme.onBackground)){
+                        append(text)
+                    }
+                    withStyle(SpanStyle(fontSize = 7.sp, color = Color.Transparent)){
+                        append(" 14:32")
+                    }
+                },
+                style = MaterialTheme.typography.labelSmall,
+                overflow = TextOverflow.Ellipsis,
+            )
+            DisableSelection {
+                Text(
+                    text = date,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onBackground.copy(0.75f),
+                    fontSize = 7.sp,
+                    maxLines = 1,
+                    modifier = Modifier.align(Alignment.BottomEnd)
+                )
+            }
+        }
     }
 }
 

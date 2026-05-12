@@ -71,13 +71,13 @@ fun PhotoPlaceholder(
 }
 
 @Composable
-fun CardPhoto(
+fun ChatAvatar(
     photo: ChatPhoto?,
     chatTitle: String,
     iconSize: Dp,
     downloadPhoto: (Int) -> Unit,
     isOnline: Boolean,
-    cardColor: Color
+    parentColor: Color = Color.Transparent
 ) {
     LaunchedEffect(Unit) {
         if(photo != null) {
@@ -113,7 +113,7 @@ fun CardPhoto(
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.tertiary,CircleShape)
                     .size(iconSize/4)
-                    .border(2.dp, cardColor,CircleShape)
+                    .border(2.dp, parentColor,CircleShape)
             )
         }
     }

@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.domain.model.chat.ChatListType
 import org.gaziz.birgram.domain.repository.ChatListRepository
+import org.gaziz.birgram.domain.repository.UserPreferencesRepository
 import org.gaziz.birgram.domain.usecase.chatList.GetChatList
 import org.gaziz.birgram.domain.usecase.chatList.LoadAllChats
 import javax.inject.Inject
@@ -16,10 +17,21 @@ import javax.inject.Inject
 class ChatListViewModel @Inject constructor(
     loadAllChats: LoadAllChats,
     getChatList: GetChatList,
-    private val chatListRepository: ChatListRepository
+    private val chatListRepository: ChatListRepository,
+    private val userPreferencesRepository: UserPreferencesRepository
 ): ViewModel() {
     init {
         loadAllChats(ChatListType.Main)
+    }
+    val isDark = userPreferencesRepository.isDark.stateIn(
+        viewModelScope,
+        SharingStarted.Eagerly,
+        true
+    )
+    fun switchIsDark(data: Boolean){
+        viewModelScope.launch {
+            userPreferencesRepository.switchIsDark(data)
+        }
     }
     val mainChatList = getChatList(ChatListType.Main).stateIn(
         viewModelScope,

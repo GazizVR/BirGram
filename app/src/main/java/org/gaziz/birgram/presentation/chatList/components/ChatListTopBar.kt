@@ -24,7 +24,8 @@ import org.gaziz.birgram.R
 
 @Composable
 fun ChatListTopBar(
-    navigateToSearch: () -> Unit
+    navigateToSearch: () -> Unit,
+    onMenu: () -> Unit
 ) {
     val appName = stringResource(R.string.app_name)
     Row(
@@ -36,7 +37,7 @@ fun ChatListTopBar(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         IconButton(
-            onClick = {},
+            onClick = onMenu,
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.menu),

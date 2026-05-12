@@ -25,7 +25,7 @@ import org.gaziz.birgram.R
 import org.gaziz.birgram.domain.model.UserStatus
 import org.gaziz.birgram.domain.model.chat.ChatPhoto
 import org.gaziz.birgram.domain.model.chat.ChatType
-import org.gaziz.birgram.presentation.common.CardPhoto
+import org.gaziz.birgram.presentation.common.ChatAvatar
 import org.gaziz.birgram.presentation.common.ChatTypeCnt
 
 @Composable
@@ -56,13 +56,13 @@ fun ChatTopBar(
                     tint = MaterialTheme.colorScheme.onBackground
                 )
             }
-            CardPhoto(
+            ChatAvatar(
                 photo = photo,
                 chatTitle = title,
                 iconSize = iconSize,
                 downloadPhoto = {},
                 isOnline = if(type is ChatType.Private) type.userStatus is UserStatus.Online else false,
-                cardColor = cardColor
+                parentColor = cardColor
             )
             Column(
                 verticalArrangement = Arrangement.Center,
