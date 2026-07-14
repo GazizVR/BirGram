@@ -3,7 +3,7 @@ package org.gaziz.birgram.domain.usecase.chat
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.gaziz.birgram.domain.model.message.MessageData
-import org.gaziz.birgram.domain.repository.EventLoopRepository
+import org.gaziz.birgram.core.telegram.EventLoopRepository
 import java.time.LocalDate
 import javax.inject.Inject
 

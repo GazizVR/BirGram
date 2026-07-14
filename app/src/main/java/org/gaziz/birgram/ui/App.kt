@@ -5,8 +5,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
-import org.gaziz.birgram.ui.navigation.Navigation
-import org.gaziz.birgram.ui.theme.BirGramTheme
+import org.gaziz.birgram.core.navigation.Navigation
+import org.gaziz.birgram.core.theme.BirGramTheme
 
 @Composable
 fun App() {

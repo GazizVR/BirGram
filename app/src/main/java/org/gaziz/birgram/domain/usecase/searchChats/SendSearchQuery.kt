@@ -1,6 +1,6 @@
 package org.gaziz.birgram.domain.usecase.searchChats
 
-import org.gaziz.birgram.domain.repository.EventLoopRepository
+import org.gaziz.birgram.core.telegram.EventLoopRepository
 import org.gaziz.birgram.domain.repository.SearchChatsRepository
 import javax.inject.Inject
 

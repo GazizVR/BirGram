@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.domain.model.chat.ChatListType
 import org.gaziz.birgram.domain.repository.ChatListRepository
-import org.gaziz.birgram.domain.repository.EventLoopRepository
+import org.gaziz.birgram.core.telegram.EventLoopRepository
 import org.gaziz.birgram.domain.repository.UserPreferencesRepository
 import org.gaziz.birgram.domain.usecase.chatList.GetChatList
 import org.gaziz.birgram.domain.usecase.chatList.LoadAllChats

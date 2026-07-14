@@ -19,7 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import org.gaziz.birgram.R
-import org.gaziz.birgram.domain.model.auth.AuthState
+import org.gaziz.birgram.features.auth.domain.model.AuthState
 
 @Composable
 fun SplashScreen(
