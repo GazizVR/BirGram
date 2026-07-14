@@ -1,4 +1,4 @@
-package org.gaziz.birgram.data.mapper
+package org.gaziz.birgram.core.telegram.data.mapper
 
 import java.time.Instant
 import java.time.LocalDate

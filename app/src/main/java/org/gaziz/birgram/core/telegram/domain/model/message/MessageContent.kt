@@ -1,4 +1,4 @@
-package org.gaziz.birgram.domain.model.message
+package org.gaziz.birgram.core.telegram.domain.model.message
 
 sealed class MessageContent {
     data class Text(val text: String): MessageContent()

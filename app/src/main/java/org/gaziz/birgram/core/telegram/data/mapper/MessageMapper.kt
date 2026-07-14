@@ -1,9 +1,9 @@
-package org.gaziz.birgram.data.mapper
+package org.gaziz.birgram.core.telegram.data.mapper
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.domain.model.chat.LastMessageData
-import org.gaziz.birgram.domain.model.message.MessageContent
-import org.gaziz.birgram.domain.model.message.MessageData
+import org.gaziz.birgram.core.telegram.domain.model.chat.LastMessageData
+import org.gaziz.birgram.core.telegram.domain.model.message.MessageContent
+import org.gaziz.birgram.core.telegram.domain.model.message.MessageData
 
 fun TdApi.MessageContent.toMessageCnt(): MessageContent {
     return when(val cnt = this) {

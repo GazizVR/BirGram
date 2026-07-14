@@ -3,7 +3,7 @@ package org.gaziz.birgram.features.auth.ui
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.gaziz.birgram.features.auth.domain.repository.AuthRepository
-import org.gaziz.birgram.core.telegram.EventLoopRepository
+import org.gaziz.birgram.core.telegram.domain.repository.EventLoopRepository
 import javax.inject.Inject
 
 @HiltViewModel

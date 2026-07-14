@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.TextUnit
 import org.gaziz.birgram.R
-import org.gaziz.birgram.domain.model.UserStatus
+import org.gaziz.birgram.core.telegram.domain.model.UserStatus
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime

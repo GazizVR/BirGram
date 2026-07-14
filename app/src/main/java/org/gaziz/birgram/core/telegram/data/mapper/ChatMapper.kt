@@ -1,12 +1,12 @@
-package org.gaziz.birgram.data.mapper
+package org.gaziz.birgram.core.telegram.data.mapper
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.domain.model.UserStatus
-import org.gaziz.birgram.domain.model.chat.ChatData
-import org.gaziz.birgram.domain.model.chat.ChatListType
-import org.gaziz.birgram.domain.model.chat.ChatPhoto
-import org.gaziz.birgram.domain.model.chat.ChatPosition
-import org.gaziz.birgram.domain.model.chat.ChatType
+import org.gaziz.birgram.core.telegram.domain.model.UserStatus
+import org.gaziz.birgram.core.telegram.domain.model.chat.ChatData
+import org.gaziz.birgram.core.telegram.domain.model.chat.ChatListType
+import org.gaziz.birgram.core.telegram.domain.model.chat.ChatPhoto
+import org.gaziz.birgram.core.telegram.domain.model.chat.ChatPosition
+import org.gaziz.birgram.core.telegram.domain.model.chat.ChatType
 
 fun TdApi.ChatList.toChatListType(): ChatListType {
     return when(this){

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.gaziz.birgram.core.telegram.EventLoopRepository
+import org.gaziz.birgram.core.telegram.domain.repository.EventLoopRepository
 import org.gaziz.birgram.features.splash.domain.SplashRepository
 import javax.inject.Inject
 

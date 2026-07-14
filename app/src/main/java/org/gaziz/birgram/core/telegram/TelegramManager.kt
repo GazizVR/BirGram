@@ -3,7 +3,7 @@ package org.gaziz.birgram.core.telegram
 import android.util.Log
 import org.drinkless.tdlib.Client
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.domain.model.RequestResponse
+import org.gaziz.birgram.core.telegram.domain.model.RequestResponse
 import javax.inject.Inject
 import javax.inject.Singleton
 

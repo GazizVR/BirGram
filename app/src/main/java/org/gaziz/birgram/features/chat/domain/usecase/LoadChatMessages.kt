@@ -4,7 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.features.chat.domain.repository.ChatRepository
-import org.gaziz.birgram.core.telegram.EventLoopRepository
+import org.gaziz.birgram.core.telegram.domain.repository.EventLoopRepository
 import javax.inject.Inject
 
 class LoadChatMessages @Inject constructor(

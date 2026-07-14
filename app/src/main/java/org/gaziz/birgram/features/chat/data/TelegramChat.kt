@@ -2,8 +2,8 @@ package org.gaziz.birgram.features.chat.data
 
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.TelegramManager
-import org.gaziz.birgram.data.mapper.toMessageData
-import org.gaziz.birgram.domain.model.message.MessageData
+import org.gaziz.birgram.core.telegram.data.mapper.toMessageData
+import org.gaziz.birgram.core.telegram.domain.model.message.MessageData
 import org.gaziz.birgram.features.chat.domain.repository.ChatRepository
 import javax.inject.Inject
 

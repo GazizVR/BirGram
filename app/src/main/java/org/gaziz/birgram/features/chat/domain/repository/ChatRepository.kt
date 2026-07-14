@@ -1,6 +1,6 @@
 package org.gaziz.birgram.features.chat.domain.repository
 
-import org.gaziz.birgram.domain.model.message.MessageData
+import org.gaziz.birgram.core.telegram.domain.model.message.MessageData
 
 interface ChatRepository {
     fun openChat(

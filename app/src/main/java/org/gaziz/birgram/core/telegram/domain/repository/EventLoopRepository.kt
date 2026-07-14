@@ -1,8 +1,8 @@
-package org.gaziz.birgram.core.telegram
+package org.gaziz.birgram.core.telegram.domain.repository
 
 import kotlinx.coroutines.flow.StateFlow
-import org.gaziz.birgram.domain.model.chat.ChatData
-import org.gaziz.birgram.domain.model.message.MessageData
+import org.gaziz.birgram.core.telegram.domain.model.chat.ChatData
+import org.gaziz.birgram.core.telegram.domain.model.message.MessageData
 import org.gaziz.birgram.features.auth.domain.model.AuthState
 
 interface EventLoopRepository {

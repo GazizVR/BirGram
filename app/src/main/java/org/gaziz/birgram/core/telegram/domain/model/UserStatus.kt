@@ -1,4 +1,4 @@
-package org.gaziz.birgram.domain.model
+package org.gaziz.birgram.core.telegram.domain.model
 
 import java.time.LocalDateTime
 

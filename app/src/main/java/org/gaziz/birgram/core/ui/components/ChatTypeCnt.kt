@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.TextUnit
 import org.gaziz.birgram.R
-import org.gaziz.birgram.domain.model.chat.ChatType
+import org.gaziz.birgram.core.telegram.domain.model.chat.ChatType
 
 @Composable
 fun ChatTypeCnt(

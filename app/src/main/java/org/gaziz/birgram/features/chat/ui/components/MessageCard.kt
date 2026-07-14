@@ -24,9 +24,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.R
-import org.gaziz.birgram.data.mapper.formatMessageCard
-import org.gaziz.birgram.domain.model.message.MessageContent
-import org.gaziz.birgram.domain.model.message.MessageData
+import org.gaziz.birgram.core.telegram.data.mapper.formatMessageCard
+import org.gaziz.birgram.core.telegram.domain.model.message.MessageContent
+import org.gaziz.birgram.core.telegram.domain.model.message.MessageData
 
 @Composable
 fun MessageText(

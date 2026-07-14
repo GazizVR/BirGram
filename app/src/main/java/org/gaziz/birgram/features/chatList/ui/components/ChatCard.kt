@@ -13,9 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.gaziz.birgram.domain.model.UserStatus
-import org.gaziz.birgram.domain.model.chat.ChatData
-import org.gaziz.birgram.domain.model.chat.ChatType
+import org.gaziz.birgram.core.telegram.domain.model.UserStatus
+import org.gaziz.birgram.core.telegram.domain.model.chat.ChatData
+import org.gaziz.birgram.core.telegram.domain.model.chat.ChatType
 import org.gaziz.birgram.features.chatList.ui.components.chatCard.ContentRow
 import org.gaziz.birgram.features.chatList.ui.components.chatCard.TitleRow
 import org.gaziz.birgram.core.ui.components.ChatAvatar
