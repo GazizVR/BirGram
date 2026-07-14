@@ -33,11 +33,22 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.telegram.data.mapper.formatMessagesList
 import org.gaziz.birgram.core.telegram.domain.model.chat.ChatType
 import org.gaziz.birgram.features.chat.ui.components.ChatTopBar
 import org.gaziz.birgram.features.chat.ui.components.MessageCard
 import org.gaziz.birgram.features.chat.ui.components.MessageInputBar
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
+
+fun LocalDate.formatMessagesList(locale: Locale = Locale.getDefault()): String {
+    val now = LocalDate.now()
+
+    return when {
+        this.year == now.year -> format(DateTimeFormatter.ofPattern("d MMM", locale))
+        else -> format(DateTimeFormatter.ofPattern("d MMM, yyyy", locale))
+    }
+}
 
 @Composable
 fun ChatScreen(

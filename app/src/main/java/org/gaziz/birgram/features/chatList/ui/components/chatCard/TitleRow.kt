@@ -15,6 +15,25 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.core.telegram.domain.model.chat.LastMessageData
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
+
+fun LocalDateTime.formatChatCard(locale: Locale = Locale.getDefault()): String {
+    val now = LocalDate.now()
+    val date = toLocalDate()
+
+    return when {
+        date == now -> format(DateTimeFormatter.ofPattern("HH:mm"))
+
+        date.isAfter(now.minusDays(7)) -> format(DateTimeFormatter.ofPattern("EEE", locale))
+
+        date.year == now.year -> format(DateTimeFormatter.ofPattern("d MMM", locale))
+
+        else -> format(DateTimeFormatter.ofPattern("dd.MM.yy"))
+    }
+}
 
 @Composable
 fun CardText(
@@ -51,7 +70,7 @@ fun TitleRow(
         }
         if(lastMessage != null) {
             CardText(
-                lastMessage.date,
+                lastMessage.date.formatChatCard(),
                 0.35f,
                 TextAlign.End
             )

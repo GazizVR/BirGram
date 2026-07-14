@@ -7,8 +7,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.TelegramManager
-import org.gaziz.birgram.core.telegram.domain.repository.EventLoopRepository
-import org.gaziz.birgram.core.telegram.data.mapper.formatChatCard
 import org.gaziz.birgram.core.telegram.data.mapper.fromUnixTimeStamp
 import org.gaziz.birgram.core.telegram.data.mapper.toChatData
 import org.gaziz.birgram.core.telegram.data.mapper.toChatPosition
@@ -23,6 +21,7 @@ import org.gaziz.birgram.core.telegram.domain.model.chat.ChatPosition
 import org.gaziz.birgram.core.telegram.domain.model.chat.ChatType
 import org.gaziz.birgram.core.telegram.domain.model.message.MessageContent
 import org.gaziz.birgram.core.telegram.domain.model.message.MessageData
+import org.gaziz.birgram.core.telegram.domain.repository.EventLoopRepository
 import org.gaziz.birgram.features.auth.domain.model.AuthCodeInfo
 import org.gaziz.birgram.features.auth.domain.model.AuthCodeType
 import org.gaziz.birgram.features.auth.domain.model.AuthPasswordInfo
@@ -133,7 +132,7 @@ class TelegramEventLoop @Inject constructor(
                                 if(lastMessage != null) {
                                     chat = chat.copy(
                                         lastMessage = chat.lastMessage?.copy(
-                                            date = lastMessage.date.fromUnixTimeStamp().formatChatCard(),
+                                            date = lastMessage.date.fromUnixTimeStamp(),
                                             content = MessageContent.Draft
                                         )
                                     )
