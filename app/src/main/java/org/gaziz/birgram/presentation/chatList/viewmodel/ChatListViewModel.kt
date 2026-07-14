@@ -28,9 +28,6 @@ class ChatListViewModel @Inject constructor(
     fun logOut(onOk: () -> Unit) {
         eventLoopRepository.logOut {
             onOk()
-            viewModelScope.launch {
-                userPreferencesRepository.switchRegistered(false)
-            }
         }
     }
     val isDark = userPreferencesRepository.isDark.stateIn(

@@ -17,7 +17,6 @@ class UserPreferences @Inject constructor(
     val Context.dataStore by preferencesDataStore("userPreferences")
     private companion object {
         val IS_DARK = booleanPreferencesKey("is_dark")
-        val IS_REGISTERED = booleanPreferencesKey("is_registered")
     }
 
     private val dataStore = context.dataStore
@@ -32,18 +31,6 @@ class UserPreferences @Inject constructor(
                 pref[IS_DARK] = isDark
             }
         }
-    }
-
-    override val isRegistered: Flow<Boolean> = dataStore.data.map {
-        it[IS_REGISTERED] ?: false
-    }
-
-    override suspend fun switchRegistered(register: Boolean) {
-       dataStore.updateData {
-           it.toMutablePreferences().also { p ->
-               p[IS_REGISTERED] = register
-           }
-       }
     }
 
 }

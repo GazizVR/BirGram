@@ -2,11 +2,6 @@ package org.gaziz.birgram.domain.repository
 
 interface AuthRepository {
 
-    fun setParameters(
-        databasePath: String,
-        onError: (String?) -> Unit
-    )
-
     fun setPhoneNumber(
         phoneNumber: String,
         onError: (String?) -> Unit

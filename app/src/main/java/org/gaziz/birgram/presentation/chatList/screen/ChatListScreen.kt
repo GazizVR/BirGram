@@ -37,7 +37,7 @@ import org.gaziz.birgram.presentation.chatList.viewmodel.ChatListViewModel
 fun ChatListScreen(
     navigateToSearch: () -> Unit,
     navigateToChat: (Long) -> Unit,
-    navigateAuth: () -> Unit
+    onLogOut: () -> Unit
 ) {
     BackHandler { }
     val viewModel = hiltViewModel<ChatListViewModel>()
@@ -93,7 +93,7 @@ fun ChatListScreen(
                             viewModel.logOut {
                                 scope.launch {
                                     drawerState.close()
-                                    navigateAuth()
+                                    onLogOut()
                                 }
                             }
                         }

@@ -1,33 +1,12 @@
 package org.gaziz.birgram.data.remote
 
-import android.os.Build
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.BuildConfig
 import org.gaziz.birgram.domain.repository.AuthRepository
-import java.util.Locale
 import javax.inject.Inject
 
-class TelegramAuth @Inject constructor(private val manager: TelegramManager): AuthRepository {
-
-    override fun setParameters(
-        databasePath: String,
-        onError: (String?) -> Unit
-    ) {
-        val parameters = TdApi.SetTdlibParameters().apply {
-            apiId = BuildConfig.API_ID.toInt()
-            apiHash = BuildConfig.API_HASH
-            filesDirectory = databasePath + "_files"
-            databaseDirectory = databasePath
-            useMessageDatabase = true
-            useFileDatabase = true
-            useChatInfoDatabase = true
-            useSecretChats = false
-            systemLanguageCode = "${Locale.getDefault().language}-${Locale.getDefault().country}"
-            deviceModel = Build.MODEL
-            applicationVersion = "0.1"
-        }
-        manager.sendRequest(parameters,{ if (it != null) onError(it.message) else onError(null) })
-    }
+class TelegramAuth @Inject constructor(
+    private val manager: TelegramManager
+): AuthRepository {
 
     override fun setPhoneNumber(
         phoneNumber: String,

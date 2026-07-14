@@ -33,10 +33,6 @@ class TelegramEventLoop @Inject constructor(
     private val manager: TelegramManager
 ): EventLoopRepository {
 
-    private companion object {
-        private const val DEFAULT_CODE_LENGTH = 5
-    }
-
     private val _authState = MutableStateFlow<AuthState>(AuthState.WaitParams)
     override val authState: StateFlow<AuthState> = _authState.asStateFlow()
 
@@ -62,7 +58,7 @@ class TelegramEventLoop @Inject constructor(
             { event ->
                 when (event) {
                     is TdApi.Error -> {
-                        Log.e(manager.logTag, "${event.code}: ${event.message}")
+                        Log.e(manager.getLogTag(), "${event.code}: ${event.message}")
                         setErrorMessage(event.message)
                     }
 
@@ -324,12 +320,12 @@ class TelegramEventLoop @Inject constructor(
                                         is TdApi.AuthenticationCodeTypeCall -> AuthCodeType(CodeType.Call,it.length)
                                         is TdApi.AuthenticationCodeTypeTelegramMessage -> AuthCodeType(CodeType.Telegram,it.length)
                                         is TdApi.AuthenticationCodeTypeSms -> AuthCodeType(CodeType.SMS,it.length)
-                                        is TdApi.AuthenticationCodeTypeFlashCall -> AuthCodeType(CodeType.FlashCall,DEFAULT_CODE_LENGTH)
+                                        is TdApi.AuthenticationCodeTypeFlashCall -> AuthCodeType(CodeType.FlashCall,manager.getDefaultCodeLength())
                                         is TdApi.AuthenticationCodeTypeMissedCall -> AuthCodeType(CodeType.MissedCall,it.length)
                                         is TdApi.AuthenticationCodeTypeFragment -> AuthCodeType(CodeType.Fragment,it.length)
                                         is TdApi.AuthenticationCodeTypeFirebaseAndroid -> AuthCodeType(CodeType.FireBaseAndroid,it.length)
                                         is TdApi.AuthenticationCodeTypeFirebaseIos -> AuthCodeType(CodeType.FireBaseIos,it.length)
-                                        else -> AuthCodeType(CodeType.Other,DEFAULT_CODE_LENGTH)
+                                        else -> AuthCodeType(CodeType.Other,manager.getDefaultCodeLength())
                                     }
                                 }
                                 AuthState.WaitCode(
@@ -346,9 +342,11 @@ class TelegramEventLoop @Inject constructor(
                                 )
                             )
                             is TdApi.AuthorizationStateReady -> AuthState.Ready
-                            is TdApi.AuthorizationStateClosed -> AuthState.Closed
-                            is TdApi.AuthorizationStateClosing -> AuthState.LoggingOut
+
                             is TdApi.AuthorizationStateLoggingOut -> AuthState.LoggingOut
+                            is TdApi.AuthorizationStateClosing -> AuthState.LoggingOut
+                            is TdApi.AuthorizationStateClosed -> AuthState.Closed
+
                             else -> AuthState.Other(event.authorizationState.toString())
                         }
                     }
@@ -357,7 +355,7 @@ class TelegramEventLoop @Inject constructor(
             },
             { throwable ->
                 val message = throwable.localizedMessage ?: throwable.message ?: "unknown update handler exception"
-                Log.e(manager.logTag, message)
+                Log.e(manager.getLogTag(), message)
                 setErrorMessage(message)
             },
         )

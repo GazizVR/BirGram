@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun WaitOther(
+fun OtherState(
     state: String
 ) {
     Column(

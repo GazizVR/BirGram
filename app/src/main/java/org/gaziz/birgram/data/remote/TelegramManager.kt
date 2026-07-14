@@ -13,9 +13,16 @@ class TelegramManager @Inject constructor(){
 
     companion object {
         const val LOG_TAG = "TGMANAGER"
+        const val DEFAULT_CODE_LENGTH = 5
     }
 
-    val logTag = LOG_TAG
+    fun getLogTag(): String {
+        return LOG_TAG
+    }
+
+    fun getDefaultCodeLength(): Int {
+        return DEFAULT_CODE_LENGTH
+    }
 
     fun createClient(
         updateHandler: (TdApi.Object) -> Unit,
@@ -30,7 +37,7 @@ class TelegramManager @Inject constructor(){
 
     fun sendRequest(
         query: TdApi.Function<*>,
-        onError: (RequestResponse.Error?) -> Unit,
+        onError: (RequestResponse.Error) -> Unit = {},
         onResult: (TdApi.Object) -> Unit = {}
     ) {
         if(client == null) {
@@ -38,7 +45,6 @@ class TelegramManager @Inject constructor(){
             onError(RequestResponse.Error(500,"Client is null"))
             return
         }
-        onError(null)
         client?.send(
             query,
             {
