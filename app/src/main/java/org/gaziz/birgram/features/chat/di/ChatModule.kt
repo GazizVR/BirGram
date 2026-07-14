@@ -4,8 +4,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.gaziz.birgram.data.remote.TelegramChat
-import org.gaziz.birgram.domain.repository.ChatRepository
+import org.gaziz.birgram.features.chat.data.TelegramChat
+import org.gaziz.birgram.features.chat.domain.repository.ChatRepository
 import javax.inject.Singleton
 
 @Module

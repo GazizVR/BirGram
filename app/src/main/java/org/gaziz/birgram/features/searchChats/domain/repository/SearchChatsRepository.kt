@@ -1,4 +1,4 @@
-package org.gaziz.birgram.domain.repository
+package org.gaziz.birgram.features.searchChats.domain.repository
 
 import kotlinx.coroutines.flow.StateFlow
 import org.gaziz.birgram.domain.model.chat.ChatData

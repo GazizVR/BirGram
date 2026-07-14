@@ -1,4 +1,4 @@
-package org.gaziz.birgram.domain.usecase.chatList
+package org.gaziz.birgram.features.chatList.domain.usecase
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

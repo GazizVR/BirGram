@@ -1,4 +1,4 @@
-package org.gaziz.birgram.domain.repository
+package org.gaziz.birgram.features.chatList.domain.repository
 
 import org.gaziz.birgram.domain.model.RequestResponse
 import org.gaziz.birgram.domain.model.chat.ChatListType

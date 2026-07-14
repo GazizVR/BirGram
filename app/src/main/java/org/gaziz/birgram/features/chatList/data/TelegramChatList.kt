@@ -1,10 +1,10 @@
-package org.gaziz.birgram.data.remote
+package org.gaziz.birgram.features.chatList.data
 
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.TelegramManager
 import org.gaziz.birgram.domain.model.RequestResponse
 import org.gaziz.birgram.domain.model.chat.ChatListType
-import org.gaziz.birgram.domain.repository.ChatListRepository
+import org.gaziz.birgram.features.chatList.domain.repository.ChatListRepository
 import javax.inject.Inject
 
 class TelegramChatList @Inject constructor(

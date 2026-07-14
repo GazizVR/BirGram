@@ -1,7 +1,7 @@
-package org.gaziz.birgram.domain.usecase.searchChats
+package org.gaziz.birgram.features.searchChats.domain.usecase
 
 import org.gaziz.birgram.core.telegram.EventLoopRepository
-import org.gaziz.birgram.domain.repository.SearchChatsRepository
+import org.gaziz.birgram.features.searchChats.domain.repository.SearchChatsRepository
 import javax.inject.Inject
 
 class SendSearchQuery @Inject constructor(

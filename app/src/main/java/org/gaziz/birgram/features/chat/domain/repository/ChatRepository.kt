@@ -1,4 +1,4 @@
-package org.gaziz.birgram.domain.repository
+package org.gaziz.birgram.features.chat.domain.repository
 
 import org.gaziz.birgram.domain.model.message.MessageData
 

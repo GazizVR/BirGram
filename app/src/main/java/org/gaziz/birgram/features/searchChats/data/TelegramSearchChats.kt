@@ -1,4 +1,4 @@
-package org.gaziz.birgram.data.remote
+package org.gaziz.birgram.features.searchChats.data
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.update
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.TelegramManager
 import org.gaziz.birgram.domain.model.chat.ChatData
-import org.gaziz.birgram.domain.repository.SearchChatsRepository
+import org.gaziz.birgram.features.searchChats.domain.repository.SearchChatsRepository
 import javax.inject.Inject
 
 class TelegramSearchChats @Inject constructor(

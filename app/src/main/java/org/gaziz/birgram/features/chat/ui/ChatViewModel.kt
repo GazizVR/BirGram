@@ -9,10 +9,10 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.domain.model.chat.ChatData
 import org.gaziz.birgram.domain.model.message.MessageData
-import org.gaziz.birgram.domain.repository.ChatRepository
-import org.gaziz.birgram.domain.usecase.chat.GetChatByID
-import org.gaziz.birgram.domain.usecase.chat.GetChatMessages
-import org.gaziz.birgram.domain.usecase.chat.LoadChatMessages
+import org.gaziz.birgram.features.chat.domain.repository.ChatRepository
+import org.gaziz.birgram.features.chat.domain.usecase.GetChatByID
+import org.gaziz.birgram.features.chat.domain.usecase.GetChatMessages
+import org.gaziz.birgram.features.chat.domain.usecase.LoadChatMessages
 import java.time.LocalDate
 import javax.inject.Inject
 
