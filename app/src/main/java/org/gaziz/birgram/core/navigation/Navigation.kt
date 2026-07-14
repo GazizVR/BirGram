@@ -7,9 +7,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import org.gaziz.birgram.features.auth.ui.AuthScreen
 import org.gaziz.birgram.features.splash.ui.SplashScreen
-import org.gaziz.birgram.presentation.chat.screen.ChatScreen
-import org.gaziz.birgram.presentation.chatList.screen.ChatListScreen
-import org.gaziz.birgram.presentation.searchChats.screen.SearchChatsScreen
+import org.gaziz.birgram.features.chat.ui.ChatScreen
+import org.gaziz.birgram.features.chatList.ui.ChatListScreen
+import org.gaziz.birgram.features.searchChats.ui.SearchChatsScreen
 
 @Composable
 fun Navigation(

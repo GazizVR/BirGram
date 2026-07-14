@@ -6,7 +6,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import org.gaziz.birgram.domain.repository.UserPreferencesRepository
+import org.gaziz.birgram.core.datastore.UserPreferencesRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
