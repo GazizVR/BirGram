@@ -1,14 +1,17 @@
 package org.gaziz.birgram.features.auth.data
 
 import android.util.Log
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.TelegramManager
+import org.gaziz.birgram.features.auth.domain.model.AuthCode
 import org.gaziz.birgram.features.auth.domain.model.AuthCodeInfo
-import org.gaziz.birgram.features.auth.domain.model.AuthCodeType
 import org.gaziz.birgram.features.auth.domain.model.AuthPasswordInfo
 import org.gaziz.birgram.features.auth.domain.model.AuthState
 import org.gaziz.birgram.features.auth.domain.model.CodeType
@@ -18,6 +21,13 @@ import javax.inject.Inject
 class TelegramAuth @Inject constructor(
     private val manager: TelegramManager
 ): AuthRepository {
+
+    init {
+        CoroutineScope(Dispatchers.IO).launch {
+            collectUpdates()
+            collectExceptions()
+        }
+    }
 
     private val _authState = MutableStateFlow<AuthState>(AuthState.WaitParams)
     override val authState: StateFlow<AuthState> = _authState.asStateFlow()
@@ -29,7 +39,7 @@ class TelegramAuth @Inject constructor(
         _errorMessage.update { msg }
     }
 
-    override suspend fun collectUpdates(){
+    private suspend fun collectUpdates(){
         manager.update.collect { u ->
             when(u) {
                 is TdApi.Error -> {
@@ -45,41 +55,41 @@ class TelegramAuth @Inject constructor(
                         is TdApi.AuthorizationStateWaitPhoneNumber -> AuthState.WaitPhoneNumber
                         is TdApi.AuthorizationStateWaitCode -> {
                             val codeInfo = (u.authorizationState as TdApi.AuthorizationStateWaitCode).codeInfo
-                            val codeType: (TdApi.AuthenticationCodeType) -> AuthCodeType = {
+                            val codeType: (TdApi.AuthenticationCodeType) -> AuthCode = {
                                 when(it) {
-                                    is TdApi.AuthenticationCodeTypeCall -> AuthCodeType(
+                                    is TdApi.AuthenticationCodeTypeCall -> AuthCode(
                                         CodeType.Call,
                                         it.length
                                     )
-                                    is TdApi.AuthenticationCodeTypeTelegramMessage -> AuthCodeType(
+                                    is TdApi.AuthenticationCodeTypeTelegramMessage -> AuthCode(
                                         CodeType.Telegram,
                                         it.length
                                     )
-                                    is TdApi.AuthenticationCodeTypeSms -> AuthCodeType(
+                                    is TdApi.AuthenticationCodeTypeSms -> AuthCode(
                                         CodeType.SMS,
                                         it.length
                                     )
-                                    is TdApi.AuthenticationCodeTypeFlashCall -> AuthCodeType(
+                                    is TdApi.AuthenticationCodeTypeFlashCall -> AuthCode(
                                         CodeType.FlashCall,
                                         manager.getDefaultCodeLength()
                                     )
-                                    is TdApi.AuthenticationCodeTypeMissedCall -> AuthCodeType(
+                                    is TdApi.AuthenticationCodeTypeMissedCall -> AuthCode(
                                         CodeType.MissedCall,
                                         it.length
                                     )
-                                    is TdApi.AuthenticationCodeTypeFragment -> AuthCodeType(
+                                    is TdApi.AuthenticationCodeTypeFragment -> AuthCode(
                                         CodeType.Fragment,
                                         it.length
                                     )
-                                    is TdApi.AuthenticationCodeTypeFirebaseAndroid -> AuthCodeType(
+                                    is TdApi.AuthenticationCodeTypeFirebaseAndroid -> AuthCode(
                                         CodeType.FireBaseAndroid,
                                         it.length
                                     )
-                                    is TdApi.AuthenticationCodeTypeFirebaseIos -> AuthCodeType(
+                                    is TdApi.AuthenticationCodeTypeFirebaseIos -> AuthCode(
                                         CodeType.FireBaseIos,
                                         it.length
                                     )
-                                    else -> AuthCodeType(
+                                    else -> AuthCode(
                                         CodeType.Other,
                                         manager.getDefaultCodeLength()
                                     )
@@ -111,7 +121,7 @@ class TelegramAuth @Inject constructor(
         }
     }
 
-    override suspend fun collectExceptions() {
+    private suspend fun collectExceptions() {
         manager.exception.collect { e ->
             if(e != null) {
                 val message = e.localizedMessage ?: e.message ?: "unknown update handler exception"

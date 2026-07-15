@@ -1,6 +1,5 @@
 package org.gaziz.birgram.core.telegram
 
-import android.util.Log
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,17 +13,11 @@ import org.gaziz.birgram.core.telegram.data.mapper.toLastMsgData
 import org.gaziz.birgram.core.telegram.data.mapper.toMessageData
 import org.gaziz.birgram.core.telegram.data.mapper.toPhotoInfo
 import org.gaziz.birgram.core.telegram.data.mapper.toStatus
-import org.gaziz.birgram.core.telegram.domain.model.chat.ChatData
 import org.gaziz.birgram.core.telegram.domain.model.chat.ChatPhoto
 import org.gaziz.birgram.core.telegram.domain.model.chat.ChatPosition
 import org.gaziz.birgram.core.telegram.domain.model.chat.ChatType
 import org.gaziz.birgram.core.telegram.domain.model.message.MessageContent
 import org.gaziz.birgram.core.telegram.domain.model.message.MessageData
-import org.gaziz.birgram.features.auth.domain.model.AuthCodeInfo
-import org.gaziz.birgram.features.auth.domain.model.AuthCodeType
-import org.gaziz.birgram.features.auth.domain.model.AuthPasswordInfo
-import org.gaziz.birgram.features.auth.domain.model.AuthState
-import org.gaziz.birgram.features.auth.domain.model.CodeType
 import javax.inject.Inject
 import kotlin.collections.iterator
 
@@ -33,8 +26,6 @@ class TelegramEventLoop @Inject constructor(
 ) {
 
 
-    private val _chatList = MutableStateFlow(emptyMap<Long, ChatData>())
-    override val chatList: StateFlow<Map<Long, ChatData>> = _chatList.asStateFlow()
 
     private val _messages = MutableStateFlow(emptyMap<Long, MessageData>())
     override val messages: StateFlow<Map<Long, MessageData>> = _messages.asStateFlow()

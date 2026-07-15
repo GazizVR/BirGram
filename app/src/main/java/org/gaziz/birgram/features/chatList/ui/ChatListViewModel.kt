@@ -20,7 +20,6 @@ class ChatListViewModel @Inject constructor(
     getChatList: GetChatList,
     private val chatListRepository: ChatListRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
-    private val eventLoopRepository: EventLoopRepository
 ): ViewModel() {
     init {
         loadAllChats(ChatListType.Main)

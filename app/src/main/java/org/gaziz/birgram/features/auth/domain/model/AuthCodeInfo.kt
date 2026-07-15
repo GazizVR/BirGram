@@ -12,13 +12,13 @@ enum class CodeType {
     Other
 }
 
-data class AuthCodeType(
+data class AuthCode(
     val type: CodeType,
     val length: Int
 )
 
 data class AuthCodeInfo(
-    val type: AuthCodeType,
-    val nextType: AuthCodeType?,
+    val type: AuthCode,
+    val nextType: AuthCode?,
     val timeout: Int,
 )

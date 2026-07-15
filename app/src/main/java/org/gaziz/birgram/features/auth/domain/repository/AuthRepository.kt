@@ -8,9 +8,6 @@ interface AuthRepository {
     val errorMessage: StateFlow<String?>
     fun setErrorMessage(msg: String?)
 
-    suspend fun collectUpdates()
-    suspend fun collectExceptions()
-
     fun setPhoneNumber(
         phoneNumber: String,
         onError: (String) -> Unit
