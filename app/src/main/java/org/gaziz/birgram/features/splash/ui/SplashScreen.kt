@@ -18,7 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import org.gaziz.birgram.R
-import org.gaziz.birgram.features.auth.domain.model.AuthState
+import org.gaziz.birgram.features.splash.domain.model.AppState
 
 @Composable
 fun SplashScreen(
@@ -27,43 +27,36 @@ fun SplashScreen(
 ) {
     val windowInfo = LocalWindowInfo.current
     val viewModel = hiltViewModel<SplashViewModel>()
-    val localState by viewModel.localState.collectAsState()
+    val appState by viewModel.appState.collectAsState()
     val context = LocalContext.current
 
-    var isSetParams = false
-    LaunchedEffect(localState) {
-        if(localState == null){
+    var isInitializing = false
+    LaunchedEffect(appState) {
+        if(appState == null){
             viewModel.loadState()
         } else {
-            if(localState is AuthState.WaitParams && !isSetParams) {
-                isSetParams = true
+            if(appState is AppState.Ready){
+                onReady()
+                return@LaunchedEffect
+            }
+            if(appState is AppState.Init && !isInitializing) {
+                isInitializing = true
                 viewModel.setParams(
                     "${context.filesDir.absolutePath}/tdlib",
-                    { isSetParams = false }
+                    { isInitializing = false }
                 )
             }
-        }
-    }
-
-    val remoteState by viewModel.remoteState.collectAsState()
-    LaunchedEffect(remoteState) {
-        if(remoteState is AuthState.Ready){
-            onReady()
-            return@LaunchedEffect
-        }
-        if(remoteState is AuthState.Closed && !isSetParams) {
-            viewModel.initEventLoop().let {
-                viewModel.setParams(
-                    "${context.filesDir.absolutePath}/tdlib",
-                    { isSetParams = false }
-                )
+            if(appState is AppState.Stopped && !isInitializing) {
+                viewModel.initApplication().let {
+                    viewModel.setParams(
+                        "${context.filesDir.absolutePath}/tdlib",
+                        { isInitializing = false }
+                    )
+                }
             }
-        }
-        if(
-            remoteState !is AuthState.WaitParams &&
-            remoteState !is AuthState.LoggingOut
-        ) {
-            onAuth()
+            if(appState is AppState.Auth) {
+                onAuth()
+            }
         }
     }
 

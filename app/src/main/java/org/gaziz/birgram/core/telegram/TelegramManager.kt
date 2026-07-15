@@ -1,6 +1,9 @@
 package org.gaziz.birgram.core.telegram
 
 import android.util.Log
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import org.drinkless.tdlib.Client
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.domain.model.RequestResponse
@@ -24,13 +27,16 @@ class TelegramManager @Inject constructor(){
         return DEFAULT_CODE_LENGTH
     }
 
-    fun createClient(
-        updateHandler: (TdApi.Object) -> Unit,
-        exceptionHandler: (Throwable) -> Unit
-    ) {
+    private val _update = MutableStateFlow<TdApi.Object?>(null)
+    val update = _update.asStateFlow()
+
+    private val _exception = MutableStateFlow<Throwable?>(null)
+    val exception = _exception.asStateFlow()
+
+    fun createClient() {
         client = Client.create(
-            { updateHandler(it) },
-            { exceptionHandler(it) },
+            { u -> _update.update { u } },
+            { e -> _exception.update { e } },
             null
         )
     }

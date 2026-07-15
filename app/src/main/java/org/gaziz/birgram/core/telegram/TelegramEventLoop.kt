@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.telegram.data
+package org.gaziz.birgram.core.telegram
 
 import android.util.Log
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.TelegramManager
 import org.gaziz.birgram.core.telegram.data.mapper.fromUnixTimeStamp
 import org.gaziz.birgram.core.telegram.data.mapper.toChatData
 import org.gaziz.birgram.core.telegram.data.mapper.toChatPosition
@@ -21,27 +20,18 @@ import org.gaziz.birgram.core.telegram.domain.model.chat.ChatPosition
 import org.gaziz.birgram.core.telegram.domain.model.chat.ChatType
 import org.gaziz.birgram.core.telegram.domain.model.message.MessageContent
 import org.gaziz.birgram.core.telegram.domain.model.message.MessageData
-import org.gaziz.birgram.core.telegram.domain.repository.EventLoopRepository
 import org.gaziz.birgram.features.auth.domain.model.AuthCodeInfo
 import org.gaziz.birgram.features.auth.domain.model.AuthCodeType
 import org.gaziz.birgram.features.auth.domain.model.AuthPasswordInfo
 import org.gaziz.birgram.features.auth.domain.model.AuthState
 import org.gaziz.birgram.features.auth.domain.model.CodeType
 import javax.inject.Inject
+import kotlin.collections.iterator
 
 class TelegramEventLoop @Inject constructor(
     private val manager: TelegramManager
-): EventLoopRepository {
+) {
 
-    private val _authState = MutableStateFlow<AuthState>(AuthState.WaitParams)
-    override val authState: StateFlow<AuthState> = _authState.asStateFlow()
-
-    private val _errorMessage = MutableStateFlow<String?>(null)
-    override val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
-
-    override fun setErrorMessage(errorMessage: String?) {
-        _errorMessage.value = errorMessage
-    }
 
     private val _chatList = MutableStateFlow(emptyMap<Long, ChatData>())
     override val chatList: StateFlow<Map<Long, ChatData>> = _chatList.asStateFlow()
@@ -59,14 +49,6 @@ class TelegramEventLoop @Inject constructor(
         manager.createClient(
             { event ->
                 when (event) {
-                    is TdApi.Error -> {
-                        Log.e(manager.getLogTag(), "${event.code}: ${event.message}")
-                        setErrorMessage(event.message)
-                    }
-
-                    is TdApi.Ok -> {
-                        setErrorMessage(null)
-                    }
 
                     is TdApi.UpdateNewChat -> {
                         val chat = event.chat.toChatData()
@@ -320,100 +302,9 @@ class TelegramEventLoop @Inject constructor(
                             newMap.toMap()
                         }
                     }
-
-                    is TdApi.UpdateAuthorizationState -> {
-                        _authState.value = when (event.authorizationState) {
-                            is TdApi.AuthorizationStateWaitTdlibParameters -> AuthState.WaitParams
-                            is TdApi.AuthorizationStateWaitPhoneNumber -> AuthState.WaitPhoneNumber
-                            is TdApi.AuthorizationStateWaitCode -> {
-                                val codeInfo = (event.authorizationState as TdApi.AuthorizationStateWaitCode).codeInfo
-                                val codeType: (TdApi.AuthenticationCodeType) -> AuthCodeType = {
-                                    when(it) {
-                                        is TdApi.AuthenticationCodeTypeCall -> AuthCodeType(
-                                            CodeType.Call,
-                                            it.length
-                                        )
-                                        is TdApi.AuthenticationCodeTypeTelegramMessage -> AuthCodeType(
-                                            CodeType.Telegram,
-                                            it.length
-                                        )
-                                        is TdApi.AuthenticationCodeTypeSms -> AuthCodeType(
-                                            CodeType.SMS,
-                                            it.length
-                                        )
-                                        is TdApi.AuthenticationCodeTypeFlashCall -> AuthCodeType(
-                                            CodeType.FlashCall,
-                                            manager.getDefaultCodeLength()
-                                        )
-                                        is TdApi.AuthenticationCodeTypeMissedCall -> AuthCodeType(
-                                            CodeType.MissedCall,
-                                            it.length
-                                        )
-                                        is TdApi.AuthenticationCodeTypeFragment -> AuthCodeType(
-                                            CodeType.Fragment,
-                                            it.length
-                                        )
-                                        is TdApi.AuthenticationCodeTypeFirebaseAndroid -> AuthCodeType(
-                                            CodeType.FireBaseAndroid,
-                                            it.length
-                                        )
-                                        is TdApi.AuthenticationCodeTypeFirebaseIos -> AuthCodeType(
-                                            CodeType.FireBaseIos,
-                                            it.length
-                                        )
-                                        else -> AuthCodeType(
-                                            CodeType.Other,
-                                            manager.getDefaultCodeLength()
-                                        )
-                                    }
-                                }
-                                AuthState.WaitCode(
-                                    AuthCodeInfo(
-                                        type = codeType(codeInfo.type),
-                                        nextType = if (codeInfo.nextType != null) codeType(codeInfo.nextType!!) else null,
-                                        timeout = codeInfo.timeout
-                                    )
-                                )
-                            }
-                            is TdApi.AuthorizationStateWaitPassword -> AuthState.WaitPassword(
-                                AuthPasswordInfo(
-                                    (event.authorizationState as TdApi.AuthorizationStateWaitPassword).passwordHint
-                                )
-                            )
-                            is TdApi.AuthorizationStateReady -> AuthState.Ready
-
-                            is TdApi.AuthorizationStateLoggingOut -> AuthState.LoggingOut
-                            is TdApi.AuthorizationStateClosing -> AuthState.LoggingOut
-                            is TdApi.AuthorizationStateClosed -> AuthState.Closed
-
-                            else -> AuthState.Other(event.authorizationState.toString())
-                        }
-                    }
-
                 }
-            },
-            { throwable ->
-                val message = throwable.localizedMessage ?: throwable.message ?: "unknown update handler exception"
-                Log.e(manager.getLogTag(), message)
-                setErrorMessage(message)
             },
         )
     }
 
-    override fun restartAuth() {
-        _authState.value = AuthState.WaitPhoneNumber
-    }
-
-    override fun logOut(onOk: () -> Unit) {
-        manager.sendRequest(
-            TdApi.LogOut(),
-            {},
-        ) {
-            if(it is TdApi.Ok) {
-                _chatList.value = emptyMap()
-                _messages.value = emptyMap()
-                onOk()
-            }
-        }
-    }
 }
