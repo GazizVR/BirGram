@@ -7,7 +7,6 @@ interface SplashRepository {
     val appState: StateFlow<AppState?>
 
     fun initApplication()
-    suspend fun collectUpdates()
 
     fun loadAppState()
     fun setParameters(

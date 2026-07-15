@@ -1,9 +1,12 @@
 package org.gaziz.birgram.features.splash.data
 
 import android.os.Build
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.BuildConfig
 import org.gaziz.birgram.core.telegram.TelegramManager
@@ -15,9 +18,14 @@ import javax.inject.Inject
 class TelegramAuthState @Inject constructor(
     private val manager: TelegramManager,
 ): SplashRepository {
+    init {
+        CoroutineScope(Dispatchers.IO).launch {
+            collectUpdates()
+        }
+    }
     private val _appState = MutableStateFlow<AppState?>(null)
     override val appState = _appState.asStateFlow()
-    override suspend fun collectUpdates() {
+    private suspend fun collectUpdates() {
         manager.update.collect { u ->
             if(u is TdApi.UpdateAuthorizationState) {
                 _appState.value = when (u.authorizationState) {

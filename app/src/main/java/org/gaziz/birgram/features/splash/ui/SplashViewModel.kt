@@ -11,11 +11,6 @@ import javax.inject.Inject
 class SplashViewModel @Inject constructor(
     private val splashRepository: SplashRepository,
 ): ViewModel() {
-    init {
-        viewModelScope.launch {
-            splashRepository.collectUpdates()
-        }
-    }
     val appState = splashRepository.appState
     fun loadState() {
         viewModelScope.launch {
