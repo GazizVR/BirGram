@@ -25,6 +25,5 @@ sealed interface MessageContent {
 
     object GIF: MessageContent
 
-    object Draft: MessageContent
     object Other: MessageContent
 }

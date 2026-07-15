@@ -1,15 +1,13 @@
 package org.gaziz.birgram.features.searchChats.domain.repository
 
 import kotlinx.coroutines.flow.StateFlow
-import org.gaziz.birgram.features.chatList.domain.model.ChatData
+import org.gaziz.birgram.features.searchChats.domain.model.ChatData
 
 interface SearchChatsRepository {
     val searchedChats: StateFlow<Map<Long, ChatData>>
-    fun updateSearchChats(chat: ChatData?)
     fun searchLocal(
         query: String,
-        limit: Int,
-        onResult: (List<Long>) -> Unit
+        limit: Int
     )
     fun downloadPhoto(fileId: Int)
 }

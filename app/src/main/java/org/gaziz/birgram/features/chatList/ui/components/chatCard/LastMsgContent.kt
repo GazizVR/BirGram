@@ -11,8 +11,8 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import org.gaziz.birgram.R
-import org.gaziz.birgram.features.chatList.domain.model.MessageData
 import org.gaziz.birgram.features.chatList.domain.model.MessageContent
+import org.gaziz.birgram.features.chatList.domain.model.MessageData
 
 @Composable
 fun LastMsgContent(
@@ -26,7 +26,7 @@ fun LastMsgContent(
         verticalAlignment = Alignment.CenterVertically
     ) {
         when(val cnt = lastMessage.content) {
-            is MessageContent.Other -> CardText(msgType[6])
+            is MessageContent.Other -> CardText(msgType[5])
             is MessageContent.Text -> CardText(cnt.text.trim())
             is MessageContent.Photo -> {
                 if(cnt.miniThumbNail != null) {
@@ -74,9 +74,6 @@ fun LastMsgContent(
             }
             is MessageContent.GIF -> {
                 CardText( msgType[4], color = MaterialTheme.colorScheme.primary)
-            }
-            is MessageContent.Draft -> {
-                CardText( msgType[5], color = MaterialTheme.colorScheme.error)
             }
         }
     }

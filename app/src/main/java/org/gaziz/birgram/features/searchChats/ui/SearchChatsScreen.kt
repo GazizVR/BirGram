@@ -21,7 +21,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import org.gaziz.birgram.R
 import org.gaziz.birgram.features.searchChats.ui.components.SearchChatCard
 import org.gaziz.birgram.features.searchChats.ui.components.SearchTopBar
-import org.gaziz.birgram.features.searchChats.ui.SearchChatsViewModel
 
 @Composable
 fun SearchChatsScreen(

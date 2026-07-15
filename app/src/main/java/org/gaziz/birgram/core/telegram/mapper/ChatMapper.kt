@@ -21,7 +21,6 @@ fun TdApi.ChatType.toType(): ChatType {
         is TdApi.ChatTypeBasicGroup -> ChatType.BasicGroup(this.basicGroupId)
         is TdApi.ChatTypePrivate -> ChatType.Private(this.userId, UserStatus.Recently)
         is TdApi.ChatTypeSupergroup -> ChatType.SuperGroup(this.supergroupId, this.isChannel)
-        is TdApi.ChatTypeSecret -> ChatType.Secret(this.secretChatId,this.userId,UserStatus.Recently)
         else -> ChatType.Other
     }
 }

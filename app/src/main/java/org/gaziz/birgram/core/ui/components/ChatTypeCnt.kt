@@ -49,11 +49,6 @@ fun ChatTypeCnt(
                 LastOnlineText(type.userStatus,fontSize)
             }
         }
-        is ChatType.Secret -> {
-            if(type.userStatus != null) {
-                LastOnlineText(type.userStatus,fontSize)
-            }
-        }
         ChatType.Other -> {}
     }
 }

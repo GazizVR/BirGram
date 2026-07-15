@@ -58,7 +58,6 @@
         <item>🎤 Voice message</item>
         <item>⭕ Video message</item>
         <item>GIF</item>
-        <item>Draft message</item>
         <item>Unsupported message</item>
     </string-array>
 
