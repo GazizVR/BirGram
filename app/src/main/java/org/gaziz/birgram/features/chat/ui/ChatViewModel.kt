@@ -25,12 +25,12 @@ class ChatViewModel @Inject constructor(
 ): ViewModel() {
     private var isMessagesLoading = false
     fun openChat(
-        chatId: Long
+        chatId: Long,
     ){
         chatRepository.openChat(
             chatId
         ) {
-            loadChatMessages(chatId, onResp = {isMessagesLoading = false})
+            loadChatMessages(chatId, onResp = { isMessagesLoading = false })
         }
     }
 
@@ -47,14 +47,14 @@ class ChatViewModel @Inject constructor(
     fun getChat(chatId: Long): StateFlow<ChatData?> {
        return getChatByID(chatId).stateIn(
            viewModelScope,
-           SharingStarted.Companion.Eagerly,
+           SharingStarted.Eagerly,
            null
        )
     }
     fun chatMessages(chatId: Long): StateFlow<Map<LocalDate, List<MessageData>>> {
         return getChatMessages(chatId).stateIn(
             viewModelScope,
-            SharingStarted.Companion.Eagerly,
+            SharingStarted.Eagerly,
             emptyMap()
         )
     }

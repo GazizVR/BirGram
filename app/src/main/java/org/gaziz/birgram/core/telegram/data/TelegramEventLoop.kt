@@ -49,8 +49,10 @@ class TelegramEventLoop @Inject constructor(
     private val _messages = MutableStateFlow(emptyMap<Long, MessageData>())
     override val messages: StateFlow<Map<Long, MessageData>> = _messages.asStateFlow()
 
-    override fun setMessages(map: Map<Long, MessageData>) {
-        _messages.update { map }
+    override fun setMessages(
+        updFun: (Map<Long, MessageData>) -> Map<Long, MessageData>
+    ) {
+        _messages.update(updFun)
     }
 
     override fun createEventLoop() {
@@ -111,11 +113,21 @@ class TelegramEventLoop @Inject constructor(
                         }
                     }
 
-                    is TdApi.UpdateNewMessage -> {
+                    is TdApi.UpdateMessageSendSucceeded -> {
                         _messages.update { map ->
                             val newMap = map.toMutableMap()
                             newMap[event.message.id] = event.message.toMessageData()
                             newMap.toMap()
+                        }
+                    }
+
+                    is TdApi.UpdateNewMessage -> {
+                        if(!event.message.isOutgoing) {
+                            _messages.update { map ->
+                                val newMap = map.toMutableMap()
+                                newMap[event.message.id] = event.message.toMessageData()
+                                newMap.toMap()
+                            }
                         }
                     }
 

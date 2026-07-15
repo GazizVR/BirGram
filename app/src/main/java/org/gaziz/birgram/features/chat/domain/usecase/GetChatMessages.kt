@@ -13,9 +13,8 @@ class GetChatMessages @Inject constructor(
     operator fun invoke(
         chatId: Long,
     ): Flow<Map<LocalDate,List<MessageData>>> {
-        return eventLoopRepository.messages.map { msgs ->
-            msgs
-                .map { it.value }
+        return eventLoopRepository.messages.map { map ->
+            map.values.asSequence()
                 .filter { it.chatId == chatId }
                 .sortedByDescending { it.date }
                 .groupBy { it.date.toLocalDate() }

@@ -16,7 +16,6 @@ class TelegramChat @Inject constructor(
     ) {
         manager.sendRequest(
             TdApi.OpenChat().apply { this.chatId = chatId },
-            {}
         ) {
             if(it is TdApi.Ok) { onOK() }
         }
@@ -25,7 +24,6 @@ class TelegramChat @Inject constructor(
     override fun closeChat(chatId: Long) {
         manager.sendRequest(
             TdApi.CloseChat().apply { this.chatId = chatId },
-            {}
         )
     }
 

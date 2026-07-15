@@ -11,7 +11,9 @@ interface EventLoopRepository {
     fun setErrorMessage(errorMessage: String?)
     val chatList: StateFlow<Map<Long, ChatData>>
     val messages: StateFlow<Map<Long, MessageData>>
-    fun setMessages(map: Map<Long, MessageData>)
+    fun setMessages(
+        updFun: (Map<Long, MessageData>) -> Map<Long, MessageData>
+    )
     fun createEventLoop()
     fun restartAuth()
     fun logOut(onOk: () -> Unit)

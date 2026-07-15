@@ -3,8 +3,8 @@ package org.gaziz.birgram.features.chat.domain.usecase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.gaziz.birgram.features.chat.domain.repository.ChatRepository
 import org.gaziz.birgram.core.telegram.domain.repository.EventLoopRepository
+import org.gaziz.birgram.features.chat.domain.repository.ChatRepository
 import javax.inject.Inject
 
 class LoadChatMessages @Inject constructor(
@@ -22,9 +22,11 @@ class LoadChatMessages @Inject constructor(
                 lastMessageId
             ) { resp ->
                 onResp()
-                val map = eventLoopRepository.messages.value.toMutableMap()
-                resp.forEach { map[it.id] = it }
-                eventLoopRepository.setMessages(map.toMap())
+                eventLoopRepository.setMessages { map ->
+                    val newMap = map.toMutableMap()
+                    resp.forEach { newMap[it.id] = it }
+                    newMap.toMap()
+                }
             }
         }
     }
