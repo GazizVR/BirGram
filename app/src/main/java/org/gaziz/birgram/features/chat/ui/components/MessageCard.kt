@@ -24,8 +24,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.R
-import org.gaziz.birgram.features.chatList.domain.model.MessageContent
 import org.gaziz.birgram.features.chat.domain.model.MessageData
+import org.gaziz.birgram.features.chatList.domain.model.MessageContent
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -86,7 +86,7 @@ fun MessageCard(
            Row(Modifier.padding(horizontal = 12.dp, vertical = 4.dp)) {
                when(msg.content) {
                    is MessageContent.Text -> { MessageText(msg.content.text,msg.date.formatMessageCard()) }
-                   else -> { MessageText(msgType[6],msg.date.formatMessageCard()) }
+                   else -> { MessageText(msgType[5],msg.date.formatMessageCard()) }
                }
            }
         }

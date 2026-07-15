@@ -24,7 +24,7 @@ class SplashViewModel @Inject constructor(
     }
     fun setParams(
         dbPath: String,
-        onErr: (String) -> Unit,
+        onErr: (String) -> Unit
     ){
         viewModelScope.launch {
             splashRepository.setParameters(

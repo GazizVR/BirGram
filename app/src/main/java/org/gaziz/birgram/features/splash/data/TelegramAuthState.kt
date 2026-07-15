@@ -19,12 +19,10 @@ class TelegramAuthState @Inject constructor(
     private val manager: TelegramManager,
 ): SplashRepository {
     init {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             collectUpdates()
         }
     }
-    private val _appState = MutableStateFlow<AppState?>(null)
-    override val appState = _appState.asStateFlow()
     private suspend fun collectUpdates() {
         manager.update.collect { u ->
             if(u is TdApi.UpdateAuthorizationState) {
@@ -41,6 +39,8 @@ class TelegramAuthState @Inject constructor(
             }
         }
     }
+    private val _appState = MutableStateFlow<AppState?>(null)
+    override val appState = _appState.asStateFlow()
     override fun initApplication() {
         manager.createClient()
     }
@@ -86,7 +86,7 @@ class TelegramAuthState @Inject constructor(
         }
         manager.sendRequest(
             query = parameters,
-            onError = { onError(it.message) }
+            onError = { onError(it.message) },
         )
     }
 }

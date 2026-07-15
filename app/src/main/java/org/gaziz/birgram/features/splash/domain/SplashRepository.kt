@@ -11,6 +11,6 @@ interface SplashRepository {
     fun loadAppState()
     fun setParameters(
         databasePath: String,
-        onError: (String) -> Unit
+        onError: (String) -> Unit,
     )
 }

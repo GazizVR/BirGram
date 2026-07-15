@@ -35,26 +35,27 @@ fun SplashScreen(
         if(appState == null){
             viewModel.loadState()
         } else {
-            if(appState is AppState.Ready){
-                onReady()
-                return@LaunchedEffect
-            }
-            if(appState is AppState.Init && !isInitializing) {
+            if (appState is AppState.Init && !isInitializing) {
                 isInitializing = true
                 viewModel.setParams(
                     "${context.filesDir.absolutePath}/tdlib",
-                    { isInitializing = false }
+                    { isInitializing = false },
                 )
             }
-            if(appState is AppState.Stopped && !isInitializing) {
+            if (appState is AppState.Stopped && !isInitializing) {
+                isInitializing = true
                 viewModel.initApplication().let {
                     viewModel.setParams(
                         "${context.filesDir.absolutePath}/tdlib",
-                        { isInitializing = false }
+                        { isInitializing = false },
                     )
                 }
             }
-            if(appState is AppState.Auth) {
+
+            if (appState is AppState.Ready) {
+                onReady()
+            }
+            if (appState is AppState.Auth) {
                 onAuth()
             }
         }
