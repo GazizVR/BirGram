@@ -1,12 +1,12 @@
-package org.gaziz.birgram.core.telegram.data.mapper
+package org.gaziz.birgram.features.chatList.data.mappers
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.domain.model.UserStatus
-import org.gaziz.birgram.core.telegram.domain.model.chat.ChatData
-import org.gaziz.birgram.core.telegram.domain.model.chat.ChatListType
-import org.gaziz.birgram.core.telegram.domain.model.chat.ChatPhoto
-import org.gaziz.birgram.core.telegram.domain.model.chat.ChatPosition
-import org.gaziz.birgram.core.telegram.domain.model.chat.ChatType
+import org.gaziz.birgram.features.chatList.domain.model.UserStatus
+import org.gaziz.birgram.features.chatList.domain.model.chat.ChatData
+import org.gaziz.birgram.features.chatList.domain.model.chat.ChatListType
+import org.gaziz.birgram.features.chatList.domain.model.chat.ChatPhoto
+import org.gaziz.birgram.features.chatList.domain.model.chat.ChatPosition
+import org.gaziz.birgram.features.chatList.domain.model.chat.ChatType
 
 fun TdApi.ChatList.toChatListType(): ChatListType {
     return when(this){
@@ -59,7 +59,6 @@ fun TdApi.Chat.toChatData(): ChatData {
         positions = chatPositions,
         unreadCount = chat.unreadCount,
         mentionCount = chat.unreadMentionCount,
-        reactionCount = chat.unreadReactionCount,
-        canSendBasicMsg = chat.permissions.canSendBasicMessages
+        reactionCount = chat.unreadReactionCount
     )
 }

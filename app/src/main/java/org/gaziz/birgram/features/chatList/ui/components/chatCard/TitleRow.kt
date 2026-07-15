@@ -14,7 +14,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.gaziz.birgram.core.telegram.domain.model.chat.LastMessageData
+import org.gaziz.birgram.features.chatList.domain.model.chat.MessageData
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -56,7 +56,7 @@ fun CardText(
 @Composable
 fun TitleRow(
     chatTitle: String,
-    lastMessage: LastMessageData?
+    lastMessage: MessageData?
 ){
     Row(
         modifier = Modifier.fillMaxWidth(),

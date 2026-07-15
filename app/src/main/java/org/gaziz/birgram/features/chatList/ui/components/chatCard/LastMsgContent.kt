@@ -11,13 +11,13 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.telegram.domain.model.chat.LastMessageData
-import org.gaziz.birgram.core.telegram.domain.model.message.MessageContent
+import org.gaziz.birgram.features.chatList.domain.model.chat.MessageData
+import org.gaziz.birgram.features.chatList.domain.model.MessageContent
 
 @Composable
 fun LastMsgContent(
     modifier: Modifier,
-    lastMessage: LastMessageData,
+    lastMessage: MessageData,
 ) {
     val msgType = stringArrayResource(R.array.message_type)
     Row(

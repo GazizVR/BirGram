@@ -7,8 +7,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.datastore.UserPreferencesRepository
-import org.gaziz.birgram.core.telegram.domain.repository.EventLoopRepository
-import org.gaziz.birgram.core.telegram.domain.model.chat.ChatListType
+import org.gaziz.birgram.features.chatList.domain.model.chat.ChatListType
 import org.gaziz.birgram.features.chatList.domain.repository.ChatListRepository
 import org.gaziz.birgram.features.chatList.domain.usecase.GetChatList
 import org.gaziz.birgram.features.chatList.domain.usecase.LoadAllChats
@@ -25,13 +24,13 @@ class ChatListViewModel @Inject constructor(
         loadAllChats(ChatListType.Main)
     }
     fun logOut(onOk: () -> Unit) {
-        eventLoopRepository.logOut {
+        chatListRepository.logOut {
             onOk()
         }
     }
     val isDark = userPreferencesRepository.isDark.stateIn(
         viewModelScope,
-        SharingStarted.Companion.Eagerly,
+        SharingStarted.Eagerly,
         true
     )
     fun switchIsDark(data: Boolean){
@@ -41,7 +40,7 @@ class ChatListViewModel @Inject constructor(
     }
     val mainChatList = getChatList(ChatListType.Main).stateIn(
         viewModelScope,
-        SharingStarted.Companion.Eagerly,
+        SharingStarted.Eagerly,
         emptyList()
     )
     fun downloadChatPhoto(id: Int) {

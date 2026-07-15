@@ -16,7 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.gaziz.birgram.core.telegram.domain.model.chat.LastMessageData
+import org.gaziz.birgram.features.chatList.domain.model.chat.MessageData
 
 @Composable
 fun UnreadBox(
@@ -51,7 +51,7 @@ fun ContentRow(
     unreadCount: Int,
     reactionCount: Int,
     mentionCount: Int,
-    lastMessage: LastMessageData?
+    lastMessage: MessageData?
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),

@@ -1,14 +1,13 @@
 package org.gaziz.birgram.features.chatList.domain.repository
 
 import kotlinx.coroutines.flow.StateFlow
-import org.gaziz.birgram.core.telegram.domain.model.RequestResponse
-import org.gaziz.birgram.core.telegram.domain.model.chat.ChatData
-import org.gaziz.birgram.core.telegram.domain.model.chat.ChatListType
+import org.gaziz.birgram.features.chatList.domain.model.chat.ChatData
+import org.gaziz.birgram.features.chatList.domain.model.chat.ChatListType
+import org.gaziz.birgram.features.chatList.domain.model.RequestResponse
 
 interface ChatListRepository {
     val chatList: StateFlow<Map<Long, ChatData>>
 
-    suspend fun collectUpdates()
     fun loadChats(
         limit: Int,
         listType: ChatListType,
