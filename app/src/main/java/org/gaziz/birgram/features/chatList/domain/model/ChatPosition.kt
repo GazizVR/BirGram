@@ -1,4 +1,4 @@
-package org.gaziz.birgram.features.chatList.domain.model.chat
+package org.gaziz.birgram.features.chatList.domain.model
 
 data class ChatPosition(
     val listType: ChatListType,

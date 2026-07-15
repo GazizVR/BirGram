@@ -1,8 +1,15 @@
 package org.gaziz.birgram.features.chat.domain.repository
 
-import org.gaziz.birgram.core.telegram.domain.model.message.MessageData
+import kotlinx.coroutines.flow.StateFlow
+import org.gaziz.birgram.features.chat.domain.model.ChatData
+import org.gaziz.birgram.features.chat.domain.model.MessageData
 
 interface ChatRepository {
+    val chats: StateFlow<Map<Long, ChatData>>
+    val messages: StateFlow<Map<Long, MessageData>>
+    fun setMessages(
+        updFun: (Map<Long, MessageData>) -> Map<Long, MessageData>
+    )
     fun openChat(
         chatId: Long,
         onOK: () -> Unit

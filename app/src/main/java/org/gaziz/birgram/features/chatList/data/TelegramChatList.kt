@@ -9,20 +9,20 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.TelegramManager
-import org.gaziz.birgram.core.telegram.data.mapper.fromUnixTimeStamp
-import org.gaziz.birgram.features.chatList.data.mappers.toChatData
-import org.gaziz.birgram.features.chatList.data.mappers.toChatPosition
-import org.gaziz.birgram.features.chatList.data.mappers.toFileData
-import org.gaziz.birgram.core.telegram.data.mapper.toLastMsgData
-import org.gaziz.birgram.features.chatList.data.mappers.toPhotoInfo
-import org.gaziz.birgram.features.chatList.data.mappers.toStatus
+import org.gaziz.birgram.core.telegram.mapper.toFileData
+import org.gaziz.birgram.core.telegram.mapper.toPhotoInfo
+import org.gaziz.birgram.core.telegram.mapper.toStatus
+import org.gaziz.birgram.core.telegram.model.ChatPhoto
+import org.gaziz.birgram.core.telegram.model.ChatType
+import org.gaziz.birgram.core.telegram.model.RequestResponse
+import org.gaziz.birgram.features.chat.data.mapper.fromUnixTimeStamp
+import org.gaziz.birgram.features.chatList.data.mapper.toChatData
+import org.gaziz.birgram.features.chatList.data.mapper.toChatPosition
+import org.gaziz.birgram.features.chatList.data.mapper.toLastMsgData
+import org.gaziz.birgram.features.chatList.domain.model.ChatData
+import org.gaziz.birgram.features.chatList.domain.model.ChatListType
+import org.gaziz.birgram.features.chatList.domain.model.ChatPosition
 import org.gaziz.birgram.features.chatList.domain.model.MessageContent
-import org.gaziz.birgram.features.chatList.domain.model.RequestResponse
-import org.gaziz.birgram.features.chatList.domain.model.chat.ChatData
-import org.gaziz.birgram.features.chatList.domain.model.chat.ChatListType
-import org.gaziz.birgram.features.chatList.domain.model.chat.ChatPhoto
-import org.gaziz.birgram.features.chatList.domain.model.chat.ChatPosition
-import org.gaziz.birgram.features.chatList.domain.model.chat.ChatType
 import org.gaziz.birgram.features.chatList.domain.repository.ChatListRepository
 import javax.inject.Inject
 
@@ -36,29 +36,29 @@ class TelegramChatList @Inject constructor(
         }
     }
 
-    private val _chatList = MutableStateFlow(emptyMap<Long, ChatData>())
-    override val chatList: StateFlow<Map<Long, ChatData>> = _chatList.asStateFlow()
+    private val _chats = MutableStateFlow(emptyMap<Long, ChatData>())
+    override val chats: StateFlow<Map<Long, ChatData>> = _chats.asStateFlow()
 
     private suspend fun collectUpdates() {
-        manager.update.collect { event ->
-            when(event) {
+        manager.update.collect { u ->
+            when(u) {
                 is TdApi.UpdateNewChat -> {
-                    val chat = event.chat.toChatData()
-                    _chatList.update { map ->
+                    val chat = u.chat.toChatData()
+                    _chats.update { map ->
                         map.toMutableMap().apply { put(chat.id, chat) }.toMap()
                     }
                 }
 
                 is TdApi.UpdateChatPosition -> {
-                    _chatList.update { map ->
+                    _chats.update { map ->
                         val newMap = map.toMutableMap()
-                        val chat = newMap[event.chatId]
+                        val chat = newMap[u.chatId]
                         if(chat != null) {
-                            val position = event.position.toChatPosition()
+                            val position = u.position.toChatPosition()
                             if(position.order == 0L) {
-                                newMap.remove(event.chatId)
+                                newMap.remove(u.chatId)
                             } else {
-                                newMap[event.chatId] = chat.copy(
+                                newMap[u.chatId] = chat.copy(
                                     positions = chat.positions.filter {
                                         it.listType != position.listType
                                     } + position
@@ -70,15 +70,15 @@ class TelegramChatList @Inject constructor(
                 }
 
                 is TdApi.UpdateChatLastMessage -> {
-                    _chatList.update { map ->
+                    _chats.update { map ->
                         val newMap = map.toMutableMap()
-                        val chat = newMap[event.chatId]
+                        val chat = newMap[u.chatId]
                         if(chat != null){
                             val positions = mutableListOf<ChatPosition>()
-                                .apply { event.positions.forEach { add(it.toChatPosition()) } }
+                                .apply { u.positions.forEach { add(it.toChatPosition()) } }
                                 .toList()
-                            val lastMsg = event.lastMessage.toLastMsgData()
-                            newMap[event.chatId] = chat.copy(
+                            val lastMsg = u.lastMessage.toLastMsgData()
+                            newMap[u.chatId] = chat.copy(
                                 positions = positions,
                                 lastMessage = lastMsg ?: chat.lastMessage
                             )
@@ -88,15 +88,15 @@ class TelegramChatList @Inject constructor(
                 }
 
                 is TdApi.UpdateChatDraftMessage -> {
-                    _chatList.update { map ->
+                    _chats.update { map ->
                         val newMap = map.toMutableMap()
-                        var chat = newMap[event.chatId]
+                        var chat = newMap[u.chatId]
                         if(chat != null){
                             val positions = mutableListOf<ChatPosition>()
-                                .apply { event.positions.forEach { add(it.toChatPosition()) } }
+                                .apply { u.positions.forEach { add(it.toChatPosition()) } }
                                 .toList()
                             chat = chat.copy(positions = positions)
-                            val lastMessage = event.draftMessage
+                            val lastMessage = u.draftMessage
                             if(lastMessage != null) {
                                 chat = chat.copy(
                                     lastMessage = chat.lastMessage?.copy(
@@ -112,27 +112,27 @@ class TelegramChatList @Inject constructor(
                 }
 
                 is TdApi.UpdateChatPhoto -> {
-                    _chatList.update {
+                    _chats.update {
                         val newMap = it.toMutableMap()
-                        val chat = newMap[event.chatId]
+                        val chat = newMap[u.chatId]
                         if(chat != null) {
-                            newMap[event.chatId] = chat.copy(photo = event.photo.toPhotoInfo())
+                            newMap[u.chatId] = chat.copy(photo = u.photo.toPhotoInfo())
                         }
                         newMap.toMap()
                     }
                 }
 
                 is TdApi.UpdateFile -> {
-                    if(event.file.local.isDownloadingCompleted) {
-                        _chatList.update { map ->
+                    if(u.file.local.isDownloadingCompleted) {
+                        _chats.update { map ->
                             val newMap = map.toMutableMap()
                             for(chat in newMap.map { it.value }){
                                 if(chat.photo != null) {
-                                    if(chat.photo.small.id == event.file.id) {
+                                    if(chat.photo.small.id == u.file.id) {
                                         newMap[chat.id] = chat.copy(
                                             photo = ChatPhoto(
                                                 chat.photo.miniThumbnail,
-                                                event.file.toFileData()
+                                                u.file.toFileData()
                                             )
                                         )
                                         break
@@ -145,30 +145,30 @@ class TelegramChatList @Inject constructor(
                 }
 
                 is TdApi.UpdateChatReadInbox -> {
-                    _chatList.update {
+                    _chats.update {
                         val newMap = it.toMutableMap()
-                        newMap[event.chatId]?.let { chat ->
-                            newMap[event.chatId] = chat.copy(unreadCount = event.unreadCount)
+                        newMap[u.chatId]?.let { chat ->
+                            newMap[u.chatId] = chat.copy(unreadCount = u.unreadCount)
                         }
                         newMap.toMap()
                     }
                 }
 
                 is TdApi.UpdateChatUnreadMentionCount -> {
-                    _chatList.update {
+                    _chats.update {
                         val newMap = it.toMutableMap()
-                        newMap[event.chatId]?.let { chat ->
-                            newMap[event.chatId] = chat.copy(unreadCount = event.unreadMentionCount)
+                        newMap[u.chatId]?.let { chat ->
+                            newMap[u.chatId] = chat.copy(unreadCount = u.unreadMentionCount)
                         }
                         newMap.toMap()
                     }
                 }
 
                 is TdApi.UpdateChatUnreadReactionCount -> {
-                    _chatList.update {
+                    _chats.update {
                         val newMap = it.toMutableMap()
-                        newMap[event.chatId]?.let { chat ->
-                            newMap[event.chatId] = chat.copy(unreadCount = event.unreadReactionCount)
+                        newMap[u.chatId]?.let { chat ->
+                            newMap[u.chatId] = chat.copy(unreadCount = u.unreadReactionCount)
                         }
                         newMap.toMap()
                     }
@@ -177,19 +177,19 @@ class TelegramChatList @Inject constructor(
                 is TdApi.UpdateBasicGroup -> {
                     manager.sendRequest(
                         TdApi.CreateBasicGroupChat().apply {
-                            this.basicGroupId = event.basicGroup.id
+                            this.basicGroupId = u.basicGroup.id
                             this.force = false
                         },
                         {}
                     ) {
                         if(it is TdApi.Chat){
                             val respChat = it.toChatData()
-                            _chatList.update {
+                            _chats.update {
                                 val newMap = it.toMutableMap()
                                 val chat = newMap[respChat.id]
                                 if(chat != null) {
                                     newMap[respChat.id] = chat.copy(
-                                        type = ChatType.BasicGroup(event.basicGroup.id,event.basicGroup.memberCount)
+                                        type = ChatType.BasicGroup(u.basicGroup.id,u.basicGroup.memberCount)
                                     )
                                 }
                                 newMap.toMap()
@@ -201,29 +201,29 @@ class TelegramChatList @Inject constructor(
                 is TdApi.UpdateSupergroup -> {
                     manager.sendRequest(
                         TdApi.CreateSupergroupChat().apply {
-                            this.supergroupId = event.supergroup.id
+                            this.supergroupId = u.supergroup.id
                             this.force = false
                         },
                         {}
                     ) {
                         if(it is TdApi.Chat){
                             val respChat = it.toChatData()
-                            _chatList.update {
+                            _chats.update {
                                 val newMap = it.toMutableMap()
                                 val chat = newMap[respChat.id]
-                                val canSend = when (event.supergroup.status) {
+                                val canSend = when (u.supergroup.status) {
                                     is TdApi.ChatMemberStatusCreator -> true
                                     is TdApi.ChatMemberStatusAdministrator -> {
-                                        (event.supergroup.status as TdApi.ChatMemberStatusAdministrator).rights.canPostMessages
+                                        (u.supergroup.status as TdApi.ChatMemberStatusAdministrator).rights.canPostMessages
                                     }
                                     else -> false
                                 }
                                 if(chat != null) {
                                     newMap[respChat.id] = chat.copy(
                                         type = ChatType.SuperGroup(
-                                            event.supergroup.id,
-                                            event.supergroup.isChannel,
-                                            event.supergroup.memberCount,
+                                            u.supergroup.id,
+                                            u.supergroup.isChannel,
+                                            u.supergroup.memberCount,
                                             canSend
                                         )
                                     )
@@ -237,21 +237,21 @@ class TelegramChatList @Inject constructor(
                 is TdApi.UpdateUserStatus -> {
                     manager.sendRequest(
                         TdApi.CreatePrivateChat().apply {
-                            this.userId = event.userId
+                            this.userId = u.userId
                             this.force = false
                         },
                         {}
                     ) {
                         if(it is TdApi.Chat){
                             val respChat = it.toChatData()
-                            _chatList.update {
+                            _chats.update {
                                 val newMap = it.toMutableMap()
                                 val chat = newMap[respChat.id]
                                 if(chat != null) {
                                     newMap[respChat.id] = chat.copy(type =
                                         ChatType.Private(
-                                            userId = event.userId,
-                                            userStatus = event.status.toStatus()
+                                            userId = u.userId,
+                                            userStatus = u.status.toStatus()
                                         )
                                     )
                                 }
@@ -259,24 +259,7 @@ class TelegramChatList @Inject constructor(
                             }
                         }
                     }
-
-                    _chatList.update { map ->
-                        val newMap = map.toMutableMap()
-                        for(chat in newMap) {
-                            val type = chat.value.type
-                            if(type is ChatType.Secret) {
-                                if(type.userId == event.userId) {
-                                    newMap[chat.key] = chat.value.copy(
-                                        type = type.copy(userStatus = event.status.toStatus())
-                                    )
-                                    break
-                                }
-                            }
-                        }
-                        newMap.toMap()
-                    }
                 }
-
             }
         }
     }
@@ -320,7 +303,7 @@ class TelegramChatList @Inject constructor(
             {},
         ) {
             if(it is TdApi.Ok) {
-                _chatList.value = emptyMap()
+                _chats.value = emptyMap()
                 onOk()
             }
         }

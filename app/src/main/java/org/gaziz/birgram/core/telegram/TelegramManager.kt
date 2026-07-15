@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.drinkless.tdlib.Client
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.features.chatList.domain.model.RequestResponse
+import org.gaziz.birgram.core.telegram.model.RequestResponse
 import javax.inject.Inject
 import javax.inject.Singleton
 

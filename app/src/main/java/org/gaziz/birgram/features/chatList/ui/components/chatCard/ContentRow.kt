@@ -16,7 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.gaziz.birgram.features.chatList.domain.model.chat.MessageData
+import org.gaziz.birgram.features.chatList.domain.model.MessageData
 
 @Composable
 fun UnreadBox(

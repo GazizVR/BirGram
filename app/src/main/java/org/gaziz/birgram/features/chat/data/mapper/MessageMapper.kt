@@ -1,9 +1,11 @@
-package org.gaziz.birgram.features.chatList.data.mappers
+package org.gaziz.birgram.features.chat.data.mapper
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.data.mapper.fromUnixTimeStamp
-import org.gaziz.birgram.features.chatList.domain.model.MessageContent
-import org.gaziz.birgram.features.chatList.domain.model.chat.MessageData
+import org.gaziz.birgram.features.chat.domain.model.MessageContent
+import org.gaziz.birgram.features.chat.domain.model.MessageData
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 fun TdApi.MessageContent.toMessageCnt(): MessageContent {
     return when(val cnt = this) {
@@ -22,14 +24,19 @@ fun TdApi.MessageContent.toMessageCnt(): MessageContent {
     }
 }
 
-fun TdApi.Message?.toLastMsgData(): MessageData? {
-    return if(this != null) {
-        MessageData(
-            id = this.id,
-            content = this.content.toMessageCnt(),
-            date = this.date.fromUnixTimeStamp()
-        )
-    } else {
-        null
-    }
+fun Int.fromUnixTimeStamp(zoneId: ZoneId = ZoneId.systemDefault()): LocalDateTime {
+    return Instant
+        .ofEpochSecond(this.toLong())
+        .atZone(zoneId)
+        .toLocalDateTime()
+}
+
+fun TdApi.Message.toMessageData(): MessageData {
+    return MessageData(
+        id = this.id,
+        content = this.content.toMessageCnt(),
+        date = this.date.fromUnixTimeStamp(),
+        isMy = this.isOutgoing,
+        chatId = this.chatId
+    )
 }

@@ -7,12 +7,12 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.gaziz.birgram.features.chatList.domain.model.chat.ChatData
-import org.gaziz.birgram.core.telegram.domain.model.message.MessageData
+import org.gaziz.birgram.features.chat.domain.model.MessageData
 import org.gaziz.birgram.features.chat.domain.repository.ChatRepository
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatByID
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatMessages
 import org.gaziz.birgram.features.chat.domain.usecase.LoadChatMessages
+import org.gaziz.birgram.features.chat.domain.model.ChatData
 import java.time.LocalDate
 import javax.inject.Inject
 

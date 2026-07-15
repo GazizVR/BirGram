@@ -1,24 +1,17 @@
-package org.gaziz.birgram.features.chatList.domain.model.chat
-
-import org.gaziz.birgram.features.chatList.domain.model.UserStatus
+package org.gaziz.birgram.core.telegram.model
 
 sealed class ChatType {
     data class BasicGroup(
         val groupId: Long,
         val memberCont: Int = 0
     ) : ChatType()
-    data class Private(
-        val userId: Long,
-        val userStatus: UserStatus? = null
-    ): ChatType()
     data class SuperGroup(
         val groupId: Long,
         val isChannel: Boolean,
         val memberCont: Int = 0,
         val canSendMessages: Boolean = false
     ): ChatType()
-    data class Secret(
-        val secretChatId: Int,
+    data class Private(
         val userId: Long,
         val userStatus: UserStatus? = null
     ): ChatType()

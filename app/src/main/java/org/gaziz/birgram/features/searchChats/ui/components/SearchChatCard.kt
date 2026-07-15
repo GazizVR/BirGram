@@ -16,9 +16,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import org.gaziz.birgram.features.chatList.domain.model.UserStatus
-import org.gaziz.birgram.features.chatList.domain.model.chat.ChatData
-import org.gaziz.birgram.features.chatList.domain.model.chat.ChatType
+import org.gaziz.birgram.core.telegram.model.UserStatus
+import org.gaziz.birgram.features.chatList.domain.model.ChatData
+import org.gaziz.birgram.core.telegram.model.ChatType
 import org.gaziz.birgram.core.ui.components.ChatAvatar
 import org.gaziz.birgram.core.ui.components.ChatTypeCnt
 

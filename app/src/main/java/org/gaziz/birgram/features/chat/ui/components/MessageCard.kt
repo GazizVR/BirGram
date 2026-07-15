@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.R
 import org.gaziz.birgram.features.chatList.domain.model.MessageContent
-import org.gaziz.birgram.core.telegram.domain.model.message.MessageData
+import org.gaziz.birgram.features.chat.domain.model.MessageData
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 

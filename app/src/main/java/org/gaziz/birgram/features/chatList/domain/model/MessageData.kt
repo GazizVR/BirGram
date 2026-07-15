@@ -1,6 +1,5 @@
-package org.gaziz.birgram.features.chatList.domain.model.chat
+package org.gaziz.birgram.features.chatList.domain.model
 
-import org.gaziz.birgram.features.chatList.domain.model.MessageContent
 import java.time.LocalDateTime
 
 data class MessageData(

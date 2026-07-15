@@ -11,7 +11,7 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import org.gaziz.birgram.R
-import org.gaziz.birgram.features.chatList.domain.model.chat.MessageData
+import org.gaziz.birgram.features.chatList.domain.model.MessageData
 import org.gaziz.birgram.features.chatList.domain.model.MessageContent
 
 @Composable

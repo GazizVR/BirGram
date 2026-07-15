@@ -1,7 +1,7 @@
 package org.gaziz.birgram.features.searchChats.domain.repository
 
 import kotlinx.coroutines.flow.StateFlow
-import org.gaziz.birgram.features.chatList.domain.model.chat.ChatData
+import org.gaziz.birgram.features.chatList.domain.model.ChatData
 
 interface SearchChatsRepository {
     val searchedChats: StateFlow<Map<Long, ChatData>>

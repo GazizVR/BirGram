@@ -1,8 +1,8 @@
-package org.gaziz.birgram.features.chatList.data.mappers
+package org.gaziz.birgram.core.telegram.mapper
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.data.mapper.fromUnixTimeStamp
-import org.gaziz.birgram.features.chatList.domain.model.UserStatus
+import org.gaziz.birgram.core.telegram.model.UserStatus
+import org.gaziz.birgram.features.chat.data.mapper.fromUnixTimeStamp
 
 fun TdApi.UserStatus.toStatus(): UserStatus {
    return when(this){

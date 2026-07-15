@@ -1,4 +1,4 @@
-package org.gaziz.birgram.features.chatList.domain.model.chat
+package org.gaziz.birgram.features.chatList.domain.model
 
 sealed class ChatListType {
     object Main: ChatListType()

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.datastore.UserPreferencesRepository
-import org.gaziz.birgram.features.chatList.domain.model.chat.ChatListType
+import org.gaziz.birgram.features.chatList.domain.model.ChatListType
 import org.gaziz.birgram.features.chatList.domain.repository.ChatListRepository
 import org.gaziz.birgram.features.chatList.domain.usecase.GetChatList
 import org.gaziz.birgram.features.chatList.domain.usecase.LoadAllChats

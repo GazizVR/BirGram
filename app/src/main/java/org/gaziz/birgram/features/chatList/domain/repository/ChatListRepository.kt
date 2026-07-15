@@ -1,12 +1,12 @@
 package org.gaziz.birgram.features.chatList.domain.repository
 
 import kotlinx.coroutines.flow.StateFlow
-import org.gaziz.birgram.features.chatList.domain.model.chat.ChatData
-import org.gaziz.birgram.features.chatList.domain.model.chat.ChatListType
-import org.gaziz.birgram.features.chatList.domain.model.RequestResponse
+import org.gaziz.birgram.core.telegram.model.RequestResponse
+import org.gaziz.birgram.features.chatList.domain.model.ChatData
+import org.gaziz.birgram.features.chatList.domain.model.ChatListType
 
 interface ChatListRepository {
-    val chatList: StateFlow<Map<Long, ChatData>>
+    val chats: StateFlow<Map<Long, ChatData>>
 
     fun loadChats(
         limit: Int,
