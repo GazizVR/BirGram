@@ -15,7 +15,13 @@ class UpdateDispatcher @Inject constructor(
 ) {
     fun dispatch(u: TdApi.Object){
         when(u) {
-            is TdApi.UpdateAuthorizationState -> tgAuth.onUpdateAuthState(u)
+            is TdApi.UpdateAuthorizationState -> {
+                if(u.authorizationState is TdApi.AuthorizationStateLoggingOut) {
+                    tgMessage.onLoggingOut()
+                    tgChat.onLoggingOut()
+                }
+                tgAuth.onUpdateAuthState(u)
+            }
 
             is TdApi.UpdateNewMessage -> tgMessage.onNewUpdate(u)
             is TdApi.UpdateMessageSendSucceeded -> tgMessage.onSendSucceedUpdate(u)

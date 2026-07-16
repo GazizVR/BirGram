@@ -53,4 +53,8 @@ class TelegramMessage @Inject constructor(
             map.toMutableMap().apply{ put(u.message.id,u.message) }.toMap()
         }
     }
+
+    fun onLoggingOut() {
+        _messages.update { emptyMap() }
+    }
 }

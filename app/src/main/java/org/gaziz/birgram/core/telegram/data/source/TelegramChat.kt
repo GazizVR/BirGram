@@ -94,4 +94,8 @@ class TelegramChat @Inject constructor() {
         }
     }
 
+    fun onLoggingOut() {
+        _chats.update { emptyMap() }
+    }
+
 }
