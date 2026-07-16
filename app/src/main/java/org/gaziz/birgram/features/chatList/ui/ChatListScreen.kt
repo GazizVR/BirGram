@@ -72,7 +72,7 @@ fun ChatListScreen(
                     items(chatList) { chat ->
                         ChatCard(
                             chat,
-                            { viewModel.downloadChatPhoto(chat.id,it) },
+                            { viewModel.downloadChatIcon(chat.id,it) },
                             navigateToChat
                         )
                     }

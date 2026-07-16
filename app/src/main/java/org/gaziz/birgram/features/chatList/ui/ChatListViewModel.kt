@@ -43,7 +43,7 @@ class ChatListViewModel @Inject constructor(
         SharingStarted.Eagerly,
         emptyList()
     )
-    fun downloadChatPhoto(
+    fun downloadChatIcon(
         chatId: Long,
         fileId: Int
     ) {

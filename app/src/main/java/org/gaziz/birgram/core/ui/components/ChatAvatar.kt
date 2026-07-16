@@ -82,9 +82,8 @@ fun ChatAvatar(
     LaunchedEffect(Unit) {
         if(photo != null) {
             if(
-                photo.small.canDownload &&
-                !photo.small.isDownloading &&
-                !photo.small.isCompleted
+                photo.small.path.isBlank() &&
+                photo.small.canDownload
             ) {
                 downloadPhoto(photo.small.id)
             }
@@ -92,7 +91,7 @@ fun ChatAvatar(
     }
     Box {
         if (photo != null) {
-            if (photo.small.isCompleted) {
+            if (photo.small.path.isNotBlank()) {
                 ChatCardPhoto(photo.small.path,iconSize)
             } else {
                 if (photo.miniThumbnail != null) {

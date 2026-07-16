@@ -32,17 +32,24 @@ class TelegramChat @Inject constructor(
                 if(obj is TdApi.File) {
                     _chats.update { map ->
                         map.toMutableMap().apply {
-                            get(chatId)?.let { chat ->
-                                var photo: TdApi.ChatPhotoInfo? = chat.photo
-                                if(photo != null) {
-                                    photo.small = obj
+                            get(chatId)?.let {
+                                val chatPhoto = it.photo
+                                val photo: TdApi.ChatPhotoInfo = TdApi.ChatPhotoInfo()
+                                if(chatPhoto != null) {
+                                    photo.apply {
+                                        small = obj
+                                        big = chatPhoto.big
+                                        minithumbnail = chatPhoto.minithumbnail
+                                    }
                                 } else {
-                                    photo = TdApi.ChatPhotoInfo().apply {
+                                    photo.apply {
                                         small = obj
                                     }
                                 }
-                                chat.photo = photo
-                                put(chatId,chat)
+                                val chat = it.apply {
+                                    this.photo = photo
+                                }
+                                put(chatId, chat)
                             }
                         }.toMap()
                     }

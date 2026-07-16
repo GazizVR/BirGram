@@ -8,7 +8,5 @@ fun TdApi.File.toFileData(): FileData {
         id = this.id,
         path = this.local.path,
         canDownload = this.local.canBeDownloaded,
-        isDownloading = this.local.isDownloadingActive,
-        isCompleted = this.local.isDownloadingCompleted
     )
 }
