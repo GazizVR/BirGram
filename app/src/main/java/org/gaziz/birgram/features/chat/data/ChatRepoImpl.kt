@@ -12,7 +12,7 @@ import org.gaziz.birgram.features.chat.domain.model.MessageData
 import org.gaziz.birgram.features.chat.domain.repository.ChatRepository
 import javax.inject.Inject
 
-class TelegramChat @Inject constructor(
+class ChatRepoImpl @Inject constructor(
     private val manager: ClientManager
 ): ChatRepository {
 

@@ -21,10 +21,6 @@ class ClientManager @Inject constructor(
         const val DEFAULT_CODE_LENGTH = 5
     }
 
-    fun getLogTag(): String {
-        return LOG_TAG
-    }
-
     fun getDefaultCodeLength(): Int {
         return DEFAULT_CODE_LENGTH
     }
