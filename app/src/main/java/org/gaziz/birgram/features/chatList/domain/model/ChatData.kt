@@ -1,7 +1,7 @@
 package org.gaziz.birgram.features.chatList.domain.model
 
-import org.gaziz.birgram.core.telegram.domain.model.chat.ChatPhoto
-import org.gaziz.birgram.core.telegram.domain.model.chat.ChatType
+import org.gaziz.birgram.core.telegram.model.ChatPhoto
+import org.gaziz.birgram.core.telegram.model.ChatType
 
 data class ChatData(
     val id: Long,

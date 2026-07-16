@@ -1,46 +1,18 @@
 package org.gaziz.birgram.features.splash.data
 
 import android.os.Build
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.BuildConfig
 import org.gaziz.birgram.core.telegram.ClientManager
-import org.gaziz.birgram.features.splash.domain.SplashRepository
-import org.gaziz.birgram.features.splash.domain.model.AppState
+import org.gaziz.birgram.core.telegram.data.source.TelegramAuth
+import org.gaziz.birgram.features.splash.domain.repository.SplashRepository
 import java.util.Locale
 import javax.inject.Inject
 
 class SplashRepoImpl @Inject constructor(
     private val manager: ClientManager,
+    private val tgAuth: TelegramAuth
 ): SplashRepository {
-    init {
-        CoroutineScope(Dispatchers.Main).launch {
-            collectUpdates()
-        }
-    }
-    private suspend fun collectUpdates() {
-        manager.update.collect { u ->
-            if(u is TdApi.UpdateAuthorizationState) {
-                _appState.value = when (u.authorizationState) {
-                    is TdApi.AuthorizationStateWaitTdlibParameters -> AppState.Init
-                    is TdApi.AuthorizationStateReady -> AppState.Ready
-
-                    is TdApi.AuthorizationStateLoggingOut -> AppState.Stopping
-                    is TdApi.AuthorizationStateClosing -> AppState.Stopping
-                    is TdApi.AuthorizationStateClosed -> AppState.Stopped
-
-                    else -> AppState.Auth
-                }
-            }
-        }
-    }
-    private val _appState = MutableStateFlow<AppState?>(null)
-    override val appState = _appState.asStateFlow()
     override fun initApplication() {
         manager.createClient()
     }
@@ -50,18 +22,7 @@ class SplashRepoImpl @Inject constructor(
             query = params,
             onResult = { obj ->
                 if(obj is TdApi.AuthorizationState) {
-                    _appState.update {
-                        when (obj) {
-                            is TdApi.AuthorizationStateWaitTdlibParameters -> AppState.Init
-                            is TdApi.AuthorizationStateReady -> AppState.Ready
-
-                            is TdApi.AuthorizationStateLoggingOut -> AppState.Stopping
-                            is TdApi.AuthorizationStateClosing -> AppState.Stopping
-                            is TdApi.AuthorizationStateClosed -> AppState.Stopped
-
-                            else -> AppState.Auth
-                        }
-                    }
+                    tgAuth.setState(obj)
                 }
             }
         )

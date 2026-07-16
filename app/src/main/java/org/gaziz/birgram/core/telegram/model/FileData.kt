@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.telegram.domain.model
+package org.gaziz.birgram.core.telegram.model
 
 data class FileData(
     val id: Int,

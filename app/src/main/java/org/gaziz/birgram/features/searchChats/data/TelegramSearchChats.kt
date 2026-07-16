@@ -12,8 +12,8 @@ import org.gaziz.birgram.core.telegram.ClientManager
 import org.gaziz.birgram.core.telegram.data.mapper.toFileData
 import org.gaziz.birgram.core.telegram.data.mapper.toPhotoInfo
 import org.gaziz.birgram.core.telegram.data.mapper.toStatus
-import org.gaziz.birgram.core.telegram.domain.model.chat.ChatPhoto
-import org.gaziz.birgram.core.telegram.domain.model.chat.ChatType
+import org.gaziz.birgram.core.telegram.model.ChatPhoto
+import org.gaziz.birgram.core.telegram.model.ChatType
 import org.gaziz.birgram.features.searchChats.data.mapper.toChatData
 import org.gaziz.birgram.features.searchChats.domain.model.ChatData
 import org.gaziz.birgram.features.searchChats.domain.repository.SearchChatsRepository

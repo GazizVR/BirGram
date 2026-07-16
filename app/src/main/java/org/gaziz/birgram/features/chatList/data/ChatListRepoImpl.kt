@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.ClientManager
-import org.gaziz.birgram.core.telegram.domain.model.RequestResponse
+import org.gaziz.birgram.core.telegram.model.RequestResponse
 import org.gaziz.birgram.features.chatList.domain.model.ChatData
 import org.gaziz.birgram.features.chatList.domain.model.ChatListType
 import org.gaziz.birgram.features.chatList.domain.repository.ChatListRepository

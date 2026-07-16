@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.gaziz.birgram.features.splash.data.SplashRepoImpl
-import org.gaziz.birgram.features.splash.domain.SplashRepository
+import org.gaziz.birgram.features.splash.domain.repository.SplashRepository
 
 @Module
 @InstallIn(SingletonComponent::class)

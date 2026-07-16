@@ -1,9 +1,9 @@
 package org.gaziz.birgram.core.telegram.data.mapper
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.domain.model.chat.ChatPhoto
-import org.gaziz.birgram.core.telegram.domain.model.chat.ChatType
-import org.gaziz.birgram.core.telegram.domain.model.UserStatus
+import org.gaziz.birgram.core.telegram.model.ChatPhoto
+import org.gaziz.birgram.core.telegram.model.ChatType
+import org.gaziz.birgram.core.telegram.model.UserStatus
 
 fun TdApi.ChatPhotoInfo?.toPhotoInfo(): ChatPhoto? {
     return if(this != null) {

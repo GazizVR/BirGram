@@ -1,9 +1,9 @@
 package org.gaziz.birgram.core.telegram
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.data.TelegramAuth
-import org.gaziz.birgram.core.telegram.data.TelegramChat
-import org.gaziz.birgram.core.telegram.data.TelegramMessage
+import org.gaziz.birgram.core.telegram.data.source.TelegramAuth
+import org.gaziz.birgram.core.telegram.data.source.TelegramChat
+import org.gaziz.birgram.core.telegram.data.source.TelegramMessage
 import javax.inject.Inject
 import javax.inject.Singleton
 

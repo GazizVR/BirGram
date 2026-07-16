@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.telegram.domain.model
+package org.gaziz.birgram.core.telegram.model
 
 sealed class RequestResponse {
     object OK: RequestResponse()

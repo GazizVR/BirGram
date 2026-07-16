@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.telegram.data
+package org.gaziz.birgram.core.telegram.data.source
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

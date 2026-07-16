@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.telegram.data
+package org.gaziz.birgram.core.telegram.data.source
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,6 +11,10 @@ import javax.inject.Singleton
 class TelegramAuth @Inject constructor() {
     private val _authState = MutableStateFlow<TdApi.AuthorizationState?>(null)
     val authState = _authState.asStateFlow()
+
+    fun setState(state: TdApi.AuthorizationState) {
+        _authState.update { state }
+    }
 
     fun onUpdateAuthState(
         update: TdApi.UpdateAuthorizationState
