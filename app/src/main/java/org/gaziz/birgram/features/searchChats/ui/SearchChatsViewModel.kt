@@ -15,7 +15,10 @@ class SearchChatsViewModel @Inject constructor(
     ) {
         searchChatsRepository.searchLocal(query,20)
     }
-    fun downloadPhoto(fileId: Int) {
-        searchChatsRepository.downloadPhoto(fileId)
+    fun downloadChatIcon(
+        chatId: Long,
+        fileId: Int
+    ) {
+        searchChatsRepository.downloadChatIcon(chatId,fileId)
     }
 }

@@ -47,17 +47,11 @@ class TelegramSearchChats @Inject constructor(
         )
     }
 
-    override fun downloadPhoto(fileId: Int) {
-        manager.sendRequest(
-            TdApi.DownloadFile().apply {
-                this.fileId = fileId
-                this.priority = 32
-                this.limit = 0
-                this.offset = 0
-                this.synchronous = false
-            },
-            {}
-        )
+    override fun downloadChatIcon(
+        chatId: Long,
+        fileId: Int
+    ) {
+        downloadChatIcon(chatId,fileId)
     }
 
 }

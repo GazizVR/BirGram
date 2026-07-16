@@ -41,7 +41,7 @@ fun SearchChatsScreen(
                 items(chats.toList()) { chat ->
                     SearchChatCard(
                         chat.second,
-                        {viewModel.downloadPhoto(it)},
+                        { viewModel.downloadChatIcon(chat.first,it) },
                         navigateToChat
                     )
                 }

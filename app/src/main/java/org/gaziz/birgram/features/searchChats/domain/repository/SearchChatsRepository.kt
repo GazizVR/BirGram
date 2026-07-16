@@ -9,5 +9,8 @@ interface SearchChatsRepository {
         query: String,
         limit: Int
     )
-    fun downloadPhoto(fileId: Int)
+    fun downloadChatIcon(
+        chatId: Long,
+        fileId: Int
+    )
 }
