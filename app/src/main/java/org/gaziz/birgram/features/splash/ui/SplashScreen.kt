@@ -1,5 +1,6 @@
 package org.gaziz.birgram.features.splash.ui
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -32,6 +33,7 @@ fun SplashScreen(
 
     var isInitializing = false
     LaunchedEffect(appState) {
+        Log.d("FUCK",appState.toString())
         if(appState == null){
             viewModel.loadState()
         } else {

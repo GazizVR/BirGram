@@ -13,7 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val splashRepository: SplashRepository,
-    private val getAppState: GetAppState
+    getAppState: GetAppState
 ): ViewModel() {
     val appState = getAppState().stateIn(
         viewModelScope,

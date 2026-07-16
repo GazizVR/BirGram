@@ -19,6 +19,6 @@ class TelegramAuth @Inject constructor() {
     fun onUpdateAuthState(
         update: TdApi.UpdateAuthorizationState
     ) {
-        _authState.update { update.authorizationState }
+        setState(update.authorizationState)
     }
 }

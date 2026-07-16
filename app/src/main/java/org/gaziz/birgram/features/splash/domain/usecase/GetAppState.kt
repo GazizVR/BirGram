@@ -10,9 +10,11 @@ import javax.inject.Inject
 class GetAppState @Inject constructor(
     private val tgAuth: TelegramAuth
 ) {
-    operator fun invoke(): Flow<AppState> {
+    operator fun invoke(): Flow<AppState?> {
         return tgAuth.authState.map { s ->
             when(s) {
+                null -> null
+
                 is TdApi.AuthorizationStateWaitTdlibParameters -> AppState.Init
                 is TdApi.AuthorizationStateReady -> AppState.Ready
 
