@@ -67,6 +67,36 @@ class TelegramChat @Inject constructor(
             map.toMutableMap().apply { put(u.chat.id,u.chat) }.toMap()
         }
     }
+    fun onPositionUpdate(u: TdApi.UpdateChatPosition){
+        _chats.update { map ->
+            map.toMutableMap().apply {
+                get(u.chatId)?.let { chat ->
+                    if (u.position.order == 0L) {
+                        remove(u.chatId)
+                    } else {
+                        val positions = chat.positions.filter { it.list != u.position.list } + u.position
+                        val newChat = chat.apply{
+                            this.positions = positions.toTypedArray()
+                        }
+                        put(u.chatId, newChat)
+                    }
+                }
+            }.toMap()
+        }
+    }
+    fun onLastMsgUpdate(u: TdApi.UpdateChatLastMessage){
+        _chats.update { map ->
+            map.toMutableMap().apply {
+                get(u.chatId)?.let { chat ->
+                    val newChat = chat.apply {
+                        this.positions = u.positions
+                        this.lastMessage = u.lastMessage
+                    }
+                    put(u.chatId, newChat)
+                }
+            }.toMap()
+        }
+    }
     fun onTitleUpdate(u: TdApi.UpdateChatTitle){
         _chats.update { map ->
             map.toMutableMap().apply {
@@ -83,32 +113,6 @@ class TelegramChat @Inject constructor(
                 get(u.chatId)?.let { chat ->
                     chat.photo = u.photo
                     put(u.chatId,chat)
-                }
-            }.toMap()
-        }
-    }
-    fun onPositionUpdate(u: TdApi.UpdateChatPosition){
-        _chats.update { map ->
-            map.toMutableMap().apply {
-                get(u.chatId)?.let { chat ->
-                    if (u.position.order == 0L) {
-                        remove(u.chatId)
-                    } else {
-                        val positions = chat.positions.filter { it.list != u.position.list } + u.position
-                        chat.positions = positions.toTypedArray()
-                        put(u.chatId, chat)
-                    }
-                }
-            }.toMap()
-        }
-    }
-    fun onLastMsgUpdate(u: TdApi.UpdateChatLastMessage){
-        _chats.update { map ->
-            map.toMutableMap().apply {
-                get(u.chatId)?.let { chat ->
-                    chat.lastMessage = u.lastMessage ?: chat.lastMessage
-                    chat.positions = u.positions
-                    put(u.chatId, chat)
                 }
             }.toMap()
         }
