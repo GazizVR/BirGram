@@ -1,9 +1,12 @@
 package org.gaziz.birgram.features.searchChats.data
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.ClientManager
 import org.gaziz.birgram.core.telegram.data.source.TelegramChat
@@ -16,6 +19,22 @@ class TelegramSearchChats @Inject constructor(
     private val manager: ClientManager,
     private val tgChat: TelegramChat
 ): SearchChatsRepository {
+
+    init {
+        CoroutineScope(Dispatchers.IO).launch {
+            tgChat.chats.collect { chats ->
+                _searchedChats.update { map ->
+                    map.toMutableMap().apply {
+                        keys.forEach { key ->
+                            chats[key]?.let{ chat ->
+                                put(key,chat.toChatData())
+                            }
+                        }
+                    }.toMap()
+                }
+            }
+        }
+    }
 
     private val _searchedChats = MutableStateFlow<Map<Long, ChatData>>(emptyMap())
     override val searchedChats: StateFlow<Map<Long, ChatData>> = _searchedChats.asStateFlow()
@@ -51,7 +70,7 @@ class TelegramSearchChats @Inject constructor(
         chatId: Long,
         fileId: Int
     ) {
-        downloadChatIcon(chatId,fileId)
+        tgChat.downloadChatPhotoSmall(chatId,fileId)
     }
 
 }
