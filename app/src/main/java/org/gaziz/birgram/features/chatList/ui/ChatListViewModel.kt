@@ -43,9 +43,12 @@ class ChatListViewModel @Inject constructor(
         SharingStarted.Eagerly,
         emptyList()
     )
-    fun downloadChatPhoto(id: Int) {
+    fun downloadChatPhoto(
+        chatId: Long,
+        fileId: Int
+    ) {
        viewModelScope.launch {
-           chatListRepository.downloadChatPhoto(id)
+           chatListRepository.downloadChatIcon(chatId,fileId)
        }
     }
 }

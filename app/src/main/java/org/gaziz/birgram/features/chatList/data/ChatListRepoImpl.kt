@@ -2,13 +2,15 @@ package org.gaziz.birgram.features.chatList.data
 
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.ClientManager
+import org.gaziz.birgram.core.telegram.data.source.TelegramChat
 import org.gaziz.birgram.core.telegram.model.ResponseData
 import org.gaziz.birgram.features.chatList.domain.model.ChatListType
 import org.gaziz.birgram.features.chatList.domain.repository.ChatListRepository
 import javax.inject.Inject
 
 class ChatListRepoImpl @Inject constructor(
-    private val manager: ClientManager
+    private val manager: ClientManager,
+    private val tgChat: TelegramChat
 ): ChatListRepository {
 
     override fun loadChats(
@@ -31,17 +33,11 @@ class ChatListRepoImpl @Inject constructor(
         )
     }
 
-    override fun downloadChatPhoto(fileId: Int) {
-        manager.sendRequest(
-            TdApi.DownloadFile().apply {
-                this.fileId = fileId
-                this.priority = 32
-                this.limit = 0
-                this.offset = 0
-                this.synchronous = false
-            },
-            {}
-        )
+    override fun downloadChatIcon(
+        chatId: Long,
+        fileId: Int
+    ) {
+        tgChat.downloadChatPhotoSmall(chatId,fileId)
     }
 
     override fun logOut(onOk: () -> Unit) {

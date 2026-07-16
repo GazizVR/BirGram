@@ -31,7 +31,6 @@ import org.gaziz.birgram.R
 import org.gaziz.birgram.features.chatList.ui.components.ChatCard
 import org.gaziz.birgram.features.chatList.ui.components.ChatListMenu
 import org.gaziz.birgram.features.chatList.ui.components.ChatListTopBar
-import org.gaziz.birgram.features.chatList.ui.ChatListViewModel
 
 @Composable
 fun ChatListScreen(
@@ -73,7 +72,7 @@ fun ChatListScreen(
                     items(chatList) { chat ->
                         ChatCard(
                             chat,
-                            { viewModel.downloadChatPhoto(it) },
+                            { viewModel.downloadChatPhoto(chat.id,it) },
                             navigateToChat
                         )
                     }

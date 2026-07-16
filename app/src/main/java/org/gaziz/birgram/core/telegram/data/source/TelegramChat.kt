@@ -4,13 +4,56 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.drinkless.tdlib.TdApi
+import org.gaziz.birgram.core.telegram.ClientManager
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TelegramChat @Inject constructor() {
+class TelegramChat @Inject constructor(
+    private val manager: ClientManager
+) {
     private val _chats = MutableStateFlow<Map<Long, TdApi.Chat>>(emptyMap())
     val chats = _chats.asStateFlow()
+
+    fun downloadChatPhotoSmall(
+        chatId: Long,
+        fileId: Int
+    ) {
+        manager.sendRequest(
+            TdApi.DownloadFile().apply {
+                this.fileId = fileId
+                this.priority = 32
+                this.limit = 0
+                this.offset = 0
+                this.synchronous = false
+            },
+            {},
+            { obj ->
+                if(obj is TdApi.File) {
+                    _chats.update { map ->
+                        map.toMutableMap().apply {
+                            get(chatId)?.let { chat ->
+                                var photo: TdApi.ChatPhotoInfo? = chat.photo
+                                if(photo != null) {
+                                    photo.small = obj
+                                } else {
+                                    photo = TdApi.ChatPhotoInfo().apply {
+                                        small = obj
+                                    }
+                                }
+                                chat.photo = photo
+                                put(chatId,chat)
+                            }
+                        }.toMap()
+                    }
+                }
+            }
+        )
+    }
+
+    fun onLoggingOut() {
+        _chats.update { emptyMap() }
+    }
 
     fun onNewUpdate(u: TdApi.UpdateNewChat){
         _chats.update { map ->
@@ -92,10 +135,6 @@ class TelegramChat @Inject constructor() {
                 }
             }.toMap()
         }
-    }
-
-    fun onLoggingOut() {
-        _chats.update { emptyMap() }
     }
 
 }

@@ -9,6 +9,9 @@ interface ChatListRepository {
         listType: ChatListType,
         onError: (ResponseData.Error) -> Unit
     )
-    fun downloadChatPhoto(fileId: Int)
+    fun downloadChatIcon(
+        chatId: Long,
+        fileId: Int
+    )
     fun logOut(onOk: () -> Unit)
 }
