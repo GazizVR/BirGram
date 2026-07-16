@@ -1,9 +1,9 @@
 package org.gaziz.birgram.core.telegram.model
 
-sealed class RequestResponse {
-    object OK: RequestResponse()
+sealed class ResponseData {
+    object OK: ResponseData()
     data class Error(
         val code: Int,
         val message: String
-    ): RequestResponse()
+    ): ResponseData()
 }

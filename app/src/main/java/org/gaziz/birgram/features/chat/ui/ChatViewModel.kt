@@ -7,12 +7,11 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import org.gaziz.birgram.features.chat.domain.model.ChatData
 import org.gaziz.birgram.features.chat.domain.model.MessageData
 import org.gaziz.birgram.features.chat.domain.repository.ChatRepository
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatByID
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatMessages
-import org.gaziz.birgram.features.chat.domain.usecase.LoadChatMessages
-import org.gaziz.birgram.features.chat.domain.model.ChatData
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -20,7 +19,6 @@ import javax.inject.Inject
 class ChatViewModel @Inject constructor(
     private val getChatByID: GetChatByID,
     private val getChatMessages: GetChatMessages,
-    private val loadChatMessages: LoadChatMessages,
     private val chatRepository: ChatRepository
 ): ViewModel() {
     private var isMessagesLoading = false
@@ -30,7 +28,7 @@ class ChatViewModel @Inject constructor(
         chatRepository.openChat(
             chatId
         ) {
-            loadChatMessages(chatId, onResp = { isMessagesLoading = false })
+            chatRepository.loadMessages(chatId, onErr = { isMessagesLoading = false })
         }
     }
 
@@ -41,7 +39,7 @@ class ChatViewModel @Inject constructor(
         lastMessageId: Long
     )  {
         if(isMessagesLoading) return
-        loadChatMessages(chatId,lastMessageId,{isMessagesLoading = false})
+        chatRepository.loadMessages(chatId,lastMessageId) { isMessagesLoading = false }
     }
 
     fun getChat(chatId: Long): StateFlow<ChatData?> {

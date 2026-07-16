@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.drinkless.tdlib.Client
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.model.RequestResponse
+import org.gaziz.birgram.core.telegram.model.ResponseData
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -38,12 +38,12 @@ class ClientManager @Inject constructor(
 
     fun sendRequest(
         query: TdApi.Function<*>,
-        onError: (RequestResponse.Error) -> Unit = {},
+        onError: (ResponseData.Error) -> Unit = {},
         onResult: (TdApi.Object) -> Unit = {}
     ) {
         if(client == null) {
             Log.e(LOG_TAG, "Client is null")
-            onError(RequestResponse.Error(500,"Client is null"))
+            onError(ResponseData.Error(500,"Client is null"))
             return
         }
         client?.send(
@@ -52,13 +52,13 @@ class ClientManager @Inject constructor(
                 onResult(it)
                 if(it is TdApi.Error) {
                     Log.e(LOG_TAG, "${it.code}, ${it.message}")
-                    onError(RequestResponse.Error(it.code,it.message))
+                    onError(ResponseData.Error(it.code,it.message))
                 }
             },
             {
                 val message = it.localizedMessage ?: it.message ?: "unknown request exception"
                 Log.e(LOG_TAG, message)
-                onError(RequestResponse.Error(500,message))
+                onError(ResponseData.Error(500,message))
             }
         )
     }

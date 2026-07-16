@@ -1,24 +1,17 @@
 package org.gaziz.birgram.features.chat.domain.repository
 
-import kotlinx.coroutines.flow.StateFlow
-import org.gaziz.birgram.features.chat.domain.model.ChatData
 import org.gaziz.birgram.features.chat.domain.model.MessageData
 
 interface ChatRepository {
-    val chats: StateFlow<Map<Long, ChatData>>
-    val messages: StateFlow<Map<Long, MessageData>>
-    fun setMessages(
-        updFun: (Map<Long, MessageData>) -> Map<Long, MessageData>
-    )
     fun openChat(
         chatId: Long,
         onOK: () -> Unit
     )
     fun closeChat(chatId: Long)
-    fun getChatMessages(
+    fun loadMessages(
         chatId: Long,
-        fromMessage: Long,
-        onMessages: (List<MessageData>) -> Unit
+        fromMessageId: Long = 0,
+        onErr: () -> Unit
     )
     fun sendMessage(
         chatId: Long,
