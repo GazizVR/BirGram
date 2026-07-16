@@ -1,7 +1,7 @@
-package org.gaziz.birgram.core.telegram.mapper
+package org.gaziz.birgram.core.telegram.data.mapper
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.model.FileData
+import org.gaziz.birgram.core.telegram.domain.model.FileData
 
 fun TdApi.File.toFileData(): FileData {
     return FileData(

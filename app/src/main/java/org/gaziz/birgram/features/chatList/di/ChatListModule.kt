@@ -4,7 +4,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.gaziz.birgram.features.chatList.data.TelegramChatList
+import org.gaziz.birgram.features.chatList.data.ChatListRepoImpl
 import org.gaziz.birgram.features.chatList.domain.repository.ChatListRepository
 import javax.inject.Singleton
 
@@ -13,5 +13,5 @@ import javax.inject.Singleton
 abstract class ChatListModule {
     @Singleton
     @Binds
-    abstract fun bindChatList(telegramChatList: TelegramChatList): ChatListRepository
+    abstract fun bindChatList(chatListRepoImpl: ChatListRepoImpl): ChatListRepository
 }

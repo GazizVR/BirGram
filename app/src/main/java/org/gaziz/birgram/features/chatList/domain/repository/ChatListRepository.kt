@@ -1,7 +1,7 @@
 package org.gaziz.birgram.features.chatList.domain.repository
 
 import kotlinx.coroutines.flow.StateFlow
-import org.gaziz.birgram.core.telegram.model.RequestResponse
+import org.gaziz.birgram.core.telegram.domain.model.RequestResponse
 import org.gaziz.birgram.features.chatList.domain.model.ChatData
 import org.gaziz.birgram.features.chatList.domain.model.ChatListType
 

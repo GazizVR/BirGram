@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.TelegramManager
+import org.gaziz.birgram.core.telegram.ClientManager
 import org.gaziz.birgram.features.auth.domain.model.AuthCode
 import org.gaziz.birgram.features.auth.domain.model.AuthCodeInfo
 import org.gaziz.birgram.features.auth.domain.model.AuthPasswordInfo
@@ -18,8 +18,8 @@ import org.gaziz.birgram.features.auth.domain.model.CodeType
 import org.gaziz.birgram.features.auth.domain.repository.AuthRepository
 import javax.inject.Inject
 
-class TelegramAuth @Inject constructor(
-    private val manager: TelegramManager
+class AuthRepoImpl @Inject constructor(
+    private val manager: ClientManager
 ): AuthRepository {
 
     init {

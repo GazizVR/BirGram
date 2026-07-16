@@ -9,14 +9,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.BuildConfig
-import org.gaziz.birgram.core.telegram.TelegramManager
+import org.gaziz.birgram.core.telegram.ClientManager
 import org.gaziz.birgram.features.splash.domain.SplashRepository
 import org.gaziz.birgram.features.splash.domain.model.AppState
 import java.util.Locale
 import javax.inject.Inject
 
-class TelegramAuthState @Inject constructor(
-    private val manager: TelegramManager,
+class SplashRepoImpl @Inject constructor(
+    private val manager: ClientManager,
 ): SplashRepository {
     init {
         CoroutineScope(Dispatchers.Main).launch {

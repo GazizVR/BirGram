@@ -8,19 +8,19 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.TelegramManager
-import org.gaziz.birgram.core.telegram.mapper.toFileData
-import org.gaziz.birgram.core.telegram.mapper.toPhotoInfo
-import org.gaziz.birgram.core.telegram.mapper.toStatus
-import org.gaziz.birgram.core.telegram.model.ChatPhoto
-import org.gaziz.birgram.core.telegram.model.ChatType
+import org.gaziz.birgram.core.telegram.ClientManager
+import org.gaziz.birgram.core.telegram.data.mapper.toFileData
+import org.gaziz.birgram.core.telegram.data.mapper.toPhotoInfo
+import org.gaziz.birgram.core.telegram.data.mapper.toStatus
+import org.gaziz.birgram.core.telegram.domain.model.chat.ChatPhoto
+import org.gaziz.birgram.core.telegram.domain.model.chat.ChatType
 import org.gaziz.birgram.features.searchChats.data.mapper.toChatData
 import org.gaziz.birgram.features.searchChats.domain.model.ChatData
 import org.gaziz.birgram.features.searchChats.domain.repository.SearchChatsRepository
 import javax.inject.Inject
 
 class TelegramSearchChats @Inject constructor(
-    private val manager: TelegramManager
+    private val manager: ClientManager
 ): SearchChatsRepository {
 
     init {

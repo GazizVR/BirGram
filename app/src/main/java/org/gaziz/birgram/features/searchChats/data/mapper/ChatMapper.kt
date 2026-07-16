@@ -1,8 +1,8 @@
 package org.gaziz.birgram.features.searchChats.data.mapper
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.mapper.toPhotoInfo
-import org.gaziz.birgram.core.telegram.mapper.toType
+import org.gaziz.birgram.core.telegram.data.mapper.toPhotoInfo
+import org.gaziz.birgram.core.telegram.data.mapper.toType
 import org.gaziz.birgram.features.searchChats.domain.model.ChatData
 
 fun TdApi.Chat.toChatData(): ChatData {

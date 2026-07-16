@@ -1,4 +1,6 @@
-package org.gaziz.birgram.core.telegram.model
+package org.gaziz.birgram.core.telegram.domain.model.chat
+
+import org.gaziz.birgram.core.telegram.domain.model.UserStatus
 
 sealed class ChatType {
     data class BasicGroup(

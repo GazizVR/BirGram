@@ -6,13 +6,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import org.gaziz.birgram.core.datastore.UserPreferencesRepository
-import org.gaziz.birgram.core.telegram.TelegramManager
+import org.gaziz.birgram.core.telegram.ClientManager
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     userPreferencesRepository: UserPreferencesRepository,
-    manager: TelegramManager
+    manager: ClientManager
 ): ViewModel() {
     init {
         manager.createClient()
