@@ -4,6 +4,7 @@ import android.os.Build
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.BuildConfig
 import org.gaziz.birgram.core.telegram.ClientManager
+import org.gaziz.birgram.core.telegram.UpdateDispatcher
 import org.gaziz.birgram.core.telegram.data.source.TelegramAuth
 import org.gaziz.birgram.features.splash.domain.repository.SplashRepository
 import java.util.Locale
@@ -11,10 +12,16 @@ import javax.inject.Inject
 
 class SplashRepoImpl @Inject constructor(
     private val manager: ClientManager,
+    private val updateDispatcher: UpdateDispatcher,
     private val tgAuth: TelegramAuth
 ): SplashRepository {
+    init {
+        if(!manager.isClientActive()) {
+            manager.createClient { updateDispatcher.dispatch(it) }
+        }
+    }
     override fun initApplication() {
-        manager.createClient()
+        manager.createClient { updateDispatcher.dispatch(it) }
     }
     override fun loadAppState() {
         val params = TdApi.GetAuthorizationState()

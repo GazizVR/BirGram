@@ -11,9 +11,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ClientManager @Inject constructor(
-    private val updateDispatcher: UpdateDispatcher
-){
+class ClientManager @Inject constructor(){
     var client: Client? = null
 
     companion object {
@@ -28,9 +26,15 @@ class ClientManager @Inject constructor(
     private val _exception = MutableStateFlow<Throwable?>(null)
     val exception = _exception.asStateFlow()
 
-    fun createClient() {
+    fun isClientActive(): Boolean {
+        return client != null
+    }
+
+    fun createClient(
+        onUpdate: (TdApi.Object) -> Unit
+    ) {
         client = Client.create(
-            { u -> updateDispatcher.dispatch(u) },
+            { u -> onUpdate(u) },
             { e -> _exception.update { e } },
             null
         )
