@@ -7,20 +7,27 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import org.gaziz.birgram.features.auth.domain.repository.AuthRepository
 import org.gaziz.birgram.features.auth.domain.usecase.GetAuthState
+import org.gaziz.birgram.features.auth.domain.usecase.GetErrorMessage
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
-    private val getAuthState: GetAuthState
+    getAuthState: GetAuthState,
+    getErrorMessage: GetErrorMessage,
+    private val authRepository: AuthRepository
 ): ViewModel() {
+
+    val errorMessage = getErrorMessage().stateIn(
+        viewModelScope,
+        SharingStarted.Eagerly,
+        null
+    )
 
     val authState = getAuthState().stateIn(
         viewModelScope,
         SharingStarted.Eagerly,
         null
     )
-    val errorMessage = authRepository.errorMessage
 
     fun setPhoneNumber(number: String){
        authRepository.setPhoneNumber(number)

@@ -1,32 +1,17 @@
 package org.gaziz.birgram.features.auth.data
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.ClientManager
 import org.gaziz.birgram.core.telegram.data.source.TelegramAuth
+import org.gaziz.birgram.core.telegram.data.source.TelegramError
 import org.gaziz.birgram.features.auth.domain.repository.AuthRepository
 import javax.inject.Inject
 
 class AuthRepoImpl @Inject constructor(
     private val manager: ClientManager,
-    private val tgAuth: TelegramAuth
+    private val tgAuth: TelegramAuth,
+    private val tgError: TelegramError
 ): AuthRepository {
-
-    init {
-        CoroutineScope(Dispatchers.IO).launch {
-            manager.exception.collect {
-                _errorMessage.update { it }
-            }
-        }
-    }
-
-    private val _errorMessage = MutableStateFlow<String?>(null)
-    override val errorMessage = _errorMessage.asStateFlow()
 
     override fun setPhoneNumber(
         phoneNumber: String,
@@ -37,8 +22,8 @@ class AuthRepoImpl @Inject constructor(
         }
         manager.sendRequest(
             phoneNumber,
-            { _errorMessage.update { it } },
-            { if(it is TdApi.Ok) _errorMessage.update { null } }
+            { tgError.setError(it) },
+            { if(it is TdApi.Ok) tgError.setError(null) }
         )
     }
 
@@ -50,8 +35,8 @@ class AuthRepoImpl @Inject constructor(
         }
         manager.sendRequest(
             code,
-            { _errorMessage.update { it } },
-            { if(it is TdApi.Ok) _errorMessage.update { null } }
+            { tgError.setError(it) },
+            { if(it is TdApi.Ok) tgError.setError(null) }
         )
     }
 
@@ -64,8 +49,8 @@ class AuthRepoImpl @Inject constructor(
         }
         manager.sendRequest(
             parameters,
-            { _errorMessage.update { it } },
-            { if(it is TdApi.Ok) _errorMessage.update { null } }
+            { tgError.setError(it) },
+            { if(it is TdApi.Ok) tgError.setError(null) }
         )
     }
 
@@ -75,8 +60,8 @@ class AuthRepoImpl @Inject constructor(
         }
         manager.sendRequest(
             parameters,
-            { _errorMessage.update { it } },
-            { if(it is TdApi.Ok) _errorMessage.update { null } }
+            { tgError.setError(it) },
+            { if(it is TdApi.Ok) tgError.setError(null) }
         )
     }
 

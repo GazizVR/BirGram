@@ -3,6 +3,7 @@ package org.gaziz.birgram.core.telegram
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.data.source.TelegramAuth
 import org.gaziz.birgram.core.telegram.data.source.TelegramChat
+import org.gaziz.birgram.core.telegram.data.source.TelegramError
 import org.gaziz.birgram.core.telegram.data.source.TelegramMessage
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -11,10 +12,12 @@ import javax.inject.Singleton
 class UpdateDispatcher @Inject constructor(
     private val tgAuth: TelegramAuth,
     private val tgChat: TelegramChat,
-    private val tgMessage: TelegramMessage
+    private val tgMessage: TelegramMessage,
+    private val tgError: TelegramError
 ) {
     fun dispatch(u: TdApi.Object){
         when(u) {
+            is TdApi.Error -> tgError.onError(u)
             is TdApi.UpdateAuthorizationState -> {
                 if(u.authorizationState is TdApi.AuthorizationStateLoggingOut) {
                     tgMessage.onLoggingOut()
