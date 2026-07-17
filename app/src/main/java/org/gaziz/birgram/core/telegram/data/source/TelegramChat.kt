@@ -26,7 +26,7 @@ class TelegramChat @Inject constructor(
                 this.priority = 32
                 this.limit = 0
                 this.offset = 0
-                this.synchronous = false
+                this.synchronous = true
             },
             {},
             { obj ->
@@ -37,9 +37,7 @@ class TelegramChat @Inject constructor(
                         var photo: TdApi.ChatPhotoInfo = TdApi.ChatPhotoInfo().apply {
                             this.small = obj
                         }
-                        if(chatPhoto != null) {
-                            photo = chatPhoto.copy(small = obj)
-                        }
+                        if(chatPhoto != null) { photo = chatPhoto.copy(small = obj) }
                         old + (chatId to chat.copy(photo = photo))
                     }
                 }
