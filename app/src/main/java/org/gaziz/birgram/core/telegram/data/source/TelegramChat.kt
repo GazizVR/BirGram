@@ -76,6 +76,17 @@ class TelegramChat @Inject constructor(
             old + (u.chatId to newChat)
         }
     }
+    fun onDraftMsgUpdate(u: TdApi.UpdateChatDraftMessage) {
+        _chats.update { old ->
+            val chat = old[u.chatId] ?: return@update old
+            val newChat = chat.copy(
+                draftMessage = u.draftMessage,
+                positions = u.positions
+            )
+            old + (u.chatId to newChat)
+        }
+    }
+
     fun onTitleUpdate(u: TdApi.UpdateChatTitle){
         _chats.update { old ->
             val chat = old[u.chatId] ?: return@update old
