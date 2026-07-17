@@ -34,6 +34,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.gaziz.birgram.R
 import org.gaziz.birgram.core.telegram.model.ChatType
+import org.gaziz.birgram.core.telegram.model.DraftMessageContent
 import org.gaziz.birgram.features.chat.ui.components.ChatTopBar
 import org.gaziz.birgram.features.chat.ui.components.MessageCard
 import org.gaziz.birgram.features.chat.ui.components.MessageInputBar
@@ -104,7 +105,19 @@ fun ChatScreen(
                 chat?.canSendBasicMsg == true ||
                 chat?.type is ChatType.SuperGroup &&
                 (chat?.type as ChatType.SuperGroup).canSendMessages
-            ) MessageInputBar { viewModel.sendMessage(chatId, it) }
+            ) MessageInputBar(
+                defaultText = if(chat?.draftMessage != null) {
+                   if(chat?.draftMessage?.content is DraftMessageContent.Text) {
+                       (chat?.draftMessage?.content as DraftMessageContent.Text).text
+                   } else {
+                       ""
+                   }
+                } else {
+                    ""
+                }
+            ) {
+                viewModel.sendMessage(chatId, it)
+            }
         },
         modifier = Modifier.padding(WindowInsets.ime.asPaddingValues())
     ) {

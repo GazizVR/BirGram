@@ -24,9 +24,10 @@ import org.gaziz.birgram.R
 
 @Composable
 fun MessageInputBar(
-    onSend: (String) -> Unit
+    defaultText: String = "",
+    onSend: (String) -> Unit,
 ){
-    var message by rememberSaveable { mutableStateOf("") }
+    var message by rememberSaveable { mutableStateOf(defaultText) }
     val containerColor = TopAppBarDefaults.topAppBarColors().containerColor
     val indicatorColor = Color.Transparent
     val placeHolder = stringResource(R.string.message_place_holder)
