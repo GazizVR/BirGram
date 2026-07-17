@@ -21,6 +21,7 @@ import org.gaziz.birgram.features.chatList.domain.model.LastMsgData
 @Composable
 fun UnreadBox(
     unreadCount: Int,
+    mentionCount: Int,
     reactionCount: Int
 ) {
     Box(contentAlignment = Alignment.CenterEnd) {
@@ -32,11 +33,12 @@ fun UnreadBox(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                when {
-                    reactionCount > 0 -> "❤\uFE0F"
-                    unreadCount > 0 -> unreadCount.toString()
-                    else -> "•"
-                },
+                text = (if(mentionCount > 0) "@" else "") +
+                    when {
+                        reactionCount > 0 -> "❤\uFE0F"
+                        unreadCount > 0 ->  unreadCount.toString()
+                        else -> ""
+                    },
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                 style = MaterialTheme.typography.labelSmall,
                 fontSize = 8.sp,
@@ -48,6 +50,7 @@ fun UnreadBox(
 
 @Composable
 fun ContentRow(
+    isUnreadBox: Boolean,
     unreadCount: Int,
     reactionCount: Int,
     mentionCount: Int,
@@ -57,8 +60,6 @@ fun ContentRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        val isUnreadBox = unreadCount > 0 || reactionCount > 0 || mentionCount > 0
-
         if(lastMessage != null) {
             LastMsgContent(
                 Modifier.weight(1f),
@@ -69,6 +70,7 @@ fun ContentRow(
         if(isUnreadBox) {
             UnreadBox(
                 unreadCount,
+                mentionCount,
                 reactionCount
             )
         }

@@ -10,6 +10,7 @@ data class ChatData(
     val photo: ChatPhoto?,
     val lastMessage: LastMsgData?,
     val positions: List<ChatPosition>,
+    val isMarkedAsUnread: Boolean,
     val unreadCount: Int,
     val mentionCount: Int,
     val reactionCount: Int,
