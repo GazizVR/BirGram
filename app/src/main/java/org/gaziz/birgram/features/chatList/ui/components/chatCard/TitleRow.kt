@@ -14,7 +14,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.gaziz.birgram.features.chatList.domain.model.LastMsgData
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -46,7 +45,7 @@ fun CardText(
         text,
         style = MaterialTheme.typography.labelSmall,
         color = color,
-        fontSize = 10.sp,
+        fontSize = 8.sp,
         maxLines = 1,
         textAlign = textAlign,
         overflow = TextOverflow.Ellipsis,
@@ -56,7 +55,7 @@ fun CardText(
 @Composable
 fun TitleRow(
     chatTitle: String,
-    lastMessage: LastMsgData?
+    date: LocalDateTime?
 ){
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -68,9 +67,9 @@ fun TitleRow(
         ) {
             CardText(text = chatTitle, alpha = 1f)
         }
-        if(lastMessage != null) {
+        if(date != null) {
             CardText(
-                lastMessage.date.formatChatCard(),
+                date.formatChatCard(),
                 0.35f,
                 TextAlign.End
             )

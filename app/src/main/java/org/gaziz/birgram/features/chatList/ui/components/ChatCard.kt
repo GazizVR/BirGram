@@ -53,13 +53,18 @@ fun ChatCard(
             ) {
                 TitleRow(
                     chatData.title,
-                    chatData.lastMessage
+                    when {
+                        chatData.lastMessage != null -> chatData.lastMessage.date
+                        chatData.draftMessage != null -> chatData.draftMessage.date
+                        else -> null
+                    }
                 )
                 ContentRow(
                     chatData.unreadCount,
                     chatData.reactionCount,
                     chatData.mentionCount,
-                    chatData.lastMessage
+                    chatData.lastMessage,
+                    chatData.draftMessage
                 )
             }
         }

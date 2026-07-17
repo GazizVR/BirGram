@@ -59,6 +59,7 @@
         <item>⭕ Video message</item>
         <item>GIF</item>
         <item>Unsupported message</item>
+        <item>Draft</item>
     </string-array>
 
     <string name="search_placeholder">Search…</string>

@@ -1,6 +1,7 @@
 package org.gaziz.birgram.features.chatList.data.mapper
 
 import org.drinkless.tdlib.TdApi
+import org.gaziz.birgram.core.telegram.data.mapper.toDraftMessage
 import org.gaziz.birgram.core.telegram.data.mapper.toPhotoInfo
 import org.gaziz.birgram.core.telegram.data.mapper.toType
 import org.gaziz.birgram.features.chatList.domain.model.ChatData
@@ -34,9 +35,10 @@ fun TdApi.Chat.toChatData(): ChatData {
         type = chat.type.toType(),
         photo = chat.photo.toPhotoInfo(),
         lastMessage = chat.lastMessage.toLastMsgData(),
+        draftMessage = chat.draftMessage.toDraftMessage(),
         positions = chatPositions,
         unreadCount = chat.unreadCount,
         mentionCount = chat.unreadMentionCount,
-        reactionCount = chat.unreadReactionCount
+        reactionCount = chat.unreadReactionCount,
     )
 }
