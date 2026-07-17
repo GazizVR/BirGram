@@ -35,7 +35,6 @@ fun TdApi.Chat.toChatData(): ChatData {
         photo = chat.photo.toPhotoInfo(),
         lastMessage = chat.lastMessage.toLastMsgData(),
         positions = chatPositions,
-        isMarkedAsUnread = chat.isMarkedAsUnread,
         unreadCount = chat.unreadCount,
         mentionCount = chat.unreadMentionCount,
         reactionCount = chat.unreadReactionCount

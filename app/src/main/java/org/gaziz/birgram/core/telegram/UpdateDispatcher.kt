@@ -30,11 +30,12 @@ class UpdateDispatcher @Inject constructor(
             is TdApi.UpdateMessageSendSucceeded -> tgMessage.onSendSucceedUpdate(u)
 
             is TdApi.UpdateNewChat -> tgChat.onNewUpdate(u)
-            is TdApi.UpdateChatPosition -> tgChat.onPositionUpdate(u)
             is TdApi.UpdateChatTitle -> tgChat.onTitleUpdate(u)
             is TdApi.UpdateChatPhoto -> tgChat.onPhotoUpdate(u)
 
+            is TdApi.UpdateChatPosition -> tgChat.onPositionUpdate(u)
             is TdApi.UpdateChatLastMessage -> tgChat.onLastMsgUpdate(u)
+
             is TdApi.UpdateChatReadInbox -> tgChat.onInboxUpdate(u)
             is TdApi.UpdateChatUnreadReactionCount -> tgChat.onReactionCountUpdate(u)
             is TdApi.UpdateChatUnreadMentionCount -> tgChat.onMentionCountUpdate(u)

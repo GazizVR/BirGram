@@ -56,7 +56,6 @@ fun ChatCard(
                     chatData.lastMessage
                 )
                 ContentRow(
-                    chatData.isMarkedAsUnread,
                     chatData.unreadCount,
                     chatData.reactionCount,
                     chatData.mentionCount,

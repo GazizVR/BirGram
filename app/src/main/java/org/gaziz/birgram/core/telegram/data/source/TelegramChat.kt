@@ -92,6 +92,7 @@ class TelegramChat @Inject constructor(
             old + (u.chatId to newChat)
         }
     }
+
     fun onInboxUpdate(u: TdApi.UpdateChatReadInbox){
         _chats.update { old ->
             val chat = old[u.chatId] ?: return@update old

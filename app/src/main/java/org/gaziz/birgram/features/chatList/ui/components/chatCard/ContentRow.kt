@@ -50,12 +50,12 @@ fun UnreadBox(
 
 @Composable
 fun ContentRow(
-    isUnreadBox: Boolean,
     unreadCount: Int,
     reactionCount: Int,
     mentionCount: Int,
     lastMessage: LastMsgData?
 ) {
+    val isUnreadBox = unreadCount > 0 || mentionCount > 0 || reactionCount > 0
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
