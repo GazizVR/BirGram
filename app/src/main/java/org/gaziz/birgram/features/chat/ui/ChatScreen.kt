@@ -114,7 +114,8 @@ fun ChatScreen(
                    }
                 } else {
                     ""
-                }
+                },
+                {viewModel.setDraftMessage(chatId,it)}
             ) {
                 viewModel.sendMessage(chatId, it)
             }

@@ -1,5 +1,6 @@
 package org.gaziz.birgram.features.chat.domain.repository
 
+import org.gaziz.birgram.core.telegram.model.DraftMessage
 import org.gaziz.birgram.features.chat.domain.model.MessageData
 
 interface ChatRepository {
@@ -17,5 +18,9 @@ interface ChatRepository {
         chatId: Long,
         content: String,
         onMessage: (MessageData?) -> Unit
+    )
+    fun setDraftMessage(
+        chatId: Long,
+        draftMessage: DraftMessage
     )
 }

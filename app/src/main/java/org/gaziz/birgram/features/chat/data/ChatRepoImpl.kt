@@ -2,7 +2,9 @@ package org.gaziz.birgram.features.chat.data
 
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.ClientManager
+import org.gaziz.birgram.core.telegram.data.mapper.toTgDraftMessage
 import org.gaziz.birgram.core.telegram.data.source.TelegramMessage
+import org.gaziz.birgram.core.telegram.model.DraftMessage
 import org.gaziz.birgram.features.chat.data.mapper.toMessageData
 import org.gaziz.birgram.features.chat.domain.model.MessageData
 import org.gaziz.birgram.features.chat.domain.repository.ChatRepository
@@ -64,5 +66,18 @@ class ChatRepoImpl @Inject constructor(
                onMessage(null)
            }
        }
+    }
+
+    override fun setDraftMessage(
+        chatId: Long,
+        draftMessage: DraftMessage
+    ) {
+        manager.sendRequest(
+            TdApi.SetChatDraftMessage().apply {
+                this.chatId = chatId
+                this.topicId = null
+                this.draftMessage = draftMessage.toTgDraftMessage()
+            }
+        )
     }
 }

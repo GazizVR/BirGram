@@ -9,6 +9,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -25,12 +26,18 @@ import org.gaziz.birgram.R
 @Composable
 fun MessageInputBar(
     defaultText: String = "",
-    onSend: (String) -> Unit,
+    onExit: (String) -> Unit,
+    onSend: (String) -> Unit
 ){
     var message by rememberSaveable { mutableStateOf(defaultText) }
     val containerColor = TopAppBarDefaults.topAppBarColors().containerColor
     val indicatorColor = Color.Transparent
     val placeHolder = stringResource(R.string.message_place_holder)
+    DisposableEffect(Unit) {
+        onDispose {
+            onExit(message)
+        }
+    }
     TextField(
         value = message,
         onValueChange = { message = it },

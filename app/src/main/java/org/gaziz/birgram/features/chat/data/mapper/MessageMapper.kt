@@ -1,11 +1,9 @@
 package org.gaziz.birgram.features.chat.data.mapper
 
 import org.drinkless.tdlib.TdApi
+import org.gaziz.birgram.core.telegram.data.mapper.fromUnixTimeStamp
 import org.gaziz.birgram.features.chat.domain.model.MessageContent
 import org.gaziz.birgram.features.chat.domain.model.MessageData
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
 
 fun TdApi.MessageContent.toMessageCnt(): MessageContent {
     return when(val cnt = this) {
@@ -24,12 +22,6 @@ fun TdApi.MessageContent.toMessageCnt(): MessageContent {
     }
 }
 
-fun Int.fromUnixTimeStamp(zoneId: ZoneId = ZoneId.systemDefault()): LocalDateTime {
-    return Instant
-        .ofEpochSecond(this.toLong())
-        .atZone(zoneId)
-        .toLocalDateTime()
-}
 
 fun TdApi.Message.toMessageData(): MessageData {
     return MessageData(

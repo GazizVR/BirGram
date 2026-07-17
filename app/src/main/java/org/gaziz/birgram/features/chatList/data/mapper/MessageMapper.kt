@@ -1,7 +1,7 @@
 package org.gaziz.birgram.features.chatList.data.mapper
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.features.chat.data.mapper.fromUnixTimeStamp
+import org.gaziz.birgram.core.telegram.data.mapper.fromUnixTimeStamp
 import org.gaziz.birgram.features.chatList.domain.model.LastMsgContent
 import org.gaziz.birgram.features.chatList.domain.model.LastMsgData
 
