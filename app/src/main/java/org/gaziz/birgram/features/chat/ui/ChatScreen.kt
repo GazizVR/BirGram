@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -62,6 +63,7 @@ fun ChatScreen(
     val containerColor = CardDefaults.cardColors().containerColor
     val lazyListState = rememberLazyListState()
     val noMessages = stringResource(R.string.no_messages)
+    val focusManager = LocalFocusManager.current
 
     DisposableEffect(Unit) {
         viewModel.openChat(chatId)
@@ -93,7 +95,10 @@ fun ChatScreen(
         topBar = {
             if(chat != null)  {
                 ChatTopBar(
-                    onBack = onBack,
+                    onBack = {
+                        focusManager.clearFocus()
+                        onBack()
+                    },
                     photo = chat?.photo,
                     title = chat?.title ?: "",
                     type = chat?.type ?: ChatType.Other
