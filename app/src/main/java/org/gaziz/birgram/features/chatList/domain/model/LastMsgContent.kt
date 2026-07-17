@@ -1,29 +1,29 @@
 package org.gaziz.birgram.features.chatList.domain.model
 
-sealed interface MessageContent {
-    data class Text(val text: String): MessageContent
+sealed interface LastMsgContent {
+    data class Text(val text: String): LastMsgContent
     data class Document(
         val caption: String,
         val fileName: String
-    ): MessageContent
+    ): LastMsgContent
     data class Audio(
         val caption: String,
         val fileName: String
-    ): MessageContent
-    data class Sticker(val emoji: String): MessageContent
-    object VoiceNote: MessageContent
+    ): LastMsgContent
+    data class Sticker(val emoji: String): LastMsgContent
+    object VoiceNote: LastMsgContent
     data class Video(
         val caption: String,
         val fileName: String
-    ): MessageContent
-    object VideoNote: MessageContent
+    ): LastMsgContent
+    object VideoNote: LastMsgContent
 
     data class Photo(
         val caption: String,
         val miniThumbNail: ByteArray?
-    ): MessageContent
+    ): LastMsgContent
 
-    object GIF: MessageContent
+    object GIF: LastMsgContent
 
-    object Other: MessageContent
+    object Other: LastMsgContent
 }

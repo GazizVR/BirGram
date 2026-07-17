@@ -8,7 +8,7 @@ data class ChatData(
     val title: String,
     val type: ChatType,
     val photo: ChatPhoto?,
-    val lastMessage: MessageData?,
+    val lastMessage: LastMsgData?,
     val positions: List<ChatPosition>,
     val unreadCount: Int,
     val mentionCount: Int,

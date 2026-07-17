@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.ClientManager
+import org.gaziz.birgram.core.telegram.data.mapper.copy
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -30,28 +31,16 @@ class TelegramChat @Inject constructor(
             {},
             { obj ->
                 if(obj is TdApi.File) {
-                    _chats.update { map ->
-                        map.toMutableMap().apply {
-                            get(chatId)?.let {
-                                val chatPhoto = it.photo
-                                val photo: TdApi.ChatPhotoInfo = TdApi.ChatPhotoInfo()
-                                if(chatPhoto != null) {
-                                    photo.apply {
-                                        small = obj
-                                        big = chatPhoto.big
-                                        minithumbnail = chatPhoto.minithumbnail
-                                    }
-                                } else {
-                                    photo.apply {
-                                        small = obj
-                                    }
-                                }
-                                val chat = it.apply {
-                                    this.photo = photo
-                                }
-                                put(chatId, chat)
-                            }
-                        }.toMap()
+                    _chats.update { old ->
+                        val chat = old[chatId] ?: return@update old
+                        val chatPhoto = chat.photo
+                        var photo: TdApi.ChatPhotoInfo = TdApi.ChatPhotoInfo().apply {
+                            this.small = obj
+                        }
+                        if(chatPhoto != null) {
+                            photo = chatPhoto.copy(small = obj)
+                        }
+                        old + (chatId to chat.copy(photo = photo))
                     }
                 }
             }
@@ -64,87 +53,64 @@ class TelegramChat @Inject constructor(
 
     fun onNewUpdate(u: TdApi.UpdateNewChat){
         _chats.update { map ->
-            map.toMutableMap().apply { put(u.chat.id,u.chat) }.toMap()
+            map + (u.chat.id to u.chat)
         }
     }
     fun onPositionUpdate(u: TdApi.UpdateChatPosition){
-        _chats.update { map ->
-            map.toMutableMap().apply {
-                get(u.chatId)?.let { chat ->
-                    if (u.position.order == 0L) {
-                        remove(u.chatId)
-                    } else {
-                        val positions = chat.positions.filter { it.list != u.position.list } + u.position
-                        val newChat = chat.apply{
-                            this.positions = positions.toTypedArray()
-                        }
-                        put(u.chatId, newChat)
-                    }
-                }
-            }.toMap()
+        _chats.update { old ->
+            val chat = old[u.chatId] ?: return@update old
+            if (u.position.order == 0L) {
+                old - u.chatId
+            } else {
+                val positions = chat.positions.filter { it.list != u.position.list } + u.position
+                val newChat = chat.copy(positions = positions.toTypedArray())
+                old + (u.chatId to newChat)
+            }
         }
     }
     fun onLastMsgUpdate(u: TdApi.UpdateChatLastMessage){
-        _chats.update { map ->
-            map.toMutableMap().apply {
-                get(u.chatId)?.let { chat ->
-                    val newChat = chat.apply {
-                        this.positions = u.positions
-                        this.lastMessage = u.lastMessage
-                    }
-                    put(u.chatId, newChat)
-                }
-            }.toMap()
+        _chats.update { old ->
+            val chat = old[u.chatId] ?: return@update old
+            val newChat = chat.copy(
+                positions = u.positions,
+                lastMessage = u.lastMessage
+            )
+            old + (u.chatId to newChat)
         }
     }
     fun onTitleUpdate(u: TdApi.UpdateChatTitle){
-        _chats.update { map ->
-            map.toMutableMap().apply {
-                get(u.chatId)?.let { chat ->
-                    chat.title = u.title
-                    put(u.chatId,chat)
-                }
-            }.toMap()
+        _chats.update { old ->
+            val chat = old[u.chatId] ?: return@update old
+            val newChat = chat.copy(title = u.title)
+            old + (u.chatId to newChat)
         }
     }
     fun onPhotoUpdate(u: TdApi.UpdateChatPhoto){
-        _chats.update { map ->
-            map.toMutableMap().apply {
-                get(u.chatId)?.let { chat ->
-                    chat.photo = u.photo
-                    put(u.chatId,chat)
-                }
-            }.toMap()
+        _chats.update { old ->
+            val chat = old[u.chatId] ?: return@update old
+            val newChat = chat.copy(photo = u.photo)
+            old + (u.chatId to newChat)
         }
     }
     fun onInboxUpdate(u: TdApi.UpdateChatReadInbox){
-        _chats.update { map ->
-            map.toMutableMap().apply {
-                get(u.chatId)?.let { chat ->
-                    chat.unreadCount = u.unreadCount
-                    put(u.chatId,chat)
-                }
-            }.toMap()
+        _chats.update { old ->
+            val chat = old[u.chatId] ?: return@update old
+            val newChat = chat.copy(unreadCount = u.unreadCount)
+            old + (u.chatId to newChat)
         }
     }
     fun onMentionCountUpdate(u: TdApi.UpdateChatUnreadMentionCount){
-        _chats.update { map ->
-            map.toMutableMap().apply {
-                get(u.chatId)?.let { chat ->
-                    chat.unreadMentionCount = u.unreadMentionCount
-                    put(u.chatId,chat)
-                }
-            }.toMap()
+        _chats.update { old ->
+            val chat = old[u.chatId] ?: return@update old
+            val newChat = chat.copy(unreadMentionCount = u.unreadMentionCount)
+            old + (u.chatId to newChat)
         }
     }
     fun onReactionCountUpdate(u: TdApi.UpdateChatUnreadReactionCount){
-        _chats.update { map ->
-            map.toMutableMap().apply {
-                get(u.chatId)?.let { chat ->
-                    chat.unreadReactionCount = u.unreadReactionCount
-                    put(u.chatId,chat)
-                }
-            }.toMap()
+        _chats.update { old ->
+            val chat = old[u.chatId] ?: return@update old
+            val newChat = chat.copy(unreadReactionCount = u.unreadReactionCount)
+            old + (u.chatId to newChat)
         }
     }
 
