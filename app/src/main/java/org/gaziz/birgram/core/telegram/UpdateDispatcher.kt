@@ -5,6 +5,7 @@ import org.gaziz.birgram.core.telegram.data.source.TelegramAuth
 import org.gaziz.birgram.core.telegram.data.source.TelegramChat
 import org.gaziz.birgram.core.telegram.data.source.TelegramError
 import org.gaziz.birgram.core.telegram.data.source.TelegramMessage
+import org.gaziz.birgram.core.telegram.data.source.TelegramUser
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -13,7 +14,8 @@ class UpdateDispatcher @Inject constructor(
     private val tgAuth: TelegramAuth,
     private val tgChat: TelegramChat,
     private val tgMessage: TelegramMessage,
-    private val tgError: TelegramError
+    private val tgError: TelegramError,
+    private val tgUser: TelegramUser
 ) {
     fun dispatch(u: TdApi.Object){
         when(u) {
@@ -40,6 +42,9 @@ class UpdateDispatcher @Inject constructor(
             is TdApi.UpdateChatReadInbox -> tgChat.onInboxUpdate(u)
             is TdApi.UpdateChatUnreadReactionCount -> tgChat.onReactionCountUpdate(u)
             is TdApi.UpdateChatUnreadMentionCount -> tgChat.onMentionCountUpdate(u)
+
+            is TdApi.UpdateUserStatus -> tgUser.onUserStatus(u)
+
         }
     }
 }

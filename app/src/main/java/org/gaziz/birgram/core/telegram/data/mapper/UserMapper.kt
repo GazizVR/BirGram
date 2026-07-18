@@ -1,15 +1,23 @@
 package org.gaziz.birgram.core.telegram.data.mapper
 
 import org.drinkless.tdlib.TdApi
+import org.gaziz.birgram.core.telegram.model.User
 import org.gaziz.birgram.core.telegram.model.UserStatus
 
 fun TdApi.UserStatus.toStatus(): UserStatus {
    return when(this){
-       is TdApi.UserStatusRecently -> UserStatus.Recently
+       is TdApi.UserStatusRecently -> UserStatus.Recently(this.byMyPrivacySettings)
        is TdApi.UserStatusLastWeek -> UserStatus.LastWeek
        is TdApi.UserStatusLastMonth -> UserStatus.LastMonth
        is TdApi.UserStatusOffline -> UserStatus.Offline(this.wasOnline.fromUnixTimeStamp())
        is TdApi.UserStatusOnline -> UserStatus.Online(this.expires.fromUnixTimeStamp())
        else -> UserStatus.Empty
    }
+}
+
+fun TdApi.User.toUser(): User {
+    return User(
+        id = this.id,
+        status = this.status.toStatus()
+    )
 }
