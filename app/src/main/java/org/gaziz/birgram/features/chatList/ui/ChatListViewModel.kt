@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.datastore.UserPreferencesRepository
-import org.gaziz.birgram.core.telegram.model.User
+import org.gaziz.birgram.core.telegram.users.api.model.User
 import org.gaziz.birgram.core.telegram.usecase.GetUserById
-import org.gaziz.birgram.features.chatList.domain.model.ChatListType
+import org.gaziz.birgram.core.telegram.chats.api.model.ChatListType
 import org.gaziz.birgram.features.chatList.domain.repository.ChatListRepository
 import org.gaziz.birgram.features.chatList.domain.usecase.GetChatList
 import org.gaziz.birgram.features.chatList.domain.usecase.LoadAllChats

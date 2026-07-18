@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.telegram.model.DraftMessage
-import org.gaziz.birgram.core.telegram.model.DraftMessageContent
+import org.gaziz.birgram.core.telegram.chats.api.model.DraftMessage
+import org.gaziz.birgram.core.telegram.chats.api.model.DraftMessageContent
 import org.gaziz.birgram.features.chatList.domain.model.LastMsgContent
 import org.gaziz.birgram.features.chatList.domain.model.LastMsgData
 

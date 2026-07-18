@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
-import org.gaziz.birgram.core.telegram.model.User
+import org.gaziz.birgram.core.telegram.users.api.model.User
 import org.gaziz.birgram.core.telegram.usecase.GetUserById
 import org.gaziz.birgram.features.searchChats.domain.repository.SearchChatsRepository
 import javax.inject.Inject

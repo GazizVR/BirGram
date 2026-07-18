@@ -2,16 +2,16 @@ package org.gaziz.birgram.features.chatList.domain.usecase
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import org.gaziz.birgram.core.telegram.data.source.TelegramChat
+import org.gaziz.birgram.core.telegram.chats.impl.TelegramChat
 import org.gaziz.birgram.features.chatList.data.mapper.toChatData
-import org.gaziz.birgram.features.chatList.domain.model.ChatData
-import org.gaziz.birgram.features.chatList.domain.model.ChatListType
+import org.gaziz.birgram.core.telegram.chats.api.model.Chat
+import org.gaziz.birgram.core.telegram.chats.api.model.ChatListType
 import javax.inject.Inject
 
 class GetChatList @Inject constructor(
     private val tgChat: TelegramChat
 ) {
-    operator fun invoke(type: ChatListType): Flow<List<ChatData>> {
+    operator fun invoke(type: ChatListType): Flow<List<Chat>> {
         return tgChat.chats.map { map ->
             map
                 .map { it.value.toChatData() }

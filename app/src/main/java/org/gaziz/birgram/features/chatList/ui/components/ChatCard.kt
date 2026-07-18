@@ -14,13 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.gaziz.birgram.core.ui.components.ChatAvatar
-import org.gaziz.birgram.features.chatList.domain.model.ChatData
+import org.gaziz.birgram.core.telegram.chats.api.model.Chat
 import org.gaziz.birgram.features.chatList.ui.components.chatCard.ContentRow
 import org.gaziz.birgram.features.chatList.ui.components.chatCard.TitleRow
 
 @Composable
 fun ChatCard(
-    chatData: ChatData,
+    chat: Chat,
     isOnline: Boolean,
     downloadPhoto: (Int) -> Unit,
     onClick: (Long) -> Unit
@@ -30,7 +30,7 @@ fun ChatCard(
     val cardColor = CardDefaults.cardColors().containerColor
     Card(
         shape = RoundedCornerShape(0),
-        onClick = { onClick(chatData.id) },
+        onClick = { onClick(chat.id) },
         modifier = Modifier.height(containerHeight)
     ) {
         Row(
@@ -39,8 +39,8 @@ fun ChatCard(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             ChatAvatar(
-                photo = chatData.photo,
-                chatTitle = chatData.title,
+                photo = chat.photo,
+                chatTitle = chat.title,
                 iconSize = iconSize,
                 downloadPhoto = downloadPhoto,
                 isOnline = isOnline,
@@ -51,19 +51,19 @@ fun ChatCard(
                 modifier = Modifier.weight(1f)
             ) {
                 TitleRow(
-                    chatData.title,
+                    chat.title,
                     when {
-                        chatData.lastMessage != null -> chatData.lastMessage.date
-                        chatData.draftMessage != null -> chatData.draftMessage.date
+                        chat.lastMessage != null -> chat.lastMessage.date
+                        chat.draftMessage != null -> chat.draftMessage.date
                         else -> null
                     }
                 )
                 ContentRow(
-                    chatData.unreadCount,
-                    chatData.reactionCount,
-                    chatData.mentionCount,
-                    chatData.lastMessage,
-                    chatData.draftMessage
+                    chat.unreadCount,
+                    chat.reactionCount,
+                    chat.mentionCount,
+                    chat.lastMessage,
+                    chat.draftMessage
                 )
             }
         }

@@ -34,8 +34,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.telegram.model.ChatType
-import org.gaziz.birgram.core.telegram.model.DraftMessageContent
+import org.gaziz.birgram.core.telegram.chats.api.model.ChatType
+import org.gaziz.birgram.core.telegram.chats.api.model.DraftMessageContent
 import org.gaziz.birgram.features.chat.ui.components.ChatTopBar
 import org.gaziz.birgram.features.chat.ui.components.MessageCard
 import org.gaziz.birgram.features.chat.ui.components.MessageInputBar

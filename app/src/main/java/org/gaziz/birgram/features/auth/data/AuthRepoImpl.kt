@@ -1,15 +1,15 @@
 package org.gaziz.birgram.features.auth.data
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.ClientManager
-import org.gaziz.birgram.core.telegram.data.source.TelegramAuth
-import org.gaziz.birgram.core.telegram.data.source.TelegramError
+import org.gaziz.birgram.core.telegram.internal.ClientManager
+import org.gaziz.birgram.core.telegram.auth.impl.AuthDataSource
+import org.gaziz.birgram.core.telegram.error.impl.TelegramError
 import org.gaziz.birgram.features.auth.domain.repository.AuthRepository
 import javax.inject.Inject
 
 class AuthRepoImpl @Inject constructor(
     private val manager: ClientManager,
-    private val tgAuth: TelegramAuth,
+    private val tgAuth: AuthDataSource,
     private val tgError: TelegramError
 ): AuthRepository {
 

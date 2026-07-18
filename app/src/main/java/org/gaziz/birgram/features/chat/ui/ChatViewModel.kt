@@ -7,12 +7,12 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.gaziz.birgram.core.telegram.model.DraftMessage
-import org.gaziz.birgram.core.telegram.model.DraftMessageContent
-import org.gaziz.birgram.core.telegram.model.User
+import org.gaziz.birgram.core.telegram.chats.api.model.DraftMessage
+import org.gaziz.birgram.core.telegram.chats.api.model.DraftMessageContent
+import org.gaziz.birgram.core.telegram.users.api.model.User
 import org.gaziz.birgram.core.telegram.usecase.GetUserById
 import org.gaziz.birgram.features.chat.domain.model.ChatData
-import org.gaziz.birgram.features.chat.domain.model.MessageData
+import org.gaziz.birgram.core.telegram.messages.api.model.Message
 import org.gaziz.birgram.features.chat.domain.repository.ChatRepository
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatByID
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatMessages
@@ -62,7 +62,7 @@ class ChatViewModel @Inject constructor(
            null
        )
     }
-    fun chatMessages(chatId: Long): StateFlow<Map<LocalDate, List<MessageData>>> {
+    fun chatMessages(chatId: Long): StateFlow<Map<LocalDate, List<Message>>> {
         return getChatMessages(chatId).stateIn(
             viewModelScope,
             SharingStarted.Eagerly,

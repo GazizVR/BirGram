@@ -16,7 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.gaziz.birgram.core.telegram.model.DraftMessage
+import org.gaziz.birgram.core.telegram.chats.api.model.DraftMessage
 import org.gaziz.birgram.features.chatList.domain.model.LastMsgData
 
 @Composable

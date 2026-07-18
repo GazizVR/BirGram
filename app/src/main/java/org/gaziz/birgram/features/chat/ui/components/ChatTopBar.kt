@@ -22,9 +22,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.telegram.model.ChatPhoto
-import org.gaziz.birgram.core.telegram.model.ChatType
-import org.gaziz.birgram.core.telegram.model.UserStatus
+import org.gaziz.birgram.core.telegram.chats.api.model.ChatPhoto
+import org.gaziz.birgram.core.telegram.chats.api.model.ChatType
+import org.gaziz.birgram.core.telegram.users.api.model.UserStatus
 import org.gaziz.birgram.core.ui.components.ChatAvatar
 import org.gaziz.birgram.core.ui.components.ChatTypeCnt
 

@@ -3,18 +3,18 @@ package org.gaziz.birgram.features.auth.domain.usecase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.ClientManager
-import org.gaziz.birgram.core.telegram.data.source.TelegramAuth
-import org.gaziz.birgram.features.auth.domain.model.AuthCode
-import org.gaziz.birgram.features.auth.domain.model.AuthCodeInfo
-import org.gaziz.birgram.features.auth.domain.model.AuthPasswordInfo
-import org.gaziz.birgram.features.auth.domain.model.AuthState
-import org.gaziz.birgram.features.auth.domain.model.CodeType
+import org.gaziz.birgram.core.telegram.internal.ClientManager
+import org.gaziz.birgram.core.telegram.auth.impl.AuthDataSource
+import org.gaziz.birgram.core.telegram.auth.api.model.AuthCode
+import org.gaziz.birgram.core.telegram.auth.api.model.AuthCodeInfo
+import org.gaziz.birgram.core.telegram.auth.api.model.AuthPasswordInfo
+import org.gaziz.birgram.core.telegram.auth.api.model.AuthState
+import org.gaziz.birgram.core.telegram.auth.api.model.CodeType
 import javax.inject.Inject
 
 class GetAuthState @Inject constructor(
     private val manager: ClientManager,
-    private val tgAuth: TelegramAuth
+    private val tgAuth: AuthDataSource
 ) {
     operator fun invoke(): Flow<AuthState> {
         return tgAuth.authState.map { s ->

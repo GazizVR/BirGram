@@ -1,12 +1,11 @@
 package org.gaziz.birgram.features.chat.data
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.ClientManager
-import org.gaziz.birgram.core.telegram.data.mapper.toTgDraftMessage
-import org.gaziz.birgram.core.telegram.data.source.TelegramMessage
-import org.gaziz.birgram.core.telegram.model.DraftMessage
-import org.gaziz.birgram.features.chat.data.mapper.toMessageData
-import org.gaziz.birgram.features.chat.domain.model.MessageData
+import org.gaziz.birgram.core.telegram.internal.ClientManager
+import org.gaziz.birgram.core.telegram.chats.impl.toTgDraftMessage
+import org.gaziz.birgram.core.telegram.messages.impl.TelegramMessage
+import org.gaziz.birgram.core.telegram.chats.api.model.DraftMessage
+import org.gaziz.birgram.core.telegram.messages.api.model.Message
 import org.gaziz.birgram.features.chat.domain.repository.ChatRepository
 import javax.inject.Inject
 
@@ -43,7 +42,7 @@ class ChatRepoImpl @Inject constructor(
     override fun sendMessage(
         chatId: Long,
         content: String,
-        onMessage: (MessageData?) -> Unit
+        onMessage: (Message?) -> Unit
     ) {
        manager.sendRequest(
            TdApi.SendMessage().apply {

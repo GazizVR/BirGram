@@ -3,10 +3,10 @@ package org.gaziz.birgram.features.splash.data
 import android.os.Build
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.BuildConfig
-import org.gaziz.birgram.core.telegram.ClientManager
-import org.gaziz.birgram.core.telegram.UpdateDispatcher
-import org.gaziz.birgram.core.telegram.data.source.TelegramAuth
-import org.gaziz.birgram.core.telegram.data.source.TelegramError
+import org.gaziz.birgram.core.telegram.internal.ClientManager
+import org.gaziz.birgram.core.telegram.internal.UpdateDispatcher
+import org.gaziz.birgram.core.telegram.auth.impl.AuthDataSource
+import org.gaziz.birgram.core.telegram.error.impl.TelegramError
 import org.gaziz.birgram.features.splash.domain.repository.SplashRepository
 import java.util.Locale
 import javax.inject.Inject
@@ -14,7 +14,7 @@ import javax.inject.Inject
 class SplashRepoImpl @Inject constructor(
     private val manager: ClientManager,
     private val updateDispatcher: UpdateDispatcher,
-    private val tgAuth: TelegramAuth,
+    private val tgAuth: AuthDataSource,
     private val tgError: TelegramError
 ): SplashRepository {
     init {

@@ -4,8 +4,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.gaziz.birgram.core.telegram.model.ResponseData
-import org.gaziz.birgram.features.chatList.domain.model.ChatListType
+import org.gaziz.birgram.core.telegram.chats.api.model.ChatListType
+import org.gaziz.birgram.core.telegram.error.api.model.ResponseData
 import org.gaziz.birgram.features.chatList.domain.repository.ChatListRepository
 import javax.inject.Inject
 

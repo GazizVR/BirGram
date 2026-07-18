@@ -1,7 +1,7 @@
 package org.gaziz.birgram.features.chat.domain.repository
 
-import org.gaziz.birgram.core.telegram.model.DraftMessage
-import org.gaziz.birgram.features.chat.domain.model.MessageData
+import org.gaziz.birgram.core.telegram.chats.api.model.DraftMessage
+import org.gaziz.birgram.core.telegram.messages.api.model.Message
 
 interface ChatRepository {
     fun openChat(
@@ -17,7 +17,7 @@ interface ChatRepository {
     fun sendMessage(
         chatId: Long,
         content: String,
-        onMessage: (MessageData?) -> Unit
+        onMessage: (Message?) -> Unit
     )
     fun setDraftMessage(
         chatId: Long,

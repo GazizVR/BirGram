@@ -24,8 +24,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.R
-import org.gaziz.birgram.features.chat.domain.model.MessageContent
-import org.gaziz.birgram.features.chat.domain.model.MessageData
+import org.gaziz.birgram.core.telegram.messages.api.model.MessageContent
+import org.gaziz.birgram.core.telegram.messages.api.model.Message
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -68,7 +68,7 @@ fun MessageText(
 
 @Composable
 fun MessageCard(
-    msg: MessageData
+    msg: Message
 ) {
     val msgType = stringArrayResource(R.array.message_type)
     Row(

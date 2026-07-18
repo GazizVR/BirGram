@@ -3,12 +3,12 @@ package org.gaziz.birgram.features.splash.domain.usecase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.data.source.TelegramAuth
+import org.gaziz.birgram.core.telegram.auth.impl.AuthDataSource
 import org.gaziz.birgram.features.splash.domain.model.AppState
 import javax.inject.Inject
 
 class GetAppState @Inject constructor(
-    private val tgAuth: TelegramAuth
+    private val tgAuth: AuthDataSource
 ) {
     operator fun invoke(): Flow<AppState?> {
         return tgAuth.authState.map { s ->
