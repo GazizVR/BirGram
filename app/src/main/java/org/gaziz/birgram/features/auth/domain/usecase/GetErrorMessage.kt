@@ -2,7 +2,7 @@ package org.gaziz.birgram.features.auth.domain.usecase
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import org.gaziz.birgram.core.telegram.error.impl.TelegramError
+import org.gaziz.birgram.core.telegram.internal.updaters.TelegramError
 import javax.inject.Inject
 
 class GetErrorMessage @Inject constructor(

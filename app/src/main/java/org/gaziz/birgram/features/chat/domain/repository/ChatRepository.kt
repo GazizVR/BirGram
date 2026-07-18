@@ -1,7 +1,7 @@
 package org.gaziz.birgram.features.chat.domain.repository
 
-import org.gaziz.birgram.core.telegram.chats.api.model.DraftMessage
-import org.gaziz.birgram.core.telegram.messages.api.model.Message
+import org.gaziz.birgram.core.telegram.api.model.chat.DraftMessage
+import org.gaziz.birgram.core.telegram.api.model.message.Message
 
 interface ChatRepository {
     fun openChat(

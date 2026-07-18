@@ -28,9 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.telegram.chats.api.model.ChatType
-import org.gaziz.birgram.core.telegram.users.api.model.UserStatus
-import org.gaziz.birgram.core.telegram.users.api.model.UserType
+import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
+import org.gaziz.birgram.core.telegram.api.model.user.UserStatus
+import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.features.chatList.ui.components.ChatCard
 import org.gaziz.birgram.features.chatList.ui.components.ChatListMenu
 import org.gaziz.birgram.features.chatList.ui.components.ChatListTopBar

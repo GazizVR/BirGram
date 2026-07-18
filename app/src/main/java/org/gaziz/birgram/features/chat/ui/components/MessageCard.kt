@@ -24,8 +24,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.telegram.messages.api.model.MessageContent
-import org.gaziz.birgram.core.telegram.messages.api.model.Message
+import org.gaziz.birgram.core.telegram.api.model.message.MessageContent
+import org.gaziz.birgram.core.telegram.api.model.message.Message
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 

@@ -2,8 +2,8 @@ package org.gaziz.birgram.features.auth.data
 
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.internal.ClientManager
-import org.gaziz.birgram.core.telegram.auth.impl.AuthDataSource
-import org.gaziz.birgram.core.telegram.error.impl.TelegramError
+import org.gaziz.birgram.core.telegram.internal.updaters.AuthDataSource
+import org.gaziz.birgram.core.telegram.internal.updaters.TelegramError
 import org.gaziz.birgram.features.auth.domain.repository.AuthRepository
 import javax.inject.Inject
 

@@ -1,7 +1,7 @@
 package org.gaziz.birgram.features.chatList.domain.repository
 
-import org.gaziz.birgram.core.telegram.chats.api.model.ChatListType
-import org.gaziz.birgram.core.telegram.error.api.model.ResponseData
+import org.gaziz.birgram.core.telegram.api.model.chat.ChatListType
+import org.gaziz.birgram.core.telegram.api.model.ResponseData
 
 interface ChatListRepository {
     fun loadChats(

@@ -1,11 +1,11 @@
 package org.gaziz.birgram.core.telegram.internal
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.auth.impl.AuthDataSource
-import org.gaziz.birgram.core.telegram.chats.impl.TelegramChat
-import org.gaziz.birgram.core.telegram.error.impl.TelegramError
-import org.gaziz.birgram.core.telegram.messages.impl.TelegramMessage
-import org.gaziz.birgram.core.telegram.users.impl.TelegramUser
+import org.gaziz.birgram.core.telegram.internal.updaters.AuthDataSource
+import org.gaziz.birgram.core.telegram.internal.updaters.TelegramChat
+import org.gaziz.birgram.core.telegram.internal.updaters.TelegramError
+import org.gaziz.birgram.core.telegram.internal.updaters.TelegramMessage
+import org.gaziz.birgram.core.telegram.internal.updaters.TelegramUser
 import javax.inject.Inject
 import javax.inject.Singleton
 

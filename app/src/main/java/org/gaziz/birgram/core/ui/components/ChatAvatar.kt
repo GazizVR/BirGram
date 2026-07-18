@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.telegram.chats.api.model.ChatPhoto
+import org.gaziz.birgram.core.telegram.api.model.chat.ChatPhoto
 
 @Composable
 fun ChatCardPhoto(

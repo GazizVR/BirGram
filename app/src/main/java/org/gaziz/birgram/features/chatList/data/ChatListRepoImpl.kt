@@ -2,9 +2,9 @@ package org.gaziz.birgram.features.chatList.data
 
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.internal.ClientManager
-import org.gaziz.birgram.core.telegram.chats.impl.TelegramChat
-import org.gaziz.birgram.core.telegram.error.api.model.ResponseData
-import org.gaziz.birgram.core.telegram.chats.api.model.ChatListType
+import org.gaziz.birgram.core.telegram.internal.updaters.TelegramChat
+import org.gaziz.birgram.core.telegram.api.model.ResponseData
+import org.gaziz.birgram.core.telegram.api.model.chat.ChatListType
 import org.gaziz.birgram.features.chatList.domain.repository.ChatListRepository
 import javax.inject.Inject
 

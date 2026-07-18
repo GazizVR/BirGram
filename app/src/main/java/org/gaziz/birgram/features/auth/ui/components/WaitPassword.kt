@@ -45,7 +45,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.telegram.auth.api.model.AuthPasswordInfo
+import org.gaziz.birgram.core.telegram.api.model.auth.AuthPasswordInfo
 
 @Composable
 fun WaitPassword(

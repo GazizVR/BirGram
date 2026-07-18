@@ -2,9 +2,9 @@ package org.gaziz.birgram.features.chat.domain.usecase
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import org.gaziz.birgram.core.telegram.messages.impl.TelegramMessage
+import org.gaziz.birgram.core.telegram.internal.updaters.TelegramMessage
 import org.gaziz.birgram.features.chat.data.mapper.toMessageData
-import org.gaziz.birgram.core.telegram.messages.api.model.Message
+import org.gaziz.birgram.core.telegram.api.model.message.Message
 import java.time.LocalDate
 import javax.inject.Inject
 

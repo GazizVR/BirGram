@@ -5,8 +5,8 @@ import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.BuildConfig
 import org.gaziz.birgram.core.telegram.internal.ClientManager
 import org.gaziz.birgram.core.telegram.internal.UpdateDispatcher
-import org.gaziz.birgram.core.telegram.auth.impl.AuthDataSource
-import org.gaziz.birgram.core.telegram.error.impl.TelegramError
+import org.gaziz.birgram.core.telegram.internal.updaters.AuthDataSource
+import org.gaziz.birgram.core.telegram.internal.updaters.TelegramError
 import org.gaziz.birgram.features.splash.domain.repository.SplashRepository
 import java.util.Locale
 import javax.inject.Inject

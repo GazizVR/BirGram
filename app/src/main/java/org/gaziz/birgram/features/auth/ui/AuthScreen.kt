@@ -10,7 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import org.gaziz.birgram.core.telegram.auth.api.model.AuthState
+import org.gaziz.birgram.core.telegram.api.model.auth.AuthState
 import org.gaziz.birgram.features.auth.ui.components.OtherState
 import org.gaziz.birgram.features.auth.ui.components.WaitCode
 import org.gaziz.birgram.features.auth.ui.components.WaitPassword

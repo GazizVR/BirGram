@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.gaziz.birgram.core.ui.components.ChatAvatar
-import org.gaziz.birgram.core.telegram.chats.api.model.Chat
+import org.gaziz.birgram.core.telegram.api.model.chat.Chat
 import org.gaziz.birgram.features.chatList.ui.components.chatCard.ContentRow
 import org.gaziz.birgram.features.chatList.ui.components.chatCard.TitleRow
 
