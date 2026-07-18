@@ -22,16 +22,8 @@ class TelegramUser @Inject constructor() {
     }
     fun onUserStatus(u: TdApi.UpdateUserStatus){
         _users.update { old ->
-            val user = old[u.userId]
-            if(user != null) {
-                old + (u.userId to user.copy(status = u.status.toStatus()))
-            } else {
-                val newUser = User(
-                    id = u.userId,
-                    status = u.status.toStatus()
-                )
-                old + (u.userId to newUser)
-            }
+            val user = old[u.userId] ?: return@update old
+            old + (u.userId to user.copy(status = u.status.toStatus()))
         }
     }
 }

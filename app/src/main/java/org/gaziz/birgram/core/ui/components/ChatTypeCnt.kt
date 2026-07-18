@@ -4,6 +4,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.R
 import org.gaziz.birgram.core.telegram.model.ChatType
@@ -12,9 +13,9 @@ import org.gaziz.birgram.core.telegram.model.UserStatus
 @Composable
 fun ChatTypeCnt(
     type: ChatType,
+    fontSize: TextUnit = 8.sp,
     userStatus: @Composable (Long) -> UserStatus?
 ) {
-    val fontSize = 8.sp
     val membersType = stringArrayResource(R.array.members_type)
     val groupType = stringArrayResource(R.array.group_type)
     when(type) {

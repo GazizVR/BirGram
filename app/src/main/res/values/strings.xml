@@ -70,9 +70,9 @@
     </string-array>
     
     <string-array name="group_type">
-        <item>Basic group</item>
-        <item>Channel</item>
-        <item>Super group</item>
+        <item>basic group</item>
+        <item>channel</item>
+        <item>super group</item>
     </string-array>
 
     <string name="empty_search">Nothing to show</string>

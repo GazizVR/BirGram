@@ -3,6 +3,7 @@ package org.gaziz.birgram.core.telegram.data.mapper
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.model.User
 import org.gaziz.birgram.core.telegram.model.UserStatus
+import org.gaziz.birgram.core.telegram.model.UserType
 
 fun TdApi.UserStatus.toStatus(): UserStatus {
    return when(this){
@@ -15,9 +16,19 @@ fun TdApi.UserStatus.toStatus(): UserStatus {
    }
 }
 
+fun TdApi.UserType.toType(): UserType {
+    return when(this) {
+        is TdApi.UserTypeBot -> UserType.Bot
+        is TdApi.UserTypeDeleted -> UserType.Deleted
+        is TdApi.UserTypeRegular -> UserType.Regular
+        else -> UserType.Unknown
+    }
+}
+
 fun TdApi.User.toUser(): User {
     return User(
         id = this.id,
-        status = this.status.toStatus()
+        status = this.status.toStatus(),
+        type = this.type.toType()
     )
 }

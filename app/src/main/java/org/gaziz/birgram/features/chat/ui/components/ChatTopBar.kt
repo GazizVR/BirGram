@@ -76,9 +76,9 @@ fun ChatTopBar(
                     color = MaterialTheme.colorScheme.onBackground,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    fontSize = 10.sp
+                    fontSize = 8.sp
                 )
-                ChatTypeCnt(type, userStatus = userStatus)
+                ChatTypeCnt(type,6.sp, userStatus)
             }
             IconButton(
                 onClick = {}
