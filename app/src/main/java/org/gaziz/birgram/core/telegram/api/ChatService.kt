@@ -1,4 +1,5 @@
 package org.gaziz.birgram.core.telegram.api
 
-interface TelegramMessages {
+interface ChatService {
+
 }

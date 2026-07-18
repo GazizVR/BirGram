@@ -2,7 +2,7 @@ package org.gaziz.birgram.features.chatList.data
 
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.internal.ClientManager
-import org.gaziz.birgram.core.telegram.internal.updaters.TelegramChat
+import org.gaziz.birgram.core.telegram.internal.updaters.ChatUpdater
 import org.gaziz.birgram.core.telegram.api.model.ResponseData
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatListType
 import org.gaziz.birgram.features.chatList.domain.repository.ChatListRepository
@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class ChatListRepoImpl @Inject constructor(
     private val manager: ClientManager,
-    private val tgChat: TelegramChat
+    private val tgChat: ChatUpdater
 ): ChatListRepository {
 
     override fun loadChats(

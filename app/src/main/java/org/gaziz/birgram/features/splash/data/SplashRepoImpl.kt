@@ -5,8 +5,8 @@ import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.BuildConfig
 import org.gaziz.birgram.core.telegram.internal.ClientManager
 import org.gaziz.birgram.core.telegram.internal.UpdateDispatcher
-import org.gaziz.birgram.core.telegram.internal.updaters.AuthDataSource
-import org.gaziz.birgram.core.telegram.internal.updaters.TelegramError
+import org.gaziz.birgram.core.telegram.internal.updaters.AuthUpdater
+import org.gaziz.birgram.core.telegram.internal.updaters.ErrorUpdater
 import org.gaziz.birgram.features.splash.domain.repository.SplashRepository
 import java.util.Locale
 import javax.inject.Inject
@@ -14,8 +14,8 @@ import javax.inject.Inject
 class SplashRepoImpl @Inject constructor(
     private val manager: ClientManager,
     private val updateDispatcher: UpdateDispatcher,
-    private val tgAuth: AuthDataSource,
-    private val tgError: TelegramError
+    private val tgAuth: AuthUpdater,
+    private val tgError: ErrorUpdater
 ): SplashRepository {
     init {
         if(!manager.isClientActive()) {

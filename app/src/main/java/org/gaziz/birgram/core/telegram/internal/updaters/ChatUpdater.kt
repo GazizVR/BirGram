@@ -10,7 +10,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TelegramChat @Inject constructor(
+class ChatUpdater @Inject constructor(
     private val manager: ClientManager
 ) {
     private val _chats = MutableStateFlow<Map<Long, TdApi.Chat>>(emptyMap())

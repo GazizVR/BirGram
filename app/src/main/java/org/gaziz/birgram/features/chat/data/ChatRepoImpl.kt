@@ -3,7 +3,7 @@ package org.gaziz.birgram.features.chat.data
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.internal.ClientManager
 import org.gaziz.birgram.core.telegram.internal.mapper.toTgDraftMessage
-import org.gaziz.birgram.core.telegram.internal.updaters.TelegramMessage
+import org.gaziz.birgram.core.telegram.internal.updaters.MessageUpdater
 import org.gaziz.birgram.core.telegram.api.model.chat.DraftMessage
 import org.gaziz.birgram.core.telegram.api.model.message.Message
 import org.gaziz.birgram.features.chat.domain.repository.ChatRepository
@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class ChatRepoImpl @Inject constructor(
     private val manager: ClientManager,
-    private val tgMessage: TelegramMessage
+    private val tgMessage: MessageUpdater
 ): ChatRepository {
 
     override fun openChat(

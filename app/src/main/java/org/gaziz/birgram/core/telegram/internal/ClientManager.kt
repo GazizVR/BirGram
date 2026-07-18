@@ -13,11 +13,6 @@ class ClientManager @Inject constructor(){
 
     companion object {
         const val LOG_TAG = "TGMANAGER"
-        const val DEFAULT_CODE_LENGTH = 5
-    }
-
-    fun getDefaultCodeLength(): Int {
-        return DEFAULT_CODE_LENGTH
     }
 
     fun isClientActive(): Boolean {

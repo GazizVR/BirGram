@@ -11,7 +11,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TelegramUser @Inject constructor() {
+class UserUpdater @Inject constructor() {
     private val _users = MutableStateFlow<Map<Long, User>>(emptyMap())
     val users = _users.asStateFlow()
 

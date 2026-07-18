@@ -1,4 +1,4 @@
 package org.gaziz.birgram.core.telegram.api
 
-interface TelegramAuth {
+interface UserService {
 }

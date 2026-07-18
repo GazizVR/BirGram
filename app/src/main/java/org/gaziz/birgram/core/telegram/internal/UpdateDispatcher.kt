@@ -1,50 +1,50 @@
 package org.gaziz.birgram.core.telegram.internal
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.internal.updaters.AuthDataSource
-import org.gaziz.birgram.core.telegram.internal.updaters.TelegramChat
-import org.gaziz.birgram.core.telegram.internal.updaters.TelegramError
-import org.gaziz.birgram.core.telegram.internal.updaters.TelegramMessage
-import org.gaziz.birgram.core.telegram.internal.updaters.TelegramUser
+import org.gaziz.birgram.core.telegram.internal.updaters.AuthUpdater
+import org.gaziz.birgram.core.telegram.internal.updaters.ChatUpdater
+import org.gaziz.birgram.core.telegram.internal.updaters.ErrorUpdater
+import org.gaziz.birgram.core.telegram.internal.updaters.MessageUpdater
+import org.gaziz.birgram.core.telegram.internal.updaters.UserUpdater
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class UpdateDispatcher @Inject constructor(
-    private val tgAuth: AuthDataSource,
-    private val tgChat: TelegramChat,
-    private val tgMessage: TelegramMessage,
-    private val tgError: TelegramError,
-    private val tgUser: TelegramUser
+    private val authUpdater: AuthUpdater,
+    private val chatUpdater: ChatUpdater,
+    private val messageUpdater: MessageUpdater,
+    private val errorUpdater: ErrorUpdater,
+    private val userUpdater: UserUpdater
 ) {
     fun dispatch(u: TdApi.Object){
         when(u) {
-            is TdApi.Error -> tgError.onError(u)
+            is TdApi.Error -> errorUpdater.onError(u)
             is TdApi.UpdateAuthorizationState -> {
                 if(u.authorizationState is TdApi.AuthorizationStateLoggingOut) {
-                    tgMessage.onLoggingOut()
-                    tgChat.onLoggingOut()
+                    messageUpdater.onLoggingOut()
+                    chatUpdater.onLoggingOut()
                 }
-                tgAuth.onUpdateAuthState(u)
+                authUpdater.onUpdateAuthState(u)
             }
 
-            is TdApi.UpdateNewMessage -> tgMessage.onNewUpdate(u)
-            is TdApi.UpdateMessageSendSucceeded -> tgMessage.onSendSucceedUpdate(u)
+            is TdApi.UpdateNewMessage -> messageUpdater.onNewUpdate(u)
+            is TdApi.UpdateMessageSendSucceeded -> messageUpdater.onSendSucceedUpdate(u)
 
-            is TdApi.UpdateNewChat -> tgChat.onNewUpdate(u)
-            is TdApi.UpdateChatTitle -> tgChat.onTitleUpdate(u)
-            is TdApi.UpdateChatPhoto -> tgChat.onPhotoUpdate(u)
+            is TdApi.UpdateNewChat -> chatUpdater.onNewUpdate(u)
+            is TdApi.UpdateChatTitle -> chatUpdater.onTitleUpdate(u)
+            is TdApi.UpdateChatPhoto -> chatUpdater.onPhotoUpdate(u)
 
-            is TdApi.UpdateChatPosition -> tgChat.onPositionUpdate(u)
-            is TdApi.UpdateChatLastMessage -> tgChat.onLastMsgUpdate(u)
-            is TdApi.UpdateChatDraftMessage -> tgChat.onDraftMsgUpdate(u)
+            is TdApi.UpdateChatPosition -> chatUpdater.onPositionUpdate(u)
+            is TdApi.UpdateChatLastMessage -> chatUpdater.onLastMsgUpdate(u)
+            is TdApi.UpdateChatDraftMessage -> chatUpdater.onDraftMsgUpdate(u)
 
-            is TdApi.UpdateChatReadInbox -> tgChat.onInboxUpdate(u)
-            is TdApi.UpdateChatUnreadReactionCount -> tgChat.onReactionCountUpdate(u)
-            is TdApi.UpdateChatUnreadMentionCount -> tgChat.onMentionCountUpdate(u)
+            is TdApi.UpdateChatReadInbox -> chatUpdater.onInboxUpdate(u)
+            is TdApi.UpdateChatUnreadReactionCount -> chatUpdater.onReactionCountUpdate(u)
+            is TdApi.UpdateChatUnreadMentionCount -> chatUpdater.onMentionCountUpdate(u)
 
-            is TdApi.UpdateUser -> tgUser.onUser(u)
-            is TdApi.UpdateUserStatus -> tgUser.onUserStatus(u)
+            is TdApi.UpdateUser -> userUpdater.onUser(u)
+            is TdApi.UpdateUserStatus -> userUpdater.onUserStatus(u)
 
         }
     }

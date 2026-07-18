@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.internal.ClientManager
-import org.gaziz.birgram.core.telegram.internal.updaters.TelegramChat
+import org.gaziz.birgram.core.telegram.internal.updaters.ChatUpdater
 import org.gaziz.birgram.features.searchChats.data.mapper.toChatData
 import org.gaziz.birgram.features.searchChats.domain.model.ChatData
 import org.gaziz.birgram.features.searchChats.domain.repository.SearchChatsRepository
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 class TelegramSearchChats @Inject constructor(
     private val manager: ClientManager,
-    private val tgChat: TelegramChat
+    private val tgChat: ChatUpdater
 ): SearchChatsRepository {
 
     init {
