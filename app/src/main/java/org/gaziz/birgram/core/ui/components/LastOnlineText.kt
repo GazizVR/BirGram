@@ -15,15 +15,16 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun LastOnlineText(
     userStatus: UserStatus,
-    fontSize: TextUnit? = null
+    fontSize: TextUnit
 ) {
+    var textColor =  MaterialTheme.colorScheme.onBackground.copy(0.5f)
     val lastSeenCnt = stringArrayResource(R.array.last_seen_cnt)
     val seenOffline = stringArrayResource(R.array.seen_offline)
     val lastOffline: (LocalDateTime) -> String = {
         val now = LocalDateTime.now()
         val diff = Duration.between(it, now)
         when {
-            diff.toMinutes() < 2 ->
+            diff.toMinutes() < 1 ->
                 "${lastSeenCnt[1]} ${seenOffline[0]}"
 
             it.toLocalDate() == LocalDate.now() ->
@@ -43,15 +44,16 @@ fun LastOnlineText(
         }
     }
     val lastSeen = when(userStatus) {
-        UserStatus.Recently -> "${lastSeenCnt[1]} ${lastSeenCnt[2]}"
+        is UserStatus.Recently -> "${lastSeenCnt[1]} ${lastSeenCnt[2]}"
         UserStatus.LastWeek -> "${lastSeenCnt[1]} ${lastSeenCnt[3]}"
         UserStatus.LastMonth -> "${lastSeenCnt[1]} ${lastSeenCnt[4]}"
         UserStatus.Empty -> "${lastSeenCnt[1]} ${lastSeenCnt[5]}"
         is UserStatus.Online -> {
             val now = LocalDateTime.now()
-            if(userStatus.expires >= now){
+            if(now >= userStatus.expires){
                lastOffline(now)
             } else {
+                textColor = MaterialTheme.colorScheme.primary
                 lastSeenCnt[0]
             }
         }
@@ -59,9 +61,9 @@ fun LastOnlineText(
     }
     Text(
         text = lastSeen,
-        color = MaterialTheme.colorScheme.onBackground.copy(0.5f),
+        color = textColor,
         style = MaterialTheme.typography.labelSmall,
         maxLines = 1,
-        fontSize = fontSize ?: MaterialTheme.typography.labelSmall.fontSize
+        fontSize = fontSize
     )
 }

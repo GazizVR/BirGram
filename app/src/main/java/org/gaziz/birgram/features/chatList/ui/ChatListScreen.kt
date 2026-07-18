@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.R
+import org.gaziz.birgram.core.telegram.model.ChatType
+import org.gaziz.birgram.core.telegram.model.UserStatus
 import org.gaziz.birgram.features.chatList.ui.components.ChatCard
 import org.gaziz.birgram.features.chatList.ui.components.ChatListMenu
 import org.gaziz.birgram.features.chatList.ui.components.ChatListTopBar
@@ -72,6 +74,12 @@ fun ChatListScreen(
                     items(chatList) { chat ->
                         ChatCard(
                             chat,
+                            if(chat.type is ChatType.Private){
+                                val user by viewModel.user(chat.type.userId).collectAsState()
+                                user?.status is UserStatus.Online
+                            } else {
+                                false
+                            },
                             { viewModel.downloadChatIcon(chat.id,it) },
                             navigateToChat
                         )

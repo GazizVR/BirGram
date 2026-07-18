@@ -3,7 +3,6 @@ package org.gaziz.birgram.core.telegram.data.mapper
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.model.ChatPhoto
 import org.gaziz.birgram.core.telegram.model.ChatType
-import org.gaziz.birgram.core.telegram.model.UserStatus
 
 fun TdApi.ChatPhotoInfo?.toPhotoInfo(): ChatPhoto? {
     return if(this != null) {
@@ -19,7 +18,7 @@ fun TdApi.ChatPhotoInfo?.toPhotoInfo(): ChatPhoto? {
 fun TdApi.ChatType.toType(): ChatType {
     return when(this) {
         is TdApi.ChatTypeBasicGroup -> ChatType.BasicGroup(this.basicGroupId)
-        is TdApi.ChatTypePrivate -> ChatType.Private(this.userId, UserStatus.Recently)
+        is TdApi.ChatTypePrivate -> ChatType.Private(this.userId)
         is TdApi.ChatTypeSupergroup -> ChatType.SuperGroup(this.supergroupId, this.isChannel)
         else -> ChatType.Other
     }

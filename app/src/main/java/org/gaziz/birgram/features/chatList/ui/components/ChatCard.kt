@@ -13,8 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.gaziz.birgram.core.telegram.model.ChatType
-import org.gaziz.birgram.core.telegram.model.UserStatus
 import org.gaziz.birgram.core.ui.components.ChatAvatar
 import org.gaziz.birgram.features.chatList.domain.model.ChatData
 import org.gaziz.birgram.features.chatList.ui.components.chatCard.ContentRow
@@ -23,6 +21,7 @@ import org.gaziz.birgram.features.chatList.ui.components.chatCard.TitleRow
 @Composable
 fun ChatCard(
     chatData: ChatData,
+    isOnline: Boolean,
     downloadPhoto: (Int) -> Unit,
     onClick: (Long) -> Unit
 ) {
@@ -44,7 +43,7 @@ fun ChatCard(
                 chatTitle = chatData.title,
                 iconSize = iconSize,
                 downloadPhoto = downloadPhoto,
-                isOnline = if(chatData.type is ChatType.Private) chatData.type.userStatus is UserStatus.Online else false,
+                isOnline = isOnline,
                 parentColor = cardColor
             )
             Column(

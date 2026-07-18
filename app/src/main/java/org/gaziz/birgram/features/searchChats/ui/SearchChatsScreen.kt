@@ -42,7 +42,11 @@ fun SearchChatsScreen(
                     SearchChatCard(
                         chat.second,
                         { viewModel.downloadChatIcon(chat.first,it) },
-                        navigateToChat
+                        navigateToChat,
+                        {
+                            val user by viewModel.user(it).collectAsState()
+                            user?.status
+                        }
                     )
                 }
             }

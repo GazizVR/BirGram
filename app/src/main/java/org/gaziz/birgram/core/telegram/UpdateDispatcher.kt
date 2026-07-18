@@ -43,6 +43,7 @@ class UpdateDispatcher @Inject constructor(
             is TdApi.UpdateChatUnreadReactionCount -> tgChat.onReactionCountUpdate(u)
             is TdApi.UpdateChatUnreadMentionCount -> tgChat.onMentionCountUpdate(u)
 
+            is TdApi.UpdateUser -> tgUser.onUser(u)
             is TdApi.UpdateUserStatus -> tgUser.onUserStatus(u)
 
         }

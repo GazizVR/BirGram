@@ -16,35 +16,6 @@ class TelegramChat @Inject constructor(
     private val _chats = MutableStateFlow<Map<Long, TdApi.Chat>>(emptyMap())
     val chats = _chats.asStateFlow()
 
-    fun downloadChatPhotoSmall(
-        chatId: Long,
-        fileId: Int
-    ) {
-        manager.sendRequest(
-            TdApi.DownloadFile().apply {
-                this.fileId = fileId
-                this.priority = 32
-                this.limit = 0
-                this.offset = 0
-                this.synchronous = true
-            },
-            {},
-            { obj ->
-                if(obj is TdApi.File) {
-                    _chats.update { old ->
-                        val chat = old[chatId] ?: return@update old
-                        val chatPhoto = chat.photo
-                        var photo: TdApi.ChatPhotoInfo = TdApi.ChatPhotoInfo().apply {
-                            this.small = obj
-                        }
-                        if(chatPhoto != null) { photo = chatPhoto.copy(small = obj) }
-                        old + (chatId to chat.copy(photo = photo))
-                    }
-                }
-            }
-        )
-    }
-
     fun onLoggingOut() {
         _chats.update { emptyMap() }
     }
@@ -122,6 +93,35 @@ class TelegramChat @Inject constructor(
             val newChat = chat.copy(unreadReactionCount = u.unreadReactionCount)
             old + (u.chatId to newChat)
         }
+    }
+
+    fun downloadChatPhotoSmall(
+        chatId: Long,
+        fileId: Int
+    ) {
+        manager.sendRequest(
+            TdApi.DownloadFile().apply {
+                this.fileId = fileId
+                this.priority = 32
+                this.limit = 0
+                this.offset = 0
+                this.synchronous = true
+            },
+            {},
+            { obj ->
+                if(obj is TdApi.File) {
+                    _chats.update { old ->
+                        val chat = old[chatId] ?: return@update old
+                        val chatPhoto = chat.photo
+                        var photo: TdApi.ChatPhotoInfo = TdApi.ChatPhotoInfo().apply {
+                            this.small = obj
+                        }
+                        if(chatPhoto != null) { photo = chatPhoto.copy(small = obj) }
+                        old + (chatId to chat.copy(photo = photo))
+                    }
+                }
+            }
+        )
     }
 
 }

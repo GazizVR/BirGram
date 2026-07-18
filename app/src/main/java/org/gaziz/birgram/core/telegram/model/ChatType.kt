@@ -12,8 +12,7 @@ sealed interface ChatType {
         val canSendMessages: Boolean = false
     ): ChatType
     data class Private(
-        val userId: Long,
-        val userStatus: UserStatus? = null
+        val userId: Long
     ): ChatType
     object Other: ChatType
 }

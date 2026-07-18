@@ -22,9 +22,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.telegram.model.UserStatus
 import org.gaziz.birgram.core.telegram.model.ChatPhoto
 import org.gaziz.birgram.core.telegram.model.ChatType
+import org.gaziz.birgram.core.telegram.model.UserStatus
 import org.gaziz.birgram.core.ui.components.ChatAvatar
 import org.gaziz.birgram.core.ui.components.ChatTypeCnt
 
@@ -33,7 +33,8 @@ fun ChatTopBar(
     photo: ChatPhoto?,
     title: String,
     type: ChatType,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    userStatus: @Composable (Long) -> UserStatus?
 ){
     val iconSize = 40.dp
     val cardColor = TopAppBarDefaults.topAppBarColors().containerColor
@@ -61,7 +62,7 @@ fun ChatTopBar(
                 chatTitle = title,
                 iconSize = iconSize,
                 downloadPhoto = {},
-                isOnline = if(type is ChatType.Private) type.userStatus is UserStatus.Online else false,
+                isOnline = false,
                 parentColor = cardColor
             )
             Column(
@@ -77,7 +78,7 @@ fun ChatTopBar(
                     overflow = TextOverflow.Ellipsis,
                     fontSize = 10.sp
                 )
-                ChatTypeCnt(type,8.sp)
+                ChatTypeCnt(type, userStatus = userStatus)
             }
             IconButton(
                 onClick = {}

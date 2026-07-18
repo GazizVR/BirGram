@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.telegram.model.DraftMessage
 import org.gaziz.birgram.core.telegram.model.DraftMessageContent
+import org.gaziz.birgram.core.telegram.model.User
+import org.gaziz.birgram.core.telegram.usecase.GetUserById
 import org.gaziz.birgram.features.chat.domain.model.ChatData
 import org.gaziz.birgram.features.chat.domain.model.MessageData
 import org.gaziz.birgram.features.chat.domain.repository.ChatRepository
@@ -20,11 +22,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
+    private val getUserById: GetUserById,
     private val getChatByID: GetChatByID,
     private val getChatMessages: GetChatMessages,
     private val chatRepository: ChatRepository
 ): ViewModel() {
     private var isMessagesLoading = false
+    val user: (Long) -> StateFlow<User?> = {
+       getUserById(it).stateIn(
+           viewModelScope,
+           SharingStarted.Eagerly,
+           null
+       )
+    }
     fun openChat(
         chatId: Long,
     ){

@@ -16,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import org.gaziz.birgram.core.telegram.model.ChatType
 import org.gaziz.birgram.core.telegram.model.UserStatus
 import org.gaziz.birgram.core.ui.components.ChatAvatar
 import org.gaziz.birgram.core.ui.components.ChatTypeCnt
@@ -26,7 +25,8 @@ import org.gaziz.birgram.features.searchChats.domain.model.ChatData
 fun SearchChatCard(
     chatData: ChatData,
     downloadChatIcon: (Int) -> Unit,
-    onClick: (Long) -> Unit
+    onClick: (Long) -> Unit,
+    userStatus: @Composable (Long) -> UserStatus?
 ) {
     val containerHeight = 80.dp
     val iconSize = 60.dp
@@ -46,7 +46,7 @@ fun SearchChatCard(
                 chatTitle = chatData.title,
                 iconSize = iconSize,
                 downloadPhoto = downloadChatIcon,
-                isOnline = if(chatData.type is ChatType.Private) chatData.type.userStatus is UserStatus.Online else false,
+                isOnline = false,
                 parentColor = cardColor
             )
             Column(
@@ -60,7 +60,7 @@ fun SearchChatCard(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
-                ChatTypeCnt(chatData.type)
+                ChatTypeCnt(chatData.type, userStatus = userStatus)
             }
         }
     }

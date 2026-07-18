@@ -101,7 +101,11 @@ fun ChatScreen(
                     },
                     photo = chat?.photo,
                     title = chat?.title ?: "",
-                    type = chat?.type ?: ChatType.Other
+                    type = chat?.type ?: ChatType.Other,
+                    userStatus = @Composable{
+                        val user by viewModel.user(it).collectAsState()
+                        user?.status
+                    }
                 )
             }
         },
