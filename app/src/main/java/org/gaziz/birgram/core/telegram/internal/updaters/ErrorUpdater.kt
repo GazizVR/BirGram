@@ -20,13 +20,4 @@ class ErrorUpdater @Inject constructor(
         )
     }
 
-    fun onException(e: Throwable) {
-        errorService.setError(
-            ResponseData.Error(
-                code = 500,
-                message = e.localizedMessage ?: e.message ?: "internal error"
-            )
-        )
-    }
-
 }

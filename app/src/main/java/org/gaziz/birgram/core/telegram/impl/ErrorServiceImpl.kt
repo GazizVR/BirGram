@@ -15,4 +15,13 @@ class ErrorServiceImpl @Inject constructor(): ErrorService {
         _error.update { e }
     }
 
+    override fun setErrorFromException(e: Throwable) {
+        setError(
+            ResponseData.Error(
+                code = 500,
+                message = e.localizedMessage ?: e.message ?: "internal error"
+            )
+        )
+    }
+
 }
