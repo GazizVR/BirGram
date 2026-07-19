@@ -1,8 +1,8 @@
 package org.gaziz.birgram.core.telegram.internal.mapper
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.api.model.chat.DraftMessage
-import org.gaziz.birgram.core.telegram.api.model.chat.DraftMessageContent
+import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
+import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId

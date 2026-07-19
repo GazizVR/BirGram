@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.telegram.api.model.chat
+package org.gaziz.birgram.core.telegram.api.model.message
 
 import java.time.LocalDateTime
 

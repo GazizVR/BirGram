@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.gaziz.birgram.core.telegram.api.model.chat.DraftMessage
-import org.gaziz.birgram.core.telegram.api.model.chat.DraftMessageContent
+import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
+import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
 import org.gaziz.birgram.core.telegram.api.model.user.User
 import org.gaziz.birgram.core.telegram.usecase.GetUserById
 import org.gaziz.birgram.features.chat.domain.model.ChatData
