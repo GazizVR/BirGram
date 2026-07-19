@@ -1,28 +1,25 @@
 package org.gaziz.birgram.core.telegram.internal.updaters
 
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.api.model.user.User
+import org.gaziz.birgram.core.telegram.api.UserService
 import org.gaziz.birgram.core.telegram.internal.mapper.toStatus
 import org.gaziz.birgram.core.telegram.internal.mapper.toUser
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class UserUpdater @Inject constructor() {
-    private val _users = MutableStateFlow<Map<Long, User>>(emptyMap())
-    val users = _users.asStateFlow()
+class UserUpdater @Inject constructor(
+    private val userService: UserService
+) {
 
     fun onUser(u: TdApi.UpdateUser) {
-        _users.update { old ->
+        userService.updateUsers { old ->
             old + (u.user.id to u.user.toUser())
         }
     }
     fun onUserStatus(u: TdApi.UpdateUserStatus){
-        _users.update { old ->
-            val user = old[u.userId] ?: return@update old
+        userService.updateUsers { old ->
+            val user = old[u.userId] ?: return@updateUsers old
             old + (u.userId to user.copy(status = u.status.toStatus()))
         }
     }
