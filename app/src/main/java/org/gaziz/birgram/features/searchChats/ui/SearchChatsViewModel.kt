@@ -5,34 +5,41 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import org.gaziz.birgram.core.telegram.api.UserService
 import org.gaziz.birgram.core.telegram.api.model.user.User
-import org.gaziz.birgram.core.telegram.usecase.GetUserById
-import org.gaziz.birgram.features.searchChats.domain.repository.SearchChatsRepository
+import org.gaziz.birgram.core.telegram.api.usecase.DownloadChatPhotoSmall
+import org.gaziz.birgram.features.searchChats.domain.repository.ChatSearchRepository
+import org.gaziz.birgram.features.searchChats.domain.usecase.SearchLocalChatsUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchChatsViewModel @Inject constructor(
-    private val getUserById: GetUserById,
-    private val searchChatsRepository: SearchChatsRepository
+    private val chatSearchRepository: ChatSearchRepository,
+    private val userService: UserService,
+    private val downloadChatPhotoSmall: DownloadChatPhotoSmall,
+    private val searchLocalChatsUseCase: SearchLocalChatsUseCase
 ): ViewModel() {
-    val user: (Long) -> StateFlow<User?> = {
-        getUserById(it).stateIn(
+    fun getUser(userId: Long): StateFlow<User?> {
+        return userService.users.map {
+            it[userId]
+        }.stateIn(
             viewModelScope,
             SharingStarted.Eagerly,
             null
         )
     }
-    val searchChats = searchChatsRepository.searchedChats
+    val searchChats = chatSearchRepository.chats
     fun sendSearchQuery(
         query: String
     ) {
-        searchChatsRepository.searchLocal(query,20)
+        searchLocalChatsUseCase(query,20)
     }
     fun downloadChatIcon(
         chatId: Long,
         fileId: Int
     ) {
-        searchChatsRepository.downloadChatIcon(chatId,fileId)
+        downloadChatPhotoSmall(chatId,fileId)
     }
 }

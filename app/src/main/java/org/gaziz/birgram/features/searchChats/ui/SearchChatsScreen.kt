@@ -44,7 +44,7 @@ fun SearchChatsScreen(
                         { viewModel.downloadChatIcon(chat.first,it) },
                         navigateToChat,
                         {
-                            val user by viewModel.user(it).collectAsState()
+                            val user by viewModel.getUser(it).collectAsState()
                             user?.status
                         }
                     )

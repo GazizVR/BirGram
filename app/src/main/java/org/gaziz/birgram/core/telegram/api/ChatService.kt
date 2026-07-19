@@ -24,4 +24,9 @@ interface ChatService {
         onError: (ResponseData.Error) -> Unit
     )
 
+    fun searchChatsLocal(
+        query: String,
+        limit: Int,
+        onChats: (Map<Long,Chat>) -> Unit
+    )
 }

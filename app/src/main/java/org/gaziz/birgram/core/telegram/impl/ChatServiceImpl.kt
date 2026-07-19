@@ -60,4 +60,31 @@ class ChatServiceImpl @Inject constructor(
             }
         )
     }
+
+    override fun searchChatsLocal(
+        query: String,
+        limit: Int,
+        onChats: (Map<Long, Chat>) -> Unit
+    ) {
+        manager.sendRequest(
+            TdApi.SearchChats().apply {
+                this.query = query
+                this.limit = limit
+            },
+            { onChats(emptyMap()) },
+            {
+                if(it is TdApi.Chats) {
+                    val map = mutableMapOf<Long,Chat>().apply {
+                        for(chatId in it.chatIds) {
+                            val chat = chats.value[chatId] ?: continue
+                            put(chatId,chat)
+                        }
+                    }.toMap()
+                    onChats(map)
+                } else {
+                    onChats(emptyMap())
+                }
+            }
+        )
+    }
 }

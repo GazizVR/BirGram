@@ -16,14 +16,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import org.gaziz.birgram.core.telegram.api.model.chat.Chat
 import org.gaziz.birgram.core.telegram.api.model.user.UserStatus
 import org.gaziz.birgram.core.ui.components.ChatAvatar
 import org.gaziz.birgram.core.ui.components.ChatTypeCnt
-import org.gaziz.birgram.features.searchChats.domain.model.ChatData
 
 @Composable
 fun SearchChatCard(
-    chatData: ChatData,
+    chatData: Chat,
     downloadChatIcon: (Int) -> Unit,
     onClick: (Long) -> Unit,
     userStatus: @Composable (Long) -> UserStatus?
