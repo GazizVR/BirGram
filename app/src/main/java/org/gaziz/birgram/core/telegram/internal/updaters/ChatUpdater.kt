@@ -7,6 +7,7 @@ import org.gaziz.birgram.core.telegram.internal.mapper.toChat
 import org.gaziz.birgram.core.telegram.internal.mapper.toChatPosition
 import org.gaziz.birgram.core.telegram.internal.mapper.toDraftMessage
 import org.gaziz.birgram.core.telegram.internal.mapper.toMessage
+import org.gaziz.birgram.core.telegram.internal.mapper.toPermissions
 import org.gaziz.birgram.core.telegram.internal.mapper.toPhotoInfo
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -65,6 +66,13 @@ class ChatUpdater @Inject constructor(
                 draftMessage = u.draftMessage.toDraftMessage(),
                 positions = positions
             )
+            old + (u.chatId to newChat)
+        }
+    }
+    fun onPermissionsUpdate(u: TdApi.UpdateChatPermissions) {
+        chatService.updateChats { old ->
+            val chat = old[u.chatId] ?: return@updateChats old
+            val newChat = chat.copy(permissions = u.permissions.toPermissions())
             old + (u.chatId to newChat)
         }
     }

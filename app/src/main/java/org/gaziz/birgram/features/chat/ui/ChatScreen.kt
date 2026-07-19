@@ -110,10 +110,7 @@ fun ChatScreen(
             }
         },
         bottomBar = {
-            if(
-                chat?.permissions?.canSendBasicMessages == true ||
-                chat?.type is ChatType.SuperGroup
-            ) MessageInputBar(
+            if(chat?.permissions?.canSendBasicMessages == true) MessageInputBar(
                 defaultText = if(chat?.draftMessage != null) {
                    if(chat?.draftMessage?.content is DraftMessageContent.Text) {
                        (chat?.draftMessage?.content as DraftMessageContent.Text).text

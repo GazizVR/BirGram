@@ -38,13 +38,14 @@ class UpdateDispatcher @Inject constructor(
             is TdApi.UpdateChatPosition -> chatUpdater.onPositionUpdate(u)
             is TdApi.UpdateChatLastMessage -> chatUpdater.onLastMsgUpdate(u)
             is TdApi.UpdateChatDraftMessage -> chatUpdater.onDraftMsgUpdate(u)
+            is TdApi.UpdateChatPermissions -> chatUpdater.onPermissionsUpdate(u)
 
             is TdApi.UpdateChatReadInbox -> chatUpdater.onInboxUpdate(u)
             is TdApi.UpdateChatUnreadReactionCount -> chatUpdater.onReactionCountUpdate(u)
             is TdApi.UpdateChatUnreadMentionCount -> chatUpdater.onMentionCountUpdate(u)
 
-            is TdApi.UpdateUser -> userUpdater.onUser(u)
-            is TdApi.UpdateUserStatus -> userUpdater.onUserStatus(u)
+            is TdApi.UpdateUser -> userUpdater.onUserUpdate(u)
+            is TdApi.UpdateUserStatus -> userUpdater.onUserStatusUpdate(u)
 
         }
     }
