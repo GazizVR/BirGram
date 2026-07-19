@@ -18,7 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import org.gaziz.birgram.R
-import org.gaziz.birgram.features.splash.domain.model.AppState
+import org.gaziz.birgram.core.telegram.api.model.auth.AuthState
 
 @Composable
 fun SplashScreen(
@@ -27,22 +27,22 @@ fun SplashScreen(
 ) {
     val windowInfo = LocalWindowInfo.current
     val viewModel = hiltViewModel<SplashViewModel>()
-    val appState by viewModel.appState.collectAsState()
+    val authState by viewModel.authState.collectAsState()
     val context = LocalContext.current
 
     var isInitializing = false
-    LaunchedEffect(appState) {
-        if(appState == null){
+    LaunchedEffect(authState) {
+        if(authState == null){
             viewModel.loadState()
         } else {
-            if (appState is AppState.Init && !isInitializing) {
+            if (authState is AuthState.WaitParams && !isInitializing) {
                 isInitializing = true
                 viewModel.setParams(
                     "${context.filesDir.absolutePath}/tdlib",
                     { isInitializing = false },
                 )
             }
-            if (appState is AppState.Stopped && !isInitializing) {
+            if (authState is AuthState.Closed && !isInitializing) {
                 isInitializing = true
                 viewModel.initApplication().let {
                     viewModel.setParams(
@@ -52,10 +52,15 @@ fun SplashScreen(
                 }
             }
 
-            if (appState is AppState.Ready) {
+            if (authState is AuthState.Ready) {
                 onReady()
             }
-            if (appState is AppState.Auth) {
+            if(
+                authState !is AuthState.WaitParams &&
+                authState !is AuthState.LoggingOut &&
+                authState !is AuthState.Closed &&
+                authState !is AuthState.Ready
+            ) {
                 onAuth()
             }
         }

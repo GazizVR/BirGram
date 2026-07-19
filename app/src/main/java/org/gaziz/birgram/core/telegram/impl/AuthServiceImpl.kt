@@ -58,6 +58,15 @@ class AuthServiceImpl @Inject constructor(
         )
     }
 
+    override fun startAuthentication() {
+        if(authState.value is AuthState.Closed || !manager.isClientActive()) {
+            manager.createClient(
+                { updateDispatcher.dispatch(it) },
+                { errorService.setErrorFromException(it) }
+            )
+        }
+    }
+
     override fun setPhoneNumber(
         phoneNumber: String,
     ) {
@@ -114,13 +123,7 @@ class AuthServiceImpl @Inject constructor(
         setAuthState(AuthState.WaitPhoneNumber)
     }
 
-    override fun startAuthorization() {
-        if(authState.value is AuthState.Closed || !manager.isClientActive()) {
-            manager.createClient(
-                { updateDispatcher.dispatch(it) },
-                { errorService.setErrorFromException(it) }
-            )
-        }
+    override fun loadAuthState() {
         val params = TdApi.GetAuthorizationState()
         manager.sendRequest(
             query = params,

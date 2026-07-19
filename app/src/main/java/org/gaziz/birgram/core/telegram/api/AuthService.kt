@@ -8,9 +8,14 @@ interface AuthService {
     val authState: StateFlow<AuthState?>
     fun setAuthState(state: AuthState)
 
+    fun startAuthentication()
+
+    fun loadAuthState()
+    fun restartAuth()
+
     fun setParameters(
         databasePath: String,
-        onError: (String) -> Unit,
+        onError: (String) -> Unit
     )
     fun setPhoneNumber(phoneNumber: String)
     fun checkCode(code: String)
@@ -19,6 +24,4 @@ interface AuthService {
 
     fun logOut(onOk: () -> Unit)
 
-    fun restartAuth()
-    fun startAuthorization()
 }
