@@ -1,52 +1,39 @@
 package org.gaziz.birgram.features.auth.ui
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
-import org.gaziz.birgram.features.auth.domain.repository.AuthRepository
-import org.gaziz.birgram.features.auth.domain.usecase.GetAuthState
-import org.gaziz.birgram.features.auth.domain.usecase.GetErrorMessage
+import org.gaziz.birgram.core.telegram.api.AuthService
+import org.gaziz.birgram.core.telegram.api.ErrorService
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    getAuthState: GetAuthState,
-    getErrorMessage: GetErrorMessage,
-    private val authRepository: AuthRepository
+    private val authService: AuthService,
+    private val errorService: ErrorService
 ): ViewModel() {
 
-    val errorMessage = getErrorMessage().stateIn(
-        viewModelScope,
-        SharingStarted.Eagerly,
-        null
-    )
+    val errorMessage = errorService.error
 
-    val authState = getAuthState().stateIn(
-        viewModelScope,
-        SharingStarted.Eagerly,
-        null
-    )
+    val authState = authService.authState
 
     fun setPhoneNumber(number: String){
-       authRepository.setPhoneNumber(number)
+       authService.setPhoneNumber(number)
     }
 
     fun setCode(code: String){
-        authRepository.checkCode(code)
+        authService.checkCode(code)
     }
 
     fun resendCode() {
-        authRepository.resendCode(true)
+        authService.resendCode(true)
     }
 
     fun setPassword(password: String){
-        authRepository.checkPassword(password)
+        authService.checkPassword(password)
     }
 
     fun restartAuth() {
-        authRepository.restartAuth()
+        authService.restartAuth()
     }
 
 }

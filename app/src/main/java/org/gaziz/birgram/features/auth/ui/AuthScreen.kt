@@ -29,31 +29,34 @@ fun AuthScreen(
         AuthState.WaitPhoneNumber -> {
             WaitPhoneNumber(
                 { viewModel.setPhoneNumber(it) },
-                errorMessage,
+                errorMessage?.message,
             )
         }
         is AuthState.WaitCode -> WaitCode(
             { viewModel.setCode(it) },
-            errorMessage,
+            errorMessage?.message,
             {viewModel.restartAuth()},
             (authState as AuthState.WaitCode).codeInfo,
             { viewModel.resendCode() },
         )
         is AuthState.WaitPassword -> WaitPassword(
             { viewModel.setPassword(it) },
-            errorMessage,
+            errorMessage?.message,
             {viewModel.restartAuth()},
             (authState as AuthState.WaitPassword).passwordInfo,
         )
+
         AuthState.Ready -> {
             onReady()
         }
+
+        AuthState.LoggingOut -> { onLogOut() }
+        AuthState.Closed -> { onLogOut() }
+
         is AuthState.Other -> {
             val state = (authState as AuthState.Other).state
             OtherState(state)
         }
-        AuthState.LoggingOut -> { onLogOut() }
-        AuthState.Closed -> { onLogOut() }
         else -> {
             Box(
                 modifier = Modifier

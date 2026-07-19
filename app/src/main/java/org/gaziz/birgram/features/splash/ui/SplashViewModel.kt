@@ -4,22 +4,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.gaziz.birgram.features.splash.domain.repository.SplashRepository
+import org.gaziz.birgram.core.telegram.api.AuthService
 import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val splashRepository: SplashRepository,
+    private val authService: AuthService,
 ): ViewModel() {
-    val authState = splashRepository.authState
+    val authState = authService.authState
     fun loadState() {
         viewModelScope.launch {
-            splashRepository.loadAuthState()
+            authService.loadAuthState()
         }
     }
     fun initApplication() {
         viewModelScope.launch {
-            splashRepository.initApplication()
+            authService.startAuthentication()
         }
     }
     fun setParams(
@@ -27,7 +27,7 @@ class SplashViewModel @Inject constructor(
         onErr: (String) -> Unit
     ){
         viewModelScope.launch {
-            splashRepository.setParameters(
+            authService.setParameters(
                 dbPath,
                 onErr
             )
