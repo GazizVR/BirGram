@@ -4,14 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.datastore.UserPreferencesRepository
-import org.gaziz.birgram.core.telegram.api.model.user.User
-import org.gaziz.birgram.core.telegram.usecase.GetUserById
+import org.gaziz.birgram.core.telegram.api.AuthService
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatListType
-import org.gaziz.birgram.features.chatList.domain.repository.ChatListRepository
+import org.gaziz.birgram.features.chatList.domain.usecase.DownloadChatPhotoSmall
 import org.gaziz.birgram.features.chatList.domain.usecase.GetChatList
 import org.gaziz.birgram.features.chatList.domain.usecase.LoadAllChats
 import javax.inject.Inject
@@ -20,22 +18,15 @@ import javax.inject.Inject
 class ChatListViewModel @Inject constructor(
     loadAllChats: LoadAllChats,
     getChatList: GetChatList,
-    getUserById: GetUserById,
-    private val chatListRepository: ChatListRepository,
+    private val downloadChatPhotoSmall: DownloadChatPhotoSmall,
+    private val authService: AuthService,
     private val userPreferencesRepository: UserPreferencesRepository,
 ): ViewModel() {
     init {
         loadAllChats(ChatListType.Main)
     }
-    val user: (Long) -> StateFlow<User?> = {
-        getUserById(it).stateIn(
-            viewModelScope,
-            SharingStarted.Eagerly,
-            null
-        )
-    }
     fun logOut(onOk: () -> Unit) {
-        chatListRepository.logOut {
+        authService.logOut {
             onOk()
         }
     }
@@ -59,7 +50,7 @@ class ChatListViewModel @Inject constructor(
         fileId: Int
     ) {
        viewModelScope.launch {
-           chatListRepository.downloadChatIcon(chatId,fileId)
+           downloadChatPhotoSmall(chatId,fileId)
        }
     }
 }

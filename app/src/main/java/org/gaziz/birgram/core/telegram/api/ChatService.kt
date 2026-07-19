@@ -24,9 +24,4 @@ interface ChatService {
         onError: (ResponseData.Error) -> Unit
     )
 
-    fun downloadChatIcon(
-        chatId: Long,
-        fileId: Int
-    )
-
 }

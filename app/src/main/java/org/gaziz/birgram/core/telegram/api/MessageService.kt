@@ -6,7 +6,7 @@ import org.gaziz.birgram.core.telegram.api.model.message.Message
 
 interface MessageService {
     val messages: StateFlow<Map<Long,Message>>
-    fun setMessages(updFun: (Map<Long,Message>) -> (Map<Long,Message>))
+    fun updateMessages(updFun: (Map<Long,Message>) -> (Map<Long,Message>))
     fun getMessages(
         chatId: Long,
         fromMessage: Long = 0,

@@ -18,7 +18,7 @@ class MessageServiceImpl @Inject constructor(
     private val _messages = MutableStateFlow<Map<Long, Message>>(emptyMap())
     override val messages = _messages.asStateFlow()
 
-    override fun setMessages(updFun: (Map<Long, Message>) -> Map<Long, Message>) {
+    override fun updateMessages(updFun: (Map<Long, Message>) -> Map<Long, Message>) {
         _messages.update(updFun)
     }
 

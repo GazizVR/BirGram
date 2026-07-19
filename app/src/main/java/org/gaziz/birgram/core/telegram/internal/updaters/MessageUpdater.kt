@@ -12,19 +12,19 @@ class MessageUpdater @Inject constructor(
 ) {
     fun onNewUpdate(u: TdApi.UpdateNewMessage) {
         if(!u.message.isOutgoing) {
-            messageService.setMessages { old ->
+            messageService.updateMessages { old ->
                 old + (u.message.id to u.message.toMessage())
             }
         }
     }
 
     fun onSendSucceedUpdate(u: TdApi.UpdateMessageSendSucceeded){
-        messageService.setMessages { old ->
+        messageService.updateMessages { old ->
             old + (u.message.id to u.message.toMessage())
         }
     }
 
     fun onLoggingOut() {
-        messageService.setMessages { emptyMap() }
+        messageService.updateMessages { emptyMap() }
     }
 }

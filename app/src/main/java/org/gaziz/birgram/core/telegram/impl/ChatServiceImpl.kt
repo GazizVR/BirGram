@@ -9,9 +9,7 @@ import org.gaziz.birgram.core.telegram.api.ChatService
 import org.gaziz.birgram.core.telegram.api.model.ResponseData
 import org.gaziz.birgram.core.telegram.api.model.chat.Chat
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatListType
-import org.gaziz.birgram.core.telegram.api.model.chat.ChatPhoto
 import org.gaziz.birgram.core.telegram.internal.ClientManager
-import org.gaziz.birgram.core.telegram.internal.mapper.toFileData
 import javax.inject.Inject
 
 class ChatServiceImpl @Inject constructor(
@@ -59,33 +57,6 @@ class ChatServiceImpl @Inject constructor(
             },
             {
                 onError(it)
-            }
-        )
-    }
-
-    override fun downloadChatIcon(chatId: Long, fileId: Int) {
-        manager.sendRequest(
-            TdApi.DownloadFile().apply {
-                this.fileId = fileId
-                this.priority = 32
-                this.limit = 0
-                this.offset = 0
-                this.synchronous = true
-            },
-            {},
-            { obj ->
-                if(obj is TdApi.File) {
-                    _chats.update { old ->
-                        val chat = old[chatId] ?: return@update old
-                        val chatPhoto = chat.photo
-                        var photo = ChatPhoto(
-                            miniThumbnail = null,
-                            small = obj.toFileData()
-                        )
-                        if(chatPhoto != null) { photo = chatPhoto.copy(small = obj.toFileData()) }
-                        old + (chatId to chat.copy(photo = photo))
-                    }
-                }
             }
         )
     }
