@@ -17,6 +17,8 @@ interface AuthService {
     fun resendCode(isUser: Boolean)
     fun checkPassword(password: String)
 
+    fun logOut(onOk: () -> Unit)
+
     fun restartAuth()
     fun startAuthorization()
 }

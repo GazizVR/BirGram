@@ -132,4 +132,15 @@ class AuthServiceImpl @Inject constructor(
         )
     }
 
+    override fun logOut(onOk: () -> Unit) {
+        manager.sendRequest(
+            TdApi.LogOut(),
+            {},
+        ) {
+            if(it is TdApi.Ok) {
+                onOk()
+            }
+        }
+    }
+
 }
