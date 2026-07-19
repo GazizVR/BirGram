@@ -48,6 +48,7 @@ fun ChatListScreen(
     val scope = rememberCoroutineScope()
     val isDark by viewModel.isDark.collectAsState()
     var isLogOut by rememberSaveable { mutableStateOf(false) }
+    val users by viewModel.users.collectAsState()
     Box {
         ModalNavigationDrawer(
             drawerState = drawerState,
@@ -76,9 +77,9 @@ fun ChatListScreen(
                         ChatCard(
                             chat,
                             if(chat.type is ChatType.Private){
-                                val user by viewModel.user(chat.type.userId).collectAsState()
+                                val user = users[chat.type.userId]
                                 if(user?.type == UserType.Regular)  {
-                                    user?.status is UserStatus.Online
+                                    user.status is UserStatus.Online
                                 } else {
                                     false
                                 }

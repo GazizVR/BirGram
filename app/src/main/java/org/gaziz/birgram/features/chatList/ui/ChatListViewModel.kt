@@ -8,8 +8,9 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.datastore.UserPreferencesRepository
 import org.gaziz.birgram.core.telegram.api.AuthService
+import org.gaziz.birgram.core.telegram.api.UserService
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatListType
-import org.gaziz.birgram.features.chatList.domain.usecase.DownloadChatPhotoSmall
+import org.gaziz.birgram.core.telegram.api.usecase.DownloadChatPhotoSmall
 import org.gaziz.birgram.features.chatList.domain.usecase.GetChatList
 import org.gaziz.birgram.features.chatList.domain.usecase.LoadAllChats
 import javax.inject.Inject
@@ -20,11 +21,13 @@ class ChatListViewModel @Inject constructor(
     getChatList: GetChatList,
     private val downloadChatPhotoSmall: DownloadChatPhotoSmall,
     private val authService: AuthService,
+    userService: UserService,
     private val userPreferencesRepository: UserPreferencesRepository,
 ): ViewModel() {
     init {
         loadAllChats(ChatListType.Main)
     }
+    val users = userService.users
     fun logOut(onOk: () -> Unit) {
         authService.logOut {
             onOk()

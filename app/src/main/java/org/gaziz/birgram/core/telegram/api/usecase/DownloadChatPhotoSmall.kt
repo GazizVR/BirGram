@@ -1,4 +1,4 @@
-package org.gaziz.birgram.features.chatList.domain.usecase
+package org.gaziz.birgram.core.telegram.api.usecase
 
 import org.gaziz.birgram.core.telegram.api.ChatService
 import org.gaziz.birgram.core.telegram.api.FileService
