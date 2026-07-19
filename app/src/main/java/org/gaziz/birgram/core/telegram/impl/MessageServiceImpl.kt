@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.api.MessageService
+import org.gaziz.birgram.core.telegram.api.model.ResponseData
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
 import org.gaziz.birgram.core.telegram.api.model.message.Message
 import org.gaziz.birgram.core.telegram.internal.ClientManager
@@ -22,10 +23,10 @@ class MessageServiceImpl @Inject constructor(
         _messages.update(updFun)
     }
 
-    override fun getMessages(
+    override fun loadMessages(
         chatId: Long,
         fromMessage: Long,
-        onError: () -> Unit
+        onError: (ResponseData.Error) -> Unit
     ) {
         manager.sendRequest(
             TdApi.GetChatHistory().apply {
@@ -35,7 +36,7 @@ class MessageServiceImpl @Inject constructor(
                 this.limit = 50
                 this.onlyLocal = false
             },
-            {onError()}
+            onError
         ) { resp ->
             if(resp is TdApi.Messages) {
                 _messages.update { map ->

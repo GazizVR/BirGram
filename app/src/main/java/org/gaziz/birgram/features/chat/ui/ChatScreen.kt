@@ -102,8 +102,8 @@ fun ChatScreen(
                     photo = chat?.photo,
                     title = chat?.title ?: "",
                     type = chat?.type ?: ChatType.Other,
-                    userStatus = @Composable{
-                        val user by viewModel.user(it).collectAsState()
+                    userStatus = {
+                        val user by viewModel.getUser(it).collectAsState()
                         user?.status
                     }
                 )
@@ -111,9 +111,8 @@ fun ChatScreen(
         },
         bottomBar = {
             if(
-                chat?.canSendBasicMsg == true ||
-                chat?.type is ChatType.SuperGroup &&
-                (chat?.type as ChatType.SuperGroup).canSendMessages
+                chat?.permissions?.canSendBasicMessages == true ||
+                chat?.type is ChatType.SuperGroup
             ) MessageInputBar(
                 defaultText = if(chat?.draftMessage != null) {
                    if(chat?.draftMessage?.content is DraftMessageContent.Text) {

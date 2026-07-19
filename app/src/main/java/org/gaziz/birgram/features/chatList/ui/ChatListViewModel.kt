@@ -4,12 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.datastore.UserPreferencesRepository
 import org.gaziz.birgram.core.telegram.api.AuthService
 import org.gaziz.birgram.core.telegram.api.UserService
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatListType
+import org.gaziz.birgram.core.telegram.api.model.user.User
 import org.gaziz.birgram.core.telegram.api.usecase.DownloadChatPhotoSmall
 import org.gaziz.birgram.features.chatList.domain.usecase.GetChatList
 import org.gaziz.birgram.features.chatList.domain.usecase.LoadAllChats
@@ -21,13 +24,21 @@ class ChatListViewModel @Inject constructor(
     getChatList: GetChatList,
     private val downloadChatPhotoSmall: DownloadChatPhotoSmall,
     private val authService: AuthService,
-    userService: UserService,
+    private val userService: UserService,
     private val userPreferencesRepository: UserPreferencesRepository,
 ): ViewModel() {
     init {
         loadAllChats(ChatListType.Main)
     }
-    val users = userService.users
+    fun getUser(userId: Long): StateFlow<User?> {
+        return userService.users.map {
+            it[userId]
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.Eagerly,
+            null
+        )
+    }
     fun logOut(onOk: () -> Unit) {
         authService.logOut {
             onOk()
