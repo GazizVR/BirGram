@@ -17,7 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
-import org.gaziz.birgram.features.chatList.domain.model.LastMsgData
+import org.gaziz.birgram.core.telegram.api.model.message.Message
 
 @Composable
 fun UnreadBox(
@@ -54,7 +54,7 @@ fun ContentRow(
     unreadCount: Int,
     reactionCount: Int,
     mentionCount: Int,
-    lastMessage: LastMsgData?,
+    lastMessage: Message?,
     draftMessage: DraftMessage?
 ) {
     val isUnreadBox = unreadCount > 0 || mentionCount > 0 || reactionCount > 0
@@ -63,7 +63,7 @@ fun ContentRow(
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         if(lastMessage != null || draftMessage != null) {
-            LastMsgContent(
+            MessageContent(
                 Modifier.weight(1f),
                 lastMessage!!,
                 draftMessage

@@ -16,15 +16,10 @@ fun ChatTypeCnt(
     fontSize: TextUnit = 8.sp,
     userStatus: @Composable (Long) -> UserStatus?
 ) {
-    val membersType = stringArrayResource(R.array.members_type)
     val groupType = stringArrayResource(R.array.group_type)
     when(type) {
         is ChatType.BasicGroup -> {
-            val text = if(type.memberCont > 0){
-                "${type.memberCont} ${membersType[0]}"
-            } else {
-                groupType[0]
-            }
+            val text = groupType[0]
             Text(
                 text = text,
                 style = MaterialTheme.typography.labelSmall,
@@ -34,11 +29,7 @@ fun ChatTypeCnt(
             )
         }
         is ChatType.SuperGroup -> {
-            val text = if(type.memberCont > 0){
-                "${type.memberCont} ${if(type.isChannel) membersType[1] else membersType[0]}"
-            } else {
-                if(type.isChannel) groupType[1] else groupType[2]
-            }
+            val text = if(type.isChannel) groupType[1] else groupType[2]
             Text(
                 text = text,
                 style = MaterialTheme.typography.labelSmall,
@@ -48,6 +39,12 @@ fun ChatTypeCnt(
             )
         }
         is ChatType.Private -> {
+            val status = userStatus(type.userId)
+            if(status != null) {
+                LastOnlineText(status,fontSize)
+            }
+        }
+        is ChatType.Secret -> {
             val status = userStatus(type.userId)
             if(status != null) {
                 LastOnlineText(status,fontSize)

@@ -8,8 +8,6 @@ interface AuthService {
     val authState: StateFlow<AuthState?>
     fun setAuthState(state: AuthState)
 
-    fun startAuthentication()
-
     fun loadAuthState()
     fun restartAuth()
 
