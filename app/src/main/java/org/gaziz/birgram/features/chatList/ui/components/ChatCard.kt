@@ -18,24 +18,76 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import org.gaziz.birgram.R
 
 @Composable
+fun ChatPhoto(
+    modifier: Modifier,
+    photoModel: Any?,
+    isDeleted: Boolean,
+    placeHolderColor: Color,
+    placeHolderText: String,
+) {
+    if(photoModel is String) {
+        AsyncImage(
+            model = photoModel,
+            contentDescription = null,
+            modifier = modifier.clip(CircleShape),
+        )
+    } else {
+        Box(
+            modifier = modifier
+                .clip(CircleShape)
+                .background(placeHolderColor),
+            contentAlignment = Alignment.Center
+        ) {
+            if(isDeleted) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.skull),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
+            } else {
+                Text(
+                    text = placeHolderText,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ChatTitle(
+    title: String,
+    fontSize: TextUnit,
+    isDeleted: Boolean
+) {
+    val userTypeCnt = stringArrayResource(R.array.user_types)
+    Text(
+        text = if(isDeleted) userTypeCnt[1] else title,
+        color = MaterialTheme.colorScheme.onBackground,
+        fontSize = fontSize,
+    )
+}
+@Composable
 fun ChatCard(
     modifier: Modifier,
     isDeleted: Boolean,
-    photoModel: Any? = null,
+    photoModel: Any?,
+    photoSize: Dp,
     title: String,
+    titleFontSize: TextUnit,
     onClick: () -> Unit
 ) {
-    val photoSize = 54.dp
-    val userTypeCnt = stringArrayResource(R.array.user_types)
     Card(
         modifier = modifier.background(MaterialTheme.colorScheme.surfaceContainer),
         shape = RoundedCornerShape(0.dp),
@@ -46,47 +98,18 @@ fun ChatCard(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ){
-            if(photoModel is String) {
-                AsyncImage(
-                    model = photoModel,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .size(photoSize)
-                )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .size(photoSize)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primary),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if(isDeleted) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.skull),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onBackground
-                        )
-                    } else {
-                        if(title.isNotBlank()) {
-                            Text(
-                                text = title[0].toString(),
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-                        }
-                    }
-                }
-            }
+            ChatPhoto(
+                modifier = Modifier.size(photoSize),
+                photoModel = photoModel,
+                isDeleted = isDeleted,
+                placeHolderColor = MaterialTheme.colorScheme.primary,
+                placeHolderText = if(title.isNotBlank()) title[0].toString() else "",
+            )
             Spacer(Modifier.width(8.dp))
-            Text(
-                text = if(isDeleted) {
-                    userTypeCnt[1]
-                } else {
-                    title
-                },
-                color = MaterialTheme.colorScheme.onBackground,
-                fontSize = 7.sp,
+            ChatTitle(
+                title = title,
+                fontSize = titleFontSize,
+                isDeleted = isDeleted
             )
         }
     }

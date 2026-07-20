@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.R
@@ -93,8 +94,10 @@ fun ChatListScreen(
                             isDeleted =
                                 users[(chat.type as? ChatType.Private)?.userId]?.type is UserType.Deleted ||
                                 users[(chat.type as? ChatType.Private)?.userId]?.type is UserType.Unknown,
-                            title = chat.title,
                             photoModel = chatPhoto,
+                            photoSize = 54.dp,
+                            title = chat.title,
+                            titleFontSize = 7.sp,
                             onClick = { navigateToChat(chat.id) }
                         )
                     }
