@@ -52,7 +52,7 @@ class ChatListViewModel @Inject constructor(
         chatId: Long,
         fileId: Int
     ) {
-       viewModelScope.launch() {
+       viewModelScope.launch {
            downloadChatPhotoSmall(chatId,fileId)
        }
     }

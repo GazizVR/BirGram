@@ -15,6 +15,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,16 +28,20 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import org.gaziz.birgram.R
+import org.gaziz.birgram.core.telegram.api.model.chat.ChatPhoto
 
 @Composable
-fun ChatPhoto(
+fun ChatImage(
     modifier: Modifier,
     photoModel: Any?,
     isDeleted: Boolean,
     placeHolderColor: Color,
-    placeHolderText: String,
+    placeHolderText: String
 ) {
-    if(photoModel is String) {
+    if(
+        photoModel is String ||
+        photoModel is ByteArray
+    ) {
         AsyncImage(
             model = photoModel,
             contentDescription = null,
@@ -78,11 +83,43 @@ fun ChatTitle(
         fontSize = fontSize,
     )
 }
+
+@Composable
+fun ChatPhoto(
+    modifier: Modifier,
+    photo: ChatPhoto?,
+    onPhotoNull: (Int) -> Unit,
+    isDeleted: Boolean,
+    placeHolderColor: Color,
+    placeHolderText: String
+){
+    LaunchedEffect(Unit) {
+        if(
+            photo?.small?.path?.isBlank() == true &&
+            photo.small.canDownload
+        ) {
+            onPhotoNull(photo.small.id)
+        }
+    }
+    val chatPhoto = when {
+        photo?.small?.path?.isNotBlank() == true -> photo.small.path
+        else -> photo?.miniThumbnail
+    }
+    ChatImage(
+        modifier = modifier,
+        photoModel = chatPhoto,
+        isDeleted = isDeleted,
+        placeHolderColor = placeHolderColor,
+        placeHolderText = placeHolderText
+    )
+}
+
 @Composable
 fun ChatCard(
     modifier: Modifier,
     isDeleted: Boolean,
-    photoModel: Any?,
+    photo: ChatPhoto?,
+    onPhotoNull: (Int) -> Unit,
     photoSize: Dp,
     title: String,
     titleFontSize: TextUnit,
@@ -100,7 +137,8 @@ fun ChatCard(
         ){
             ChatPhoto(
                 modifier = Modifier.size(photoSize),
-                photoModel = photoModel,
+                photo = photo,
+                onPhotoNull = onPhotoNull,
                 isDeleted = isDeleted,
                 placeHolderColor = MaterialTheme.colorScheme.primary,
                 placeHolderText = if(title.isNotBlank()) title[0].toString() else "",

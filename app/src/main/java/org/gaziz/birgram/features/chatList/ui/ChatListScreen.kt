@@ -82,11 +82,6 @@ fun ChatListScreen(
                     verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     items(chatList) { chat ->
-                        val chatPhoto = when {
-                            chat.photo?.small?.path?.isNotBlank() == true -> chat.photo.small.path
-                            chat.photo?.miniThumbnail != null -> chat.photo.miniThumbnail
-                            else -> null
-                        }
                         ChatCard(
                             modifier = Modifier
                                 .height(cardHeight)
@@ -94,7 +89,8 @@ fun ChatListScreen(
                             isDeleted =
                                 users[(chat.type as? ChatType.Private)?.userId]?.type is UserType.Deleted ||
                                 users[(chat.type as? ChatType.Private)?.userId]?.type is UserType.Unknown,
-                            photoModel = chatPhoto,
+                            photo = chat.photo,
+                            onPhotoNull = { fileId -> viewModel.downloadChatIcon(chat.id,fileId) },
                             photoSize = 54.dp,
                             title = chat.title,
                             titleFontSize = 7.sp,
