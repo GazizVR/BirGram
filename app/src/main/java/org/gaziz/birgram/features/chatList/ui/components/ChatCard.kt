@@ -101,9 +101,10 @@ fun ChatPhoto(
             onPhotoNull(photo.small.id)
         }
     }
-    val chatPhoto = when {
-        photo?.small?.path?.isNotBlank() == true -> photo.small.path
-        else -> photo?.miniThumbnail
+    val chatPhoto = if(photo?.small?.path?.isNotBlank() == true) {
+        photo.small.path
+    } else {
+        photo?.miniThumbnail
     }
     ChatImage(
         modifier = modifier,

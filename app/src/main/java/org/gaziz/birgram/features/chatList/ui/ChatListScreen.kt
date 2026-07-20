@@ -111,12 +111,7 @@ fun ChatListScreen(
                     TextButton(
                         onClick = {
                             isLogOut = false
-                            viewModel.logOut {
-                                scope.launch {
-                                    drawerState.close()
-                                    onLogOut()
-                                }
-                            }
+                            viewModel.logOut { scope.launch { drawerState.close() } }
                         }
                     ) {
                         Text(cnt[0], color = MaterialTheme.colorScheme.error)

@@ -6,10 +6,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import org.gaziz.birgram.features.auth.ui.AuthScreen
-import org.gaziz.birgram.features.splash.ui.SplashScreen
 import org.gaziz.birgram.features.chat.ui.ChatScreen
 import org.gaziz.birgram.features.chatList.ui.ChatListScreen
 import org.gaziz.birgram.features.searchChats.ui.SearchChatsScreen
+import org.gaziz.birgram.features.splash.ui.SplashScreen
 
 @Composable
 fun Navigation(
@@ -22,7 +22,13 @@ fun Navigation(
         composable(Route.Splash.route) {
             SplashScreen(
                 onReady =  { navController.navigate(Route.ChatList.route) },
-                onAuth = { navController.navigate(Route.Auth.route) }
+                onAuth = { navController.navigate(Route.Auth.route) },
+                onNonReady = {
+                    val currentBack = navController.currentBackStackEntry
+                    if(currentBack?.destination?.route != Route.Splash.route) {
+                        navController.navigate(Route.Splash.route)
+                    }
+                }
             )
         }
         composable(Route.Auth.route) {

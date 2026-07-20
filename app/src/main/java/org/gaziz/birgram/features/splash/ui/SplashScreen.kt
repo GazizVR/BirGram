@@ -23,7 +23,8 @@ import org.gaziz.birgram.core.telegram.api.model.auth.AuthState
 @Composable
 fun SplashScreen(
     onReady: () -> Unit,
-    onAuth: () -> Unit
+    onAuth: () -> Unit,
+    onNonReady: () -> Unit
 ) {
     val windowInfo = LocalWindowInfo.current
     val viewModel = hiltViewModel<SplashViewModel>()
@@ -31,6 +32,9 @@ fun SplashScreen(
     val context = LocalContext.current
 
     var isInitializing = false
+    LaunchedEffect(Unit) {
+        viewModel.initApplication(onNonReady)
+    }
     LaunchedEffect(authState) {
         if(authState == null){
             viewModel.loadState()
@@ -44,7 +48,7 @@ fun SplashScreen(
             }
             if (authState is AuthState.Closed && !isInitializing) {
                 isInitializing = true
-                viewModel.initApplication().let {
+                viewModel.initApplication(onReady,true).let {
                     viewModel.setParams(
                         "${context.filesDir.absolutePath}/tdlib",
                         { isInitializing = false },
