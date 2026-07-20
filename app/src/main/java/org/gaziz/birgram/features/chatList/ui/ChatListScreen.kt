@@ -1,5 +1,6 @@
 package org.gaziz.birgram.features.chatList.ui
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
@@ -16,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,6 +51,10 @@ fun ChatListScreen(
     val scope = rememberCoroutineScope()
     val isDark by viewModel.isDark.collectAsState()
     var isLogOut by rememberSaveable { mutableStateOf(false) }
+    val listState = rememberLazyListState()
+    LaunchedEffect(listState) {
+        Log.d("FUCK","update")
+    }
     Box {
         ModalNavigationDrawer(
             drawerState = drawerState,
@@ -69,6 +76,7 @@ fun ChatListScreen(
                 }
             ) {
                 LazyColumn(
+                    state = listState,
                     modifier = Modifier.fillMaxSize().padding(it),
                     verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {

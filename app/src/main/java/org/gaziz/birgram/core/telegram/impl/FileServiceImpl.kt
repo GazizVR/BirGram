@@ -13,12 +13,14 @@ class FileServiceImpl @Inject constructor(
 ): FileService {
     override fun downloadFile(
         fileId: Int,
+
         priority: Int,
         offset: Long,
         limit: Long,
         synchronous: Boolean,
+
+        onError: (ResponseData.Error) -> Unit,
         onFile: (FileData) -> Unit,
-        onError: (ResponseData.Error) -> Unit
     ) {
         manager.sendRequest(
             TdApi.DownloadFile().apply {
@@ -31,6 +33,23 @@ class FileServiceImpl @Inject constructor(
             onError
         ) { obj ->
             if (obj is TdApi.File) {
+                onFile(obj.toFileData())
+            }
+        }
+    }
+
+    override fun getFile(
+        fileId: Int,
+        onError: (ResponseData.Error) -> Unit,
+        onFile: (FileData) -> Unit
+    ) {
+        manager.sendRequest(
+            TdApi.GetFile().apply {
+                this.fileId = fileId
+            },
+            onError
+        ) { obj ->
+            if(obj is TdApi.File) {
                 onFile(obj.toFileData())
             }
         }

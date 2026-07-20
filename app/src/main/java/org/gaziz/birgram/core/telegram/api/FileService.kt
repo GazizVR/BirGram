@@ -11,7 +11,12 @@ interface FileService {
         limit: Long = 0,
         synchronous: Boolean = true,
 
+        onError: (ResponseData.Error) -> Unit = {},
         onFile: (FileData) -> Unit = {},
-        onError: (ResponseData.Error) -> Unit = {}
+    )
+    fun getFile(
+        fileId: Int,
+        onError: (ResponseData.Error) -> Unit = {},
+        onFile: (FileData) -> Unit
     )
 }
