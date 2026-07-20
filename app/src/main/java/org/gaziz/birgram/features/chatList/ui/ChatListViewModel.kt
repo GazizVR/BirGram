@@ -25,7 +25,7 @@ class ChatListViewModel @Inject constructor(
     private val downloadChatPhotoSmall: DownloadChatPhotoSmall,
     private val authService: AuthService,
     private val userService: UserService,
-    private val userPreferencesRepository: UserPreferencesRepository,
+    private val userPreferencesRepository: UserPreferencesRepository
 ): ViewModel() {
     init {
         loadAllChats(ChatListType.Main)
@@ -63,7 +63,7 @@ class ChatListViewModel @Inject constructor(
         chatId: Long,
         fileId: Int
     ) {
-       viewModelScope.launch {
+       viewModelScope.launch() {
            downloadChatPhotoSmall(chatId,fileId)
        }
     }
