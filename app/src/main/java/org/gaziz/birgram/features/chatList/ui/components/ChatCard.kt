@@ -1,71 +1,66 @@
 package org.gaziz.birgram.features.chatList.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import org.gaziz.birgram.core.telegram.api.model.chat.Chat
-import org.gaziz.birgram.core.ui.components.ChatAvatar
-import org.gaziz.birgram.features.chatList.ui.components.chatCard.ContentRow
-import org.gaziz.birgram.features.chatList.ui.components.chatCard.TitleRow
+import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 
 @Composable
 fun ChatCard(
-    chat: Chat,
-    isOnline: Boolean,
-    downloadPhoto: (Int) -> Unit,
-    onClick: (Long) -> Unit
+    modifier: Modifier,
+    photoModel: Any? = null,
+    title: String,
+    onClick: () -> Unit
 ) {
-    val containerHeight = 80.dp
-    val iconSize = 60.dp
-    val cardColor = CardDefaults.cardColors().containerColor
     Card(
-        shape = RoundedCornerShape(0),
-        onClick = { onClick(chat.id) },
-        modifier = Modifier.height(containerHeight)
+        modifier = modifier.background(MaterialTheme.colorScheme.surfaceContainer),
+        shape = RoundedCornerShape(0.dp),
+        onClick = onClick
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            ChatAvatar(
-                photo = chat.photo,
-                chatTitle = chat.title,
-                iconSize = iconSize,
-                downloadPhoto = downloadPhoto,
-                isOnline = isOnline,
-                parentColor = cardColor
-            )
-            Column(
-                horizontalAlignment = Alignment.Start,
-                modifier = Modifier.weight(1f)
+            modifier = modifier.padding(8.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Box(
+                modifier = Modifier.size(60.dp)
             ) {
-                TitleRow(
-                    chat.title,
-                    when {
-                        chat.lastMessage != null -> chat.lastMessage.date
-                        chat.draftMessage != null -> chat.draftMessage.date
-                        else -> null
-                    }
-                )
-                ContentRow(
-                    chat.unreadCount,
-                    chat.reactionCount,
-                    chat.mentionCount,
-                    chat.lastMessage,
-                    chat.draftMessage
-                )
+                if(photoModel != null) {
+                    AsyncImage(
+                        model = photoModel,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(55.dp)
+                            .clip(CircleShape)
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .size(55.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                    )
+                }
             }
+            Text(
+                text = title,
+                color = MaterialTheme.colorScheme.onBackground,
+                fontSize = 7.sp,
+            )
         }
     }
 }

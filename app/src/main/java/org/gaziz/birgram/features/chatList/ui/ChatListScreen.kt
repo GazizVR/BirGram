@@ -4,7 +4,9 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
@@ -23,14 +25,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
-import org.gaziz.birgram.core.telegram.api.model.user.UserStatus
-import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.features.chatList.ui.components.ChatCard
 import org.gaziz.birgram.features.chatList.ui.components.ChatListMenu
 import org.gaziz.birgram.features.chatList.ui.components.ChatListTopBar
@@ -48,6 +48,9 @@ fun ChatListScreen(
     val scope = rememberCoroutineScope()
     val isDark by viewModel.isDark.collectAsState()
     var isLogOut by rememberSaveable { mutableStateOf(false) }
+    val window = LocalWindowInfo.current
+    val cardHeight = 70.dp
+    val cardWidth = window.containerDpSize.width
     Box {
         ModalNavigationDrawer(
             drawerState = drawerState,
@@ -73,25 +76,24 @@ fun ChatListScreen(
                     verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     items(chatList) { chat ->
+                        val chatPhoto = when {
+                            chat.photo?.small?.path?.isNotBlank() == true -> chat.photo.small.path
+                            chat.photo?.miniThumbnail != null -> chat.photo.miniThumbnail
+                            else -> null
+                        }
                         ChatCard(
-                            chat,
-                            if(chat.type is ChatType.Private){
-                                val user by viewModel.getUser(chat.type.userId).collectAsState()
-                                if(user?.type == UserType.Regular)  {
-                                    user?.status is UserStatus.Online
-                                } else {
-                                    false
-                                }
-                            } else {
-                                false
-                            },
-                            { viewModel.downloadChatIcon(chat.id,it) },
-                            navigateToChat
+                            modifier = Modifier
+                                .height(cardHeight)
+                                .width(cardWidth),
+                            title = chat.title,
+                            photoModel = chatPhoto,
+                            onClick = { navigateToChat(chat.id) }
                         )
                     }
                 }
             }
         }
+
         if(isLogOut) {
             val cnt = stringArrayResource(R.array.log_out_cnt)
             AlertDialog(

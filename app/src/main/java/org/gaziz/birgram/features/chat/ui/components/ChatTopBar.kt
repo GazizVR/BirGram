@@ -25,7 +25,6 @@ import org.gaziz.birgram.R
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatPhoto
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
 import org.gaziz.birgram.core.telegram.api.model.user.UserStatus
-import org.gaziz.birgram.core.ui.components.ChatAvatar
 import org.gaziz.birgram.core.ui.components.ChatTypeCnt
 
 @Composable
@@ -57,14 +56,6 @@ fun ChatTopBar(
                     tint = MaterialTheme.colorScheme.onBackground
                 )
             }
-            ChatAvatar(
-                photo = photo,
-                chatTitle = title,
-                iconSize = iconSize,
-                downloadPhoto = {},
-                isOnline = false,
-                parentColor = cardColor
-            )
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.Start,

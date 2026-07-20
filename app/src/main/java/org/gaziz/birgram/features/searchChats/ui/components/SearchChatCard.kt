@@ -18,7 +18,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.gaziz.birgram.core.telegram.api.model.chat.Chat
 import org.gaziz.birgram.core.telegram.api.model.user.UserStatus
-import org.gaziz.birgram.core.ui.components.ChatAvatar
 import org.gaziz.birgram.core.ui.components.ChatTypeCnt
 
 @Composable
@@ -41,14 +40,6 @@ fun SearchChatCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            ChatAvatar(
-                photo = chatData.photo,
-                chatTitle = chatData.title,
-                iconSize = iconSize,
-                downloadPhoto = downloadChatIcon,
-                isOnline = false,
-                parentColor = cardColor
-            )
             Column(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier.weight(1f)
