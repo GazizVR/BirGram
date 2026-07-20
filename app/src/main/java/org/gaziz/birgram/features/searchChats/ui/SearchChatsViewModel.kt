@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchChatsViewModel @Inject constructor(
-    private val chatSearchRepository: ChatSearchRepository,
+    chatSearchRepository: ChatSearchRepository,
     private val userService: UserService,
     private val downloadChatPhotoSmall: DownloadChatPhotoSmall,
     private val searchLocalChatsUseCase: SearchLocalChatsUseCase

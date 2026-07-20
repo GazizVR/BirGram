@@ -15,6 +15,8 @@ class SearchLocalChatsUseCase @Inject constructor(
         chatService.searchChatsLocal(
             query,
             limit
-        ) { chatSearchRepository.replace(it) }
+        ) {
+            chatSearchRepository.replace(it)
+        }
     }
 }
