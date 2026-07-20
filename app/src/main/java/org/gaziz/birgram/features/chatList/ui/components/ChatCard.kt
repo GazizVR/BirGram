@@ -4,8 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -36,26 +38,31 @@ fun ChatCard(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ){
-            Box(
-                modifier = Modifier.size(60.dp)
-            ) {
-                if(photoModel != null) {
-                    AsyncImage(
-                        model = photoModel,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(55.dp)
-                            .clip(CircleShape)
-                    )
-                } else {
-                    Box(
-                        modifier = Modifier
-                            .size(55.dp)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.surfaceContainerLow)
-                    )
+            if(photoModel != null) {
+                AsyncImage(
+                    model = photoModel,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(54.dp)
+                )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .size(54.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primary),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if(title.isNotBlank()) {
+                        Text(
+                            text = title[0].toString(),
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
                 }
             }
+            Spacer(Modifier.width(4.dp))
             Text(
                 text = title,
                 color = MaterialTheme.colorScheme.onBackground,
