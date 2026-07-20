@@ -31,6 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.R
+import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
+import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.features.chatList.ui.components.ChatCard
 import org.gaziz.birgram.features.chatList.ui.components.ChatListMenu
 import org.gaziz.birgram.features.chatList.ui.components.ChatListTopBar
@@ -48,9 +50,12 @@ fun ChatListScreen(
     val scope = rememberCoroutineScope()
     val isDark by viewModel.isDark.collectAsState()
     var isLogOut by rememberSaveable { mutableStateOf(false) }
+
+    val users by viewModel.users.collectAsState()
     val window = LocalWindowInfo.current
     val cardHeight = 70.dp
     val cardWidth = window.containerDpSize.width
+
     Box {
         ModalNavigationDrawer(
             drawerState = drawerState,
@@ -85,6 +90,9 @@ fun ChatListScreen(
                             modifier = Modifier
                                 .height(cardHeight)
                                 .width(cardWidth),
+                            isDeleted =
+                                users[(chat.type as? ChatType.Private)?.userId]?.type is UserType.Deleted ||
+                                users[(chat.type as? ChatType.Private)?.userId]?.type is UserType.Unknown,
                             title = chat.title,
                             photoModel = chatPhoto,
                             onClick = { navigateToChat(chat.id) }

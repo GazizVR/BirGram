@@ -16,7 +16,7 @@ fun ChatTypeCnt(
     fontSize: TextUnit = 8.sp,
     userStatus: @Composable (Long) -> UserStatus?
 ) {
-    val groupType = stringArrayResource(R.array.group_type)
+    val groupType = stringArrayResource(R.array.group_types)
     when(type) {
         is ChatType.BasicGroup -> {
             val text = groupType[0]

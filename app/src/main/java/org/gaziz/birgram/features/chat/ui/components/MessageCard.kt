@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
@@ -24,8 +24,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.telegram.api.model.message.MessageContent
 import org.gaziz.birgram.core.telegram.api.model.message.Message
+import org.gaziz.birgram.core.telegram.api.model.message.MessageContent
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -70,7 +70,7 @@ fun MessageText(
 fun MessageCard(
     msg: Message
 ) {
-    val msgType = stringArrayResource(R.array.message_type)
+    val unsupportedMsg = stringResource(R.string.unsupported_message)
     Row(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -86,7 +86,7 @@ fun MessageCard(
            Row(Modifier.padding(horizontal = 12.dp, vertical = 4.dp)) {
                when(msg.content) {
                    is MessageContent.Text -> { MessageText(msg.content.text,msg.date.formatMessageCard()) }
-                   else -> { MessageText(msgType[5],msg.date.formatMessageCard()) }
+                   else -> { MessageText(unsupportedMsg,msg.date.formatMessageCard()) }
                }
            }
         }

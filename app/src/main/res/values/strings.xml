@@ -26,7 +26,7 @@
         <item>Forgot password?</item>
     </string-array>
 
-    <string-array name="code_type">
+    <string-array name="code_types">
         <item>A verification code was sent to you in Telegram. Check your messages on another device. The message will come from Telegram.</item>
         <item>We sent a verification code via SMS to your phone number.</item>
         <item>We will call you and read out a verification code. Please listen carefully.</item>
@@ -38,7 +38,7 @@
         <item>A verification code will be sent shortly. Please wait…</item>
     </string-array>
 
-    <string-array name="next_type">
+    <string-array name="next_types">
         <item>Resend via Telegram</item>       <!-- TelegramMessage -->
         <item>Resend via SMS</item>            <!-- SMS -->
         <item>Receive call</item>              <!-- Call -->
@@ -52,27 +52,17 @@
 
     <string name="suffix_waiting">in</string>
 
-    <string-array name="message_type">
-        <item>Photo</item>
-        <item>Sticker</item>
-        <item>🎤 Voice message</item>
-        <item>⭕ Video message</item>
-        <item>GIF</item>
-        <item>Unsupported message</item>
-        <item>Draft</item>
-    </string-array>
-
     <string name="search_placeholder">Search…</string>
 
-    <string-array name="members_type">
-        <item>members</item>
-        <item>subscribers</item>
-    </string-array>
-    
-    <string-array name="group_type">
+    <string-array name="group_types">
         <item>basic group</item>
         <item>channel</item>
         <item>super group</item>
+    </string-array>
+
+    <string-array name="user_types">
+        <item>bot</item>
+        <item>Deleted Account</item>
     </string-array>
 
     <string name="empty_search">Nothing to show</string>
@@ -106,5 +96,6 @@
         <item>Are you sure you want to log out?</item>
         <item>Cancel</item>
     </string-array>
+    <string name="unsupported_message">Unsupported message</string>
 
 </resources>

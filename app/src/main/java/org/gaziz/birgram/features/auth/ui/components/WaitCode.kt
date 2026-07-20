@@ -62,7 +62,7 @@ fun WaitCode(
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
     var code by rememberSaveable { mutableStateOf("") }
-    val codeType = stringArrayResource(R.array.code_type)[codeInfo.type.type.ordinal]
+    val codeType = stringArrayResource(R.array.code_types)[codeInfo.type.type.ordinal]
     var counter by rememberSaveable { mutableIntStateOf(codeInfo.timeout) }
     var isLoading by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(Unit){
@@ -193,7 +193,7 @@ fun WaitCode(
                 },
             )
             if(codeInfo.nextType != null) {
-                val nextType = stringArrayResource(R.array.next_type)[codeInfo.nextType.type.ordinal]
+                val nextType = stringArrayResource(R.array.next_types)[codeInfo.nextType.type.ordinal]
                 val nextTypeSuffix = stringResource(R.string.suffix_waiting)
                 Spacer(Modifier.height(8.dp))
                 TextButton(
