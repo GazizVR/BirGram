@@ -22,4 +22,5 @@ interface AuthService {
 
     fun logOut(onOk: () -> Unit)
 
+    var onLoggingOut: () -> Unit
 }

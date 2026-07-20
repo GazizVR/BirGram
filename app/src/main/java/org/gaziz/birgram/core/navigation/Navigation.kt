@@ -26,7 +26,7 @@ fun Navigation(
                 onNonReady = {
                     val currentBack = navController.currentBackStackEntry
                     if(currentBack?.destination?.route != Route.Splash.route) {
-                        navController.navigate(Route.Splash.route)
+                        navController.popBackStack(Route.Splash.route, inclusive = false)
                     }
                 }
             )

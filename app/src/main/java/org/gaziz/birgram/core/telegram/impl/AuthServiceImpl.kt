@@ -1,10 +1,13 @@
 package org.gaziz.birgram.core.telegram.impl
 
 import android.os.Build
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.BuildConfig
 import org.gaziz.birgram.core.telegram.api.AuthService
@@ -23,6 +26,8 @@ class AuthServiceImpl @Inject constructor(
         const val DEFAULT_CODE_LENGTH = 5
     }
 
+    override var onLoggingOut: () -> Unit = {}
+
     override fun getDefaultCodeLength(): Int {
         return DEFAULT_CODE_LENGTH
     }
@@ -30,6 +35,16 @@ class AuthServiceImpl @Inject constructor(
     override val authState: StateFlow<AuthState?> = _authState.asStateFlow()
 
     override fun setAuthState(state: AuthState) {
+        if(state is AuthState.LoggingOut) {
+            CoroutineScope(Dispatchers.Main).launch {
+                onLoggingOut()
+            }
+        }
+        if(state is AuthState.Closed) {
+            CoroutineScope(Dispatchers.Main).launch {
+                onLoggingOut()
+            }
+        }
         _authState.update { state }
     }
 
