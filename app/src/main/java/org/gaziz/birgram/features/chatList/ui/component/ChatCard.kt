@@ -3,6 +3,7 @@ package org.gaziz.birgram.features.chatList.ui.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -78,6 +79,8 @@ fun ChatTitle(
         text = title,
         color = color,
         fontSize = fontSize,
+        lineHeight = fontSize,
+        maxLines = 1
     )
 }
 
@@ -115,6 +118,7 @@ fun ChatCard(
     modifier: Modifier,
     photo: CardPhoto,
     title: CardText,
+    lastMessage: @Composable () -> Unit = {},
     unreadBadge: CardUnreadBadge? = null,
     onClick: () -> Unit
 ) {
@@ -145,42 +149,60 @@ fun ChatCard(
                 )
             }
             Spacer(Modifier.width(8.dp))
-            ChatTitle(
-                title = title.text,
-                color = title.color,
-                fontSize = title.fontSize,
-            )
-            if(unreadBadge != null) {
-                if(
-                    unreadBadge.unreadCount > 0 ||
-                    unreadBadge.mentionCount > 0 ||
-                    unreadBadge.reactionCount > 0
+            Column(
+                verticalArrangement = Arrangement.Center
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ){
+                    ChatTitle(
+                        title = title.text,
+                        color = title.color,
+                        fontSize = title.fontSize,
+                    )
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Spacer(Modifier.weight(1f))
-                    if(unreadBadge.reactionCount > 0) {
-                        Text(
-                            text = "❤\uFE0F",
-                            fontSize = unreadBadge.fontSize*1.35,
-                            lineHeight = unreadBadge.fontSize*1.35,
-                        )
-                    }
-                    Spacer(Modifier.width(3.dp))
-                    Box(
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.onBackground.copy(0.35f)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = (unreadBadge.mentionCount+unreadBadge.unreadCount).toString(),
-                            fontSize = unreadBadge.fontSize,
-                            lineHeight = unreadBadge.fontSize,
-                            color = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier.padding(
-                                horizontal = 6.dp,
-                                vertical = 4.dp
-                            )
-                        )
+                    lastMessage()
+                    if(unreadBadge != null) {
+                        Spacer(Modifier.weight(1f))
+                        if(
+                            unreadBadge.unreadCount > 0 ||
+                            unreadBadge.mentionCount > 0 ||
+                            unreadBadge.reactionCount > 0
+                        ) {
+                            Row {
+                                if(unreadBadge.reactionCount > 0) {
+                                    Text(
+                                        text = "❤\uFE0F",
+                                        fontSize = unreadBadge.fontSize*1.35,
+                                        lineHeight = unreadBadge.fontSize*1.35,
+                                    )
+                                }
+                                Spacer(Modifier.width(3.dp))
+                                Box(
+                                    modifier = Modifier
+                                        .clip(CircleShape)
+                                        .background(MaterialTheme.colorScheme.onBackground.copy(0.35f)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = (unreadBadge.mentionCount+unreadBadge.unreadCount).toString(),
+                                        fontSize = unreadBadge.fontSize,
+                                        lineHeight = unreadBadge.fontSize,
+                                        color = MaterialTheme.colorScheme.onBackground,
+                                        modifier = Modifier.padding(
+                                            horizontal = 6.dp,
+                                            vertical = 4.dp
+                                        ),
+                                        maxLines = 1
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }
