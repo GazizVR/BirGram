@@ -26,6 +26,7 @@ import org.gaziz.birgram.features.chatList.ui.component.ArchiveScreenTopBar
 import org.gaziz.birgram.features.chatList.ui.component.ChatCard
 import org.gaziz.birgram.features.chatList.ui.model.CardPhoto
 import org.gaziz.birgram.features.chatList.ui.model.CardText
+import org.gaziz.birgram.features.chatList.ui.model.CardUnreadBadge
 
 @Composable
 fun ArchiveScreen(
@@ -73,7 +74,12 @@ fun ArchiveScreen(
                         fontSize = 7.sp,
                         color = MaterialTheme.colorScheme.onBackground
                     ),
-                    unreadCount = chat.unreadCount+chat.mentionCount+chat.reactionCount,
+                    unreadBadge = CardUnreadBadge(
+                        unreadCount = chat.unreadCount,
+                        mentionCount = chat.mentionCount,
+                        reactionCount = chat.reactionCount,
+                        fontSize = 6.sp
+                    ),
                     onClick = { onChatClick(chat.id) }
                 )
             }

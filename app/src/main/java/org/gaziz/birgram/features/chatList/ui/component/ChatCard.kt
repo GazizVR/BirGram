@@ -23,11 +23,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatPhoto
 import org.gaziz.birgram.features.chatList.ui.model.CardPhoto
 import org.gaziz.birgram.features.chatList.ui.model.CardText
+import org.gaziz.birgram.features.chatList.ui.model.CardUnreadBadge
 
 @Composable
 fun ChatImage(
@@ -115,7 +115,7 @@ fun ChatCard(
     modifier: Modifier,
     photo: CardPhoto,
     title: CardText,
-    unreadCount: Int = 0,
+    unreadBadge: CardUnreadBadge? = null,
     onClick: () -> Unit
 ) {
     Card(
@@ -150,24 +150,38 @@ fun ChatCard(
                 color = title.color,
                 fontSize = title.fontSize,
             )
-            if(unreadCount > 0) {
-                Spacer(Modifier.weight(1f))
-                Box(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.onBackground.copy(0.35f)),
-                    contentAlignment = Alignment.Center
+            if(unreadBadge != null) {
+                if(
+                    unreadBadge.unreadCount > 0 ||
+                    unreadBadge.mentionCount > 0 ||
+                    unreadBadge.reactionCount > 0
                 ) {
-                    Text(
-                        text = unreadCount.toString(),
-                        fontSize = 6.sp,
-                        lineHeight = 6.sp,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.padding(
-                            horizontal = 6.dp,
-                            vertical = 4.dp
+                    Spacer(Modifier.weight(1f))
+                    if(unreadBadge.reactionCount > 0) {
+                        Text(
+                            text = "❤\uFE0F",
+                            fontSize = unreadBadge.fontSize*1.35,
+                            lineHeight = unreadBadge.fontSize*1.35,
                         )
-                    )
+                    }
+                    Spacer(Modifier.width(3.dp))
+                    Box(
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.onBackground.copy(0.35f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = (unreadBadge.mentionCount+unreadBadge.unreadCount).toString(),
+                            fontSize = unreadBadge.fontSize,
+                            lineHeight = unreadBadge.fontSize,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier.padding(
+                                horizontal = 6.dp,
+                                vertical = 4.dp
+                            )
+                        )
+                    }
                 }
             }
         }
