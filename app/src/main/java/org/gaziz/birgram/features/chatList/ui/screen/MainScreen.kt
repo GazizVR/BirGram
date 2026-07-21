@@ -1,4 +1,4 @@
-package org.gaziz.birgram.features.chatList.ui
+package org.gaziz.birgram.features.chatList.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,9 +36,12 @@ import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.ui.icons.archive
 import org.gaziz.birgram.core.ui.icons.skull
-import org.gaziz.birgram.features.chatList.ui.components.ChatCard
-import org.gaziz.birgram.features.chatList.ui.components.MainScreenMenu
-import org.gaziz.birgram.features.chatList.ui.components.MainScreenTopBar
+import org.gaziz.birgram.features.chatList.ui.ChatListViewModel
+import org.gaziz.birgram.features.chatList.ui.component.ChatCard
+import org.gaziz.birgram.features.chatList.ui.component.MainScreenMenu
+import org.gaziz.birgram.features.chatList.ui.component.MainScreenTopBar
+import org.gaziz.birgram.features.chatList.ui.model.CardPhoto
+import org.gaziz.birgram.features.chatList.ui.model.CardText
 
 @Composable
 fun MainScreen(
@@ -58,6 +61,7 @@ fun MainScreen(
     val window = LocalWindowInfo.current
     val cardHeight = 70.dp
     val cardWidth = window.containerDpSize.width
+    val cardPhotoSize = 54.dp
 
     Box {
         ModalNavigationDrawer(
@@ -90,11 +94,16 @@ fun MainScreen(
                                 modifier = Modifier
                                     .height(cardHeight)
                                     .width(cardWidth),
-                                photoModel = archive,
-                                photoSize = 54.dp,
-                                photoPlaceHolderColor = MaterialTheme.colorScheme.onSurface.copy(0.25f),
-                                title = archivedChats,
-                                titleFontSize = 7.sp,
+                                photo = CardPhoto(
+                                    model = archive,
+                                    size = cardPhotoSize,
+                                    placeHolderColor = MaterialTheme.colorScheme.onSurface.copy(0.25f),
+                                ),
+                                title = CardText(
+                                    text = archivedChats,
+                                    fontSize = 7.sp,
+                                    color = MaterialTheme.colorScheme.onBackground
+                                ),
                                 onClick = onArchiveClick
                             )
                         }
@@ -108,12 +117,17 @@ fun MainScreen(
                             modifier = Modifier
                                 .height(cardHeight)
                                 .width(cardWidth),
-                            photoModel = if(isDeleted) skull else chat.photo,
-                            onPhotoNull = { fileId -> viewModel.downloadChatIcon(chat.id,fileId) },
-                            photoSize = 54.dp,
-                            photoPlaceHolderColor = accentColor,
-                            title = if(isDeleted) stringResource(R.string.deleted_account) else chat.title,
-                            titleFontSize = 7.sp,
+                            photo = CardPhoto(
+                                model = if(isDeleted) skull else chat.photo,
+                                size = cardPhotoSize,
+                                placeHolderColor = accentColor,
+                                onNull = { fileId -> viewModel.downloadChatIcon(chat.id,fileId) },
+                            ),
+                            title = CardText(
+                                text = if(isDeleted) stringResource(R.string.deleted_account) else chat.title,
+                                fontSize = 7.sp,
+                                color = MaterialTheme.colorScheme.onBackground
+                            ),
                             onClick = { onChatClick(chat.id) }
                         )
                     }

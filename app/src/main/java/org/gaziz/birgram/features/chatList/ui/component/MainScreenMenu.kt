@@ -1,4 +1,4 @@
-package org.gaziz.birgram.features.chatList.ui.components
+package org.gaziz.birgram.features.chatList.ui.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

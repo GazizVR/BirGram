@@ -7,8 +7,8 @@ import androidx.navigation.navigation
 import org.gaziz.birgram.core.navigation.ChatListRoute
 import org.gaziz.birgram.core.navigation.ChatRoute
 import org.gaziz.birgram.core.navigation.SearchChatsRoute
-import org.gaziz.birgram.features.chatList.ui.ArchiveScreen
-import org.gaziz.birgram.features.chatList.ui.MainScreen
+import org.gaziz.birgram.features.chatList.ui.screen.ArchiveScreen
+import org.gaziz.birgram.features.chatList.ui.screen.MainScreen
 
 fun NavGraphBuilder.chatListGraph(
     navController: NavController

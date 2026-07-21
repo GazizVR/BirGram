@@ -1,8 +1,9 @@
-package org.gaziz.birgram.features.chatList.ui.components
+package org.gaziz.birgram.features.chatList.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -21,11 +22,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatPhoto
+import org.gaziz.birgram.features.chatList.ui.model.CardPhoto
+import org.gaziz.birgram.features.chatList.ui.model.CardText
 
 @Composable
 fun ChatImage(
@@ -69,11 +71,12 @@ fun ChatImage(
 @Composable
 fun ChatTitle(
     title: String,
-    fontSize: TextUnit
+    color: Color,
+    fontSize: TextUnit,
 ) {
     Text(
         text = title,
-        color = MaterialTheme.colorScheme.onBackground,
+        color = color,
         fontSize = fontSize,
     )
 }
@@ -110,12 +113,9 @@ fun ChatPhoto(
 @Composable
 fun ChatCard(
     modifier: Modifier,
-    photoModel: Any?,
-    onPhotoNull: (Int) -> Unit = {},
-    photoSize: Dp,
-    photoPlaceHolderColor: Color,
-    title: String,
-    titleFontSize: TextUnit,
+    photo: CardPhoto,
+    title: CardText,
+    lastMessage: CardText? = null,
     onClick: () -> Unit
 ) {
     Card(
@@ -128,27 +128,37 @@ fun ChatCard(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ){
-            if(photoModel is ChatPhoto?) {
+            if(photo.model is ChatPhoto?) {
                 ChatPhoto(
-                    modifier = Modifier.size(photoSize),
-                    photo = photoModel,
-                    onPhotoNull = onPhotoNull,
-                    placeHolderColor = photoPlaceHolderColor,
-                    placeHolderText = if(title.isNotBlank()) title[0].toString() else "",
+                    modifier = Modifier.size(photo.size),
+                    photo = photo.model,
+                    onPhotoNull = photo.onNull,
+                    placeHolderColor = photo.placeHolderColor,
+                    placeHolderText = if(title.text.isNotBlank()) title.text[0].toString() else "",
                 )
             } else {
                 ChatImage(
-                    modifier = Modifier.size(photoSize),
-                    imageModel = photoModel,
-                    placeHolderColor = photoPlaceHolderColor,
-                    placeHolderText = if(title.isNotBlank()) title[0].toString() else "",
+                    modifier = Modifier.size(photo.size),
+                    imageModel = photo.model,
+                    placeHolderColor = photo.placeHolderColor,
+                    placeHolderText = if(title.text.isNotBlank()) title.text[0].toString() else "",
                 )
             }
             Spacer(Modifier.width(8.dp))
-            ChatTitle(
-                title = title,
-                fontSize = titleFontSize,
-            )
+            Column {
+                ChatTitle(
+                    title = title.text,
+                    color = title.color,
+                    fontSize = title.fontSize,
+                )
+                if(lastMessage != null) {
+                    Text(
+                        text = lastMessage.text,
+                        fontSize = lastMessage.fontSize,
+                        color = lastMessage.color
+                    )
+                }
+            }
         }
     }
 }
