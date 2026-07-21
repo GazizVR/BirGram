@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.datastore.UserPreferencesRepository
 import org.gaziz.birgram.core.telegram.api.AuthService
+import org.gaziz.birgram.core.telegram.api.ChatService
 import org.gaziz.birgram.core.telegram.api.UserService
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatListType
 import org.gaziz.birgram.core.telegram.api.usecase.DownloadChatPhotoSmall
@@ -19,10 +20,11 @@ import javax.inject.Inject
 class ChatListViewModel @Inject constructor(
     loadChatList: LoadChatList,
     getChatList: GetChatList,
+    userService: UserService,
     private val downloadChatPhotoSmall: DownloadChatPhotoSmall,
     private val authService: AuthService,
-    userService: UserService,
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val userPreferencesRepository: UserPreferencesRepository,
+    private val chatService: ChatService
 ): ViewModel() {
     init {
         loadChatList(ChatListType.Main)
@@ -49,6 +51,7 @@ class ChatListViewModel @Inject constructor(
         SharingStarted.Eagerly,
         emptyList()
     )
+    val accentColors = chatService.accentColors
     fun downloadChatIcon(
         chatId: Long,
         fileId: Int
