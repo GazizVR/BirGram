@@ -16,11 +16,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import org.gaziz.birgram.R
+import org.gaziz.birgram.core.ui.icons.arrowBack
+import org.gaziz.birgram.core.ui.icons.close
 
 @Composable
 fun SearchTopBar(
@@ -47,7 +47,7 @@ fun SearchTopBar(
                 onClick = { onBack() }
             ) {
                 Icon(
-                    ImageVector.vectorResource(R.drawable.arrow_back),
+                    imageVector = arrowBack,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onBackground,
                 )
@@ -59,7 +59,7 @@ fun SearchTopBar(
                     onClick = { searchQuery = "" }
                 ) {
                     Icon(
-                        ImageVector.vectorResource(R.drawable.close),
+                        imageVector = close,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onBackground,
                     )

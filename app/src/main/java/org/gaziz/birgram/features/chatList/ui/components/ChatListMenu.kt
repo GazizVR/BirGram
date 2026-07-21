@@ -15,11 +15,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringArrayResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import org.gaziz.birgram.R
+import org.gaziz.birgram.core.ui.icons.darkMode
+import org.gaziz.birgram.core.ui.icons.exitToApp
 
 @Composable
 fun ChatListMenu(
@@ -40,7 +40,7 @@ fun ChatListMenu(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.dark_mode),
+                    imageVector = darkMode,
                     contentDescription = "",
                     tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(36.dp)
@@ -62,7 +62,7 @@ fun ChatListMenu(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.log_out),
+                    imageVector = exitToApp,
                     contentDescription = "",
                     tint = MaterialTheme.colorScheme.error,
                     modifier = Modifier.size(32.dp)

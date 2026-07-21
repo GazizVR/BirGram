@@ -16,12 +16,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.R
+import org.gaziz.birgram.core.ui.icons.send
 
 @Composable
 fun MessageInputBar(
@@ -70,7 +69,7 @@ fun MessageInputBar(
                     },
                 ) {
                     Icon(
-                        ImageVector.vectorResource(R.drawable.send),
+                        imageVector = send,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.primary,
                     )

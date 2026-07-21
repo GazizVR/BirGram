@@ -100,7 +100,6 @@ fun ChatListScreen(
                 }
             }
         }
-
         if(isLogOut) {
             val cnt = stringArrayResource(R.array.log_out_cnt)
             AlertDialog(

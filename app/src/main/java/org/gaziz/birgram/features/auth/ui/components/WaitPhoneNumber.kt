@@ -32,14 +32,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringArrayResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.gaziz.birgram.R
+import org.gaziz.birgram.core.ui.icons.arrowBack
 
 @Composable
 fun WaitPhoneNumber(
@@ -141,7 +140,7 @@ fun WaitPhoneNumber(
                                 },
                             ) {
                                 Icon(
-                                    imageVector = ImageVector.vectorResource(R.drawable.arrow_back),
+                                    imageVector = arrowBack,
                                     contentDescription = "",
                                     modifier = Modifier
                                         .size(26.dp)

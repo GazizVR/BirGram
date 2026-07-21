@@ -20,15 +20,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringArrayResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import org.gaziz.birgram.R
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatPhoto
+import org.gaziz.birgram.core.ui.icons.skull
 
 @Composable
 fun ChatImage(
@@ -56,7 +55,7 @@ fun ChatImage(
         ) {
             if(isDeleted) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.skull),
+                    imageVector = skull,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onBackground
                 )

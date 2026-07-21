@@ -16,16 +16,15 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.gaziz.birgram.R
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatPhoto
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
 import org.gaziz.birgram.core.telegram.api.model.user.UserStatus
 import org.gaziz.birgram.core.ui.components.ChatTypeCnt
+import org.gaziz.birgram.core.ui.icons.arrowBack
+import org.gaziz.birgram.core.ui.icons.moreVert
 
 @Composable
 fun ChatTopBar(
@@ -51,7 +50,7 @@ fun ChatTopBar(
                 onClick = onBack
             ) {
                 Icon(
-                    ImageVector.vectorResource(R.drawable.arrow_back),
+                    imageVector = arrowBack,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onBackground
                 )
@@ -75,7 +74,7 @@ fun ChatTopBar(
                 onClick = {}
             ) {
                 Icon(
-                    ImageVector.vectorResource(R.drawable.more),
+                    imageVector = moreVert,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onBackground
                 )
