@@ -17,33 +17,33 @@ fun Navigation(
 ){
     NavHost(
         navController = navController,
-        startDestination = Route.Splash.route
+        startDestination = SplashRoute
     ){
-        composable(Route.Splash.route) {
+        composable<SplashRoute> {
             SplashScreen(
-                onReady =  { navController.navigate(Route.ChatList.route) },
-                onAuth = { navController.navigate(Route.Auth.route) },
+                onReady =  { navController.navigate(ChatListRoute) },
+                onAuth = { navController.navigate(AuthRoute) },
                 onNonReady = {
                     val currentBack = navController.currentBackStackEntry
-                    if(currentBack?.destination?.route != Route.Splash.route) {
-                        navController.popBackStack(Route.Splash.route, inclusive = false)
+                    if(currentBack?.destination != SplashRoute) {
+                        navController.popBackStack(SplashRoute, inclusive = false)
                     }
                 }
             )
         }
-        composable(Route.Auth.route) {
+        composable<AuthRoute> {
             AuthScreen(
-                onReady =  { navController.navigate(Route.ChatList.route) },
-                onLogOut = { navController.navigate(Route.Splash.route) }
+                onReady =  { navController.navigate(ChatListRoute) },
+                onLogOut = { navController.navigate(SplashRoute) }
             )
         }
-        composable(Route.ChatList.route) {
+        composable<ChatListRoute> {
             ChatListScreen(
-                { navController.navigate(Route.SearchChats.route) },
+                { navController.navigate(SearchChatsRoute) },
                 { navController.navigate(ChatRoute(it)) },
             )
         }
-        composable(Route.SearchChats.route) {
+        composable<SearchChatsRoute> {
             SearchChatsScreen(
                 { navController.popBackStack() },
                 { navController.navigate(ChatRoute(it)) }

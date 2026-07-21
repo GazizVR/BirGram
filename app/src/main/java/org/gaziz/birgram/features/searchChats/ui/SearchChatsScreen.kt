@@ -25,7 +25,7 @@ import org.gaziz.birgram.features.searchChats.ui.components.SearchTopBar
 @Composable
 fun SearchChatsScreen(
     onBack: () -> Unit,
-    navigateToChat: (Long) -> Unit
+    onChatClick: (Long) -> Unit
 ){
     val viewModel = hiltViewModel<SearchChatsViewModel>()
     val chats by viewModel.searchChats.collectAsState()
@@ -42,7 +42,7 @@ fun SearchChatsScreen(
                     SearchChatCard(
                         chat.second,
                         { viewModel.downloadChatIcon(chat.first,it) },
-                        navigateToChat,
+                        onChatClick,
                         {
                             val user by viewModel.getUser(it).collectAsState()
                             user?.status

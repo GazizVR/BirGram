@@ -43,8 +43,8 @@ import org.gaziz.birgram.features.chatList.ui.components.ChatListTopBar
 
 @Composable
 fun ChatListScreen(
-    navigateToSearch: () -> Unit,
-    navigateToChat: (Long) -> Unit
+    onSearchClick: () -> Unit,
+    onChatClick: (Long) -> Unit
 ) {
     BackHandler { }
     val viewModel = hiltViewModel<ChatListViewModel>()
@@ -74,7 +74,7 @@ fun ChatListScreen(
             Scaffold(
                 topBar = {
                     ChatListTopBar(
-                        navigateToSearch
+                        onSearchClick
                     ) {
                         scope.launch { drawerState.open() }
                     }
@@ -115,7 +115,7 @@ fun ChatListScreen(
                             photoPlaceHolderColor = accentColor,
                             title = if(isDeleted) stringResource(R.string.deleted_account) else chat.title,
                             titleFontSize = 7.sp,
-                            onClick = { navigateToChat(chat.id) }
+                            onClick = { onChatClick(chat.id) }
                         )
                     }
                 }
