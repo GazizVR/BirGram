@@ -21,10 +21,10 @@ class ChatListViewModel @Inject constructor(
     loadChatList: LoadChatList,
     getChatList: GetChatList,
     userService: UserService,
+    chatService: ChatService,
     private val downloadChatPhotoSmall: DownloadChatPhotoSmall,
     private val authService: AuthService,
     private val userPreferencesRepository: UserPreferencesRepository,
-    private val chatService: ChatService
 ): ViewModel() {
     init {
         loadChatList(ChatListType.Main)
@@ -47,6 +47,11 @@ class ChatListViewModel @Inject constructor(
         }
     }
     val mainChatList = getChatList(ChatListType.Main).stateIn(
+        viewModelScope,
+        SharingStarted.Eagerly,
+        emptyList()
+    )
+    val archiveChatList = getChatList(ChatListType.Archive).stateIn(
         viewModelScope,
         SharingStarted.Eagerly,
         emptyList()

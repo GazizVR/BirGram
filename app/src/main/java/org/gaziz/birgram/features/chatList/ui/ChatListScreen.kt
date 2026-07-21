@@ -36,6 +36,7 @@ import kotlinx.coroutines.launch
 import org.gaziz.birgram.R
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
+import org.gaziz.birgram.core.ui.icons.archive
 import org.gaziz.birgram.core.ui.icons.skull
 import org.gaziz.birgram.features.chatList.ui.components.ChatCard
 import org.gaziz.birgram.features.chatList.ui.components.ChatListMenu
@@ -50,6 +51,7 @@ fun ChatListScreen(
     val viewModel = hiltViewModel<ChatListViewModel>()
     val mainChats by viewModel.mainChatList.collectAsState()
     val accentColors by viewModel.accentColors.collectAsState()
+    val archivedChats by viewModel.archiveChatList.collectAsState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val isDark by viewModel.isDark.collectAsState()
@@ -84,6 +86,22 @@ fun ChatListScreen(
                     modifier = Modifier.fillMaxSize().padding(it),
                     verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
+                    item {
+                        if(archivedChats.isNotEmpty()) {
+                            val archivedChats = stringResource(R.string.archived_chats)
+                            ChatCard(
+                                modifier = Modifier
+                                    .height(cardHeight)
+                                    .width(cardWidth),
+                                photoModel = archive,
+                                photoSize = 54.dp,
+                                photoPlaceHolderColor = MaterialTheme.colorScheme.onSurface.copy(0.25f),
+                                title = archivedChats,
+                                titleFontSize = 7.sp,
+                                onClick = {}
+                            )
+                        }
+                    }
                     items(mainChats) { chat ->
                         var photoPlaceHolderColor = MaterialTheme.colorScheme.primary
                         val accentColorId = if(accentColors[chat.accentColorId] != null){
