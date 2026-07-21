@@ -22,7 +22,7 @@ import org.gaziz.birgram.core.ui.icons.darkMode
 import org.gaziz.birgram.core.ui.icons.exitToApp
 
 @Composable
-fun ChatListMenu(
+fun MainScreenMenu(
     isDark: Boolean,
     switchIsDark: (Boolean) -> Unit,
     onLogOut: () -> Unit

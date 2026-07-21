@@ -18,14 +18,15 @@ fun NavGraphBuilder.chatListGraph(
     ) {
         composable<MainRoute> {
             MainScreen(
-                { navController.navigate(SearchChatsRoute) },
-                { navController.navigate(ChatRoute(it)) },
-                { navController.navigate(ArchiveRoute) }
+                onSearchClick = { navController.navigate(SearchChatsRoute) },
+                onChatClick = { navController.navigate(ChatRoute(it)) },
+                onArchiveClick = { navController.navigate(ArchiveRoute) }
             )
         }
         composable<ArchiveRoute> {
             ArchiveScreen(
-                onBack = { navController.popBackStack(MainRoute, inclusive = false) }
+                onBack = { navController.popBackStack(MainRoute, inclusive = false) },
+                onChatClick = { navController.navigate(ChatRoute(it)) },
             )
         }
     }

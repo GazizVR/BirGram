@@ -23,7 +23,7 @@ import org.gaziz.birgram.core.ui.icons.menu
 import org.gaziz.birgram.core.ui.icons.search
 
 @Composable
-fun ChatListTopBar(
+fun MainScreenTopBar(
     navigateToSearch: () -> Unit,
     onMenu: () -> Unit
 ) {

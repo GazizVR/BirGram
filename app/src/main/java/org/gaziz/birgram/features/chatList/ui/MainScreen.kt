@@ -37,8 +37,8 @@ import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.ui.icons.archive
 import org.gaziz.birgram.core.ui.icons.skull
 import org.gaziz.birgram.features.chatList.ui.components.ChatCard
-import org.gaziz.birgram.features.chatList.ui.components.ChatListMenu
-import org.gaziz.birgram.features.chatList.ui.components.ChatListTopBar
+import org.gaziz.birgram.features.chatList.ui.components.MainScreenMenu
+import org.gaziz.birgram.features.chatList.ui.components.MainScreenTopBar
 
 @Composable
 fun MainScreen(
@@ -63,7 +63,7 @@ fun MainScreen(
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
-                ChatListMenu(
+                MainScreenMenu(
                     isDark = isDark,
                     switchIsDark = { viewModel.switchIsDark(it) },
                     onLogOut = { isLogOut = true }
@@ -72,7 +72,7 @@ fun MainScreen(
         ) {
             Scaffold(
                 topBar = {
-                    ChatListTopBar(
+                    MainScreenTopBar(
                         onSearchClick
                     ) {
                         scope.launch { drawerState.open() }
