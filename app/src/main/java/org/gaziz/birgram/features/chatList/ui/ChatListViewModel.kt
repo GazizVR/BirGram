@@ -1,9 +1,11 @@
 package org.gaziz.birgram.features.chatList.ui
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.datastore.UserPreferencesRepository
@@ -12,6 +14,7 @@ import org.gaziz.birgram.core.telegram.api.ChatService
 import org.gaziz.birgram.core.telegram.api.UserService
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatListType
 import org.gaziz.birgram.core.telegram.api.usecase.DownloadChatPhotoSmall
+import org.gaziz.birgram.core.telegram.api.usecase.GetAccentColorById
 import org.gaziz.birgram.features.chatList.domain.usecase.GetChatList
 import org.gaziz.birgram.features.chatList.domain.usecase.LoadChatList
 import javax.inject.Inject
@@ -22,6 +25,7 @@ class ChatListViewModel @Inject constructor(
     getChatList: GetChatList,
     userService: UserService,
     chatService: ChatService,
+    private val getAccentColorById: GetAccentColorById,
     private val downloadChatPhotoSmall: DownloadChatPhotoSmall,
     private val authService: AuthService,
     private val userPreferencesRepository: UserPreferencesRepository,
@@ -56,7 +60,13 @@ class ChatListViewModel @Inject constructor(
         SharingStarted.Eagerly,
         emptyList()
     )
-    val accentColors = chatService.accentColors
+    val getAccentColor: (Int) -> StateFlow<Color> = {
+        getAccentColorById(it).stateIn(
+            viewModelScope,
+            SharingStarted.Eagerly,
+            Color.Unspecified
+        )
+    }
     fun downloadChatIcon(
         chatId: Long,
         fileId: Int
