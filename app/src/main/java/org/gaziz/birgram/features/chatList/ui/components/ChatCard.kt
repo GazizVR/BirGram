@@ -113,6 +113,7 @@ fun ChatCard(
     photoModel: Any?,
     onPhotoNull: (Int) -> Unit = {},
     photoSize: Dp,
+    photoPlaceHolderColor: Color,
     title: String,
     titleFontSize: TextUnit,
     onClick: () -> Unit
@@ -132,14 +133,14 @@ fun ChatCard(
                     modifier = Modifier.size(photoSize),
                     photo = photoModel,
                     onPhotoNull = onPhotoNull,
-                    placeHolderColor = MaterialTheme.colorScheme.primary,
+                    placeHolderColor = photoPlaceHolderColor,
                     placeHolderText = if(title.isNotBlank()) title[0].toString() else "",
                 )
             } else {
                 ChatImage(
                     modifier = Modifier.size(photoSize),
                     imageModel = photoModel,
-                    placeHolderColor = MaterialTheme.colorScheme.primary,
+                    placeHolderColor = photoPlaceHolderColor,
                     placeHolderText = if(title.isNotBlank()) title[0].toString() else "",
                 )
             }

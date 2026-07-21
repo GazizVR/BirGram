@@ -26,7 +26,7 @@ class UpdateDispatcher @Inject constructor(
                     messageUpdater.onLoggingOut()
                     chatUpdater.onLoggingOut()
                 }
-                authUpdater.onUpdateAuthState(u)
+                authUpdater.onAuthStateUpdate(u)
             }
 
             is TdApi.UpdateNewMessage -> messageUpdater.onNewUpdate(u)
@@ -40,6 +40,9 @@ class UpdateDispatcher @Inject constructor(
             is TdApi.UpdateChatLastMessage -> chatUpdater.onLastMsgUpdate(u)
             is TdApi.UpdateChatDraftMessage -> chatUpdater.onDraftMsgUpdate(u)
             is TdApi.UpdateChatPermissions -> chatUpdater.onPermissionsUpdate(u)
+
+            is TdApi.UpdateChatAccentColors -> chatUpdater.onChatAccentColorsUpdate(u)
+            is TdApi.UpdateAccentColors -> chatUpdater.onAccentColorsUpdate(u)
 
             is TdApi.UpdateChatReadInbox -> chatUpdater.onInboxUpdate(u)
             is TdApi.UpdateChatUnreadReactionCount -> chatUpdater.onReactionCountUpdate(u)

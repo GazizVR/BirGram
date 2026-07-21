@@ -1,11 +1,16 @@
 package org.gaziz.birgram.core.telegram.api
 
 import kotlinx.coroutines.flow.StateFlow
+import org.gaziz.birgram.core.telegram.api.model.AccentColor
 import org.gaziz.birgram.core.telegram.api.model.ResponseData
 import org.gaziz.birgram.core.telegram.api.model.chat.Chat
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatListType
 
 interface ChatService {
+
+    val accentColors: StateFlow<Map<Int, AccentColor>>
+
+    fun updateAccentColors(updFun: (Map<Int, AccentColor>) -> Map<Int, AccentColor>)
 
     val chats: StateFlow<Map<Long, Chat>>
 

@@ -10,7 +10,7 @@ import javax.inject.Singleton
 class AuthUpdater @Inject constructor(
     private val authService: AuthService,
 ) {
-    fun onUpdateAuthState(
+    fun onAuthStateUpdate(
         update: TdApi.UpdateAuthorizationState
     ) {
         authService.setAuthState(

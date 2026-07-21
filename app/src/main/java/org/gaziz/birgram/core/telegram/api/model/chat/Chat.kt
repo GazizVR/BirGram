@@ -14,5 +14,6 @@ data class Chat(
     val unreadCount: Int,
     val mentionCount: Int,
     val reactionCount: Int,
-    val permissions: ChatPermissions
+    val permissions: ChatPermissions,
+    val accentColorId: Int
 )

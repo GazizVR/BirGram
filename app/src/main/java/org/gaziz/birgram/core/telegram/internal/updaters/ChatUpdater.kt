@@ -3,6 +3,7 @@ package org.gaziz.birgram.core.telegram.internal.updaters
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.api.ChatService
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatPosition
+import org.gaziz.birgram.core.telegram.internal.mapper.toAccentColor
 import org.gaziz.birgram.core.telegram.internal.mapper.toChat
 import org.gaziz.birgram.core.telegram.internal.mapper.toChatPosition
 import org.gaziz.birgram.core.telegram.internal.mapper.toDraftMessage
@@ -74,6 +75,22 @@ class ChatUpdater @Inject constructor(
             val chat = old[u.chatId] ?: return@updateChats old
             val newChat = chat.copy(permissions = u.permissions.toPermissions())
             old + (u.chatId to newChat)
+        }
+    }
+    fun onChatAccentColorsUpdate(u: TdApi.UpdateChatAccentColors){
+        chatService.updateChats { old ->
+            val chat = old[u.chatId] ?: return@updateChats old
+            val newChat = chat.copy(accentColorId = u.accentColorId)
+            old + (u.chatId to newChat)
+        }
+    }
+    fun onAccentColorsUpdate(u: TdApi.UpdateAccentColors) {
+        chatService.updateAccentColors { old ->
+            old.toMutableMap().apply {
+                u.colors.forEach { color ->
+                    put(color.id,color.toAccentColor())
+                }
+            }.toMap()
         }
     }
 

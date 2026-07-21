@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.api.ChatService
+import org.gaziz.birgram.core.telegram.api.model.AccentColor
 import org.gaziz.birgram.core.telegram.api.model.ResponseData
 import org.gaziz.birgram.core.telegram.api.model.chat.Chat
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatListType
@@ -13,10 +14,20 @@ import org.gaziz.birgram.core.telegram.internal.ClientManager
 import javax.inject.Inject
 
 class ChatServiceImpl @Inject constructor(
-    private val manager: ClientManager
+    private val manager: ClientManager,
 ): ChatService {
+    private val _accentColors = MutableStateFlow<Map<Int, AccentColor>>(emptyMap())
+    override val accentColors: StateFlow<Map<Int, AccentColor>> = _accentColors.asStateFlow()
+
+    override fun updateAccentColors(
+        updFun: (Map<Int, AccentColor>) -> Map<Int, AccentColor>
+    ) {
+        _accentColors.update(updFun)
+    }
+
     private val _chats = MutableStateFlow<Map<Long, Chat>>(emptyMap())
     override val chats: StateFlow<Map<Long, Chat>> = _chats.asStateFlow()
+
 
     override fun updateChats(
         updFun: (Map<Long, Chat>) -> Map<Long, Chat>

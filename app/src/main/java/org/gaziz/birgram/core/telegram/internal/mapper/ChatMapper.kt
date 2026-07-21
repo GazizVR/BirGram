@@ -68,5 +68,6 @@ fun TdApi.Chat.toChat(): Chat {
         mentionCount = chat.unreadMentionCount,
         reactionCount = chat.unreadReactionCount,
         permissions = chat.permissions.toPermissions(),
+        accentColorId = chat.accentColorId
     )
 }

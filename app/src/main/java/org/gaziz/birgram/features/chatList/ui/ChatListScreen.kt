@@ -93,6 +93,7 @@ fun ChatListScreen(
                             photoModel = if(isDeleted) skull else chat.photo,
                             onPhotoNull = { fileId -> viewModel.downloadChatIcon(chat.id,fileId) },
                             photoSize = 54.dp,
+                            photoPlaceHolderColor = MaterialTheme.colorScheme.primary,
                             title = if(isDeleted) stringResource(R.string.deleted_account) else chat.title,
                             titleFontSize = 7.sp,
                             onClick = { navigateToChat(chat.id) }
