@@ -73,6 +73,7 @@ fun ArchiveScreen(
                         fontSize = 7.sp,
                         color = MaterialTheme.colorScheme.onBackground
                     ),
+                    unreadCount = chat.unreadCount+chat.mentionCount+chat.reactionCount,
                     onClick = { onChatClick(chat.id) }
                 )
             }

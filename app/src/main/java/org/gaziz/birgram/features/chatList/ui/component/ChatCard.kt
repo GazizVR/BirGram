@@ -3,7 +3,6 @@ package org.gaziz.birgram.features.chatList.ui.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -24,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatPhoto
 import org.gaziz.birgram.features.chatList.ui.model.CardPhoto
@@ -115,7 +115,7 @@ fun ChatCard(
     modifier: Modifier,
     photo: CardPhoto,
     title: CardText,
-    lastMessage: CardText? = null,
+    unreadCount: Int = 0,
     onClick: () -> Unit
 ) {
     Card(
@@ -145,17 +145,28 @@ fun ChatCard(
                 )
             }
             Spacer(Modifier.width(8.dp))
-            Column {
-                ChatTitle(
-                    title = title.text,
-                    color = title.color,
-                    fontSize = title.fontSize,
-                )
-                if(lastMessage != null) {
+            ChatTitle(
+                title = title.text,
+                color = title.color,
+                fontSize = title.fontSize,
+            )
+            if(unreadCount > 0) {
+                Spacer(Modifier.weight(1f))
+                Box(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.onBackground.copy(0.35f)),
+                    contentAlignment = Alignment.Center
+                ) {
                     Text(
-                        text = lastMessage.text,
-                        fontSize = lastMessage.fontSize,
-                        color = lastMessage.color
+                        text = unreadCount.toString(),
+                        fontSize = 6.sp,
+                        lineHeight = 6.sp,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.padding(
+                            horizontal = 6.dp,
+                            vertical = 4.dp
+                        )
                     )
                 }
             }
