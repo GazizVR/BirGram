@@ -60,11 +60,6 @@
         <item>super group</item>
     </string-array>
 
-    <string-array name="user_types">
-        <item>bot</item>
-        <item>Deleted Account</item>
-    </string-array>
-
     <string name="empty_search">Nothing to show</string>
 
     <string-array name="last_seen_cnt">
@@ -97,5 +92,8 @@
         <item>Cancel</item>
     </string-array>
     <string name="unsupported_message">Unsupported message</string>
+
+    <string name="archived_chats">Archived chats</string>
+    <string name="deleted_account">Deleted Account</string>
 
 </resources>

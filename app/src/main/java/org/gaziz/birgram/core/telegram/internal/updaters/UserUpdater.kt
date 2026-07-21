@@ -23,4 +23,7 @@ class UserUpdater @Inject constructor(
             old + (u.userId to user.copy(status = u.status.toStatus()))
         }
     }
+    fun onLoggingOut() {
+        userService.updateUsers { emptyMap() }
+    }
 }

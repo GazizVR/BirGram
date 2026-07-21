@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -34,6 +35,7 @@ import kotlinx.coroutines.launch
 import org.gaziz.birgram.R
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
+import org.gaziz.birgram.core.ui.icons.skull
 import org.gaziz.birgram.features.chatList.ui.components.ChatCard
 import org.gaziz.birgram.features.chatList.ui.components.ChatListMenu
 import org.gaziz.birgram.features.chatList.ui.components.ChatListTopBar
@@ -41,12 +43,11 @@ import org.gaziz.birgram.features.chatList.ui.components.ChatListTopBar
 @Composable
 fun ChatListScreen(
     navigateToSearch: () -> Unit,
-    navigateToChat: (Long) -> Unit,
-    onLogOut: () -> Unit
+    navigateToChat: (Long) -> Unit
 ) {
     BackHandler { }
     val viewModel = hiltViewModel<ChatListViewModel>()
-    val chatList by viewModel.mainChatList.collectAsState()
+    val mainChats by viewModel.mainChatList.collectAsState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val isDark by viewModel.isDark.collectAsState()
@@ -81,18 +82,18 @@ fun ChatListScreen(
                     modifier = Modifier.fillMaxSize().padding(it),
                     verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
-                    items(chatList) { chat ->
+                    items(mainChats) { chat ->
+                        val isDeleted =
+                            users[(chat.type as? ChatType.Private)?.userId]?.type is UserType.Deleted ||
+                            users[(chat.type as? ChatType.Private)?.userId]?.type is UserType.Unknown
                         ChatCard(
                             modifier = Modifier
                                 .height(cardHeight)
                                 .width(cardWidth),
-                            isDeleted =
-                                users[(chat.type as? ChatType.Private)?.userId]?.type is UserType.Deleted ||
-                                users[(chat.type as? ChatType.Private)?.userId]?.type is UserType.Unknown,
-                            photo = chat.photo,
+                            photoModel = if(isDeleted) skull else chat.photo,
                             onPhotoNull = { fileId -> viewModel.downloadChatIcon(chat.id,fileId) },
                             photoSize = 54.dp,
-                            title = chat.title,
+                            title = if(isDeleted) stringResource(R.string.deleted_account) else chat.title,
                             titleFontSize = 7.sp,
                             onClick = { navigateToChat(chat.id) }
                         )

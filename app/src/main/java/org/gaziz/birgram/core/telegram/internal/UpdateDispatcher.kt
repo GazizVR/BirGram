@@ -22,6 +22,7 @@ class UpdateDispatcher @Inject constructor(
             is TdApi.Error -> errorUpdater.onError(u)
             is TdApi.UpdateAuthorizationState -> {
                 if(u.authorizationState is TdApi.AuthorizationStateLoggingOut) {
+                    userUpdater.onLoggingOut()
                     messageUpdater.onLoggingOut()
                     chatUpdater.onLoggingOut()
                 }

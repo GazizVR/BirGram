@@ -9,7 +9,7 @@ import org.gaziz.birgram.core.telegram.api.model.ResponseData
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatListType
 import javax.inject.Inject
 
-class LoadAllChats @Inject constructor(
+class LoadChatList @Inject constructor(
     private val chatService: ChatService
 ) {
     operator fun invoke(type: ChatListType) {

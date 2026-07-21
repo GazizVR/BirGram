@@ -12,20 +12,21 @@ import org.gaziz.birgram.core.telegram.api.UserService
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatListType
 import org.gaziz.birgram.core.telegram.api.usecase.DownloadChatPhotoSmall
 import org.gaziz.birgram.features.chatList.domain.usecase.GetChatList
-import org.gaziz.birgram.features.chatList.domain.usecase.LoadAllChats
+import org.gaziz.birgram.features.chatList.domain.usecase.LoadChatList
 import javax.inject.Inject
 
 @HiltViewModel
 class ChatListViewModel @Inject constructor(
-    loadAllChats: LoadAllChats,
+    loadChatList: LoadChatList,
     getChatList: GetChatList,
     private val downloadChatPhotoSmall: DownloadChatPhotoSmall,
     private val authService: AuthService,
-    private val userService: UserService,
+    userService: UserService,
     private val userPreferencesRepository: UserPreferencesRepository
 ): ViewModel() {
     init {
-        loadAllChats(ChatListType.Main)
+        loadChatList(ChatListType.Main)
+        loadChatList(ChatListType.Archive)
     }
     val users = userService.users
     fun logOut(onOk: () -> Unit) {
