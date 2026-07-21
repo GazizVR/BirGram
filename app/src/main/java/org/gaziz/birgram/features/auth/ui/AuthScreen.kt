@@ -1,6 +1,5 @@
 package org.gaziz.birgram.features.auth.ui
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,9 +18,7 @@ import org.gaziz.birgram.features.auth.ui.components.WaitPhoneNumber
 @Composable
 fun AuthScreen(
     onReady: () -> Unit,
-    onLogOut: () -> Unit
 ) {
-    BackHandler{}
     val viewModel = hiltViewModel<AuthViewModel>()
     val authState by viewModel.authState.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
@@ -49,9 +46,6 @@ fun AuthScreen(
         AuthState.Ready -> {
             onReady()
         }
-
-        AuthState.LoggingOut -> { onLogOut() }
-        AuthState.Closed -> { onLogOut() }
 
         is AuthState.Other -> {
             val state = (authState as AuthState.Other).state

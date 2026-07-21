@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import org.gaziz.birgram.features.auth.ui.AuthScreen
 import org.gaziz.birgram.features.chat.ui.ChatScreen
-import org.gaziz.birgram.features.chatList.ui.ChatListScreen
+import org.gaziz.birgram.features.chatList.ui.navigation.chatListGraph
 import org.gaziz.birgram.features.searchChats.ui.SearchChatsScreen
 import org.gaziz.birgram.features.splash.ui.SplashScreen
 
@@ -21,8 +21,20 @@ fun Navigation(
     ){
         composable<SplashRoute> {
             SplashScreen(
-                onReady =  { navController.navigate(ChatListRoute) },
-                onAuth = { navController.navigate(AuthRoute) },
+                onReady =  {
+                    navController.navigate(ChatListRoute) {
+                        popUpTo(SplashRoute) {
+                           inclusive = true
+                        }
+                    }
+                },
+                onAuth = {
+                    navController.navigate(AuthRoute) {
+                        popUpTo(SplashRoute) {
+                            inclusive = true
+                        }
+                    }
+                },
                 onNonReady = {
                     val currentBack = navController.currentBackStackEntry
                     if(currentBack?.destination != SplashRoute) {
@@ -33,19 +45,19 @@ fun Navigation(
         }
         composable<AuthRoute> {
             AuthScreen(
-                onReady =  { navController.navigate(ChatListRoute) },
-                onLogOut = { navController.navigate(SplashRoute) }
+                onReady =  {
+                    navController.navigate(ChatListRoute){
+                        popUpTo(AuthRoute) {
+                            inclusive = true
+                        }
+                    }
+                },
             )
         }
-        composable<ChatListRoute> {
-            ChatListScreen(
-                { navController.navigate(SearchChatsRoute) },
-                { navController.navigate(ChatRoute(it)) },
-            )
-        }
+        chatListGraph(navController)
         composable<SearchChatsRoute> {
             SearchChatsScreen(
-                { navController.popBackStack() },
+                { navController.popBackStack(ChatListRoute, inclusive =  false) },
                 { navController.navigate(ChatRoute(it)) }
             )
         }

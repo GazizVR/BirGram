@@ -1,6 +1,5 @@
 package org.gaziz.birgram.features.chatList.ui
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,11 +41,11 @@ import org.gaziz.birgram.features.chatList.ui.components.ChatListMenu
 import org.gaziz.birgram.features.chatList.ui.components.ChatListTopBar
 
 @Composable
-fun ChatListScreen(
+fun MainScreen(
     onSearchClick: () -> Unit,
-    onChatClick: (Long) -> Unit
+    onChatClick: (Long) -> Unit,
+    onArchiveClick: () -> Unit
 ) {
-    BackHandler { }
     val viewModel = hiltViewModel<ChatListViewModel>()
     val mainChats by viewModel.mainChatList.collectAsState()
     val archivedChats by viewModel.archiveChatList.collectAsState()
@@ -96,7 +95,7 @@ fun ChatListScreen(
                                 photoPlaceHolderColor = MaterialTheme.colorScheme.onSurface.copy(0.25f),
                                 title = archivedChats,
                                 titleFontSize = 7.sp,
-                                onClick = {}
+                                onClick = onArchiveClick
                             )
                         }
                     }
