@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.datastore.UserPreferencesRepository
 import org.gaziz.birgram.core.telegram.api.AuthService
-import org.gaziz.birgram.core.telegram.api.ChatService
 import org.gaziz.birgram.core.telegram.api.UserService
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatListType
 import org.gaziz.birgram.core.telegram.api.usecase.DownloadChatPhotoSmall
@@ -24,7 +23,6 @@ class ChatListViewModel @Inject constructor(
     loadChatList: LoadChatList,
     getChatList: GetChatList,
     userService: UserService,
-    chatService: ChatService,
     private val getAccentColorById: GetAccentColorById,
     private val downloadChatPhotoSmall: DownloadChatPhotoSmall,
     private val authService: AuthService,
