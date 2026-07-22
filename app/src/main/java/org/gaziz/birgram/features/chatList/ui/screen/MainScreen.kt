@@ -33,17 +33,21 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.R
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
+import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.ui.icons.archive
 import org.gaziz.birgram.core.ui.icons.skull
 import org.gaziz.birgram.features.chatList.ui.ChatListViewModel
 import org.gaziz.birgram.features.chatList.ui.component.ChatCard
-import org.gaziz.birgram.features.chatList.ui.component.chatCard.LastMessagePreview
 import org.gaziz.birgram.features.chatList.ui.component.MainScreenMenu
 import org.gaziz.birgram.features.chatList.ui.component.MainScreenTopBar
-import org.gaziz.birgram.features.chatList.ui.model.CardPhoto
-import org.gaziz.birgram.features.chatList.ui.model.CardText
-import org.gaziz.birgram.features.chatList.ui.model.CardUnreadBadge
+import org.gaziz.birgram.features.chatList.ui.component.chatCard.DraftMessagePreview
+import org.gaziz.birgram.features.chatList.ui.component.chatCard.LastMessagePreview
+import org.gaziz.birgram.features.chatList.ui.model.CardTextUiState
+import org.gaziz.birgram.features.chatList.ui.model.LastMsgUiState
+import org.gaziz.birgram.features.chatList.ui.model.PhotoUiState
+import org.gaziz.birgram.features.chatList.ui.model.UnreadBadgeUiState
+import java.time.LocalDateTime
 
 @Composable
 fun MainScreen(
@@ -96,12 +100,12 @@ fun MainScreen(
                                 modifier = Modifier
                                     .height(cardHeight)
                                     .width(cardWidth),
-                                photo = CardPhoto(
+                                photo = PhotoUiState(
                                     model = archive,
                                     size = cardPhotoSize,
                                     placeHolderColor = MaterialTheme.colorScheme.onSurface.copy(0.25f),
                                 ),
-                                title = CardText(
+                                title = CardTextUiState(
                                     text = archivedChats,
                                     fontSize = 7.sp,
                                     color = MaterialTheme.colorScheme.onBackground
@@ -115,29 +119,50 @@ fun MainScreen(
                         val isDeleted =
                             users[(chat.type as? ChatType.Private)?.userId]?.type is UserType.Deleted ||
                             users[(chat.type as? ChatType.Private)?.userId]?.type is UserType.Unknown
+                        val isDraftMsg = chat.draftMessage != null && chat.draftMessage.content is DraftMessageContent.Text && !chat.draftMessage.content.clearDraft
                         ChatCard(
                             modifier = Modifier
                                 .height(cardHeight)
                                 .width(cardWidth),
-                            photo = CardPhoto(
+                            photo = PhotoUiState(
                                 model = if(isDeleted) skull else chat.photo,
                                 size = cardPhotoSize,
                                 placeHolderColor = accentColor,
                                 onNull = { fileId -> viewModel.downloadChatIcon(chat.id,fileId) },
                             ),
-                            title = CardText(
+                            title = CardTextUiState(
                                 text = if(isDeleted) stringResource(R.string.deleted_account) else chat.title,
                                 fontSize = 7.sp,
                                 color = MaterialTheme.colorScheme.onBackground
                             ),
-                            lastMessage = {
-                                LastMessagePreview(
-                                    draftMessage = chat.draftMessage,
-                                    lastMessage = chat.lastMessage,
-                                    fontSize = 6.sp
-                                )
-                            },
-                            unreadBadge = CardUnreadBadge(
+                            lastMessage = LastMsgUiState(
+                                component = { modifier ->
+                                    if (isDraftMsg) {
+                                        if (chat.draftMessage != null) {
+                                            DraftMessagePreview(
+                                                modifier = modifier,
+                                                draftMessage = chat.draftMessage,
+                                                fontSize = 6.sp
+                                            )
+                                        }
+                                    } else {
+                                        if (chat.lastMessage != null) {
+                                            LastMessagePreview(
+                                                modifier = modifier,
+                                                lastMessage = chat.lastMessage,
+                                                fontSize = 6.sp
+                                            )
+                                        }
+                                    }
+                                },
+                                date = if (isDraftMsg) {
+                                    chat.draftMessage?.date ?: LocalDateTime.now()
+                                } else {
+                                    chat.lastMessage?.date ?: LocalDateTime.now()
+                                },
+                                fontSize = 5.sp,
+                            ),
+                            unreadBadge = UnreadBadgeUiState(
                                 unreadCount = chat.unreadCount,
                                 mentionCount = chat.mentionCount,
                                 reactionCount = chat.reactionCount,

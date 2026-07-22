@@ -14,11 +14,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import org.gaziz.birgram.features.chatList.ui.model.CardUnreadBadge
+import org.gaziz.birgram.features.chatList.ui.model.UnreadBadgeUiState
 
 @Composable
 fun ChatUnreadBadge(
-    unreadBadge: CardUnreadBadge,
+    unreadBadge: UnreadBadgeUiState,
 ) {
     if(
         unreadBadge.unreadCount > 0 ||

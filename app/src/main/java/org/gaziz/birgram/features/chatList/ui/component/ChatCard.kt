@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -17,19 +18,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatPhoto
 import org.gaziz.birgram.features.chatList.ui.component.chatCard.ChatAvatar
+import org.gaziz.birgram.features.chatList.ui.component.chatCard.ChatTime
 import org.gaziz.birgram.features.chatList.ui.component.chatCard.ChatTitle
 import org.gaziz.birgram.features.chatList.ui.component.chatCard.ChatUnreadBadge
-import org.gaziz.birgram.features.chatList.ui.model.CardPhoto
-import org.gaziz.birgram.features.chatList.ui.model.CardText
-import org.gaziz.birgram.features.chatList.ui.model.CardUnreadBadge
+import org.gaziz.birgram.features.chatList.ui.model.CardTextUiState
+import org.gaziz.birgram.features.chatList.ui.model.LastMsgUiState
+import org.gaziz.birgram.features.chatList.ui.model.PhotoUiState
+import org.gaziz.birgram.features.chatList.ui.model.UnreadBadgeUiState
 
 @Composable
 fun ChatCard(
     modifier: Modifier,
-    photo: CardPhoto,
-    title: CardText,
-    lastMessage: @Composable () -> Unit = {},
-    unreadBadge: CardUnreadBadge? = null,
+    photo: PhotoUiState,
+    title: CardTextUiState,
+    lastMessage: LastMsgUiState? = null,
+    unreadBadge: UnreadBadgeUiState? = null,
     onClick: () -> Unit
 ) {
     Card(
@@ -70,15 +73,27 @@ fun ChatCard(
                         title = title.text,
                         color = title.color,
                         fontSize = title.fontSize,
+                        modifier = Modifier.weight(1f)
                     )
+                    if(lastMessage != null) {
+                        ChatTime(
+                            date = lastMessage.date,
+                            fontSize = lastMessage.fontSize
+                        )
+                    }
                 }
+                Spacer(Modifier.height(6.dp))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    lastMessage()
+                    if(lastMessage != null) {
+                        lastMessage.component(Modifier.weight(1f))
+                    }
                     if(unreadBadge != null) {
-                        Spacer(Modifier.weight(1f))
+                        if(lastMessage == null) {
+                            Spacer(Modifier.weight(1f))
+                        }
                         ChatUnreadBadge(unreadBadge)
                     }
                 }
