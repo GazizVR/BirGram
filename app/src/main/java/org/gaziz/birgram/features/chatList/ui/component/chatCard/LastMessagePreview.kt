@@ -1,6 +1,8 @@
 package org.gaziz.birgram.features.chatList.ui.component.chatCard
 
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -10,6 +12,8 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import org.gaziz.birgram.R
 import org.gaziz.birgram.core.telegram.api.model.message.Message
 import org.gaziz.birgram.core.telegram.api.model.message.MessageContent
@@ -48,10 +52,10 @@ fun LastMessagePreview(
                 fontSize = fontSize,
             )
         }
-        when (val msgCnt = lastMessage.content) {
+        when (val cnt = lastMessage.content) {
             is MessageContent.Text -> {
                 LastMsgText(
-                    text = msgCnt.text,
+                    text = cnt.text,
                     color = MaterialTheme.colorScheme.onBackground.copy(0.5f),
                     fontSize = fontSize,
                 )
@@ -59,8 +63,27 @@ fun LastMessagePreview(
 
             is MessageContent.Sticker -> {
                 LastMsgText(
-                    text = "${msgCnt.emoji} ${msgContents[0]}",
+                    text = "${cnt.emoji} ${msgContents[0]}",
                     color = MaterialTheme.colorScheme.primary,
+                    fontSize = fontSize
+                )
+            }
+
+            is MessageContent.GIF -> {
+                if(cnt.miniThumbnail != null) {
+                    AsyncImage(
+                        model = cnt.miniThumbnail,
+                        contentDescription = null,
+                    )
+                    Spacer(Modifier.width(4.dp))
+                }
+                LastMsgText(
+                    text = cnt.caption.ifBlank { msgContents[1] },
+                    color = if(cnt.caption.isNotBlank()) {
+                        MaterialTheme.colorScheme.onBackground.copy(0.5f)
+                    } else {
+                        MaterialTheme.colorScheme.primary
+                    },
                     fontSize = fontSize
                 )
             }
