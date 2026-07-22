@@ -21,5 +21,6 @@ sealed interface MessageContent {
         val caption: String
     ): MessageContent
     object VoiceNote: MessageContent
+    data class VideoNote(val miniThumbnail: ByteArray?): MessageContent
     object Other: MessageContent
 }

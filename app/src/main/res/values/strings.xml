@@ -106,6 +106,7 @@
         <item>Audio</item>
         <item>Document</item>
         <item>Voice message</item>
+        <item>Video message</item>
     </string-array>
 
 </resources>

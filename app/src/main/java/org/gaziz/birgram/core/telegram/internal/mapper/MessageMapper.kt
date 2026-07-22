@@ -37,6 +37,10 @@ fun TdApi.MessageContent.toMessageCnt(): MessageContent {
 
         is TdApi.MessageVoiceNote -> MessageContent.VoiceNote
 
+        is TdApi.MessageVideoNote -> MessageContent.VideoNote(
+            miniThumbnail = cnt.videoNote.minithumbnail?.data
+        )
+
         else -> MessageContent.Other
     }
 }

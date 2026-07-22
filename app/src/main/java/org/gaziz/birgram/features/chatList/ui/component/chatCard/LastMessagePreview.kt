@@ -4,11 +4,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringArrayResource
@@ -40,6 +42,7 @@ fun LastMsgText(
 @Composable
 fun LastMsgMedia(
     media: Any?,
+    modifier: Modifier = Modifier,
     caption: String,
     captionPlaceHolder: String,
     fontSize: TextUnit
@@ -49,7 +52,7 @@ fun LastMsgMedia(
             model = media,
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.size(15.dp)
+            modifier = modifier.size(15.dp)
         )
         Spacer(Modifier.width(4.dp))
     }
@@ -162,6 +165,16 @@ fun LastMessagePreview(
                 LastMsgText(
                     text = msgContents[6],
                     color = MaterialTheme.colorScheme.primary,
+                    fontSize = fontSize
+                )
+            }
+
+            is MessageContent.VideoNote -> {
+                LastMsgMedia(
+                    media = cnt.miniThumbnail,
+                    caption = "",
+                    modifier = Modifier.clip(CircleShape),
+                    captionPlaceHolder = msgContents[7],
                     fontSize = fontSize
                 )
             }
