@@ -26,6 +26,10 @@ fun TdApi.MessageContent.toMessageCnt(): MessageContent {
             caption = cnt.caption.text
         )
 
+        is TdApi.MessageAudio -> MessageContent.Audio(
+            caption = cnt.caption.text
+        )
+
         else -> MessageContent.Other
     }
 }

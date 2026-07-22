@@ -127,6 +127,15 @@ fun LastMessagePreview(
                 )
             }
 
+            is MessageContent.Audio -> {
+                val caption = cnt.caption.ifBlank { msgContents[4] }
+                LastMsgText(
+                    text = "\uD83C\uDFA7 $caption",
+                    color = MaterialTheme.colorScheme.primary,
+                    fontSize = fontSize
+                )
+            }
+
             else -> {
                 val unsupportedMessage = stringResource(R.string.unsupported_message)
                 LastMsgText(
