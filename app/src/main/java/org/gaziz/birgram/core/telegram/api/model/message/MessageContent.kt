@@ -20,5 +20,6 @@ sealed interface MessageContent {
         val fileName: String,
         val caption: String
     ): MessageContent
+    object VoiceNote: MessageContent
     object Other: MessageContent
 }

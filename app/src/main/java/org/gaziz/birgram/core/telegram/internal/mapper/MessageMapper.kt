@@ -35,6 +35,8 @@ fun TdApi.MessageContent.toMessageCnt(): MessageContent {
             caption = cnt.caption.text
         )
 
+        is TdApi.MessageVoiceNote -> MessageContent.VoiceNote
+
         else -> MessageContent.Other
     }
 }

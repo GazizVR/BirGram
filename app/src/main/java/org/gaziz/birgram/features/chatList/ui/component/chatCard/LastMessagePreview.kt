@@ -158,6 +158,14 @@ fun LastMessagePreview(
                 )
             }
 
+            is MessageContent.VoiceNote -> {
+                LastMsgText(
+                    text = msgContents[6],
+                    color = MaterialTheme.colorScheme.primary,
+                    fontSize = fontSize
+                )
+            }
+
             else -> {
                 val unsupportedMessage = stringResource(R.string.unsupported_message)
                 LastMsgText(
