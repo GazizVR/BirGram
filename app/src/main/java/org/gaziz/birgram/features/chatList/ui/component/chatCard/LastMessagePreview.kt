@@ -16,11 +16,22 @@ import org.gaziz.birgram.core.telegram.api.model.message.MessageContent
 fun LastMessagePreview(
     modifier: Modifier,
     lastMessage: Message,
-    fontSize: TextUnit
+    fontSize: TextUnit,
+    sender: String? = null
 ) {
     Row(
         modifier = modifier
     ) {
+        if(sender != null) {
+            Text(
+                text = "$sender: ",
+                color = MaterialTheme.colorScheme.onBackground,
+                fontSize = fontSize,
+                lineHeight = fontSize,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+            )
+        }
         when (val msgCnt = lastMessage.content) {
             is MessageContent.Text -> {
                 Text(

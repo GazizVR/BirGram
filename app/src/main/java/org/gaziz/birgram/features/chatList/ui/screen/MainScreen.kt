@@ -34,6 +34,7 @@ import kotlinx.coroutines.launch
 import org.gaziz.birgram.R
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
+import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.ui.icons.archive
 import org.gaziz.birgram.core.ui.icons.skull
@@ -145,10 +146,22 @@ fun MainScreen(
                                         )
                                     } else {
                                         if (chat.lastMessage != null) {
+                                            var sender: String? = null
+                                            if(
+                                                (chat.type is ChatType.BasicGroup ||
+                                                (chat.type is ChatType.SuperGroup && !chat.type.isChannel)) &&
+                                                chat.lastMessage.sender is MessageSender.User
+                                            ) {
+                                                val user = users[chat.lastMessage.sender.id]
+                                                if(user != null) {
+                                                    sender = user.firstName
+                                                }
+                                            }
                                             LastMessagePreview(
                                                 modifier = modifier,
                                                 lastMessage = chat.lastMessage,
-                                                fontSize = 6.sp
+                                                fontSize = 6.sp,
+                                                sender = sender
                                             )
                                         }
                                     }

@@ -28,6 +28,7 @@ fun TdApi.UserType.toType(): UserType {
 fun TdApi.User.toUser(): User {
     return User(
         id = this.id,
+        firstName = this.firstName,
         status = this.status.toStatus(),
         type = this.type.toType()
     )
