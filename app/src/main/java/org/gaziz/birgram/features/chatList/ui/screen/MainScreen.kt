@@ -138,13 +138,11 @@ fun MainScreen(
                             lastMessage = LastMsgUiState(
                                 component = { modifier ->
                                     if (isDraftMsg) {
-                                        if (chat.draftMessage != null) {
-                                            DraftMessagePreview(
-                                                modifier = modifier,
-                                                draftMessage = chat.draftMessage,
-                                                fontSize = 6.sp
-                                            )
-                                        }
+                                        DraftMessagePreview(
+                                            modifier = modifier,
+                                            draftMessage = chat.draftMessage,
+                                            fontSize = 6.sp
+                                        )
                                     } else {
                                         if (chat.lastMessage != null) {
                                             LastMessagePreview(
@@ -156,7 +154,7 @@ fun MainScreen(
                                     }
                                 },
                                 date = if (isDraftMsg) {
-                                    chat.draftMessage?.date ?: LocalDateTime.now()
+                                    chat.draftMessage.date
                                 } else {
                                     chat.lastMessage?.date ?: LocalDateTime.now()
                                 },

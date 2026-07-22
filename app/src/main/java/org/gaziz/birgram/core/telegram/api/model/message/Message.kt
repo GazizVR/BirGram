@@ -7,5 +7,6 @@ data class Message(
     val content: MessageContent,
     val date: LocalDateTime,
     val isMy: Boolean,
-    val chatId: Long
+    val chatId: Long,
+    val sender: MessageSender
 )
