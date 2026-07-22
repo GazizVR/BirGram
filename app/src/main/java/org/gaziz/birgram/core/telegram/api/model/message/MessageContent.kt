@@ -16,5 +16,9 @@ sealed interface MessageContent {
         val caption: String
     ): MessageContent
     data class Audio(val caption: String): MessageContent
+    data class Document(
+        val fileName: String,
+        val caption: String
+    ): MessageContent
     object Other: MessageContent
 }

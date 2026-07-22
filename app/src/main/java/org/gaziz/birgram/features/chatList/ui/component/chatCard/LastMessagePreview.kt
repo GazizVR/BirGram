@@ -136,6 +136,28 @@ fun LastMessagePreview(
                 )
             }
 
+            is MessageContent.Document -> {
+                val text = cnt.caption.ifBlank {
+                    cnt.fileName.ifBlank {
+                       msgContents[5]
+                    }
+                }
+                LastMsgText(
+                    text = "\uD83D\uDCC4 ",
+                    color = MaterialTheme.colorScheme.onBackground,
+                    fontSize = fontSize
+                )
+                LastMsgText(
+                    text = text,
+                    color = if(cnt.caption.isNotBlank()) {
+                        MaterialTheme.colorScheme.onBackground.copy(0.5f)
+                    } else {
+                        MaterialTheme.colorScheme.primary
+                    },
+                    fontSize = fontSize
+                )
+            }
+
             else -> {
                 val unsupportedMessage = stringResource(R.string.unsupported_message)
                 LastMsgText(

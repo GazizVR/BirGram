@@ -30,6 +30,11 @@ fun TdApi.MessageContent.toMessageCnt(): MessageContent {
             caption = cnt.caption.text
         )
 
+        is TdApi.MessageDocument -> MessageContent.Document(
+            fileName = cnt.document.fileName,
+            caption = cnt.caption.text
+        )
+
         else -> MessageContent.Other
     }
 }

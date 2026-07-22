@@ -104,6 +104,7 @@
         <item>Photo</item>
         <item>Video</item>
         <item>Audio</item>
+        <item>Document</item>
     </string-array>
 
 </resources>
