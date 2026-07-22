@@ -21,6 +21,11 @@ fun TdApi.MessageContent.toMessageCnt(): MessageContent {
             caption = cnt.caption.text
         )
 
+        is TdApi.MessageVideo -> MessageContent.Video(
+            miniThumbnail = cnt.video.minithumbnail?.data,
+            caption = cnt.caption.text
+        )
+
         else -> MessageContent.Other
     }
 }

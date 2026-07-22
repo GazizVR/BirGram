@@ -102,6 +102,7 @@
         <item>Sticker</item>
         <item>GIF</item>
         <item>Photo</item>
+        <item>Video</item>
     </string-array>
 
 </resources>

@@ -2,12 +2,15 @@ package org.gaziz.birgram.features.chatList.ui.component.chatCard
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -45,6 +48,8 @@ fun LastMsgMedia(
         AsyncImage(
             model = media,
             contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.size(15.dp)
         )
         Spacer(Modifier.width(4.dp))
     }
@@ -68,7 +73,8 @@ fun LastMessagePreview(
 ) {
     val msgContents = stringArrayResource(R.array.message_contents)
     Row(
-        modifier = modifier
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         if(sender != null) {
             LastMsgText(
@@ -108,6 +114,15 @@ fun LastMessagePreview(
                     media = cnt.miniThumbnail,
                     caption = cnt.caption,
                     captionPlaceHolder = msgContents[2],
+                    fontSize = fontSize
+                )
+            }
+
+            is MessageContent.Video -> {
+                LastMsgMedia(
+                    media = cnt.miniThumbnail,
+                    caption = cnt.caption,
+                    captionPlaceHolder = msgContents[3],
                     fontSize = fontSize
                 )
             }

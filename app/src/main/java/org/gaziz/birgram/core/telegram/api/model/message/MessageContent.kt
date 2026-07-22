@@ -11,5 +11,9 @@ sealed interface MessageContent {
         val miniThumbnail: ByteArray?,
         val caption: String
     ): MessageContent
+    data class Video(
+        val miniThumbnail: ByteArray?,
+        val caption: String
+    ): MessageContent
     object Other: MessageContent
 }
