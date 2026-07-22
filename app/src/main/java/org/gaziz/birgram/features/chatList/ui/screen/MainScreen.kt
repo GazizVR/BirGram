@@ -38,6 +38,7 @@ import org.gaziz.birgram.core.ui.icons.archive
 import org.gaziz.birgram.core.ui.icons.skull
 import org.gaziz.birgram.features.chatList.ui.ChatListViewModel
 import org.gaziz.birgram.features.chatList.ui.component.ChatCard
+import org.gaziz.birgram.features.chatList.ui.component.chatCard.LastMessagePreview
 import org.gaziz.birgram.features.chatList.ui.component.MainScreenMenu
 import org.gaziz.birgram.features.chatList.ui.component.MainScreenTopBar
 import org.gaziz.birgram.features.chatList.ui.model.CardPhoto
@@ -129,11 +130,18 @@ fun MainScreen(
                                 fontSize = 7.sp,
                                 color = MaterialTheme.colorScheme.onBackground
                             ),
+                            lastMessage = {
+                                LastMessagePreview(
+                                    draftMessage = chat.draftMessage,
+                                    lastMessage = chat.lastMessage,
+                                    fontSize = 6.sp
+                                )
+                            },
                             unreadBadge = CardUnreadBadge(
                                 unreadCount = chat.unreadCount,
                                 mentionCount = chat.mentionCount,
                                 reactionCount = chat.reactionCount,
-                                fontSize = 6.sp
+                                fontSize = 5.sp
                             ),
                             onClick = { onChatClick(chat.id) }
                         )

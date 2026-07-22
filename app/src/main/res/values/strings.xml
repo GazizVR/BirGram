@@ -91,9 +91,11 @@
         <item>Are you sure you want to log out?</item>
         <item>Cancel</item>
     </string-array>
+
     <string name="unsupported_message">Unsupported message</string>
 
     <string name="archived_chats">Archived chats</string>
     <string name="deleted_account">Deleted Account</string>
+    <string name="draft_message">Draft</string>
 
 </resources>
