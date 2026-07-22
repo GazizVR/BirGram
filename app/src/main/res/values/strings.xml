@@ -98,4 +98,8 @@
     <string name="deleted_account">Deleted Account</string>
     <string name="draft_message">Draft</string>
 
+    <string-array name="message_contents">
+        <item>Sticker</item>
+    </string-array>
+
 </resources>
