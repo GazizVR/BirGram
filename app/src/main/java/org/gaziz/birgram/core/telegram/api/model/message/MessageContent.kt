@@ -7,5 +7,9 @@ sealed interface MessageContent {
         val miniThumbnail: ByteArray?,
         val caption: String
     ): MessageContent
+    data class Photo(
+        val miniThumbnail: ByteArray?,
+        val caption: String
+    ): MessageContent
     object Other: MessageContent
 }

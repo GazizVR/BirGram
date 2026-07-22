@@ -101,6 +101,7 @@
     <string-array name="message_contents">
         <item>Sticker</item>
         <item>GIF</item>
+        <item>Photo</item>
     </string-array>
 
 </resources>

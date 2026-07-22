@@ -35,6 +35,31 @@ fun LastMsgText(
 }
 
 @Composable
+fun LastMsgMedia(
+    media: Any?,
+    caption: String,
+    captionPlaceHolder: String,
+    fontSize: TextUnit
+) {
+    if(media != null) {
+        AsyncImage(
+            model = media,
+            contentDescription = null,
+        )
+        Spacer(Modifier.width(4.dp))
+    }
+    LastMsgText(
+        text = caption.ifBlank { captionPlaceHolder },
+        color = if(caption.isNotBlank()) {
+            MaterialTheme.colorScheme.onBackground.copy(0.5f)
+        } else {
+            MaterialTheme.colorScheme.primary
+        },
+        fontSize = fontSize
+    )
+}
+
+@Composable
 fun LastMessagePreview(
     modifier: Modifier,
     lastMessage: Message,
@@ -70,20 +95,19 @@ fun LastMessagePreview(
             }
 
             is MessageContent.GIF -> {
-                if(cnt.miniThumbnail != null) {
-                    AsyncImage(
-                        model = cnt.miniThumbnail,
-                        contentDescription = null,
-                    )
-                    Spacer(Modifier.width(4.dp))
-                }
-                LastMsgText(
-                    text = cnt.caption.ifBlank { msgContents[1] },
-                    color = if(cnt.caption.isNotBlank()) {
-                        MaterialTheme.colorScheme.onBackground.copy(0.5f)
-                    } else {
-                        MaterialTheme.colorScheme.primary
-                    },
+                LastMsgMedia(
+                    media = cnt.miniThumbnail,
+                    caption = cnt.caption,
+                    captionPlaceHolder = msgContents[1],
+                    fontSize = fontSize
+                )
+            }
+
+            is MessageContent.Photo -> {
+                LastMsgMedia(
+                    media = cnt.miniThumbnail,
+                    caption = cnt.caption,
+                    captionPlaceHolder = msgContents[2],
                     fontSize = fontSize
                 )
             }

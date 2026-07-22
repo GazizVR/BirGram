@@ -10,8 +10,14 @@ fun TdApi.MessageContent.toMessageCnt(): MessageContent {
         is TdApi.MessageText -> MessageContent.Text(cnt.text.text)
 
         is TdApi.MessageSticker -> MessageContent.Sticker(cnt.sticker.emoji)
+
         is TdApi.MessageAnimation -> MessageContent.GIF(
             miniThumbnail = cnt.animation.minithumbnail?.data,
+            caption = cnt.caption.text
+        )
+
+        is TdApi.MessagePhoto -> MessageContent.Photo(
+            miniThumbnail = cnt.photo.minithumbnail?.data,
             caption = cnt.caption.text
         )
 
