@@ -21,37 +21,44 @@ fun ChatAvatar(
     modifier: Modifier,
     imageModel: Any?,
     placeHolderColor: Color,
-    placeHolderText: String
+    placeHolderText: String,
+    overlay: @Composable () -> Unit
 ) {
-    if(
-        imageModel is String ||
-        imageModel is ByteArray
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
     ) {
-        AsyncImage(
-            model = imageModel,
-            contentDescription = null,
-            modifier = modifier.clip(CircleShape),
-        )
-    } else {
-        Box(
-            modifier = modifier
-                .clip(CircleShape)
-                .background(placeHolderColor),
-            contentAlignment = Alignment.Center
+        if(
+            imageModel is String ||
+            imageModel is ByteArray
         ) {
-            if(imageModel is ImageVector){
-                Icon(
-                    imageVector = imageModel,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onBackground
-                )
-            } else {
-                Text(
-                    text = placeHolderText,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
+            AsyncImage(
+                model = imageModel,
+                contentDescription = null,
+                modifier = modifier.clip(CircleShape),
+            )
+        } else {
+            Box(
+                modifier = modifier
+                    .clip(CircleShape)
+                    .background(placeHolderColor),
+                contentAlignment = Alignment.Center
+            ) {
+                if(imageModel is ImageVector){
+                    Icon(
+                        imageVector = imageModel,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onBackground
+                    )
+                } else {
+                    Text(
+                        text = placeHolderText,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                }
             }
         }
+        overlay()
     }
 }
 
@@ -61,7 +68,8 @@ fun ChatPhoto(
     photo: ChatPhoto?,
     onPhotoNull: (Int) -> Unit,
     placeHolderColor: Color,
-    placeHolderText: String
+    placeHolderText: String,
+    overlay: @Composable () -> Unit
 ){
     LaunchedEffect(Unit) {
         if(
@@ -80,6 +88,7 @@ fun ChatPhoto(
         modifier = modifier,
         imageModel = chatPhoto,
         placeHolderColor = placeHolderColor,
-        placeHolderText = placeHolderText
+        placeHolderText = placeHolderText,
+        overlay = overlay
     )
 }

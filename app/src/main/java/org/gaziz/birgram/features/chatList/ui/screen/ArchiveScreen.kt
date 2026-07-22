@@ -6,12 +6,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -21,6 +24,7 @@ import org.gaziz.birgram.R
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
+import org.gaziz.birgram.core.telegram.api.model.user.UserStatus
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.ui.icons.skull
 import org.gaziz.birgram.features.chatList.ui.ChatListViewModel
@@ -28,6 +32,7 @@ import org.gaziz.birgram.features.chatList.ui.component.ArchiveScreenTopBar
 import org.gaziz.birgram.features.chatList.ui.component.ChatCard
 import org.gaziz.birgram.features.chatList.ui.component.chatCard.DraftMessagePreview
 import org.gaziz.birgram.features.chatList.ui.component.chatCard.LastMessagePreview
+import org.gaziz.birgram.features.chatList.ui.component.chatCard.OnlineIndicator
 import org.gaziz.birgram.features.chatList.ui.model.CardTextUiState
 import org.gaziz.birgram.features.chatList.ui.model.LastMsgUiState
 import org.gaziz.birgram.features.chatList.ui.model.PhotoUiState
@@ -75,6 +80,17 @@ fun ArchiveScreen(
                         size = 54.dp,
                         placeHolderColor = accentColor,
                         onNull = { fileId -> viewModel.downloadChatIcon(chat.id, fileId) },
+                        overlay = {
+                            OnlineIndicator(
+                                size = 10.dp,
+                                isOnline = chat.type is ChatType.Private &&
+                                        users[chat.type.userId]?.status is UserStatus.Online &&
+                                        users[chat.type.userId]?.type is UserType.Regular,
+                                indicatorColor = Color.Green,
+                                backgroundColor = CardDefaults.cardColors().containerColor,
+                                alignment = Alignment.BottomEnd,
+                            )
+                        }
                     ),
                     title = CardTextUiState(
                         text = if (isDeleted) stringResource(R.string.deleted_account) else chat.title,

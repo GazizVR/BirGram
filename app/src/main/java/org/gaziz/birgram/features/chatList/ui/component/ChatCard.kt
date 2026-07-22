@@ -52,6 +52,7 @@ fun ChatCard(
                     onPhotoNull = photo.onNull,
                     placeHolderColor = photo.placeHolderColor,
                     placeHolderText = if (title.text.isNotBlank()) title.text[0].toString() else "",
+                    overlay = photo.overlay
                 )
             } else {
                 ChatAvatar(
@@ -59,6 +60,7 @@ fun ChatCard(
                     imageModel = photo.model,
                     placeHolderColor = photo.placeHolderColor,
                     placeHolderText = if (title.text.isNotBlank()) title.text[0].toString() else "",
+                    overlay = photo.overlay
                 )
             }
             Spacer(Modifier.width(8.dp))
