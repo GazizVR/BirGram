@@ -2,6 +2,7 @@ package org.gaziz.birgram.features.chatList.domain.usecase
 
 import android.graphics.BitmapFactory
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.decodeToImageBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -85,10 +86,18 @@ class GetChatList @Inject constructor(
                                 val image = bitmap.asImageBitmap()
                                 ChatAvatar.Photo(image)
                             }
+                            chat.photo != null && chat.photo.miniThumbnail != null -> {
+                                ChatAvatar.Photo(
+                                    bitmap = chat.photo.miniThumbnail.decodeToImageBitmap(),
+                                    onEmpty = {
+                                        downloadChatPhotoSmall(chat.id,chat.photo.small.id)
+                                    }
+                                )
+                            }
                             else -> ChatAvatar.PlaceHolder(
                                 text = if(chat.title.isNotBlank()) chat.title[0].toString() else "",
                                 color = accentColor.value,
-                                callback = {
+                                downloadPhoto = {
                                     if(chat.photo != null) {
                                         downloadChatPhotoSmall(chat.id,chat.photo.small.id)
                                     }

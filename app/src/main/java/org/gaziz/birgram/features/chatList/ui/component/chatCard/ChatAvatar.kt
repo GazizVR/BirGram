@@ -26,6 +26,9 @@ fun ChatAvatar(
     ) {
         when(avatar) {
             is ChatAvatar.Photo -> {
+                LaunchedEffect(Unit) {
+                    avatar.onEmpty()
+                }
                 Image(
                     bitmap = avatar.bitmap,
                     contentDescription = null,
@@ -48,7 +51,7 @@ fun ChatAvatar(
             }
             is ChatAvatar.PlaceHolder -> {
                 LaunchedEffect(Unit) {
-                    avatar.callback()
+                    avatar.downloadPhoto()
                 }
                 Box(
                     modifier = modifier
