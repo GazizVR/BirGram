@@ -1,5 +1,6 @@
 package org.gaziz.birgram.features.chatList.ui.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,11 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
-import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
-import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
-import org.gaziz.birgram.core.telegram.api.model.user.UserStatus
-import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.ui.icons.skull
 import org.gaziz.birgram.features.chatList.ui.ChatListViewModel
 import org.gaziz.birgram.features.chatList.ui.component.ArchiveScreenTopBar
@@ -37,7 +33,6 @@ import org.gaziz.birgram.features.chatList.ui.model.CardTextUiState
 import org.gaziz.birgram.features.chatList.ui.model.LastMsgUiState
 import org.gaziz.birgram.features.chatList.ui.model.PhotoUiState
 import org.gaziz.birgram.features.chatList.ui.model.UnreadBadgeUiState
-import java.time.LocalDateTime
 
 @Composable
 fun ArchiveScreen(
@@ -49,9 +44,14 @@ fun ArchiveScreen(
     val cardHeight = 70.dp
     val cardWidth = window.containerDpSize.width
 
+    val cardPhotoSize = 54.dp
+    val cardColor = MaterialTheme.colorScheme.surfaceContainer
+
+    val deletedAccount = stringResource(R.string.deleted_account)
+
     val viewModel = hiltViewModel<ChatListViewModel>()
     val chats by viewModel.archiveChatList.collectAsState()
-    val users by viewModel.users.collectAsState()
+
     Scaffold(
         topBar = {
             ArchiveScreenTopBar(
@@ -65,27 +65,21 @@ fun ArchiveScreen(
             modifier = Modifier.padding(paddingValues),
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
-            items(chats) { chat ->
-                val accentColor by viewModel.getAccentColor(chat.accentColorId).collectAsState()
-                val isDeleted =
-                    users[(chat.type as? ChatType.Private)?.userId]?.type is UserType.Deleted ||
-                            users[(chat.type as? ChatType.Private)?.userId]?.type is UserType.Unknown
-                val isDraftMsg = chat.draftMessage != null && chat.draftMessage.content is DraftMessageContent.Text && !chat.draftMessage.content.clearDraft
+            items(chats) { item ->
                 ChatCard(
                     modifier = Modifier
                         .height(cardHeight)
-                        .width(cardWidth),
+                        .width(cardWidth)
+                        .background(cardColor),
                     photo = PhotoUiState(
-                        model = if (isDeleted) skull else chat.photo,
-                        size = 54.dp,
-                        placeHolderColor = accentColor,
-                        onNull = { fileId -> viewModel.downloadChatIcon(chat.id, fileId) },
+                        model = if(item.isDeleted) skull else item.chat.photo,
+                        size = cardPhotoSize,
+                        placeHolderColor = item.accentColor,
+                        onNull = { viewModel.downloadChatIcon(item.chat.id,it) },
                         overlay = {
                             OnlineIndicator(
                                 size = 10.dp,
-                                isOnline = chat.type is ChatType.Private &&
-                                        users[chat.type.userId]?.status is UserStatus.Online &&
-                                        users[chat.type.userId]?.type is UserType.Regular,
+                                isOnline = item.isOnline,
                                 indicatorColor = Color.Green,
                                 backgroundColor = CardDefaults.cardColors().containerColor,
                                 alignment = Alignment.BottomEnd,
@@ -93,54 +87,41 @@ fun ArchiveScreen(
                         }
                     ),
                     title = CardTextUiState(
-                        text = if (isDeleted) stringResource(R.string.deleted_account) else chat.title,
+                        text = if(item.isDeleted) deletedAccount else item.chat.title,
                         fontSize = 7.sp,
                         color = MaterialTheme.colorScheme.onBackground
                     ),
                     lastMessage = LastMsgUiState(
                         component = { modifier ->
-                            if(isDraftMsg) {
-                                DraftMessagePreview(
-                                    modifier = modifier,
-                                    draftMessage = chat.draftMessage,
-                                    fontSize = 6.sp
-                                )
+                            if(item.isDraftMsg) {
+                                if(item.chat.draftMessage != null) {
+                                    DraftMessagePreview(
+                                        modifier = modifier,
+                                        draftMessage = item.chat.draftMessage,
+                                        fontSize = 6.sp
+                                    )
+                                }
                             } else {
-                                if(chat.lastMessage != null) {
-                                    var sender: String? = null
-                                    if(
-                                        (chat.type is ChatType.BasicGroup ||
-                                        (chat.type is ChatType.SuperGroup && !chat.type.isChannel)) &&
-                                        chat.lastMessage.sender is MessageSender.User
-                                    ) {
-                                        val user = users[chat.lastMessage.sender.id]
-                                        if(user != null) {
-                                            sender = user.firstName
-                                        }
-                                    }
+                                if(item.chat.lastMessage != null) {
                                     LastMessagePreview(
                                         modifier = modifier,
-                                        lastMessage = chat.lastMessage,
+                                        lastMessage = item.chat.lastMessage,
                                         fontSize = 6.sp,
-                                        sender = sender
+                                        sender = item.messageSender
                                     )
                                 }
                             }
                         },
-                        date = if(isDraftMsg) {
-                            chat.draftMessage.date
-                        } else {
-                            chat.lastMessage?.date ?: LocalDateTime.now()
-                        },
+                        date = item.lastMsgDate,
                         fontSize = 6.sp
                     ),
                     unreadBadge = UnreadBadgeUiState(
-                        unreadCount = chat.unreadCount,
-                        mentionCount = chat.mentionCount,
-                        reactionCount = chat.reactionCount,
+                        unreadCount = item.chat.unreadCount,
+                        mentionCount = item.chat.mentionCount,
+                        reactionCount = item.chat.reactionCount,
                         fontSize = 5.sp
                     ),
-                    onClick = { onChatClick(chat.id) }
+                    onClick = { onChatClick(item.chat.id) },
                 )
             }
         }
