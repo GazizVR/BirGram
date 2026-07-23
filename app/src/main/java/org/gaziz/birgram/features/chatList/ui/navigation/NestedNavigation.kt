@@ -46,6 +46,17 @@ fun NavGraphBuilder.chatListGraph(
                     initialOffsetX = {it}
                 )
             },
+            exitTransition = {
+                slideOutHorizontally(
+                    animationSpec = tween(),
+                    targetOffsetX = {-it}
+                )
+            },
+            popEnterTransition = {
+                expandHorizontally(
+                    animationSpec = tween(),
+                )
+            },
             popExitTransition = {
                 slideOutHorizontally(
                     animationSpec = tween(),

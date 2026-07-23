@@ -1,6 +1,7 @@
 package org.gaziz.birgram.core.navigation
 
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
@@ -71,6 +72,17 @@ fun Navigation(
                 )
             },
             exitTransition = {
+                slideOutHorizontally(
+                    animationSpec = tween(),
+                    targetOffsetX = {-it}
+                )
+            },
+            popEnterTransition = {
+                expandHorizontally(
+                    animationSpec = tween(),
+                )
+            },
+            popExitTransition = {
                 slideOutHorizontally(
                     animationSpec = tween(),
                     targetOffsetX = {it}
