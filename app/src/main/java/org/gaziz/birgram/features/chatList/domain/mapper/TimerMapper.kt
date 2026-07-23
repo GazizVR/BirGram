@@ -1,4 +1,4 @@
-package org.gaziz.birgram.features.chatList.ui.mapper
+package org.gaziz.birgram.features.chatList.domain.mapper
 
 import java.time.LocalDate
 import java.time.LocalDateTime

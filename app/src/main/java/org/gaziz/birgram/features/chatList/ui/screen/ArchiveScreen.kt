@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.ui.icons.skull
 import org.gaziz.birgram.features.chatList.ui.ChatListViewModel
 import org.gaziz.birgram.features.chatList.ui.component.ArchiveScreenTopBar
 import org.gaziz.birgram.features.chatList.ui.component.ChatCard
@@ -72,10 +71,8 @@ fun ArchiveScreen(
                         .width(cardWidth)
                         .background(cardColor),
                     photo = PhotoUiState(
-                        model = if(item.isDeleted) skull else item.chat.photo,
+                        photo = item.avatar,
                         size = cardPhotoSize,
-                        placeHolderColor = item.accentColor,
-                        onNull = { viewModel.downloadChatIcon(item.chat.id,it) },
                         overlay = {
                             OnlineIndicator(
                                 size = 10.dp,

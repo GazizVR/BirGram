@@ -37,7 +37,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.R
 import org.gaziz.birgram.core.ui.icons.archive
-import org.gaziz.birgram.core.ui.icons.skull
+import org.gaziz.birgram.features.chatList.domain.model.ChatAvatar
 import org.gaziz.birgram.features.chatList.ui.ChatListViewModel
 import org.gaziz.birgram.features.chatList.ui.component.ChatCard
 import org.gaziz.birgram.features.chatList.ui.component.MainScreenMenu
@@ -107,9 +107,11 @@ fun MainScreen(
                                     .width(cardWidth)
                                     .background(cardColor),
                                 photo = PhotoUiState(
-                                    model = archive,
+                                    photo = ChatAvatar.Icon(
+                                        imageVector = archive,
+                                        background = MaterialTheme.colorScheme.onSurface.copy(0.25f)
+                                    ),
                                     size = cardPhotoSize,
-                                    placeHolderColor = MaterialTheme.colorScheme.onSurface.copy(0.25f),
                                 ),
                                 title = CardTextUiState(
                                     text = archivedChats,
@@ -127,10 +129,8 @@ fun MainScreen(
                                 .width(cardWidth)
                                 .background(cardColor),
                             photo = PhotoUiState(
-                                model = if(item.isDeleted) skull else item.chat.photo,
+                                photo = item.avatar,
                                 size = cardPhotoSize,
-                                placeHolderColor = item.accentColor,
-                                onNull = { viewModel.downloadChatIcon(item.chat.id,it) },
                                 overlay = {
                                     OnlineIndicator(
                                         size = 10.dp,

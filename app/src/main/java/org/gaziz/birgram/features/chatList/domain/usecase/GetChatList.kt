@@ -1,5 +1,7 @@
 package org.gaziz.birgram.features.chatList.domain.usecase
 
+import android.graphics.BitmapFactory
+import androidx.compose.ui.graphics.asImageBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -15,16 +17,20 @@ import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
 import org.gaziz.birgram.core.telegram.api.model.user.UserStatus
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
+import org.gaziz.birgram.core.telegram.api.usecase.DownloadChatPhotoSmall
 import org.gaziz.birgram.core.telegram.api.usecase.GetAccentColorById
+import org.gaziz.birgram.core.ui.icons.skull
+import org.gaziz.birgram.features.chatList.domain.mapper.toStringDate
+import org.gaziz.birgram.features.chatList.domain.model.ChatAvatar
 import org.gaziz.birgram.features.chatList.domain.model.ChatListItem
-import org.gaziz.birgram.features.chatList.ui.mapper.toStringDate
 import java.time.LocalDateTime
 import javax.inject.Inject
 
 class GetChatList @Inject constructor(
     private val chatService: ChatService,
     private val getAccentColorById: GetAccentColorById,
-    private val userService: UserService
+    private val userService: UserService,
+    private val downloadChatPhotoSmall: DownloadChatPhotoSmall
 ) {
     operator fun invoke(type: ChatListType): Flow<List<ChatListItem>> {
         return chatService.chats.map { map ->
@@ -58,15 +64,37 @@ class GetChatList @Inject constructor(
                             sender = user.firstName
                         }
                     }
+                    val isDeleted = (
+                        chat.type is ChatType.Private &&
+                        userService.users.value[chat.type.userId]?.type !is UserType.Regular &&
+                        userService.users.value[chat.type.userId]?.type !is UserType.Bot
+                    )
                     ChatListItem(
                         chat = chat,
-                        isDeleted = (
-                            chat.type is ChatType.Private &&
-                            userService.users.value[chat.type.userId]?.type !is UserType.Regular &&
-                            userService.users.value[chat.type.userId]?.type !is UserType.Bot
-                        ),
+                        isDeleted = isDeleted,
                         lastMsgDate = if(isDraftMsg) chat.draftMessage.date.toStringDate() else (chat.lastMessage?.date ?: LocalDateTime.now()).toStringDate(),
-                        accentColor = accentColor.value,
+                        avatar = when {
+                            isDeleted -> {
+                                ChatAvatar.Icon(
+                                    imageVector = skull,
+                                    background = accentColor.value
+                                )
+                            }
+                            chat.photo != null && chat.photo.small.path.isNotBlank() -> {
+                                val bitmap = BitmapFactory.decodeFile(chat.photo.small.path)
+                                val image = bitmap.asImageBitmap()
+                                ChatAvatar.Photo(image)
+                            }
+                            else -> ChatAvatar.PlaceHolder(
+                                text = if(chat.title.isNotBlank()) chat.title[0].toString() else "",
+                                color = accentColor.value,
+                                callback = {
+                                    if(chat.photo != null) {
+                                        downloadChatPhotoSmall(chat.id,chat.photo.small.id)
+                                    }
+                                }
+                            )
+                        },
                         isDraftMsg = isDraftMsg,
                         isOnline = (
                             chat.type is ChatType.Private &&

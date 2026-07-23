@@ -74,15 +74,10 @@ dependencies {
     implementation(libs.tdlib.android)
     //DataStore
     implementation(libs.androidx.datastore.preferences)
-    //Coil
-    implementation(libs.coil.compose)
-    implementation(libs.coil.network.okhttp)
     //Hilt
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
     ksp(libs.hilt.android.compiler)
     //Material
     implementation(libs.material)
-    //Coil
-    implementation(libs.coil.compose)
 }

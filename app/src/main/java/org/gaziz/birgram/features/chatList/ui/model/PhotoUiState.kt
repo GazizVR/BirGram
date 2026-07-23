@@ -1,13 +1,11 @@
 package org.gaziz.birgram.features.chatList.ui.model
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
+import org.gaziz.birgram.features.chatList.domain.model.ChatAvatar
 
 data class PhotoUiState(
-    val model: Any?,
     val size: Dp,
-    val placeHolderColor: Color,
-    val onNull: (Int) -> Unit = {},
+    val photo: ChatAvatar,
     val overlay: @Composable () -> Unit = {}
 )

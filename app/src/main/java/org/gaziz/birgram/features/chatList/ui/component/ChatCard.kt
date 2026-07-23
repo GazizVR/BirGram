@@ -14,8 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.gaziz.birgram.core.telegram.api.model.chat.ChatPhoto
-import org.gaziz.birgram.features.chatList.ui.component.chatCard.CardPhoto
 import org.gaziz.birgram.features.chatList.ui.component.chatCard.ChatAvatar
 import org.gaziz.birgram.features.chatList.ui.component.chatCard.ChatTime
 import org.gaziz.birgram.features.chatList.ui.component.chatCard.ChatTitle
@@ -42,24 +40,11 @@ fun ChatCard(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ){
-            if(photo.model is ChatPhoto?) {
-                CardPhoto(
-                    modifier = Modifier.size(photo.size),
-                    photo = photo.model,
-                    onPhotoNull = photo.onNull,
-                    placeHolderColor = photo.placeHolderColor,
-                    placeHolderText = if (title.text.isNotBlank()) title.text[0].toString() else "",
-                    overlay = photo.overlay
-                )
-            } else {
-                ChatAvatar(
-                    modifier = Modifier.size(photo.size),
-                    imageModel = photo.model,
-                    placeHolderColor = photo.placeHolderColor,
-                    placeHolderText = if (title.text.isNotBlank()) title.text[0].toString() else "",
-                    overlay = photo.overlay
-                )
-            }
+            ChatAvatar(
+                modifier = Modifier.size(photo.size),
+                avatar = photo.photo,
+                overlay = photo.overlay
+            )
             Spacer(Modifier.width(8.dp))
             Column(
                 verticalArrangement = Arrangement.Center

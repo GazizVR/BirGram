@@ -9,7 +9,6 @@ import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.datastore.UserPreferencesRepository
 import org.gaziz.birgram.core.telegram.api.AuthService
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatListType
-import org.gaziz.birgram.core.telegram.api.usecase.DownloadChatPhotoSmall
 import org.gaziz.birgram.features.chatList.domain.usecase.GetChatList
 import org.gaziz.birgram.features.chatList.domain.usecase.LoadChatList
 import javax.inject.Inject
@@ -18,7 +17,6 @@ import javax.inject.Inject
 class ChatListViewModel @Inject constructor(
     loadChatList: LoadChatList,
     getChatList: GetChatList,
-    private val downloadChatPhotoSmall: DownloadChatPhotoSmall,
     private val authService: AuthService,
     private val userPreferencesRepository: UserPreferencesRepository,
 ): ViewModel() {
@@ -51,12 +49,4 @@ class ChatListViewModel @Inject constructor(
         SharingStarted.Eagerly,
         emptyList()
     )
-    fun downloadChatIcon(
-        chatId: Long,
-        fileId: Int
-    ) {
-       viewModelScope.launch {
-           downloadChatPhotoSmall(chatId,fileId)
-       }
-    }
 }
