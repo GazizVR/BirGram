@@ -4,6 +4,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -39,7 +40,14 @@ fun Navigation(
                     }
                 },
                 onNonReady = {
-                    navController.popBackStack(SplashRoute, inclusive = false)
+                    val currentEntry = navController.currentDestination
+                    if(currentEntry?.hasRoute<SplashRoute>() == false) {
+                        navController.navigate(SplashRoute) {
+                            popUpTo(SplashRoute) {
+                                inclusive = false
+                            }
+                        }
+                    }
                 }
             )
         }
