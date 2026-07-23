@@ -48,7 +48,7 @@ fun SplashScreen(
             }
             if (authState is AuthState.Closed && !isInitializing) {
                 isInitializing = true
-                viewModel.initApplication(onReady,true).let {
+                viewModel.initApplication(onNonReady,true).let {
                     viewModel.setParams(
                         "${context.filesDir.absolutePath}/tdlib",
                         { isInitializing = false },

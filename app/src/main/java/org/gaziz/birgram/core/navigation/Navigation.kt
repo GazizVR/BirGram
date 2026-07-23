@@ -1,5 +1,8 @@
 package org.gaziz.birgram.core.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -36,10 +39,7 @@ fun Navigation(
                     }
                 },
                 onNonReady = {
-                    val currentBack = navController.currentBackStackEntry
-                    if(currentBack?.destination != SplashRoute) {
-                        navController.popBackStack(SplashRoute, inclusive = false)
-                    }
+                    navController.popBackStack(SplashRoute, inclusive = false)
                 }
             )
         }
@@ -55,15 +55,51 @@ fun Navigation(
             )
         }
         chatListGraph(navController)
-        composable<SearchChatsRoute> {
+        composable<SearchChatsRoute>(
+            enterTransition = {
+                slideInHorizontally(
+                    animationSpec = tween(),
+                    initialOffsetX = {it}
+                )
+            },
+            exitTransition = {
+                slideOutHorizontally(
+                    animationSpec = tween(),
+                    targetOffsetX = {it}
+                )
+            },
+        ) {
             SearchChatsScreen(
-                { navController.popBackStack(ChatListRoute, inclusive =  false) },
+                {
+                    val backStackEntry = navController.previousBackStackEntry
+                    if(backStackEntry != null) {
+                        navController.popBackStack()
+                    }
+                },
                 { navController.navigate(ChatRoute(it)) }
             )
         }
-        composable<ChatRoute> { backStackEntry ->
+        composable<ChatRoute>(
+            enterTransition = {
+                slideInHorizontally(
+                    animationSpec = tween(),
+                    initialOffsetX = {it}
+                )
+            },
+            exitTransition = {
+                slideOutHorizontally(
+                    animationSpec = tween(),
+                    targetOffsetX = {it}
+                )
+            },
+        ) { backStackEntry ->
             val chat = backStackEntry.toRoute<ChatRoute>()
-            ChatScreen(chat.chatId) { navController.popBackStack() }
+            ChatScreen(chat.chatId) {
+                val backStackEntry = navController.previousBackStackEntry
+                if(backStackEntry != null) {
+                    navController.popBackStack()
+                }
+            }
         }
     }
 }

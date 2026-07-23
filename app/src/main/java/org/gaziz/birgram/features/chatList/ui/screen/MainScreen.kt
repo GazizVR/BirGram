@@ -163,13 +163,13 @@ fun MainScreen(
                                     } else {
                                         if (chat.lastMessage != null) {
                                             var sender: String? = null
-                                            if(
+                                            if (
                                                 (chat.type is ChatType.BasicGroup ||
-                                                (chat.type is ChatType.SuperGroup && !chat.type.isChannel)) &&
+                                                        (chat.type is ChatType.SuperGroup && !chat.type.isChannel)) &&
                                                 chat.lastMessage.sender is MessageSender.User
                                             ) {
                                                 val user = users[chat.lastMessage.sender.id]
-                                                if(user != null) {
+                                                if (user != null) {
                                                     sender = user.firstName
                                                 }
                                             }

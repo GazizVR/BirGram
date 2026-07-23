@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatPhoto
+import org.gaziz.birgram.features.chatList.ui.component.chatCard.CardPhoto
 import org.gaziz.birgram.features.chatList.ui.component.chatCard.ChatAvatar
 import org.gaziz.birgram.features.chatList.ui.component.chatCard.ChatTime
 import org.gaziz.birgram.features.chatList.ui.component.chatCard.ChatTitle
@@ -46,7 +47,7 @@ fun ChatCard(
             verticalAlignment = Alignment.CenterVertically
         ){
             if(photo.model is ChatPhoto?) {
-                org.gaziz.birgram.features.chatList.ui.component.chatCard.ChatPhoto(
+                CardPhoto(
                     modifier = Modifier.size(photo.size),
                     photo = photo.model,
                     onPhotoNull = photo.onNull,

@@ -63,7 +63,7 @@ fun ChatAvatar(
 }
 
 @Composable
-fun ChatPhoto(
+fun CardPhoto(
     modifier: Modifier,
     photo: ChatPhoto?,
     onPhotoNull: (Int) -> Unit,
