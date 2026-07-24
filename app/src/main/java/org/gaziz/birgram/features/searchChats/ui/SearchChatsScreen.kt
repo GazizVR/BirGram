@@ -26,6 +26,7 @@ import org.gaziz.birgram.features.searchChats.ui.components.SearchTopBar
 import org.gaziz.birgram.features.searchChats.ui.components.SearchedCard
 import org.gaziz.birgram.features.searchChats.ui.model.PhotoUiState
 import org.gaziz.birgram.features.searchChats.ui.model.TextUiState
+import org.gaziz.birgram.features.searchChats.ui.model.TypeInfoUiState
 
 @Composable
 fun SearchChatsScreen(
@@ -47,6 +48,7 @@ fun SearchChatsScreen(
                 verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 items(chats.toList()) { item ->
+                    val typeInfo = item.second.typeInfo
                     SearchedCard(
                         modifier = Modifier
                             .height(cardHeight)
@@ -60,6 +62,12 @@ fun SearchChatsScreen(
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 6.sp
                         ),
+                        typeInfo = if(typeInfo != null) {
+                            TypeInfoUiState(
+                                info = typeInfo,
+                                fontSize = 6.sp
+                            )
+                        } else null,
                         onClick = { onChatClick(item.first) }
                     )
                 }

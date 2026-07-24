@@ -88,4 +88,18 @@
         <item>Video message</item>
     </string-array>
 
+    <string name="group">group</string>
+    <string name="channel">channel</string>
+    <string name="subscribers">subscribers</string>
+    <string name="members">members</string>
+    <string name="bot">bot</string>
+
+    <string name="status_online">online</string>
+    <string name="status_last_seen_recently">last seen recently</string>
+    <string name="status_last_seen_at">last seen at</string>
+    <string name="status_last_seen_yesterday_at">last seen yesterday at</string>
+    <string name="status_last_seen_within_week">last seen within a week</string>
+    <string name="status_last_seen_within_month">last seen within a month</string>
+    <string name="status_last_seen_long_ago">last seen a long time ago</string>
+
 </resources>

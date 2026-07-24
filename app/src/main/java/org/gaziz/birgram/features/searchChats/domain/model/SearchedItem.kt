@@ -5,5 +5,6 @@ import org.gaziz.birgram.core.ui.model.ChatAvatar
 
 data class SearchedItem(
     val chat: Chat,
-    val avatar: ChatAvatar
+    val avatar: ChatAvatar,
+    val typeInfo: ChatTypeInfo?
 )

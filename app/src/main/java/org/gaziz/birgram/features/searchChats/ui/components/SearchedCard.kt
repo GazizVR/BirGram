@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -18,12 +20,14 @@ import org.gaziz.birgram.core.ui.component.ChatAvatar
 import org.gaziz.birgram.core.ui.component.ChatTitle
 import org.gaziz.birgram.features.searchChats.ui.model.PhotoUiState
 import org.gaziz.birgram.features.searchChats.ui.model.TextUiState
+import org.gaziz.birgram.features.searchChats.ui.model.TypeInfoUiState
 
 @Composable
 fun SearchedCard(
     modifier: Modifier,
     photo: PhotoUiState,
     title: TextUiState,
+    typeInfo: TypeInfoUiState?,
     onClick: () -> Unit
 ) {
     Box(
@@ -42,7 +46,8 @@ fun SearchedCard(
             Spacer(Modifier.width(8.dp))
             Column(
                 horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxHeight()
             ) {
                 ChatTitle(
                     modifier = Modifier.weight(1f),
@@ -50,6 +55,14 @@ fun SearchedCard(
                     color = title.color,
                     fontSize = title.fontSize,
                 )
+                if(typeInfo != null) {
+                    Spacer(Modifier.height(4.dp))
+                    ChatTypePreview(
+                        modifier = Modifier.weight(1f),
+                        info = typeInfo.info,
+                        fontSize = typeInfo.fontSize
+                    )
+                }
             }
         }
     }
