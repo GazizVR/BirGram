@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.ui.icons
+package org.gaziz.birgram.core.ui.icon
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathFillType
@@ -9,14 +9,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 
-val menu: ImageVector
+val send: ImageVector
   get() {
-    if (_menu != null) {
-      return _menu!!
+    if (_send != null) {
+      return _send!!
     }
-    _menu =
+    _send =
       ImageVector.Builder(
-          name = "menu",
+          name = "send",
           defaultWidth = 24.dp,
           defaultHeight = 24.dp,
           viewportWidth = 24f,
@@ -34,28 +34,18 @@ val menu: ImageVector
             strokeLineMiter = 1f,
             pathFillType = PathFillType.Companion.NonZero,
           ) {
-            moveTo(3f, 18f)
-            verticalLineTo(16f)
-            horizontalLineTo(21f)
-            verticalLineToRelative(2f)
-            horizontalLineTo(3f)
-            close()
-            moveTo(3f, 13f)
-            verticalLineTo(11f)
-            horizontalLineTo(21f)
-            verticalLineToRelative(2f)
-            horizontalLineTo(3f)
-            close()
-            moveTo(3f, 8f)
-            verticalLineTo(6f)
-            horizontalLineTo(21f)
-            verticalLineTo(8f)
-            horizontalLineTo(3f)
+            moveTo(3f, 20f)
+            verticalLineTo(14f)
+            lineToRelative(8f, -2f)
+            lineTo(3f, 10f)
+            verticalLineTo(4f)
+            lineToRelative(19f, 8f)
+            lineTo(3f, 20f)
             close()
           }
         }
         .build()
-    return _menu!!
+    return _send!!
   }
 
-private var _menu: ImageVector? = null
+private var _send: ImageVector? = null

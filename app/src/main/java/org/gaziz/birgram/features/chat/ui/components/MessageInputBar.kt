@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.ui.icons.send
+import org.gaziz.birgram.core.ui.icon.send
 
 @Composable
 fun MessageInputBar(

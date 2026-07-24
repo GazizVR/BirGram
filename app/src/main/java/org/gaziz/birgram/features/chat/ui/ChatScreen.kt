@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
 import org.gaziz.birgram.features.chat.ui.components.ChatTopBar
 import org.gaziz.birgram.features.chat.ui.components.MessageCard
@@ -99,13 +98,7 @@ fun ChatScreen(
                         focusManager.clearFocus()
                         onBack()
                     },
-                    photo = chat?.photo,
                     title = chat?.title ?: "",
-                    type = chat?.type ?: ChatType.Other,
-                    userStatus = {
-                        val user by viewModel.getUser(it).collectAsState()
-                        user?.status
-                    }
                 )
             }
         },

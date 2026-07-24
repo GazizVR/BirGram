@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.ui.icons
+package org.gaziz.birgram.core.ui.icon
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathFillType
@@ -9,14 +9,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 
-val close: ImageVector
+val darkMode: ImageVector
   get() {
-    if (_close != null) {
-      return _close!!
+    if (_darkMode != null) {
+      return _darkMode!!
     }
-    _close =
+    _darkMode =
       ImageVector.Builder(
-          name = "close",
+          name = "dark_mode",
           defaultWidth = 24.dp,
           defaultHeight = 24.dp,
           viewportWidth = 24f,
@@ -34,24 +34,28 @@ val close: ImageVector
             strokeLineMiter = 1f,
             pathFillType = PathFillType.Companion.NonZero,
           ) {
-            moveTo(6.4f, 19f)
-            lineTo(5f, 17.6f)
-            lineTo(10.6f, 12f)
-            lineTo(5f, 6.4f)
-            lineTo(6.4f, 5f)
-            lineTo(12f, 10.6f)
-            lineTo(17.6f, 5f)
-            lineTo(19f, 6.4f)
-            lineTo(13.4f, 12f)
-            lineTo(19f, 17.6f)
-            lineTo(17.6f, 19f)
-            lineTo(12f, 13.4f)
-            lineTo(6.4f, 19f)
+            moveTo(12f, 21f)
+            quadTo(8.25f, 21f, 5.63f, 18.38f)
+            reflectiveQuadTo(3f, 12f)
+            reflectiveQuadTo(5.63f, 5.63f)
+            reflectiveQuadTo(12f, 3f)
+            quadToRelative(0.35f, 0f, 0.69f, 0.02f)
+            quadToRelative(0.34f, 0.02f, 0.66f, 0.07f)
+            quadTo(12.33f, 3.82f, 11.71f, 4.99f)
+            reflectiveQuadTo(11.1f, 7.5f)
+            quadToRelative(0f, 2.25f, 1.57f, 3.82f)
+            reflectiveQuadTo(16.5f, 12.9f)
+            quadToRelative(1.38f, 0f, 2.53f, -0.61f)
+            reflectiveQuadTo(20.9f, 10.65f)
+            quadToRelative(0.05f, 0.33f, 0.07f, 0.66f)
+            reflectiveQuadTo(21f, 12f)
+            quadToRelative(0f, 3.75f, -2.63f, 6.38f)
+            reflectiveQuadTo(12f, 21f)
             close()
           }
         }
         .build()
-    return _close!!
+    return _darkMode!!
   }
 
-private var _close: ImageVector? = null
+private var _darkMode: ImageVector? = null

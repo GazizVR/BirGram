@@ -20,9 +20,9 @@ import org.gaziz.birgram.core.telegram.api.model.user.UserStatus
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.telegram.api.usecase.DownloadChatPhotoSmall
 import org.gaziz.birgram.core.telegram.api.usecase.GetAccentColorById
-import org.gaziz.birgram.core.ui.icons.skull
+import org.gaziz.birgram.core.ui.icon.skull
 import org.gaziz.birgram.features.chatList.domain.mapper.toStringDate
-import org.gaziz.birgram.features.chatList.domain.model.ChatAvatar
+import org.gaziz.birgram.core.ui.model.ChatAvatar
 import org.gaziz.birgram.features.chatList.domain.model.ChatListItem
 import java.time.LocalDateTime
 import javax.inject.Inject

@@ -54,28 +54,7 @@
 
     <string name="search_placeholder">Search…</string>
 
-    <string-array name="group_types">
-        <item>basic group</item>
-        <item>channel</item>
-        <item>super group</item>
-    </string-array>
-
     <string name="empty_search">Nothing to show</string>
-
-    <string-array name="last_seen_cnt">
-        <item>online</item>
-        <item>last seen</item>
-        <item>recently</item>
-        <item>within a week</item>
-        <item>within a month</item>
-        <item>a long time ago</item>
-    </string-array>
-
-    <string-array name="seen_offline">
-        <item>just now</item>
-        <item>at</item>
-        <item>yesterday</item>
-    </string-array>
 
     <string name="no_messages">No messages here yet…</string>
 

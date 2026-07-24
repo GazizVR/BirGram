@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.ui.icons
+package org.gaziz.birgram.core.ui.icon
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathFillType
@@ -9,14 +9,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 
-val arrowBack: ImageVector
+val close: ImageVector
   get() {
-    if (_arrowBack != null) {
-      return _arrowBack!!
+    if (_close != null) {
+      return _close!!
     }
-    _arrowBack =
+    _close =
       ImageVector.Builder(
-          name = "arrow_back",
+          name = "close",
           defaultWidth = 24.dp,
           defaultHeight = 24.dp,
           viewportWidth = 24f,
@@ -34,21 +34,24 @@ val arrowBack: ImageVector
             strokeLineMiter = 1f,
             pathFillType = PathFillType.Companion.NonZero,
           ) {
-            moveTo(7.83f, 13f)
-            lineToRelative(5.6f, 5.6f)
-            lineTo(12f, 20f)
-            lineTo(4f, 12f)
-            lineTo(12f, 4f)
-            lineToRelative(1.43f, 1.4f)
-            lineTo(7.83f, 11f)
-            horizontalLineTo(20f)
-            verticalLineToRelative(2f)
-            horizontalLineTo(7.83f)
+            moveTo(6.4f, 19f)
+            lineTo(5f, 17.6f)
+            lineTo(10.6f, 12f)
+            lineTo(5f, 6.4f)
+            lineTo(6.4f, 5f)
+            lineTo(12f, 10.6f)
+            lineTo(17.6f, 5f)
+            lineTo(19f, 6.4f)
+            lineTo(13.4f, 12f)
+            lineTo(19f, 17.6f)
+            lineTo(17.6f, 19f)
+            lineTo(12f, 13.4f)
+            lineTo(6.4f, 19f)
             close()
           }
         }
         .build()
-    return _arrowBack!!
+    return _close!!
   }
 
-private var _arrowBack: ImageVector? = null
+private var _close: ImageVector? = null

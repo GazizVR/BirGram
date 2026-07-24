@@ -18,8 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.ui.icons.darkMode
-import org.gaziz.birgram.core.ui.icons.exitToApp
+import org.gaziz.birgram.core.ui.icon.darkMode
+import org.gaziz.birgram.core.ui.icon.exitToApp
 
 @Composable
 fun MainScreenMenu(

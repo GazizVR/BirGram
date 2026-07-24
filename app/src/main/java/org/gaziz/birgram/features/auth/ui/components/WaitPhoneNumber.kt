@@ -38,7 +38,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.ui.icons.arrowBack
+import org.gaziz.birgram.core.ui.icon.arrowBack
 
 @Composable
 fun WaitPhoneNumber(

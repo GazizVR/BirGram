@@ -19,8 +19,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.ui.icons.arrowBack
-import org.gaziz.birgram.core.ui.icons.close
+import org.gaziz.birgram.core.ui.icon.arrowBack
+import org.gaziz.birgram.core.ui.icon.close
 
 @Composable
 fun SearchTopBar(

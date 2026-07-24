@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.ui.icons
+package org.gaziz.birgram.core.ui.icon
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathFillType

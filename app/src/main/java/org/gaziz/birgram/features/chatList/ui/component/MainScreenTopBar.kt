@@ -19,8 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.ui.icons.menu
-import org.gaziz.birgram.core.ui.icons.search
+import org.gaziz.birgram.core.ui.icon.menu
+import org.gaziz.birgram.core.ui.icon.search
 
 @Composable
 fun MainScreenTopBar(

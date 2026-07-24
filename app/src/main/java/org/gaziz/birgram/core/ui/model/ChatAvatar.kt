@@ -1,4 +1,4 @@
-package org.gaziz.birgram.features.chatList.domain.model
+package org.gaziz.birgram.core.ui.model
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap

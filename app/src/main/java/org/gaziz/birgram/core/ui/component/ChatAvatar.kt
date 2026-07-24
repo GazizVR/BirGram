@@ -1,4 +1,4 @@
-package org.gaziz.birgram.features.chatList.ui.component.chatCard
+package org.gaziz.birgram.core.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,7 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import org.gaziz.birgram.features.chatList.domain.model.ChatAvatar
+import org.gaziz.birgram.core.ui.model.ChatAvatar
 
 @Composable
 fun ChatAvatar(

@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.ui.icons
+package org.gaziz.birgram.core.ui.icon
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathFillType
@@ -9,14 +9,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 
-val darkMode: ImageVector
+val arrowBack: ImageVector
   get() {
-    if (_darkMode != null) {
-      return _darkMode!!
+    if (_arrowBack != null) {
+      return _arrowBack!!
     }
-    _darkMode =
+    _arrowBack =
       ImageVector.Builder(
-          name = "dark_mode",
+          name = "arrow_back",
           defaultWidth = 24.dp,
           defaultHeight = 24.dp,
           viewportWidth = 24f,
@@ -34,28 +34,21 @@ val darkMode: ImageVector
             strokeLineMiter = 1f,
             pathFillType = PathFillType.Companion.NonZero,
           ) {
-            moveTo(12f, 21f)
-            quadTo(8.25f, 21f, 5.63f, 18.38f)
-            reflectiveQuadTo(3f, 12f)
-            reflectiveQuadTo(5.63f, 5.63f)
-            reflectiveQuadTo(12f, 3f)
-            quadToRelative(0.35f, 0f, 0.69f, 0.02f)
-            quadToRelative(0.34f, 0.02f, 0.66f, 0.07f)
-            quadTo(12.33f, 3.82f, 11.71f, 4.99f)
-            reflectiveQuadTo(11.1f, 7.5f)
-            quadToRelative(0f, 2.25f, 1.57f, 3.82f)
-            reflectiveQuadTo(16.5f, 12.9f)
-            quadToRelative(1.38f, 0f, 2.53f, -0.61f)
-            reflectiveQuadTo(20.9f, 10.65f)
-            quadToRelative(0.05f, 0.33f, 0.07f, 0.66f)
-            reflectiveQuadTo(21f, 12f)
-            quadToRelative(0f, 3.75f, -2.63f, 6.38f)
-            reflectiveQuadTo(12f, 21f)
+            moveTo(7.83f, 13f)
+            lineToRelative(5.6f, 5.6f)
+            lineTo(12f, 20f)
+            lineTo(4f, 12f)
+            lineTo(12f, 4f)
+            lineToRelative(1.43f, 1.4f)
+            lineTo(7.83f, 11f)
+            horizontalLineTo(20f)
+            verticalLineToRelative(2f)
+            horizontalLineTo(7.83f)
             close()
           }
         }
         .build()
-    return _darkMode!!
+    return _arrowBack!!
   }
 
-private var _darkMode: ImageVector? = null
+private var _arrowBack: ImageVector? = null
