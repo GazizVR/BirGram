@@ -1,4 +1,4 @@
-package org.gaziz.birgram.features.searchChats.ui.components
+package org.gaziz.birgram.core.ui.component
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -9,7 +9,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import org.gaziz.birgram.R
 import org.gaziz.birgram.core.telegram.api.model.user.UserStatus
-import org.gaziz.birgram.features.searchChats.domain.model.ChatTypeInfo
+import org.gaziz.birgram.core.ui.model.ChatTypeInfo
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -63,26 +63,14 @@ fun ChatTypePreview(
     fontSize: TextUnit
 ) {
     var color = MaterialTheme.colorScheme.onBackground.copy(0.5f)
-    val group = stringResource(R.string.group)
     val members = stringResource(R.string.members)
     val subscribers = stringResource(R.string.subscribers)
-    val channel = stringResource(R.string.channel)
     val bot = stringResource(R.string.bot)
     val text: String = when(info) {
-        is ChatTypeInfo.BasicGroup -> {
-            if(info.memberCount > 1) {
-                "${info.memberCount} $members"
-            } else {
-               group
-            }
-        }
+        is ChatTypeInfo.BasicGroup -> "${info.memberCount} $members"
 
         is ChatTypeInfo.SuperGroup -> {
-            if(info.memberCount > 1) {
-                "${info.memberCount} ${if (info.isChannel) subscribers else members}"
-            } else {
-                if(info.isChannel) channel else group
-            }
+            "${info.memberCount} ${if (info.isChannel) subscribers else members}"
         }
 
         is ChatTypeInfo.User -> {

@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.core.ui.component.ChatAvatar
 import org.gaziz.birgram.core.ui.component.ChatText
+import org.gaziz.birgram.core.ui.component.ChatTypePreview
 import org.gaziz.birgram.features.searchChats.ui.model.PhotoUiState
 import org.gaziz.birgram.features.searchChats.ui.model.TextUiState
 import org.gaziz.birgram.features.searchChats.ui.model.TypeInfoUiState

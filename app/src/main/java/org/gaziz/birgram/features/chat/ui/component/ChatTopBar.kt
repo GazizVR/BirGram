@@ -1,12 +1,15 @@
 package org.gaziz.birgram.features.chat.ui.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
@@ -21,8 +24,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.core.ui.component.ChatAvatar
 import org.gaziz.birgram.core.ui.component.ChatText
+import org.gaziz.birgram.core.ui.component.ChatTypePreview
 import org.gaziz.birgram.core.ui.icon.arrowBack
 import org.gaziz.birgram.core.ui.icon.moreVert
+import org.gaziz.birgram.core.ui.model.ChatTypeInfo
 import org.gaziz.birgram.features.chat.ui.model.AvatarUiState
 import org.gaziz.birgram.features.chat.ui.model.TitleUiState
 
@@ -31,6 +36,7 @@ fun ChatTopBar(
     modifier: Modifier,
     avatar: AvatarUiState,
     title: TitleUiState,
+    info: ChatTypeInfo?,
     onBackClick: () -> Unit,
     onMoreClick: () -> Unit
 ) {
@@ -66,11 +72,23 @@ fun ChatTopBar(
                 }
                 Spacer(Modifier.width(8.dp))
                 if(title.title != null) {
-                    ChatText(
-                        text = title.title,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        fontSize = title.fontSize
-                    )
+                    Column(
+                        horizontalAlignment = Alignment.Start,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        ChatText(
+                            text = title.title,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = title.fontSize
+                        )
+                        if(info != null) {
+                            Spacer(Modifier.height(6.dp))
+                            ChatTypePreview(
+                                info = info,
+                                fontSize = 6.sp
+                            )
+                        }
+                    }
                 }
             }
             IconButton(

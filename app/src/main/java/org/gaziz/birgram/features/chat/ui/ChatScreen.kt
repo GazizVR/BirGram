@@ -45,6 +45,7 @@ fun ChatScreen(
                     title = if(chat?.isDeleted == true) deletedAccount else chat?.title,
                     fontSize = 6.sp
                 ),
+                info = chat?.typeInfo,
                 onBackClick = onBack,
                 onMoreClick = {}
             )

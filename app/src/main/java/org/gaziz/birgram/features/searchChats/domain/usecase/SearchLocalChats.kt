@@ -15,7 +15,7 @@ import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.telegram.api.usecase.DownloadChatPhotoSmall
 import org.gaziz.birgram.core.telegram.api.usecase.GetAccentColorById
 import org.gaziz.birgram.core.ui.model.ChatAvatar
-import org.gaziz.birgram.features.searchChats.domain.model.ChatTypeInfo
+import org.gaziz.birgram.core.ui.model.ChatTypeInfo
 import org.gaziz.birgram.features.searchChats.domain.model.SearchedItem
 import org.gaziz.birgram.features.searchChats.domain.repository.ChatSearchRepository
 import javax.inject.Inject
