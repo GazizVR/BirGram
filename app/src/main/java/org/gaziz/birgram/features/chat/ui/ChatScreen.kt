@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import org.gaziz.birgram.R
 import org.gaziz.birgram.features.chat.ui.component.ChatTopBar
+import org.gaziz.birgram.features.chat.ui.component.MessageInputBar
 import org.gaziz.birgram.features.chat.ui.model.AvatarUiState
 import org.gaziz.birgram.features.chat.ui.model.TitleUiState
 
@@ -33,10 +34,8 @@ fun ChatScreen(
             .fillMaxSize()
             .background(containerColor),
         topBar = {
-            val height = 80.dp
             val deletedAccount = stringResource(R.string.deleted_account)
             ChatTopBar(
-                modifier = Modifier.height(height),
                 avatar = AvatarUiState(
                     avatar = chat?.avatar,
                     size = 40.dp
@@ -49,13 +48,20 @@ fun ChatScreen(
                 onBackClick = onBack,
                 onMoreClick = {}
             )
-        }
+        },
+        bottomBar = {
+            val height = 50.dp
+            MessageInputBar(
+                modifier = Modifier.height(height),
+                sendMessage = {}
+            )
+        },
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .background(containerColor)
+                .background(containerColor),
         ) {
 
         }

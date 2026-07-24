@@ -1,22 +1,17 @@
 package org.gaziz.birgram.features.chat.ui.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,36 +26,32 @@ import org.gaziz.birgram.core.ui.model.ChatTypeInfo
 import org.gaziz.birgram.features.chat.ui.model.AvatarUiState
 import org.gaziz.birgram.features.chat.ui.model.TitleUiState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatTopBar(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     avatar: AvatarUiState,
     title: TitleUiState,
     info: ChatTypeInfo?,
     onBackClick: () -> Unit,
     onMoreClick: () -> Unit
 ) {
-    Box(
-        modifier = modifier
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(WindowInsets.statusBars.asPaddingValues()),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
+    TopAppBar(
+        modifier = modifier,
+        navigationIcon = {
             IconButton(
                 onClick = onBackClick
             ) {
                 Icon(
                     imageVector = arrowBack,
                     contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
+        },
+        title = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.weight(1f)
             ) {
                 if(avatar.avatar != null) {
                     ChatAvatar(
@@ -91,14 +82,17 @@ fun ChatTopBar(
                     }
                 }
             }
+        },
+        actions = {
             IconButton(
                 onClick = onMoreClick
             ) {
                 Icon(
                     imageVector = moreVert,
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         }
-    }
+    )
 }
