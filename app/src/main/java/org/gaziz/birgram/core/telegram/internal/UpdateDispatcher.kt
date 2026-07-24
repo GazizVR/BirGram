@@ -4,6 +4,7 @@ import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.internal.updaters.AuthUpdater
 import org.gaziz.birgram.core.telegram.internal.updaters.ChatUpdater
 import org.gaziz.birgram.core.telegram.internal.updaters.ErrorUpdater
+import org.gaziz.birgram.core.telegram.internal.updaters.GroupUpdater
 import org.gaziz.birgram.core.telegram.internal.updaters.MessageUpdater
 import org.gaziz.birgram.core.telegram.internal.updaters.UserUpdater
 import javax.inject.Inject
@@ -15,7 +16,8 @@ class UpdateDispatcher @Inject constructor(
     private val chatUpdater: ChatUpdater,
     private val messageUpdater: MessageUpdater,
     private val errorUpdater: ErrorUpdater,
-    private val userUpdater: UserUpdater
+    private val userUpdater: UserUpdater,
+    private val groupUpdater: GroupUpdater
 ) {
     fun dispatch(u: TdApi.Object){
         when(u) {
@@ -50,6 +52,9 @@ class UpdateDispatcher @Inject constructor(
 
             is TdApi.UpdateUser -> userUpdater.onUserUpdate(u)
             is TdApi.UpdateUserStatus -> userUpdater.onUserStatusUpdate(u)
+
+            is TdApi.UpdateBasicGroup -> groupUpdater.onBasicGroupUpdate(u)
+            is TdApi.UpdateSupergroup -> groupUpdater.onSuperGroupUpdate(u)
 
         }
     }
