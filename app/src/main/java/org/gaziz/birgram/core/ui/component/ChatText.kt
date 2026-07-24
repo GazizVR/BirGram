@@ -8,14 +8,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 
 @Composable
-fun ChatTitle(
-    modifier: Modifier,
-    title: String,
+fun ChatText(
+    modifier: Modifier = Modifier,
+    text: String,
     color: Color,
     fontSize: TextUnit,
 ) {
     Text(
-        text = title,
+        text = text,
         modifier = modifier,
         color = color,
         fontSize = fontSize,

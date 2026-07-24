@@ -12,12 +12,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.core.ui.model.ChatAvatar
 
 @Composable
 fun ChatAvatar(
     modifier: Modifier,
     avatar: ChatAvatar,
+    placeHolderFontSize: TextUnit = 16.sp,
     overlay: @Composable () -> Unit
 ) {
     Box(
@@ -61,7 +65,10 @@ fun ChatAvatar(
                 ) {
                     Text(
                         text = avatar.text,
-                        color = MaterialTheme.colorScheme.onBackground
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontSize = placeHolderFontSize,
+                        textAlign = TextAlign.Center,
+                        lineHeight = placeHolderFontSize
                     )
                 }
             }

@@ -58,7 +58,7 @@ fun TdApi.Message.toMessage(): Message {
         id = this.id,
         content = this.content.toMessageCnt(),
         date = this.date.fromUnixTimeStamp(),
-        isMy = this.isOutgoing,
+        isOutgoing = this.isOutgoing,
         chatId = this.chatId,
         sender = this.senderId.toSender()
     )

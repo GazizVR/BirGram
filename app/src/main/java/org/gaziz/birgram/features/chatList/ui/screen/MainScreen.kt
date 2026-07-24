@@ -142,25 +142,25 @@ fun MainScreen(
                                 }
                             ),
                             title = CardTextUiState(
-                                text = if(item.isDeleted) deletedAccount else item.chat.title,
+                                text = if(item.isDeleted) deletedAccount else item.title,
                                 fontSize = 7.sp,
                                 color = MaterialTheme.colorScheme.onBackground
                             ),
                             lastMessage = LastMsgUiState(
                                 component = { modifier ->
                                     if(item.isDraftMsg) {
-                                        if(item.chat.draftMessage != null) {
+                                        if(item.draftMessage != null) {
                                             DraftMessagePreview(
                                                 modifier = modifier,
-                                                draftMessage = item.chat.draftMessage,
+                                                draftMessage = item.draftMessage,
                                                 fontSize = 6.sp
                                             )
                                         }
                                     } else {
-                                        if(item.chat.lastMessage != null) {
+                                        if(item.lastMessage != null) {
                                             LastMessagePreview(
                                                 modifier = modifier,
-                                                lastMessage = item.chat.lastMessage,
+                                                lastMessage = item.lastMessage,
                                                 fontSize = 6.sp,
                                                 sender = item.messageSender
                                             )
@@ -171,12 +171,12 @@ fun MainScreen(
                                 fontSize = 6.sp
                             ),
                             unreadBadge = UnreadBadgeUiState(
-                                unreadCount = item.chat.unreadCount,
-                                mentionCount = item.chat.mentionCount,
-                                reactionCount = item.chat.reactionCount,
+                                unreadCount = item.unreadCount,
+                                mentionCount = item.mentionCount,
+                                reactionCount = item.reactionCount,
                                 fontSize = 5.sp
                             ),
-                            onClick = { onChatClick(item.chat.id) },
+                            onClick = { onChatClick(item.id) },
                         )
                     }
                 }

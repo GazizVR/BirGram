@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.gaziz.birgram.core.ui.component.ChatAvatar
-import org.gaziz.birgram.core.ui.component.ChatTitle
+import org.gaziz.birgram.core.ui.component.ChatText
 import org.gaziz.birgram.features.chatList.ui.component.chatCard.ChatTime
 import org.gaziz.birgram.features.chatList.ui.component.chatCard.ChatUnreadBadge
 import org.gaziz.birgram.features.chatList.ui.model.CardTextUiState
@@ -53,8 +53,8 @@ fun ChatCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ){
-                    ChatTitle(
-                        title = title.text,
+                    ChatText(
+                        text = title.text,
                         color = title.color,
                         fontSize = title.fontSize,
                         modifier = Modifier.weight(1f)

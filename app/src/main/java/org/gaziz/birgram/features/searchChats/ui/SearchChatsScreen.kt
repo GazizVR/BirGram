@@ -58,7 +58,7 @@ fun SearchChatsScreen(
                             size = cardPhotoSize
                         ),
                         title = TextUiState(
-                            text = item.second.chat.title,
+                            text = item.second.title,
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 6.sp
                         ),

@@ -15,8 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.core.ui.component.ChatAvatar
-import org.gaziz.birgram.core.ui.component.ChatTitle
+import org.gaziz.birgram.core.ui.component.ChatText
 import org.gaziz.birgram.features.searchChats.ui.model.PhotoUiState
 import org.gaziz.birgram.features.searchChats.ui.model.TextUiState
 import org.gaziz.birgram.features.searchChats.ui.model.TypeInfoUiState
@@ -42,15 +43,16 @@ fun SearchedCard(
             ChatAvatar(
                 modifier = Modifier.size(photo.size),
                 avatar = photo.avatar,
-                overlay = {}
+                placeHolderFontSize = 10.sp,
+                overlay = {},
             )
             Column(
                 modifier = Modifier.fillMaxHeight(),
                 verticalArrangement = Arrangement.Center
             ) {
-                ChatTitle(
+                ChatText(
                     modifier = Modifier,
-                    title = title.text,
+                    text = title.text,
                     color = title.color,
                     fontSize = title.fontSize,
                 )

@@ -89,7 +89,7 @@ class SearchLocalChats @Inject constructor(
                         else -> null
                     }
                     SearchedItem(
-                        chat = chat,
+                        title = chat.title,
                         avatar = when {
                             chat.photo != null && chat.photo.small.path.isNotBlank() -> {
                                 val bitmap = BitmapFactory.decodeFile(chat.photo.small.path)
