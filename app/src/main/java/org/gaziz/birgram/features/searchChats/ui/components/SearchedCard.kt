@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,29 +35,28 @@ fun SearchedCard(
             .clickable { onClick() }
     ) {
         Row(
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             ChatAvatar(
                 modifier = Modifier.size(photo.size),
                 avatar = photo.avatar,
                 overlay = {}
             )
-            Spacer(Modifier.width(8.dp))
             Column(
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxHeight()
+                modifier = Modifier.fillMaxHeight(),
+                verticalArrangement = Arrangement.Center
             ) {
                 ChatTitle(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier,
                     title = title.text,
                     color = title.color,
                     fontSize = title.fontSize,
                 )
                 if(typeInfo != null) {
-                    Spacer(Modifier.height(4.dp))
+                    Spacer(Modifier.height(8.dp))
                     ChatTypePreview(
-                        modifier = Modifier.weight(1f),
                         info = typeInfo.info,
                         fontSize = typeInfo.fontSize
                     )
