@@ -47,6 +47,7 @@ class ChatViewModel @Inject constructor(
             map.entries.associate { (key,value) ->
                 val messages = value.map { msg ->
                     MessageUiState(
+                        id = msg.id,
                         content = msg.content,
                         isOutgoing = msg.isOutgoing,
                         date = msg.date.formatMonthDay()
@@ -59,5 +60,11 @@ class ChatViewModel @Inject constructor(
             SharingStarted.Eagerly,
             emptyMap()
         )
+    }
+    fun loadMessages(
+        chatId: Long,
+        fromMessageId: Long
+    ){
+        loadChatMessages(chatId,fromMessageId)
     }
 }

@@ -13,6 +13,6 @@ class LoadChatMessages @Inject constructor(
         messageService.getChatHistory(
             chatId,
             fromMsgId
-        ) {}
+        )
     }
 }
