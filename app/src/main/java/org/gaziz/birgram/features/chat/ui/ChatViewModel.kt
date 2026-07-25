@@ -11,6 +11,7 @@ import org.gaziz.birgram.core.telegram.api.ChatService
 import org.gaziz.birgram.features.chat.domain.model.ChatInfo
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatById
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatMessages
+import org.gaziz.birgram.features.chat.domain.usecase.LoadChatMessages
 import org.gaziz.birgram.features.chat.ui.mapper.formatMonthDay
 import org.gaziz.birgram.features.chat.ui.model.MessageUiState
 import javax.inject.Inject
@@ -19,12 +20,15 @@ import javax.inject.Inject
 class ChatViewModel @Inject constructor(
     private val getChatById: GetChatById,
     private val getChatMessages: GetChatMessages,
-    private val chatService: ChatService
+    private val chatService: ChatService,
+    private val loadChatMessages: LoadChatMessages
 ): ViewModel() {
     fun openChat(
         chatId: Long,
     ) {
-        chatService.openChat(chatId,{})
+        chatService.openChat(chatId) {
+            loadChatMessages(chatId)
+        }
     }
     fun closeChat(
         chatId: Long,

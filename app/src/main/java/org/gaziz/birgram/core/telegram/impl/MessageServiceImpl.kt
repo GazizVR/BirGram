@@ -23,7 +23,7 @@ class MessageServiceImpl @Inject constructor(
         _messages.update(updFun)
     }
 
-    override fun loadMessages(
+    override fun getChatHistory(
         chatId: Long,
         fromMessage: Long,
         onError: (ResponseData.Error) -> Unit

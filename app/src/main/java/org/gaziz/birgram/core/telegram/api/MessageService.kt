@@ -8,9 +8,9 @@ import org.gaziz.birgram.core.telegram.api.model.message.Message
 interface MessageService {
     val messages: StateFlow<Map<Long,Message>>
     fun updateMessages(updFun: (Map<Long,Message>) -> (Map<Long,Message>))
-    fun loadMessages(
+    fun getChatHistory(
         chatId: Long,
-        fromMessage: Long = 0,
+        fromMessage: Long,
         onError: (ResponseData.Error) -> Unit
     )
     fun sendMessage(

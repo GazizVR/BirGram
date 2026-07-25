@@ -72,8 +72,8 @@ fun ChatScreen(
         if(messages.isNotEmpty()) {
             LazyColumn(
                 modifier = Modifier
-                    .padding(paddingValues)
                     .fillMaxSize()
+                    .padding(paddingValues)
                     .background(containerColor),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(4.dp),
