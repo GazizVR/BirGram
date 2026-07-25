@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import org.gaziz.birgram.core.telegram.api.ChatService
 import org.gaziz.birgram.features.chat.domain.model.ChatInfo
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatById
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatMessages
@@ -17,8 +18,19 @@ import javax.inject.Inject
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val getChatById: GetChatById,
-    private val getChatMessages: GetChatMessages
+    private val getChatMessages: GetChatMessages,
+    private val chatService: ChatService
 ): ViewModel() {
+    fun openChat(
+        chatId: Long,
+    ) {
+        chatService.openChat(chatId,{})
+    }
+    fun closeChat(
+        chatId: Long,
+    ) {
+        chatService.closeChat(chatId)
+    }
     val chat: (Long) -> StateFlow<ChatInfo?> = {
         getChatById(it).stateIn(
             viewModelScope,
