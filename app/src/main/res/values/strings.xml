@@ -56,10 +56,6 @@
 
     <string name="empty_search">Nothing to show</string>
 
-    <string name="no_messages">No messages here yet…</string>
-
-    <string name="message_place_holder">Message</string>
-
     <string-array name="chat_list_menu_cnt">
         <item>Night Mode</item>
         <item>Log out</item>
@@ -99,5 +95,8 @@
     <string name="status_last_seen_within_week">last seen within a week</string>
     <string name="status_last_seen_within_month">last seen within a month</string>
     <string name="status_last_seen_long_ago">last seen a long time ago</string>
+
+    <string name="message">Message</string>
+    <string name="no_messages_yet">No messages yet</string>
 
 </resources>

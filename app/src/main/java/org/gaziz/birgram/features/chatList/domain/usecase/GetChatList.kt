@@ -22,7 +22,7 @@ import org.gaziz.birgram.core.telegram.api.usecase.DownloadChatPhotoSmall
 import org.gaziz.birgram.core.telegram.api.usecase.GetAccentColorById
 import org.gaziz.birgram.core.ui.icon.skull
 import org.gaziz.birgram.core.ui.model.ChatAvatar
-import org.gaziz.birgram.features.chatList.domain.mapper.toStringDate
+import org.gaziz.birgram.features.chatList.domain.mapper.formatChatTime
 import org.gaziz.birgram.features.chatList.domain.model.ChatListItem
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -79,8 +79,8 @@ class GetChatList @Inject constructor(
                         mentionCount = chat.mentionCount,
                         reactionCount = chat.reactionCount,
                         isDeleted = isDeleted,
-                        lastMsgDate = if (isDraftMsg) chat.draftMessage.date.toStringDate() else (chat.lastMessage?.date
-                            ?: LocalDateTime.now()).toStringDate(),
+                        lastMsgDate = if (isDraftMsg) chat.draftMessage.date.formatChatTime() else (chat.lastMessage?.date
+                            ?: LocalDateTime.now()).formatChatTime(),
                         avatar = when {
                             isDeleted -> {
                                 ChatAvatar.Icon(

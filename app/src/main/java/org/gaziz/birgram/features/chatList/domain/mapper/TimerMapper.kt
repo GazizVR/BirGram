@@ -8,7 +8,7 @@ private val TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm")
 private val MONTH_DAY_FORMATTER = DateTimeFormatter.ofPattern("MMM dd")
 private val DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yy")
 
-fun LocalDateTime.toStringDate(): String {
+fun LocalDateTime.formatChatTime(): String {
     val today = LocalDate.now()
 
     return when {
