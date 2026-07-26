@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -26,6 +25,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.gaziz.birgram.R
 import org.gaziz.birgram.features.chat.ui.component.ChatTopBar
+import org.gaziz.birgram.features.chat.ui.component.MessageCard
 import org.gaziz.birgram.features.chat.ui.component.MessageInputBar
 import org.gaziz.birgram.features.chat.ui.component.TextBox
 import org.gaziz.birgram.features.chat.ui.model.AvatarUiState
@@ -104,7 +104,10 @@ fun ChatScreen(
                         items = messages,
                         key = { it.id }
                     ) { msg ->
-                        Text(msg.content.toString())
+                        MessageCard(
+                            message = msg,
+                            fontSize = 6.sp
+                        )
                     }
                     item {
                         TextBox(

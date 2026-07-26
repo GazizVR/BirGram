@@ -8,7 +8,7 @@ class LoadChatMessages @Inject constructor(
 ) {
     operator fun invoke(
         chatId: Long,
-        fromMsgId: Long= 0
+        fromMsgId: Long = 0
     ) {
         messageService.getChatHistory(
             chatId,

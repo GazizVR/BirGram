@@ -13,6 +13,7 @@ import org.gaziz.birgram.features.chat.domain.usecase.GetChatById
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatMessages
 import org.gaziz.birgram.features.chat.domain.usecase.LoadChatMessages
 import org.gaziz.birgram.features.chat.ui.mapper.formatMonthDay
+import org.gaziz.birgram.features.chat.ui.mapper.toTimeString
 import org.gaziz.birgram.features.chat.ui.model.MessageUiState
 import javax.inject.Inject
 
@@ -50,7 +51,7 @@ class ChatViewModel @Inject constructor(
                         id = msg.id,
                         content = msg.content,
                         isOutgoing = msg.isOutgoing,
-                        date = msg.date.formatMonthDay()
+                        date = msg.date.toTimeString()
                     )
                 }
                 key.formatMonthDay() to messages
