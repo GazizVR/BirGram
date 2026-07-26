@@ -47,13 +47,15 @@ fun ChatScreen(
     val listState = rememberLazyListState()
     LaunchedEffect(Unit) {
         snapshotFlow {
-            listState.layoutInfo to listState.firstVisibleItemIndex
+            listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index to listState.layoutInfo.totalItemsCount
         }
             .distinctUntilChanged()
-            .collect { (info,firstIndex) ->
-                if(info.totalItemsCount-firstIndex <= 5) {
-                    messages.values.lastOrNull()?.last()?.let { msg ->
-                        viewModel.loadMessages(chatId,msg.id)
+            .collect { (lastItem,total) ->
+                if(lastItem != null) {
+                    if(total-lastItem <= 10) {
+                        messages.values.lastOrNull()?.last()?.let { msg ->
+                            viewModel.loadMessages(chatId,msg.id)
+                        }
                     }
                 }
             }

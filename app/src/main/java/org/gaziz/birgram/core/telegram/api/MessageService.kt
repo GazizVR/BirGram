@@ -1,6 +1,7 @@
 package org.gaziz.birgram.core.telegram.api
 
 import kotlinx.coroutines.flow.StateFlow
+import org.gaziz.birgram.core.telegram.api.model.ResponseData
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
 import org.gaziz.birgram.core.telegram.api.model.message.Message
 
@@ -9,7 +10,9 @@ interface MessageService {
     fun updateMessages(updFun: (Map<Long,Message>) -> (Map<Long,Message>))
     fun getChatHistory(
         chatId: Long,
-        fromMessage: Long
+        fromMessage: Long,
+        onError: (ResponseData.Error) -> Unit,
+        onResult: () -> Unit
     )
     fun sendMessage(
         chatId: Long,

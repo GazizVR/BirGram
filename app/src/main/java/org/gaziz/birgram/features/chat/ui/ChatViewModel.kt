@@ -24,11 +24,13 @@ class ChatViewModel @Inject constructor(
     private val chatService: ChatService,
     private val loadChatMessages: LoadChatMessages
 ): ViewModel() {
+    private var isLoading = false
     fun openChat(
         chatId: Long,
     ) {
         chatService.openChat(chatId) {
-            loadChatMessages(chatId)
+            isLoading = true
+            loadChatMessages(chatId, onResp = { isLoading = false } )
         }
     }
     fun closeChat(
@@ -66,6 +68,13 @@ class ChatViewModel @Inject constructor(
         chatId: Long,
         fromMessageId: Long
     ){
-        loadChatMessages(chatId,fromMessageId)
+        if(isLoading) return
+        isLoading = true
+        loadChatMessages(
+            chatId,
+            fromMessageId
+        ) {
+            isLoading = false
+        }
     }
 }
