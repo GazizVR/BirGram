@@ -1,11 +1,12 @@
 package org.gaziz.birgram.features.chat.ui.mapper
 
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.Year
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-fun LocalDateTime.formatMonthDay(locale: Locale = Locale.getDefault()): String {
+fun LocalDate.formatMonthDay(locale: Locale = Locale.getDefault()): String {
     val currentYear = Year.now().value
 
     val formatter = if (year == currentYear) {
