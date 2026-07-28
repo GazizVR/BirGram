@@ -8,5 +8,6 @@ data class ChatUiState(
     val avatar: Avatar,
     val isDeleted: Boolean,
     val typeInfo: ChatTypeInfo?,
-    val canSendTextMessages: Boolean = false
+    val draftText: String = "",
+    val canSendTextMessages: Boolean = false,
 )

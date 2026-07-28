@@ -22,10 +22,11 @@ import org.gaziz.birgram.R
 @Composable
 fun MessageInputBar(
     modifier: Modifier = Modifier,
+    defaultText: String,
     fontSize: TextUnit,
     sendMessage: (String) -> Unit
 ) {
-    var messageStr by rememberSaveable { mutableStateOf("") }
+    var messageStr by rememberSaveable { mutableStateOf(defaultText) }
     val containerColor = MaterialTheme.colorScheme.background
     val indicatorColor = Color.Transparent
     val message = stringResource(R.string.message)

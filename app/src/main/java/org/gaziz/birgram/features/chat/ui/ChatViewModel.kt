@@ -12,6 +12,7 @@ import org.gaziz.birgram.core.telegram.api.GroupService
 import org.gaziz.birgram.core.telegram.api.UserService
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
 import org.gaziz.birgram.core.telegram.api.model.group.GroupMemberStatus
+import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.telegram.api.usecase.GetChatAvatar
 import org.gaziz.birgram.core.ui.model.ChatTypeInfo
@@ -111,12 +112,21 @@ class ChatViewModel @Inject constructor(
                 }
                 else -> null
             }
+            var draftMessageText = ""
+            if(
+                chat.draftMessage != null &&
+                chat.draftMessage.content is DraftMessageContent.Text &&
+                !chat.draftMessage.content.clearDraft
+            ) {
+                draftMessageText = chat.draftMessage.content.text
+            }
             ChatUiState(
                 title = chat.title,
                 avatar = avatar,
                 isDeleted = isDeleted,
                 typeInfo = typeInfo,
-                canSendTextMessages = canSendTextMessages
+                draftText = draftMessageText,
+                canSendTextMessages = canSendTextMessages,
             )
         }.stateIn(
             viewModelScope,
