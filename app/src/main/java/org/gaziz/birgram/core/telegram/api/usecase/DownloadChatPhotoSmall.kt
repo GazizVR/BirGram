@@ -3,7 +3,7 @@ package org.gaziz.birgram.core.telegram.api.usecase
 import org.gaziz.birgram.core.telegram.api.ChatService
 import org.gaziz.birgram.core.telegram.api.FileService
 import org.gaziz.birgram.core.telegram.api.model.FileData
-import org.gaziz.birgram.core.telegram.api.model.chat.ChatPhoto
+import org.gaziz.birgram.core.telegram.api.model.ProfilePhoto
 import javax.inject.Inject
 
 class DownloadChatPhotoSmall @Inject constructor(
@@ -16,7 +16,7 @@ class DownloadChatPhotoSmall @Inject constructor(
     ) {
         chatService.updateChats { old ->
             val chat = old[chatId] ?: return@updateChats old
-            var photo = ChatPhoto(
+            var photo = ProfilePhoto(
                 small = file,
                 miniThumbnail = null
             )

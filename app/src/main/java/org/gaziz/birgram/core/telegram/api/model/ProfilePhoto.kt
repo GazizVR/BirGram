@@ -1,8 +1,6 @@
-package org.gaziz.birgram.core.telegram.api.model.chat
+package org.gaziz.birgram.core.telegram.api.model
 
-import org.gaziz.birgram.core.telegram.api.model.FileData
-
-data class ChatPhoto(
+data class ProfilePhoto(
     val miniThumbnail: ByteArray?,
     val small: FileData
 ) {
@@ -10,7 +8,7 @@ data class ChatPhoto(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as ChatPhoto
+        other as ProfilePhoto
 
         if (!miniThumbnail.contentEquals(other.miniThumbnail)) return false
         if (small != other.small) return false

@@ -1,8 +1,12 @@
 package org.gaziz.birgram.core.telegram.api.model.user
 
+import org.gaziz.birgram.core.telegram.api.model.ProfilePhoto
+
 data class User(
     val id: Long,
     val firstName: String,
+    val photo: ProfilePhoto?,
     val status: UserStatus,
-    val type: UserType
+    val type: UserType,
+    val accentColorId: Int
 )

@@ -1,6 +1,7 @@
 package org.gaziz.birgram.core.telegram.internal.mapper
 
 import org.drinkless.tdlib.TdApi
+import org.gaziz.birgram.core.telegram.api.model.ProfilePhoto
 import org.gaziz.birgram.core.telegram.api.model.user.User
 import org.gaziz.birgram.core.telegram.api.model.user.UserStatus
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
@@ -25,11 +26,21 @@ fun TdApi.UserType.toType(): UserType {
     }
 }
 
+fun TdApi.ProfilePhoto?.toPhoto(): ProfilePhoto? {
+    this ?: return null
+    return ProfilePhoto(
+        miniThumbnail = this.minithumbnail?.data,
+        small = this.small.toFileData()
+    )
+}
+
 fun TdApi.User.toUser(): User {
     return User(
         id = this.id,
         firstName = this.firstName,
+        photo = this.profilePhoto.toPhoto(),
         status = this.status.toStatus(),
-        type = this.type.toType()
+        type = this.type.toType(),
+        accentColorId = this.accentColorId
     )
 }
