@@ -158,18 +158,6 @@ class ChatViewModel @Inject constructor(
             emptyMap()
         )
     }
-    fun setDraftMessageText(
-        chatId: Long,
-        draft: String
-    ) {
-        messageService.setDraftMessage(
-            chatId,
-            DraftMessage(
-                content = DraftMessageContent.Text(draft,false),
-                date = LocalDateTime.now()
-            )
-        )
-    }
     fun loadMessages(
         chatId: Long,
         fromMessageId: Long
@@ -182,5 +170,23 @@ class ChatViewModel @Inject constructor(
         ) {
             isLoading = false
         }
+    }
+    fun setDraftMessageText(
+        chatId: Long,
+        draft: String
+    ) {
+        messageService.setDraftMessage(
+            chatId,
+            DraftMessage(
+                content = DraftMessageContent.Text(draft,false),
+                date = LocalDateTime.now()
+            )
+        )
+    }
+    fun sendMessageText(
+        chatId: Long,
+        message: String
+    ) {
+        messageService.sendMessage(chatId,message)
     }
 }

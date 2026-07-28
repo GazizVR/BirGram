@@ -88,7 +88,7 @@ fun ChatScreen(
                         modifier = Modifier.height(height),
                         defaultText = c.draftText,
                         fontSize = 8.sp,
-                        sendMessage = {},
+                        sendMessage = { viewModel.sendMessageText(c.id,it) },
                         setDraft = { viewModel.setDraftMessageText(c.id,it) }
                     )
                 }

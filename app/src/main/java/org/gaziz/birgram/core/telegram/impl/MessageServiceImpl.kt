@@ -53,8 +53,7 @@ class MessageServiceImpl @Inject constructor(
 
     override fun sendMessage(
         chatId: Long,
-        content: String,
-        onMessage: (Message?) -> Unit
+        content: String
     ) {
         manager.sendRequest(
             TdApi.SendMessage().apply {
@@ -69,14 +68,7 @@ class MessageServiceImpl @Inject constructor(
                     this.clearDraft = true
                 }
             },
-            { onMessage(null) }
-        ){
-            if(it is TdApi.Message){
-                onMessage(it.toMessage())
-            } else {
-                onMessage(null)
-            }
-        }
+        )
     }
 
     override fun setDraftMessage(

@@ -16,8 +16,7 @@ interface MessageService {
     )
     fun sendMessage(
         chatId: Long,
-        content: String,
-        onMessage: (Message?) -> Unit
+        content: String
     )
     fun setDraftMessage(
         chatId: Long,
