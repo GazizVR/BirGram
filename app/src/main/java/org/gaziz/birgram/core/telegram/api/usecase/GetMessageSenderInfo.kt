@@ -2,6 +2,9 @@ package org.gaziz.birgram.core.telegram.api.usecase
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import org.gaziz.birgram.core.telegram.api.ChatService
 import org.gaziz.birgram.core.telegram.api.UserService
@@ -18,29 +21,33 @@ class GetMessageSenderInfo @Inject constructor(
 ) {
     suspend operator fun invoke(
         messageSender: MessageSender
-    ): MessageSenderInfo? {
+    ): Flow<MessageSenderInfo?> {
         return when(messageSender) {
             is MessageSender.Chat -> {
-                val chat = chatService.chats.value[messageSender.id] ?: return null
-                val accentColor = getAccentColorById(chat.accentColorId)
-                    .stateIn(CoroutineScope(Dispatchers.IO))
-                MessageSenderInfo(
-                    name = chat.title,
-                    avatar = getChatAvatar(chat),
-                    accentColor = accentColor.value
-                )
+                chatService.chats.map {
+                    val chat = it[messageSender.id] ?: return@map null
+                    val accentColor = getAccentColorById(chat.accentColorId)
+                        .stateIn(CoroutineScope(Dispatchers.IO))
+                    MessageSenderInfo(
+                        name = chat.title,
+                        avatar = getChatAvatar(chat),
+                        accentColor = accentColor.value
+                    )
+                }
             }
             is MessageSender.User -> {
-                val user = userService.users.value[messageSender.id] ?: return null
-                val accentColor = getAccentColorById(user.accentColorId)
-                    .stateIn(CoroutineScope(Dispatchers.IO))
-                MessageSenderInfo(
-                    name = user.firstName,
-                    avatar = getUserAvatar(user),
-                    accentColor = accentColor.value
-                )
+                userService.users.map {
+                    val user = it[messageSender.id] ?: return@map null
+                    val accentColor = getAccentColorById(user.accentColorId)
+                        .stateIn(CoroutineScope(Dispatchers.IO))
+                    MessageSenderInfo(
+                        name = user.firstName,
+                        avatar = getUserAvatar(user),
+                        accentColor = accentColor.value
+                    )
+                }
             }
-            else -> null
+            else -> flowOf(null)
         }
     }
 }

@@ -51,20 +51,18 @@ fun MessageCard(
         horizontalArrangement = if(message.isOutgoing) Arrangement.End else Arrangement.Start
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             if(
                 showAuthor &&
                 message.sender.avatar != null
             ) {
-                Box(contentAlignment = Alignment.BottomStart) {
-                    ChatAvatar(
-                        modifier = Modifier.size(40.dp),
-                        avatar = message.sender.avatar,
-                        placeHolderFontSize = 10.sp,
-                    )
-                }
+                ChatAvatar(
+                    modifier = Modifier.size(40.dp),
+                    avatar = message.sender.avatar,
+                    placeHolderFontSize = 10.sp,
+                )
             }
             Box(
                 modifier = Modifier

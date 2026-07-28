@@ -150,7 +150,8 @@ class ChatViewModel @Inject constructor(
             map.entries.associate { (key,value) ->
                 val messages = value.map { msg ->
                     val chat = chatService.chats.value[msg.chatId]
-                    var senderInfo = getMessageSenderInfo(msg.sender)
+                    val messageSenderInfo = getMessageSenderInfo(msg.sender).stateIn(viewModelScope)
+                    var senderInfo = messageSenderInfo.value
                     if(msg.authorSignature.isNotEmpty()) {
                         val accentColor = getAccentColorById(chat?.accentColorId ?: -1)
                             .stateIn(viewModelScope)
