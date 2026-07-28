@@ -63,7 +63,7 @@ class AuthServiceImpl @Inject constructor(
             useSecretChats = false
             systemLanguageCode = "${Locale.getDefault().language}-${Locale.getDefault().country}"
             deviceModel = Build.MODEL
-            applicationVersion = "0.1"
+            applicationVersion = "1.0"
         }
         manager.sendRequest(
             query = parameters,
