@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.DisableSelection
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,9 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -55,31 +54,41 @@ fun MessageCard(
             ) {
                 when(val cnt = message.content){
                     is MessageContent.Text -> {
-                        Text(
-                            text = buildAnnotatedString {
-                                append(cnt.text)
-                                withStyle(SpanStyle(color = Color.Transparent)) {
-                                    append("14:32")
+                        SelectionContainer {
+                            Row {
+                                Text(
+                                    text = cnt.text,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    fontSize = fontSize,
+                                    lineHeight = fontSize,
+                                )
+                                DisableSelection {
+                                    Text(
+                                        text = " 14:32",
+                                        color = Color.Transparent,
+                                        fontSize = 5.sp,
+                                        lineHeight = 5.sp
+                                    )
                                 }
-                            },
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = fontSize,
-                            lineHeight = fontSize,
-                        )
+                            }
+                        }
                     }
                     else -> {
                         val unsupportedMessage = stringResource(R.string.unsupported_message)
-                        Text(
-                            text = buildAnnotatedString {
-                                append(unsupportedMessage)
-                                withStyle(SpanStyle(color = Color.Transparent)) {
-                                    append(" 14:32")
-                                }
-                            },
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = fontSize,
-                            lineHeight = fontSize
-                        )
+                        Row {
+                            Text(
+                                text = unsupportedMessage,
+                                color = MaterialTheme.colorScheme.onBackground,
+                                fontSize = fontSize,
+                                lineHeight = fontSize
+                            )
+                            Text(
+                                text = " 14:32",
+                                color = Color.Transparent,
+                                fontSize = 5.sp,
+                                lineHeight = 5.sp
+                            )
+                        }
                     }
                 }
                 Text(

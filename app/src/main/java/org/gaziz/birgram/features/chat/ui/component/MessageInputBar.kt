@@ -28,13 +28,13 @@ fun MessageInputBar(
     sendMessage: (String) -> Unit,
     setDraft: (String) -> Unit
 ) {
-    var messageStr by rememberSaveable { mutableStateOf(defaultText) }
+    var message by rememberSaveable { mutableStateOf(defaultText) }
     val containerColor = MaterialTheme.colorScheme.background
     val indicatorColor = Color.Transparent
-    val message = stringResource(R.string.message)
+    val placeholderText = stringResource(R.string.message)
     DisposableEffect(Unit) {
         onDispose {
-            setDraft(messageStr)
+            setDraft(message)
         }
     }
     Box(
@@ -44,12 +44,12 @@ fun MessageInputBar(
     ) {
         Row {
             TextField(
-                value = messageStr,
-                onValueChange = { messageStr = it },
+                value = message,
+                onValueChange = { message = it },
                 modifier = Modifier.weight(1f),
                 placeholder = {
                     Text(
-                        text = message,
+                        text = placeholderText,
                         fontSize = fontSize,
                         lineHeight = fontSize
                     )
