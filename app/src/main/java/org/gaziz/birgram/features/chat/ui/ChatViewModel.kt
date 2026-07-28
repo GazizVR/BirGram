@@ -9,9 +9,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import org.gaziz.birgram.core.telegram.api.ChatService
 import org.gaziz.birgram.core.telegram.api.GroupService
+import org.gaziz.birgram.core.telegram.api.MessageService
 import org.gaziz.birgram.core.telegram.api.UserService
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
 import org.gaziz.birgram.core.telegram.api.model.group.GroupMemberStatus
+import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.telegram.api.usecase.GetChatAvatar
@@ -23,6 +25,7 @@ import org.gaziz.birgram.features.chat.ui.mapper.formatMonthDay
 import org.gaziz.birgram.features.chat.ui.mapper.toTimeString
 import org.gaziz.birgram.features.chat.ui.model.ChatUiState
 import org.gaziz.birgram.features.chat.ui.model.MessageUiState
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,7 +36,8 @@ class ChatViewModel @Inject constructor(
     private val loadChatMessages: LoadChatMessages,
     private val userService: UserService,
     private val getChatAvatar: GetChatAvatar,
-    private val groupService: GroupService
+    private val groupService: GroupService,
+    private val messageService: MessageService
 ): ViewModel() {
     private var isLoading = false
     fun openChat(
@@ -121,6 +125,7 @@ class ChatViewModel @Inject constructor(
                 draftMessageText = chat.draftMessage.content.text
             }
             ChatUiState(
+                id = chat.id,
                 title = chat.title,
                 avatar = avatar,
                 isDeleted = isDeleted,
@@ -151,6 +156,18 @@ class ChatViewModel @Inject constructor(
             viewModelScope,
             SharingStarted.Eagerly,
             emptyMap()
+        )
+    }
+    fun setDraftMessageText(
+        chatId: Long,
+        draft: String
+    ) {
+        messageService.setDraftMessage(
+            chatId,
+            DraftMessage(
+                content = DraftMessageContent.Text(draft,false),
+                date = LocalDateTime.now()
+            )
         )
     }
     fun loadMessages(

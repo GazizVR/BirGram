@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -24,12 +25,18 @@ fun MessageInputBar(
     modifier: Modifier = Modifier,
     defaultText: String,
     fontSize: TextUnit,
-    sendMessage: (String) -> Unit
+    sendMessage: (String) -> Unit,
+    setDraft: (String) -> Unit
 ) {
     var messageStr by rememberSaveable { mutableStateOf(defaultText) }
     val containerColor = MaterialTheme.colorScheme.background
     val indicatorColor = Color.Transparent
     val message = stringResource(R.string.message)
+    DisposableEffect(Unit) {
+        onDispose {
+            setDraft(messageStr)
+        }
+    }
     Box(
         modifier = modifier
             .fillMaxWidth()

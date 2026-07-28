@@ -81,14 +81,15 @@ fun ChatScreen(
             )
         },
         bottomBar = {
-            chat?.let {
-                if(it.canSendTextMessages) {
+            chat?.let { c ->
+                if(c.canSendTextMessages) {
                     val height = 60.dp
                     MessageInputBar(
                         modifier = Modifier.height(height),
-                        defaultText = it.draftText,
+                        defaultText = c.draftText,
                         fontSize = 8.sp,
-                        sendMessage = {}
+                        sendMessage = {},
+                        setDraft = { viewModel.setDraftMessageText(c.id,it) }
                     )
                 }
             }
