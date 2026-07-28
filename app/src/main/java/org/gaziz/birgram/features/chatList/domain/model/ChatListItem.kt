@@ -2,7 +2,7 @@ package org.gaziz.birgram.features.chatList.domain.model
 
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
 import org.gaziz.birgram.core.telegram.api.model.message.Message
-import org.gaziz.birgram.core.ui.model.ChatAvatar
+import org.gaziz.birgram.core.telegram.api.model.Avatar
 
 data class ChatListItem(
     val id: Long,
@@ -15,7 +15,7 @@ data class ChatListItem(
 
     val isDeleted: Boolean,
     val lastMsgDate: String,
-    val avatar: ChatAvatar,
+    val avatar: Avatar,
     val isDraftMsg: Boolean,
     val isOnline: Boolean,
     val messageSender: String?

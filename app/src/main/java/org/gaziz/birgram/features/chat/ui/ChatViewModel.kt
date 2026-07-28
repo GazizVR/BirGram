@@ -8,12 +8,18 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import org.gaziz.birgram.core.telegram.api.ChatService
-import org.gaziz.birgram.features.chat.domain.model.ChatInfo
+import org.gaziz.birgram.core.telegram.api.GroupService
+import org.gaziz.birgram.core.telegram.api.UserService
+import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
+import org.gaziz.birgram.core.telegram.api.model.user.UserType
+import org.gaziz.birgram.core.telegram.api.usecase.GetChatAvatar
+import org.gaziz.birgram.core.ui.model.ChatTypeInfo
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatById
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatMessages
 import org.gaziz.birgram.features.chat.domain.usecase.LoadChatMessages
 import org.gaziz.birgram.features.chat.ui.mapper.formatMonthDay
 import org.gaziz.birgram.features.chat.ui.mapper.toTimeString
+import org.gaziz.birgram.features.chat.ui.model.ChatUiState
 import org.gaziz.birgram.features.chat.ui.model.MessageUiState
 import javax.inject.Inject
 
@@ -22,7 +28,10 @@ class ChatViewModel @Inject constructor(
     private val getChatById: GetChatById,
     private val getChatMessages: GetChatMessages,
     private val chatService: ChatService,
-    private val loadChatMessages: LoadChatMessages
+    private val loadChatMessages: LoadChatMessages,
+    private val userService: UserService,
+    private val getChatAvatar: GetChatAvatar,
+    private val groupService: GroupService
 ): ViewModel() {
     private var isLoading = false
     fun openChat(
@@ -38,8 +47,67 @@ class ChatViewModel @Inject constructor(
     ) {
         chatService.closeChat(chatId)
     }
-    val chat: (Long) -> StateFlow<ChatInfo?> = {
-        getChatById(it).stateIn(
+    val chat: (Long) -> StateFlow<ChatUiState?> = {
+        getChatById(it).map { chat ->
+            chat ?: return@map null
+            val isDeleted =
+                chat.type is ChatType.Private &&
+                userService.users.value[chat.type.userId]?.type == UserType.Deleted &&
+                userService.users.value[chat.type.userId]?.type == UserType.Unknown
+            val avatar = getChatAvatar(chat)
+            val typeInfo: ChatTypeInfo? = when(val type = chat.type) {
+                is ChatType.BasicGroup -> {
+                    val group = groupService.basicGroups.value[type.groupId]
+                    if(group != null) {
+                        ChatTypeInfo.BasicGroup(
+                            memberCount = group.memberCount,
+                        )
+                    } else {
+                        null
+                    }
+                }
+                is ChatType.Private -> {
+                    val user = userService.users.value[type.userId]
+                    if(user != null) {
+                        ChatTypeInfo.User(
+                            status = user.status,
+                            isBot = user.type is UserType.Bot
+                        )
+                    } else {
+                        null
+                    }
+                }
+                is ChatType.Secret -> {
+                    val user = userService.users.value[type.userId]
+                    if(user != null) {
+                        ChatTypeInfo.User(
+                            status = user.status,
+                            isBot = user.type is UserType.Bot
+                        )
+                    } else {
+                        null
+                    }
+                }
+                is ChatType.SuperGroup -> {
+                    val group = groupService.superGroups.value[type.groupId]
+                    if(group != null) {
+                        ChatTypeInfo.SuperGroup(
+                            memberCount = group.memberCount,
+                            isChannel = type.isChannel
+                        )
+                    } else {
+                        null
+                    }
+                }
+                else -> null
+            }
+            ChatUiState(
+                title = chat.title,
+                avatar = avatar,
+                isDeleted = isDeleted,
+                typeInfo = typeInfo
+            )
+        }.stateIn(
             viewModelScope,
             SharingStarted.Eagerly,
             null

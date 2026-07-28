@@ -1,9 +1,9 @@
 package org.gaziz.birgram.features.chat.ui.model
 
 import androidx.compose.ui.unit.Dp
-import org.gaziz.birgram.core.ui.model.ChatAvatar
+import org.gaziz.birgram.core.telegram.api.model.Avatar
 
 data class AvatarUiState(
-    val avatar: ChatAvatar?,
+    val avatar: Avatar?,
     val size: Dp
 )
