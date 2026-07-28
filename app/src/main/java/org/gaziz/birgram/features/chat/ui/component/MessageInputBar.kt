@@ -1,9 +1,14 @@
 package org.gaziz.birgram.features.chat.ui.component
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -14,11 +19,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.TextUnit
 import org.gaziz.birgram.R
+import org.gaziz.birgram.core.ui.icon.send
 
 @Composable
 fun MessageInputBar(
@@ -42,7 +49,9 @@ fun MessageInputBar(
             .fillMaxWidth()
             .background(containerColor)
     ) {
-        Row {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             TextField(
                 value = message,
                 onValueChange = { message = it },
@@ -70,6 +79,24 @@ fun MessageInputBar(
                     unfocusedIndicatorColor = indicatorColor
                 )
             )
+            AnimatedVisibility(
+                visible = message.isNotBlank(),
+                enter = slideInHorizontally(initialOffsetX = {it}),
+                exit = slideOutHorizontally(targetOffsetX = {it})
+            ) {
+                IconButton(
+                    onClick = {
+                        sendMessage(message)
+                        message = ""
+                    }
+                ) {
+                    Icon(
+                        imageVector = send,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
         }
     }
 }
