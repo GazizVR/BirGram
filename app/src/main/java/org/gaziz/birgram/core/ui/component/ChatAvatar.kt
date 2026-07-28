@@ -22,7 +22,7 @@ fun ChatAvatar(
     modifier: Modifier,
     avatar: Avatar,
     placeHolderFontSize: TextUnit = 16.sp,
-    overlay: @Composable () -> Unit
+    overlay: @Composable () -> Unit = {}
 ) {
     Box(
         modifier = modifier,

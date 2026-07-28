@@ -8,5 +8,6 @@ data class Message(
     val date: LocalDateTime,
     val isOutgoing: Boolean,
     val chatId: Long,
-    val sender: MessageSender
+    val sender: MessageSender,
+    val authorSignature: String
 )

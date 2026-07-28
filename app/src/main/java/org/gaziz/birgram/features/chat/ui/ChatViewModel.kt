@@ -15,8 +15,12 @@ import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
 import org.gaziz.birgram.core.telegram.api.model.group.GroupMemberStatus
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
+import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
+import org.gaziz.birgram.core.telegram.api.model.message.MessageSenderInfo
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
+import org.gaziz.birgram.core.telegram.api.usecase.GetAccentColorById
 import org.gaziz.birgram.core.telegram.api.usecase.GetChatAvatar
+import org.gaziz.birgram.core.telegram.api.usecase.GetMessageSenderInfo
 import org.gaziz.birgram.core.ui.model.ChatTypeInfo
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatById
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatMessages
@@ -37,7 +41,9 @@ class ChatViewModel @Inject constructor(
     private val userService: UserService,
     private val getChatAvatar: GetChatAvatar,
     private val groupService: GroupService,
-    private val messageService: MessageService
+    private val messageService: MessageService,
+    private val getMessageSenderInfo: GetMessageSenderInfo,
+    private val getAccentColorById: GetAccentColorById
 ): ViewModel() {
     private var isLoading = false
     fun openChat(
@@ -139,15 +145,32 @@ class ChatViewModel @Inject constructor(
             null
         )
     }
-    val messages: (Long) -> StateFlow<Map<String, List<MessageUiState>>> = {
-        getChatMessages(it).map { map ->
+    val messages: (Long) -> StateFlow<Map<String, List<MessageUiState>>> = { msgId ->
+        getChatMessages(msgId).map { map ->
             map.entries.associate { (key,value) ->
                 val messages = value.map { msg ->
+                    val chat = chatService.chats.value[msg.chatId]
+                    var senderInfo = getMessageSenderInfo(msg.sender)
+                    if(msg.authorSignature.isNotEmpty()) {
+                        val accentColor = getAccentColorById(chat?.accentColorId ?: -1)
+                            .stateIn(viewModelScope)
+                        senderInfo = MessageSenderInfo(
+                            name = msg.authorSignature,
+                            accentColor = accentColor.value
+                        )
+                    }
+                    if(chat?.type is ChatType.Private || chat?.type is ChatType.Secret) {
+                        senderInfo = null
+                    }
+                    if(msg.sender is MessageSender.Chat && msg.sender.id == msg.chatId) {
+                        senderInfo = null
+                    }
                     MessageUiState(
                         id = msg.id,
                         content = msg.content,
                         isOutgoing = msg.isOutgoing,
-                        date = msg.date.toTimeString()
+                        date = msg.date.toTimeString(),
+                        sender = senderInfo
                     )
                 }
                 key.formatMonthDay() to messages
