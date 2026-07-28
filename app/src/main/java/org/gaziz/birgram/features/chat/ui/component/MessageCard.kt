@@ -38,20 +38,20 @@ fun MessageCard(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(
+                horizontal = 8.dp,
+                vertical = 4.dp
+            ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = if(message.isOutgoing) Arrangement.End else Arrangement.Start
     ) {
         Box(
             modifier = Modifier
-                .clip(RoundedCornerShape(20.dp))
+                .clip(RoundedCornerShape(16.dp))
                 .background(containerColor),
         ) {
             Box(
-                modifier = Modifier.padding(
-                    vertical = 6.dp,
-                    horizontal = 8.dp
-                )
+                modifier = Modifier.padding(9.dp)
             ) {
                 when(val cnt = message.content){
                     is MessageContent.Text -> {
@@ -59,7 +59,7 @@ fun MessageCard(
                             text = buildAnnotatedString {
                                 append(cnt.text)
                                 withStyle(SpanStyle(color = Color.Transparent)) {
-                                    append(" 14:32")
+                                    append("14:32")
                                 }
                             },
                             color = MaterialTheme.colorScheme.onBackground,
