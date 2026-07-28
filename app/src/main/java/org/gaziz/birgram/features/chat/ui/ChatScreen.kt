@@ -81,12 +81,14 @@ fun ChatScreen(
             )
         },
         bottomBar = {
-            val height = 60.dp
-            MessageInputBar(
-                modifier = Modifier.height(height),
-                fontSize = 8.sp,
-                sendMessage = {}
-            )
+            if(chat?.canSendTextMessages == true) {
+                val height = 60.dp
+                MessageInputBar(
+                    modifier = Modifier.height(height),
+                    fontSize = 8.sp,
+                    sendMessage = {}
+                )
+            }
         },
     ) { paddingValues ->
         val fontSize = 6.sp

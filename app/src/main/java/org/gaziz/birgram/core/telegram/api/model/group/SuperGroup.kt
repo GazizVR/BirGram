@@ -4,5 +4,5 @@ data class SuperGroup(
     val id: Long,
     val isChannel: Boolean,
     val memberCount: Int,
-    val status: GroupMemberStatus
+    val memberStatus: GroupMemberStatus
 )

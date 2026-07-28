@@ -11,6 +11,7 @@ import org.gaziz.birgram.core.telegram.api.ChatService
 import org.gaziz.birgram.core.telegram.api.GroupService
 import org.gaziz.birgram.core.telegram.api.UserService
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
+import org.gaziz.birgram.core.telegram.api.model.group.GroupMemberStatus
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.telegram.api.usecase.GetChatAvatar
 import org.gaziz.birgram.core.ui.model.ChatTypeInfo
@@ -55,12 +56,32 @@ class ChatViewModel @Inject constructor(
                 userService.users.value[chat.type.userId]?.type == UserType.Deleted &&
                 userService.users.value[chat.type.userId]?.type == UserType.Unknown
             val avatar = getChatAvatar(chat)
+            var canSendTextMessages = chat.permissions.canSendBasicMessages
             val typeInfo: ChatTypeInfo? = when(val type = chat.type) {
                 is ChatType.BasicGroup -> {
                     val group = groupService.basicGroups.value[type.groupId]
+                    canSendTextMessages =
+                        chat.permissions.canSendBasicMessages ||
+                        group?.memberStatus is GroupMemberStatus.Creator ||
+                        (group?.memberStatus is GroupMemberStatus.Admin && group.memberStatus.canPostMessages)
                     if(group != null) {
                         ChatTypeInfo.BasicGroup(
                             memberCount = group.memberCount,
+                        )
+                    } else {
+                        null
+                    }
+                }
+                is ChatType.SuperGroup -> {
+                    val group = groupService.superGroups.value[type.groupId]
+                    canSendTextMessages =
+                        chat.permissions.canSendBasicMessages ||
+                                group?.memberStatus is GroupMemberStatus.Creator ||
+                                (group?.memberStatus is GroupMemberStatus.Admin && group.memberStatus.canPostMessages)
+                    if(group != null) {
+                        ChatTypeInfo.SuperGroup(
+                            memberCount = group.memberCount,
+                            isChannel = type.isChannel
                         )
                     } else {
                         null
@@ -88,24 +109,14 @@ class ChatViewModel @Inject constructor(
                         null
                     }
                 }
-                is ChatType.SuperGroup -> {
-                    val group = groupService.superGroups.value[type.groupId]
-                    if(group != null) {
-                        ChatTypeInfo.SuperGroup(
-                            memberCount = group.memberCount,
-                            isChannel = type.isChannel
-                        )
-                    } else {
-                        null
-                    }
-                }
                 else -> null
             }
             ChatUiState(
                 title = chat.title,
                 avatar = avatar,
                 isDeleted = isDeleted,
-                typeInfo = typeInfo
+                typeInfo = typeInfo,
+                canSendTextMessages = canSendTextMessages
             )
         }.stateIn(
             viewModelScope,

@@ -20,7 +20,7 @@ fun TdApi.BasicGroup.toBasicGroup(): BasicGroup {
     return BasicGroup(
         id = this.id,
         memberCount = this.memberCount,
-        status = this.status.toMemberStatus(),
+        memberStatus = this.status.toMemberStatus(),
         upgradedSuperGroupId = this.upgradedToSupergroupId
     )
 }
@@ -29,7 +29,7 @@ fun TdApi.Supergroup.toSuperGroup(): SuperGroup {
     return SuperGroup(
         id = this.id,
         memberCount = this.memberCount,
-        status = this.status.toMemberStatus(),
+        memberStatus = this.status.toMemberStatus(),
         isChannel = this.isChannel
     )
 }
