@@ -19,7 +19,6 @@ import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
-import org.gaziz.birgram.core.telegram.api.usecase.GetAccentColorById
 import org.gaziz.birgram.core.telegram.api.usecase.GetChatAvatar
 import org.gaziz.birgram.core.telegram.api.usecase.GetMessageSenderInfo
 import org.gaziz.birgram.core.ui.model.ChatTypeInfo
@@ -43,8 +42,7 @@ class ChatViewModel @Inject constructor(
     private val getChatAvatar: GetChatAvatar,
     private val groupService: GroupService,
     private val messageService: MessageService,
-    private val getMessageSenderInfo: GetMessageSenderInfo,
-    private val getAccentColorById: GetAccentColorById
+    private val getMessageSenderInfo: GetMessageSenderInfo
 ): ViewModel() {
     private var isLoading = false
     fun openChat(

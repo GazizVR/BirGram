@@ -47,7 +47,9 @@ class GetUserAvatar @Inject constructor(
                 if(user.photo.small.canDownload) {
                     downloadOrGetFileDataById(
                         user.photo.small.id
-                    ) { updateAvatar(user.id,it) }
+                    ) {
+                        updateAvatar(user.id,it)
+                    }
                 }
             }
         }
@@ -78,7 +80,7 @@ class GetUserAvatar @Inject constructor(
             else -> Avatar.PlaceHolder(
                 text = if(user.firstName.isNotBlank()) user.firstName[0].toString() else "",
                 color = accentColor.value,
-                downloadPhoto = {}
+                downloadPhoto = downloadPhoto
             )
         }
     }
