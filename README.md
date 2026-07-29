@@ -1,144 +1,255 @@
 <div align="center">
 
-<h1>
-  <br>
-  🐦 BirGram
-</h1>
+# 💬 BirGram
 
-<p><strong>A modern, open-source Telegram client for Android — built with Kotlin & TDLib</strong></p>
+### Modern Telegram Client for Android
 
-[![Android](https://img.shields.io/badge/Platform-Android%2026%2B-3DDC84?style=flat-square&logo=android&logoColor=white)](https://developer.android.com)
-[![Kotlin](https://img.shields.io/badge/Language-Kotlin%202.3-7F52FF?style=flat-square&logo=kotlin&logoColor=white)](https://kotlinlang.org)
-[![Jetpack Compose](https://img.shields.io/badge/UI-Jetpack%20Compose-4285F4?style=flat-square&logo=jetpackcompose&logoColor=white)](https://developer.android.com/compose)
-[![TDLib](https://img.shields.io/badge/API-TDLib%201.8.61-2CA5E0?style=flat-square&logo=telegram&logoColor=white)](https://core.telegram.org/tdlib)
-[![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.0.0-orange?style=flat-square)](https://github.com/GazizVR/BirGram/releases)
+Built with **Kotlin**, **Jetpack Compose**, **Material 3**, and **TDLib**
 
-<br>
+![Android](https://img.shields.io/badge/Android-8.0%2B-3DDC84?style=for-the-badge&logo=android)
+![Kotlin](https://img.shields.io/badge/Kotlin-2.x-7F52FF?style=for-the-badge&logo=kotlin)
+![Jetpack Compose](https://img.shields.io/badge/Jetpack-Compose-4285F4?style=for-the-badge)
+![Material 3](https://img.shields.io/badge/Material-3-6750A4?style=for-the-badge)
+![TDLib](https://img.shields.io/badge/TDLib-Telegram-26A5E4?style=for-the-badge&logo=telegram)
+
+*A clean, fast, and modern Telegram client for Android.*
 
 </div>
 
 ---
 
-## Overview
+# ✨ About
 
-**BirGram** is a custom Android Telegram client that prioritizes a clean architecture and a native Material You experience. Instead of forking the official app, BirGram is built from the ground up on top of [TDLib](https://core.telegram.org/tdlib) — Telegram's own cross-platform library — giving it full access to the Telegram API while keeping the codebase lean, readable, and modern.
+**BirGram** is an open-source Telegram client for Android built with modern Android technologies.
 
-The project follows contemporary Android development best practices: a unidirectional data flow driven by `StateFlow`, a clear separation of concerns across data/domain/presentation layers, and a fully declarative UI written in Jetpack Compose.
+The project focuses on:
+
+- ⚡ High performance
+- 🎨 Modern Material 3 UI
+- 🧩 Modular architecture
+- 🏛 Clean Architecture
+- 🚀 Scalability
+- 🛠 Easy maintenance
+
+BirGram uses **Telegram TDLib** as its networking layer and is built entirely with **Jetpack Compose**.
 
 ---
 
-## Tech Stack
+# 📱 Features
 
-| Layer | Technology |
-|---|---|
-| **Language** | Kotlin 2.3 |
-| **UI** | Jetpack Compose + Material 3 |
-| **Architecture** | MVVM with MVI-style unidirectional data flow |
-| **Telegram API** | TDLib 1.8.61 (via `tdlib-android`) |
-| **DI** | Hilt 2.59 |
-| **Navigation** | Navigation Compose |
-| **Image Loading** | Coil 3 (OkHttp backend) |
-| **Persistence** | DataStore Preferences |
-| **Build System** | Gradle with Version Catalog (`libs.versions.toml`) |
-| **Min SDK** | Android 8.0 (API 26) |
-| **Target SDK** | Android 16 (API 36) |
+## 💬 Messaging
 
-### Architecture Deep-Dive
+- Telegram authentication
+- Private chats
+- Groups
+- Supergroups
+- Channels
+- Chat list
+- Message history
+- Send text messages
+- Image support
+- File support
 
-BirGram uses a three-layer architecture:
+## 🔍 Search
 
+- Fast local chat search
+- Optimized filtering
+- Instant search results
+
+## 🎨 User Interface
+
+- Material 3
+- Jetpack Compose
+- Dark Theme
+- Splash Screen
+- Adaptive layouts
+- Smooth animations
+
+---
+
+# 🏗 Architecture
+
+BirGram follows a modular architecture with a clear separation of responsibilities.
+
+```text
+Application
+│
+├── Core
+│
+├── Features
+│   ├── Auth
+│   ├── Chats
+│   ├── Search
+│   └── Splash
+│
+├── Telegram
+│   ├── API
+│   ├── Implementation
+│   ├── Internal
+│   ├── Mapper
+│   └── Services
+│
+└── UI
 ```
-presentation/      ← Compose screens + ViewModels (MVVM)
-   auth/
-   chatList/
-   chat/
-   searchChats/
-domain/            ← Use cases, repository interfaces, domain models
-   model/
-   repository/
-   usecase/
-data/              ← TDLib integration, mappers
-   remote/         ← TelegramManager, TelegramEventLoop
-   mapper/         ← TdApi → domain model converters
+
+### Design Principles
+
+- 🧩 Feature-based modules
+- 🏛 Clean Architecture
+- 🔄 MVVM
+- 🌊 Kotlin Flow
+- ⚙ Kotlin Coroutines
+- 📦 Dependency Injection
+- 🔌 Service-oriented Telegram layer
+- 🎯 Immutable UI state
+
+---
+
+# 🛠 Tech Stack
+
+| Technology | Description |
+|------------|-------------|
+| Kotlin | Main programming language |
+| Jetpack Compose | Declarative UI Toolkit |
+| Material 3 | Modern Android Design |
+| TDLib | Telegram Client Library |
+| Kotlin Coroutines | Asynchronous programming |
+| Kotlin Flow | Reactive data streams |
+| AndroidX | Android Jetpack libraries |
+| Navigation Compose | Navigation |
+| MVVM | Presentation architecture |
+| Gradle Version Catalog | Dependency management |
+
+---
+
+# 📂 Project Structure
+
+```text
+app/
+core/
+
+features/
+├── auth
+├── chats
+├── search
+└── splash
+
+telegram/
+├── api
+├── impl
+├── internal
+├── mapper
+└── services
+
+ui/
 ```
 
-The `TelegramEventLoop` acts as a central event bus: it creates the TDLib client, handles all incoming `TdApi` updates (new chats, messages, auth state changes, file downloads, etc.), and exposes reactive `StateFlow` streams that ViewModels collect from. This keeps TDLib concerns isolated from the rest of the app.
+---
+
+# 🚀 Getting Started
+
+## Requirements
+
+- Android Studio Hedgehog or newer
+- Android SDK
+- JDK 17+
+- Gradle 8+
+- Android 8.0+
+
+## Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/BirGram.git
+```
+
+## Build
+
+Debug build:
+
+```bash
+./gradlew assembleDebug
+```
+
+Release build:
+
+```bash
+./gradlew assembleRelease
+```
 
 ---
 
-## Features
+# ⚡ Performance
 
-### ✅ Implemented
-- **Full Authentication Flow** — phone number input → OTP code (SMS, Telegram message, call, Flash Call, Fragment, Firebase) → 2FA password
-- **Chat List** — loads and displays all chats from the main list with real-time position updates driven by TDLib events
-- **Chat View** — opens individual chats, loads message history, displays messages in a scrollable list
-- **Message Sending** — text message input and sending via TDLib
-- **Chat Search** — search across existing chats by query string
-- **Live Updates** — unread counts, last message, draft messages, and online status update in real-time via the TDLib event loop
-- **Avatar Loading** — chat photos downloaded on demand via TDLib file API and rendered with Coil
-- **Chat Types** — supports Private, Basic Group, Supergroup, Channel, and Secret Chat types
-- **User Online Status** — displays last seen / online status per chat
+> [!IMPORTANT]
+> **Release builds provide the best performance.**
 
----
+Debug builds are intended for development and include:
 
-## How to Build
+- Additional runtime checks
+- Debug instrumentation
+- Extensive logging
+- Disabled compiler optimizations
 
-### Prerequisites
+As a result, **Debug APKs may experience**:
 
-- Android Studio Meerkat (2024.3) or newer
-- JDK 11+
-- A Telegram API ID and API Hash — obtain them at [my.telegram.org](https://my.telegram.org)
+- Lower FPS
+- Slower startup
+- UI lag
+- Reduced responsiveness
 
-### Setup
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/GazizVR/BirGram.git
-   cd BirGram
-   ```
-
-2. **Add your API credentials**
-
-   Create a `local.properties` file in the project root (alongside `build.gradle.kts`) and add:
-   ```properties
-   sdk.dir=/path/to/your/Android/sdk
-   api_id="YOUR_API_ID"
-   api_hash="YOUR_API_HASH"
-   ```
-   > ⚠️ **Never commit `local.properties` to version control.** It is already listed in `.gitignore`.
-
-3. **Build & run**
-
-   Open the project in Android Studio and click **Run**, or use the command line:
-   ```bash
-   ./gradlew assembleDebug
-   ```
-   The APK will be at `app/build/outputs/apk/debug/app-debug.apk`.
+For the best user experience and accurate performance testing, always use a **Release APK**.
 
 ---
 
-## Roadmap
+# 🗺 Roadmap
 
-The following items represent the planned development trajectory, ordered from infrastructure foundations through to user-facing features.
-
-- [ ] Implement comprehensive caching layer and background update processing
-- [ ] Fix chat loading lag in the chat list and search screens
-- [ ] Handle rich message content types in the message card (photos, videos, documents, stickers, etc.)
-- [ ] Push notification system
-- [ ] Support for additional chat list sources — archived chats and folder-based lists
-- [ ] Discover new chats via QR code / invite link scanning
-
----
-
-## Contributing
-
-Contributions are welcome. Please open an issue first to discuss what you'd like to change, then submit a pull request against the `main` branch.
+- 🎙 Voice messages
+- 😀 Message reactions
+- 📸 Stories
+- 📞 Voice & video calls
+- 🎭 Stickers
+- 📁 Improved media viewer
+- 📱 Tablet optimization
+- ⌚ Wear OS support
 
 ---
 
-## License
+# 🤝 Contributing
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+Contributions are welcome!
 
-> BirGram is an independent project and is not affiliated with, endorsed by, or sponsored by Telegram Messenger LLP.
+If you'd like to improve BirGram:
+
+1. Fork the repository.
+2. Create a feature branch.
+3. Commit your changes.
+4. Open a Pull Request.
+
+---
+
+# ❤️ Acknowledgements
+
+Special thanks to:
+
+- Telegram
+- TDLib
+- Jetpack Compose Team
+- Android Open Source Community
+
+---
+
+# 📄 License
+
+This project is licensed under the **MIT License**.
+
+---
+
+<div align="center">
+
+### ⭐ Enjoying BirGram?
+
+If you like this project, consider giving it a **star** on GitHub.
+
+Made with ❤️ using Kotlin & Jetpack Compose.
+
+</div>
