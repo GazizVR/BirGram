@@ -60,7 +60,6 @@ fun TdApi.Message.toMessage(): Message {
         date = this.date.fromUnixTimeStamp(),
         isOutgoing = this.isOutgoing,
         chatId = this.chatId,
-        sender = this.senderId.toSender(),
-        authorSignature = this.authorSignature
+        sender = this.senderId.toSender()
     )
 }

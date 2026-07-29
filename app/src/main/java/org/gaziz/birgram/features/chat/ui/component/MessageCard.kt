@@ -54,15 +54,16 @@ fun MessageCard(
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            if(
-                showAuthor &&
-                message.sender.avatar != null
-            ) {
-                ChatAvatar(
-                    modifier = Modifier.size(40.dp),
-                    avatar = message.sender.avatar,
-                    placeHolderFontSize = 10.sp,
-                )
+            if(showAuthor) {
+                if(message.sender.avatar != null) {
+                    ChatAvatar(
+                        modifier = Modifier.size(40.dp),
+                        avatar = message.sender.avatar,
+                        placeHolderFontSize = 10.sp,
+                    )
+                } else {
+                    Box(Modifier.size(40.dp))
+                }
             }
             Box(
                 modifier = Modifier
@@ -75,12 +76,14 @@ fun MessageCard(
                     modifier = Modifier.padding(9.dp)
                 ) {
                     if(showAuthor) {
-                        Text(
-                            text = message.sender.name,
-                            color = message.sender.accentColor,
-                            fontSize = fontSize,
-                            lineHeight = fontSize
-                        )
+                        if(message.sender.name != null) {
+                            Text(
+                                text = message.sender.name,
+                                color = message.sender.accentColor,
+                                fontSize = fontSize,
+                                lineHeight = fontSize
+                            )
+                        }
                     }
                     Box {
                         when(val cnt = message.content){

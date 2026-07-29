@@ -3,6 +3,8 @@ package org.gaziz.birgram.features.chat.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -16,7 +18,6 @@ import org.gaziz.birgram.core.telegram.api.model.group.GroupMemberStatus
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
-import org.gaziz.birgram.core.telegram.api.model.message.MessageSenderInfo
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.telegram.api.usecase.GetAccentColorById
 import org.gaziz.birgram.core.telegram.api.usecase.GetChatAvatar
@@ -148,30 +149,42 @@ class ChatViewModel @Inject constructor(
     val messages: (Long) -> StateFlow<Map<String, List<MessageUiState>>> = { msgId ->
         getChatMessages(msgId).map { map ->
             map.entries.associate { (key,value) ->
-                val messages = value.map { msg ->
+                val messages = value.mapIndexed { ind, msg ->
                     val chat = chatService.chats.value[msg.chatId]
-                    val messageSenderInfo = getMessageSenderInfo(msg.sender).stateIn(viewModelScope)
-                    var senderInfo = messageSenderInfo.value
-                    if(msg.authorSignature.isNotEmpty()) {
-                        val accentColor = getAccentColorById(chat?.accentColorId ?: -1)
-                            .stateIn(viewModelScope)
-                        senderInfo = MessageSenderInfo(
-                            name = msg.authorSignature,
-                            accentColor = accentColor.value
-                        )
-                    }
-                    if(chat?.type is ChatType.Private || chat?.type is ChatType.Secret) {
-                        senderInfo = null
-                    }
-                    if(msg.sender is MessageSender.Chat && msg.sender.id == msg.chatId) {
-                        senderInfo = null
-                    }
+                    val senderInfo = getMessageSenderInfo(msg.sender)
+                        .map { dt ->
+                            var newData = dt?.copy(name = null, avatar = null)
+                            val preMsg = value.getOrNull(ind+1)
+                            if(preMsg != null) {
+                                if(msg.sender != preMsg.sender) {
+                                    newData = newData?.copy(name = dt?.name)
+                                }
+                            } else {
+                                newData = newData?.copy(name = dt?.name)
+                            }
+                            val nextMsg = value.getOrNull(ind-1)
+                            if(nextMsg != null) {
+                                if(msg.sender != nextMsg.sender) {
+                                    newData = newData?.copy(avatar = dt?.avatar)
+                                }
+                            } else {
+                                newData = newData?.copy(avatar = dt?.avatar)
+                            }
+                            if(chat?.type is ChatType.Private || chat?.type is ChatType.Secret) {
+                                newData = null
+                            }
+                            if(msg.sender is MessageSender.Chat && msg.sender.id == msg.chatId) {
+                                newData = null
+                            }
+                            newData
+                        }
+                        .stateIn(CoroutineScope(Dispatchers.IO))
                     MessageUiState(
                         id = msg.id,
                         content = msg.content,
                         isOutgoing = msg.isOutgoing,
                         date = msg.date.toTimeString(),
-                        sender = senderInfo
+                        sender = senderInfo.value
                     )
                 }
                 key.formatMonthDay() to messages

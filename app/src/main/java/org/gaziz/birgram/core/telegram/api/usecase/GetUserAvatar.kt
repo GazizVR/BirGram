@@ -26,8 +26,8 @@ class GetUserAvatar @Inject constructor(
         userService.updateUsers { old ->
             val user = old[userId] ?: return@updateUsers old
             var newPhoto = ProfilePhoto(
-                miniThumbnail = null,
-                small = file
+                small = file,
+                miniThumbnail = null
             )
             if(user.photo != null) {
                 newPhoto = user.photo.copy(small = file)

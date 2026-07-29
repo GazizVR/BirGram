@@ -96,17 +96,17 @@ fun ChatScreen(
         },
     ) { paddingValues ->
         val fontSize = 6.sp
-        LazyColumn(
-            state = listState,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .background(containerColor),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Bottom,
-            reverseLayout = true
-        ) {
-            if(messages.isNotEmpty()) {
+        if (messages.isNotEmpty()) {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .background(containerColor),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Bottom,
+                reverseLayout = true
+            ) {
                 messages.forEach { (date, messages) ->
                     items(
                         items = messages,
@@ -125,16 +125,14 @@ fun ChatScreen(
                         )
                     }
                 }
-            } else {
-                item {
-                    val noMessagesYet = stringResource(R.string.no_messages_yet)
-                    TextBox(
-                        text = noMessagesYet,
-                        modifier = Modifier.fillMaxSize().background(containerColor),
-                        fontSize = fontSize
-                    )
-                }
             }
+        } else {
+            val noMessagesYet = stringResource(R.string.no_messages_yet)
+            TextBox(
+                text = noMessagesYet,
+                modifier = Modifier.fillMaxSize().background(containerColor),
+                fontSize = fontSize
+            )
         }
     }
 }
