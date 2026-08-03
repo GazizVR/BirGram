@@ -26,8 +26,6 @@ fun MessageContent.toInfo(
             }
             MessageContentInfo.Sticker(
                 emoji = this.emoji,
-                height = this.height,
-                width = this.width,
                 content = content
             )
         }

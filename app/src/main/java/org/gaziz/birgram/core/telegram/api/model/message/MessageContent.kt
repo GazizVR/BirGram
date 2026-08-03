@@ -7,8 +7,6 @@ sealed interface MessageContent {
     data class Text(val text: String): MessageContent
     data class Sticker(
         val emoji: String,
-        val width: Int,
-        val height: Int,
         val format: StickerFormat,
         val data: FileData
     ): MessageContent

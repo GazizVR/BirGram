@@ -13,8 +13,6 @@ sealed interface MessageContentInfo {
     data class Text(val text: String):  MessageContentInfo
     data class Sticker(
         val emoji: String,
-        val height: Int,
-        val width: Int,
         val content: StickerContent
     ): MessageContentInfo
     object UnSupported: MessageContentInfo
