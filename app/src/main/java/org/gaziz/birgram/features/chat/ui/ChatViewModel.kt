@@ -19,6 +19,7 @@ import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
+import org.gaziz.birgram.core.telegram.api.usecase.DownloadMessageMedia
 import org.gaziz.birgram.core.telegram.api.usecase.GetChatAvatar
 import org.gaziz.birgram.core.telegram.api.usecase.GetMessageSenderInfo
 import org.gaziz.birgram.core.ui.model.ChatTypeInfo
@@ -26,6 +27,7 @@ import org.gaziz.birgram.features.chat.domain.usecase.GetChatById
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatMessages
 import org.gaziz.birgram.features.chat.domain.usecase.LoadChatMessages
 import org.gaziz.birgram.features.chat.ui.mapper.formatMonthDay
+import org.gaziz.birgram.features.chat.ui.mapper.toInfo
 import org.gaziz.birgram.features.chat.ui.mapper.toTimeString
 import org.gaziz.birgram.features.chat.ui.model.ChatUiState
 import org.gaziz.birgram.features.chat.ui.model.MessageUiState
@@ -42,7 +44,8 @@ class ChatViewModel @Inject constructor(
     private val getChatAvatar: GetChatAvatar,
     private val groupService: GroupService,
     private val messageService: MessageService,
-    private val getMessageSenderInfo: GetMessageSenderInfo
+    private val getMessageSenderInfo: GetMessageSenderInfo,
+    private val downloadMessageMedia: DownloadMessageMedia
 ): ViewModel() {
     private var isLoading = false
     fun openChat(
@@ -179,7 +182,12 @@ class ChatViewModel @Inject constructor(
                         .stateIn(CoroutineScope(Dispatchers.IO))
                     MessageUiState(
                         id = msg.id,
-                        content = msg.content,
+                        content = msg.content.toInfo {
+                            downloadMessageMedia(
+                                fileId = it,
+                                messageId = msg.id
+                            )
+                        },
                         isOutgoing = msg.isOutgoing,
                         date = msg.date.toTimeString(),
                         sender = senderInfo.value

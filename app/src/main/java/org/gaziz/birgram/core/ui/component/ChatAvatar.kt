@@ -15,7 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
-import org.gaziz.birgram.core.telegram.api.model.Avatar
+import org.gaziz.birgram.core.telegram.api.model.media.Avatar
 
 @Composable
 fun ChatAvatar(

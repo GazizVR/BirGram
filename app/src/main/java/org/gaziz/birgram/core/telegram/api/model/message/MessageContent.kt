@@ -1,9 +1,16 @@
 package org.gaziz.birgram.core.telegram.api.model.message
 
+import org.gaziz.birgram.core.telegram.api.model.StickerFormat
+import org.gaziz.birgram.core.telegram.api.model.media.FileData
+
 sealed interface MessageContent {
     data class Text(val text: String): MessageContent
     data class Sticker(
-        val emoji: String
+        val emoji: String,
+        val width: Int,
+        val height: Int,
+        val format: StickerFormat,
+        val data: FileData
     ): MessageContent
     data class GIF(
         val miniThumbnail: ByteArray?,

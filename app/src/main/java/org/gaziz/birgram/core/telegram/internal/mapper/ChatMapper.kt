@@ -4,7 +4,7 @@ import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.api.model.chat.Chat
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatListType
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatPermissions
-import org.gaziz.birgram.core.telegram.api.model.ProfilePhoto
+import org.gaziz.birgram.core.telegram.api.model.media.ProfilePhoto
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatPosition
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
 

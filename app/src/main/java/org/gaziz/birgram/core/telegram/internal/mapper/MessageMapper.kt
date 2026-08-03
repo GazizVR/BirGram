@@ -1,15 +1,30 @@
 package org.gaziz.birgram.core.telegram.internal.mapper
 
 import org.drinkless.tdlib.TdApi
+import org.gaziz.birgram.core.telegram.api.model.StickerFormat
 import org.gaziz.birgram.core.telegram.api.model.message.Message
 import org.gaziz.birgram.core.telegram.api.model.message.MessageContent
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
+
+fun TdApi.StickerFormat.toFormat(): StickerFormat {
+    return when(this) {
+        is TdApi.StickerFormatTgs -> StickerFormat.Tgs
+        is TdApi.StickerFormatWebm -> StickerFormat.WebM
+        else -> StickerFormat.WebP
+    }
+}
 
 fun TdApi.MessageContent.toMessageCnt(): MessageContent {
     return when(val cnt = this) {
         is TdApi.MessageText -> MessageContent.Text(cnt.text.text)
 
-        is TdApi.MessageSticker -> MessageContent.Sticker(cnt.sticker.emoji)
+        is TdApi.MessageSticker -> MessageContent.Sticker(
+            emoji = cnt.sticker.emoji,
+            width = cnt.sticker.width,
+            height = cnt.sticker.height,
+            format = cnt.sticker.format.toFormat(),
+            data = cnt.sticker.sticker.toFileData()
+        )
 
         is TdApi.MessageAnimation -> MessageContent.GIF(
             miniThumbnail = cnt.animation.minithumbnail?.data,

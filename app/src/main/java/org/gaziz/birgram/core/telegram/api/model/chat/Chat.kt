@@ -1,6 +1,6 @@
 package org.gaziz.birgram.core.telegram.api.model.chat
 
-import org.gaziz.birgram.core.telegram.api.model.ProfilePhoto
+import org.gaziz.birgram.core.telegram.api.model.media.ProfilePhoto
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
 import org.gaziz.birgram.core.telegram.api.model.message.Message
 

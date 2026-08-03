@@ -1,7 +1,7 @@
 package org.gaziz.birgram.core.telegram.internal.mapper
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.api.model.ProfilePhoto
+import org.gaziz.birgram.core.telegram.api.model.media.ProfilePhoto
 import org.gaziz.birgram.core.telegram.api.model.user.User
 import org.gaziz.birgram.core.telegram.api.model.user.UserStatus
 import org.gaziz.birgram.core.telegram.api.model.user.UserType

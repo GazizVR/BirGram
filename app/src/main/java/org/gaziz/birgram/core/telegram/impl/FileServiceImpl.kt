@@ -2,7 +2,7 @@ package org.gaziz.birgram.core.telegram.impl
 
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.api.FileService
-import org.gaziz.birgram.core.telegram.api.model.FileData
+import org.gaziz.birgram.core.telegram.api.model.media.FileData
 import org.gaziz.birgram.core.telegram.api.model.ResponseData
 import org.gaziz.birgram.core.telegram.internal.ClientManager
 import org.gaziz.birgram.core.telegram.internal.mapper.toFileData

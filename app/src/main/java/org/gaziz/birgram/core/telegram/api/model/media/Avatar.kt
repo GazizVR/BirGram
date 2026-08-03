@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.telegram.api.model
+package org.gaziz.birgram.core.telegram.api.model.media
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap

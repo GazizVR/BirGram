@@ -1,7 +1,7 @@
 package org.gaziz.birgram.core.telegram.api.usecase
 
 import org.gaziz.birgram.core.telegram.api.FileService
-import org.gaziz.birgram.core.telegram.api.model.FileData
+import org.gaziz.birgram.core.telegram.api.model.media.FileData
 import javax.inject.Inject
 
 class DownloadOrGetFileDataById @Inject constructor(

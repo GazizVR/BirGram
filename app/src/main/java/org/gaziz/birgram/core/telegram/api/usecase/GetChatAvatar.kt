@@ -7,9 +7,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.stateIn
 import org.gaziz.birgram.core.telegram.api.ChatService
 import org.gaziz.birgram.core.telegram.api.UserService
-import org.gaziz.birgram.core.telegram.api.model.Avatar
-import org.gaziz.birgram.core.telegram.api.model.FileData
-import org.gaziz.birgram.core.telegram.api.model.ProfilePhoto
+import org.gaziz.birgram.core.telegram.api.model.media.Avatar
+import org.gaziz.birgram.core.telegram.api.model.media.FileData
+import org.gaziz.birgram.core.telegram.api.model.media.ProfilePhoto
 import org.gaziz.birgram.core.telegram.api.model.chat.Chat
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
 import org.gaziz.birgram.core.telegram.api.model.user.UserType

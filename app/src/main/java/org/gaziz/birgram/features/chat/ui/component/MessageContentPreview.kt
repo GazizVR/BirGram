@@ -11,15 +11,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.telegram.api.model.message.MessageContent
+import org.gaziz.birgram.features.chat.ui.model.MessageContentInfo
 
 @Composable
 fun MessageContentPreview(
-    content: MessageContent,
+    content: MessageContentInfo,
     fontSize: TextUnit
 ) {
     when(content){
-        is MessageContent.Text -> {
+        is MessageContentInfo.Text -> {
             SelectionContainer {
                 Row {
                     Text(
@@ -40,7 +40,10 @@ fun MessageContentPreview(
                 }
             }
         }
-        else -> {
+        is MessageContentInfo.Sticker -> {
+
+        }
+        is MessageContentInfo.UnSupported -> {
             val unsupportedMessage = stringResource(R.string.unsupported_message)
             Row {
                 Text(

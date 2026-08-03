@@ -1,6 +1,6 @@
 package org.gaziz.birgram.core.telegram.api
 
-import org.gaziz.birgram.core.telegram.api.model.FileData
+import org.gaziz.birgram.core.telegram.api.model.media.FileData
 import org.gaziz.birgram.core.telegram.api.model.ResponseData
 
 interface FileService {
