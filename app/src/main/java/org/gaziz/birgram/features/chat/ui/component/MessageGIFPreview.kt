@@ -1,5 +1,6 @@
 package org.gaziz.birgram.features.chat.ui.component
 
+import android.os.Build.VERSION.SDK_INT
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,14 +14,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import coil3.ImageLoader
 import coil3.compose.AsyncImage
+import coil3.gif.AnimatedImageDecoder
+import coil3.gif.GifDecoder
 import org.gaziz.birgram.features.chat.ui.model.MediaContent
 import org.gaziz.birgram.features.chat.ui.model.MessageContentInfo
 
@@ -42,9 +48,21 @@ fun MessageGIFPreview(
     ) {
         when(content.content) {
             is MediaContent.Media -> {
+                val context = LocalContext.current
+                val imageLoader = remember(context) {
+                    ImageLoader.Builder(context)
+                        .components {
+                            if (SDK_INT >= 28) {
+                                add(AnimatedImageDecoder.Factory())
+                            } else {
+                                add(GifDecoder.Factory())
+                            }                        }
+                        .build()
+                }
                 AsyncImage(
                     model = content.content.file,
                     contentDescription = null,
+                    imageLoader = imageLoader,
                     modifier = Modifier.fillMaxSize()
                 )
             }
