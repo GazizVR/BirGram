@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.R
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSenderInfo
 import org.gaziz.birgram.features.chat.ui.model.MessageContentInfo
@@ -28,7 +29,10 @@ fun MessageContentPreview(
         }
         is MessageContentInfo.Sticker -> {
             MessageStickerPreview(
-                emoji = content.emoji
+                info = content,
+                date = date,
+                fontSize = 5.sp,
+                containerColor = containerColor
             )
         }
         is MessageContentInfo.UnSupported -> {
