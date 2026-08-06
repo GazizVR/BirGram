@@ -10,6 +10,10 @@ sealed interface MessageContent {
         val format: StickerFormat,
         val data: FileData
     ): MessageContent
+    data class AnimatedEmoji(
+        val emoji: String,
+        val animation: Sticker?
+    ): MessageContent
     data class GIF(
         val miniThumbnail: ByteArray?,
         val caption: String

@@ -1,9 +1,12 @@
 package org.gaziz.birgram.features.chat.ui.component
 
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.R
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSenderInfo
@@ -29,11 +32,31 @@ fun MessageContentPreview(
         }
         is MessageContentInfo.Sticker -> {
             MessageStickerPreview(
-                info = content,
+                modifier = Modifier.size(150.dp),
+                content = content.content,
                 date = date,
                 fontSize = 5.sp,
                 containerColor = containerColor
             )
+        }
+        is MessageContentInfo.AnimatedEmoji -> {
+            if(content.content != null) {
+                MessageStickerPreview(
+                    modifier = Modifier.size(75.dp),
+                    content = content.content,
+                    date = date,
+                    fontSize = 5.sp,
+                    containerColor = containerColor
+                )
+            } else {
+                MessageTextPreview(
+                    text = content.emoji,
+                    date = date,
+                    fontSize = fontSize,
+                    containerColor = containerColor,
+                    senderInfo = sender
+                )
+            }
         }
         is MessageContentInfo.UnSupported -> {
             val unsupportedMessage = stringResource(R.string.unsupported_message)

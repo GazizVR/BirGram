@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,25 +26,24 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
-import org.gaziz.birgram.features.chat.ui.model.MessageContentInfo
 import org.gaziz.birgram.features.chat.ui.model.StickerContent
 
 @Composable
 fun MessageStickerPreview(
-    info: MessageContentInfo.Sticker,
+    modifier: Modifier = Modifier,
+    content: StickerContent,
     date: String,
     fontSize: TextUnit,
     containerColor: Color
 ) {
-    val shape = RoundedCornerShape(20.dp)
+    val shape = RoundedCornerShape(18.dp)
     Box(
-        modifier = Modifier
-            .size(150.dp)
+        modifier = modifier
             .clip(shape)
-            .background(if(info.content is StickerContent.Empty) containerColor else Color.Transparent),
+            .background(if(content is StickerContent.Empty) containerColor else Color.Transparent),
         contentAlignment = Alignment.Center
     ) {
-        when(val cnt = info.content) {
+        when(val cnt = content) {
             is StickerContent.Picture -> {
                 AsyncImage(
                     model = cnt.file,
@@ -81,7 +79,7 @@ fun MessageStickerPreview(
                     cnt.downloadContent()
                 }
                 Text(
-                    text = info.emoji,
+                    text = cnt.emoji,
                     textAlign = TextAlign.Center
                 )
             }
@@ -89,7 +87,7 @@ fun MessageStickerPreview(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(8.dp),
+                .padding(7.dp),
             contentAlignment = Alignment.BottomEnd
         ) {
             Text(

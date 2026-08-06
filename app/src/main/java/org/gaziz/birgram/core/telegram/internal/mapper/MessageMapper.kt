@@ -24,6 +24,22 @@ fun TdApi.MessageContent.toMessageCnt(): MessageContent {
             data = cnt.sticker.sticker.toFileData()
         )
 
+        is TdApi.MessageAnimatedEmoji -> {
+            var emojiSticker: MessageContent.Sticker? = null
+            val sticker = cnt.animatedEmoji.sticker
+            if(sticker != null) {
+                emojiSticker = MessageContent.Sticker(
+                    emoji = sticker.emoji,
+                    format = sticker.format.toFormat(),
+                    data = sticker.sticker.toFileData()
+                )
+            }
+            MessageContent.AnimatedEmoji(
+                emoji = cnt.emoji,
+                animation = emojiSticker
+            )
+        }
+
         is TdApi.MessageAnimation -> MessageContent.GIF(
             miniThumbnail = cnt.animation.minithumbnail?.data,
             caption = cnt.caption.text
