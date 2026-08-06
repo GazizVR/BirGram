@@ -35,6 +35,7 @@ fun MessageContentPreview(
                 modifier = Modifier.size(150.dp),
                 content = content.content,
                 date = date,
+                datePadding = 8.dp,
                 fontSize = 5.sp,
                 containerColor = containerColor
             )
@@ -42,7 +43,7 @@ fun MessageContentPreview(
         is MessageContentInfo.AnimatedEmoji -> {
             if(content.content != null) {
                 MessageStickerPreview(
-                    modifier = Modifier.size(75.dp),
+                    modifier = Modifier.size(100.dp),
                     content = content.content,
                     date = date,
                     fontSize = 5.sp,
