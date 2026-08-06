@@ -18,7 +18,7 @@ val apiHash = properties.getProperty("api_hash") ?: ""
 android {
     namespace = "org.gaziz.birgram"
     compileSdk {
-        version = release(36)
+        version = release(37)
     }
 
     buildFeatures {
@@ -32,6 +32,7 @@ android {
         applicationId = "org.gaziz.birgram"
         minSdk = 26
         targetSdk = 36
+        compileSdk = 37
         versionCode = 1
         versionName = "1.0"
 
@@ -80,4 +81,6 @@ dependencies {
     ksp(libs.hilt.android.compiler)
     //Material
     implementation(libs.material)
+    //Coil
+    implementation(libs.coil.compose)
 }

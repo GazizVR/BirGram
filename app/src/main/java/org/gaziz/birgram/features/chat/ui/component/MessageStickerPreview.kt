@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -16,7 +17,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import org.gaziz.birgram.features.chat.ui.model.MessageContentInfo
+import org.gaziz.birgram.features.chat.ui.model.StickerContent
 
 @Composable
 fun MessageStickerPreview(
@@ -33,10 +36,27 @@ fun MessageStickerPreview(
             .background(containerColor),
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = info.emoji,
-            textAlign = TextAlign.Center
-        )
+        when(val cnt = info.content) {
+            is StickerContent.Picture -> {
+                AsyncImage(
+                    model = cnt.file,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            is StickerContent.Empty -> {
+                LaunchedEffect(Unit) {
+                    cnt.downloadContent()
+                }
+                Text(
+                    text = info.emoji,
+                    textAlign = TextAlign.Center
+                )
+            }
+            else -> {
+
+            }
+        }
         Box(
             modifier = Modifier
                 .fillMaxSize()
