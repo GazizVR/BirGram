@@ -14,12 +14,8 @@ sealed interface StickerContent {
 }
 
 sealed interface MediaContent {
-    data class Media(
-        val file: File
-    ): MediaContent
-    data class PlaceHolder(
-        val downloadMedia: () -> Unit
-    ): MediaContent
+    data class Media(val file: File): MediaContent
+    data class PlaceHolder(val downloadMedia: () -> Unit): MediaContent
     data class Thumbnail(
         val data: ImageBitmap,
         val downloadMedia: () -> Unit

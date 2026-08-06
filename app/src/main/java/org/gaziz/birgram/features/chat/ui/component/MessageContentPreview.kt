@@ -59,6 +59,14 @@ fun MessageContentPreview(
                 )
             }
         }
+        is MessageContentInfo.GIF -> {
+            MessageGIFPreview(
+                content = content,
+                containerColor = containerColor,
+                date = date,
+                fontSize = fontSize
+            )
+        }
         is MessageContentInfo.UnSupported -> {
             val unsupportedMessage = stringResource(R.string.unsupported_message)
             MessageTextPreview(
