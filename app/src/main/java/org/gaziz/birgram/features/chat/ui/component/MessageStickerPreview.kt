@@ -11,14 +11,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import coil3.ImageLoader
 import coil3.compose.AsyncImage
+import coil3.video.VideoFrameDecoder
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
@@ -58,6 +62,20 @@ fun MessageStickerPreview(
                     modifier = Modifier.fillMaxSize()
                 )
             }
+            is StickerContent.Video -> {
+                val context = LocalContext.current
+                val imageLoader = remember(context) {
+                    ImageLoader.Builder(context)
+                        .components { add(VideoFrameDecoder.Factory()) }
+                        .build()
+                }
+                AsyncImage(
+                    model = cnt.path,
+                    contentDescription = null,
+                    imageLoader = imageLoader,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
             is StickerContent.Empty -> {
                 LaunchedEffect(Unit) {
                     cnt.downloadContent()
@@ -66,9 +84,6 @@ fun MessageStickerPreview(
                     text = info.emoji,
                     textAlign = TextAlign.Center
                 )
-            }
-            else -> {
-
             }
         }
         Box(
