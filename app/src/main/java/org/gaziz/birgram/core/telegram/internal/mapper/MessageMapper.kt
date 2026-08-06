@@ -20,8 +20,6 @@ fun TdApi.MessageContent.toMessageCnt(): MessageContent {
 
         is TdApi.MessageSticker -> MessageContent.Sticker(
             emoji = cnt.sticker.emoji,
-            width = cnt.sticker.width,
-            height = cnt.sticker.height,
             format = cnt.sticker.format.toFormat(),
             data = cnt.sticker.sticker.toFileData()
         )
