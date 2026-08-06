@@ -42,7 +42,10 @@ fun TdApi.MessageContent.toMessageCnt(): MessageContent {
 
         is TdApi.MessageAnimation -> MessageContent.GIF(
             miniThumbnail = cnt.animation.minithumbnail?.data,
-            caption = cnt.caption.text
+            caption = cnt.caption.text,
+            file = cnt.animation.animation.toFileData(),
+            width = cnt.animation.width,
+            height = cnt.animation.height
         )
 
         is TdApi.MessagePhoto -> MessageContent.Photo(

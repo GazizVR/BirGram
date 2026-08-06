@@ -1,7 +1,10 @@
 package org.gaziz.birgram.features.chat.ui.mapper
 
+import android.graphics.BitmapFactory
+import androidx.compose.ui.graphics.asImageBitmap
 import org.gaziz.birgram.core.telegram.api.model.StickerFormat
 import org.gaziz.birgram.core.telegram.api.model.message.MessageContent
+import org.gaziz.birgram.features.chat.ui.model.MediaContent
 import org.gaziz.birgram.features.chat.ui.model.MessageContentInfo
 import org.gaziz.birgram.features.chat.ui.model.StickerContent
 import java.io.File
@@ -25,10 +28,12 @@ fun MessageContent.Sticker.toCnt(
         }
     }
 }
+
 fun MessageContent.toInfo(
     downloadMedia: (Int) -> Unit
 ): MessageContentInfo {
     return when(this) {
+        is MessageContent.Text -> MessageContentInfo.Text(this.text)
         is MessageContent.Sticker -> {
             MessageContentInfo.Sticker(content = this.toCnt(downloadMedia))
         }
@@ -42,7 +47,36 @@ fun MessageContent.toInfo(
                 content = content
             )
         }
-        is MessageContent.Text -> MessageContentInfo.Text(this.text)
+        is MessageContent.GIF -> {
+            val downloadAnimation = {
+                if(this.file.canDownload) {
+                    downloadMedia(this.file.id)
+                }
+            }
+            var content: MediaContent = MediaContent.PlaceHolder(downloadAnimation)
+            if(this.miniThumbnail != null) {
+                val bitmap = BitmapFactory.decodeByteArray(
+                    this.miniThumbnail,
+                    0,
+                    this.miniThumbnail.size
+                ).asImageBitmap()
+                content = MediaContent.Thumbnail(
+                    data = bitmap,
+                    downloadMedia = downloadAnimation
+                )
+            }
+            if(this.file.path.isNotBlank()) {
+                content = MediaContent.Media(
+                    File(this.file.path)
+                )
+            }
+            MessageContentInfo.GIF(
+                caption = this.caption.ifBlank { null },
+                content = content,
+                width = this.width,
+                height = this.height
+            )
+        }
         else -> MessageContentInfo.UnSupported
     }
 }

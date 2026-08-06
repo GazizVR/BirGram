@@ -15,8 +15,11 @@ sealed interface MessageContent {
         val animation: Sticker?
     ): MessageContent
     data class GIF(
-        val miniThumbnail: ByteArray?,
-        val caption: String
+        val file: FileData,
+        val caption: String,
+        val width: Int,
+        val height: Int,
+        val miniThumbnail: ByteArray?
     ): MessageContent
     data class Photo(
         val miniThumbnail: ByteArray?,

@@ -26,6 +26,9 @@ class DownloadMessageMedia @Inject constructor(
                             }
                             msg.content.copy(animation = sticker)
                         }
+                        is MessageContent.GIF -> {
+                            msg.content.copy(file = file)
+                        }
                         else -> return@updateMessages old
                     }
                     val newMsg = msg.copy(content = content)
