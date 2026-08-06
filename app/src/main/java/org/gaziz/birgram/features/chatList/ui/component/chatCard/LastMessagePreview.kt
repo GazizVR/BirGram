@@ -113,6 +113,14 @@ fun LastMessagePreview(
                 )
             }
 
+            is MessageContent.AnimatedEmoji -> {
+                LastMsgText(
+                    text = cnt.emoji,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    fontSize = fontSize
+                )
+            }
+
             is MessageContent.Photo -> {
                 LastMsgMedia(
                     media = cnt.miniThumbnail,
