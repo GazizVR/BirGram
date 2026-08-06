@@ -83,4 +83,6 @@ dependencies {
     implementation(libs.material)
     //Coil
     implementation(libs.coil.compose)
+    //Lottie
+    implementation(libs.lottie.compose)
 }
