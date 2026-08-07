@@ -62,7 +62,8 @@ fun MessageCard(
                 }
             }
             Box(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                contentAlignment = if(message.isOutgoing) Alignment.CenterEnd else Alignment.CenterStart
             ) {
                 MessageContentPreview(
                     content = message.content,
