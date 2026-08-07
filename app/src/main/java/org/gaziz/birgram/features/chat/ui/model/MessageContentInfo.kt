@@ -34,5 +34,10 @@ sealed interface MessageContentInfo {
         val width: Int,
         val height: Int
     ): MessageContentInfo
+    data class Photo(
+        val content: MediaContent?,
+        val width: Int,
+        val height: Int
+    ): MessageContentInfo
     object UnSupported: MessageContentInfo
 }

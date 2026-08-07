@@ -1,5 +1,7 @@
 package org.gaziz.birgram.features.chat.ui
 
+import android.graphics.BitmapFactory
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,11 +19,13 @@ import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
 import org.gaziz.birgram.core.telegram.api.model.group.GroupMemberStatus
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
+import org.gaziz.birgram.core.telegram.api.model.message.MessageContent
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.telegram.api.usecase.DownloadMessageMedia
 import org.gaziz.birgram.core.telegram.api.usecase.GetChatAvatar
 import org.gaziz.birgram.core.telegram.api.usecase.GetMessageSenderInfo
+import org.gaziz.birgram.core.telegram.api.usecase.GetPhotoBySizes
 import org.gaziz.birgram.core.ui.model.ChatTypeInfo
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatById
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatMessages
@@ -30,7 +34,10 @@ import org.gaziz.birgram.features.chat.ui.mapper.formatMonthDay
 import org.gaziz.birgram.features.chat.ui.mapper.toInfo
 import org.gaziz.birgram.features.chat.ui.mapper.toTimeString
 import org.gaziz.birgram.features.chat.ui.model.ChatUiState
+import org.gaziz.birgram.features.chat.ui.model.MediaContent
+import org.gaziz.birgram.features.chat.ui.model.MessageContentInfo
 import org.gaziz.birgram.features.chat.ui.model.MessageUiState
+import java.io.File
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -45,7 +52,8 @@ class ChatViewModel @Inject constructor(
     private val groupService: GroupService,
     private val messageService: MessageService,
     private val getMessageSenderInfo: GetMessageSenderInfo,
-    private val downloadMessageMedia: DownloadMessageMedia
+    private val downloadMessageMedia: DownloadMessageMedia,
+    private val getPhotoBySizes: GetPhotoBySizes
 ): ViewModel() {
     private var isLoading = false
     fun openChat(
@@ -180,14 +188,70 @@ class ChatViewModel @Inject constructor(
                             newData
                         }
                         .stateIn(CoroutineScope(Dispatchers.IO))
-                    MessageUiState(
-                        id = msg.id,
-                        content = msg.content.toInfo {
+                    val msgContent = when(msg.content) {
+                        is MessageContent.Photo -> {
+                            val photoSize = getPhotoBySizes(msg.content.sizes)
+                            var width = 150
+                            var heigh = 150
+                            var content: MediaContent? = null
+                            if(msg.content.miniThumbnail != null) {
+                                val bitmap = BitmapFactory.decodeByteArray(
+                                    msg.content.miniThumbnail,
+                                    0,
+                                    msg.content.miniThumbnail.size
+                                ).asImageBitmap()
+                                content = MediaContent.Thumbnail(
+                                    data = bitmap,
+                                    downloadMedia = {}
+                                )
+                            }
+                            if(photoSize != null) {
+                                val downloadPhoto = {
+                                    downloadMessageMedia(
+                                        fileId = photoSize.file.id,
+                                        messageId = msg.id,
+                                        onFile = { file, msg ->
+                                            var newMsg = msg
+                                            if(msg.content is MessageContent.Photo) {
+                                                val content = msg.content.copy(
+                                                    sizes = msg.content.sizes.map { size ->
+                                                        if(size.type == photoSize.type) size.copy(file = file) else size
+                                                    }
+                                                )
+                                                newMsg = newMsg.copy(content = content)
+                                            }
+                                            newMsg
+                                        }
+                                    )
+                                }
+                                width = photoSize.width
+                                heigh = photoSize.height
+                                content = when {
+                                    photoSize.file.path.isNotBlank() -> {
+                                        MediaContent.Media(
+                                            File(photoSize.file.path)
+                                        )
+                                    }
+                                    content is MediaContent.Thumbnail -> content.copy(downloadMedia = downloadPhoto)
+                                    else -> MediaContent.PlaceHolder(downloadPhoto)
+                                }
+                            }
+                            MessageContentInfo.Photo(
+                                content = content,
+                                width = width,
+                                height = heigh
+                            ) 
+                        } 
+                        else -> msg.content.toInfo {
                             downloadMessageMedia(
                                 fileId = it,
                                 messageId = msg.id
                             )
-                        },
+                        }
+                    }
+                    MessageUiState(
+                        id = msg.id,
+                        content = msgContent,
                         isOutgoing = msg.isOutgoing,
                         date = msg.date.toTimeString(),
                         sender = senderInfo.value

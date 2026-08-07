@@ -1,0 +1,20 @@
+package org.gaziz.birgram.core.telegram.api.usecase
+
+import org.gaziz.birgram.core.telegram.api.model.media.PhotoSize
+import javax.inject.Inject
+
+class GetPhotoBySizes @Inject constructor() {
+    operator fun invoke(
+        sizes: List<PhotoSize>
+    ): PhotoSize? {
+        var photo: PhotoSize? = null
+        sizes.forEach { size ->
+            when(size.type) {
+                "y" -> photo = size
+                "x" -> photo = size
+                "m" -> photo = size
+            }
+        }
+        return photo
+    }
+}

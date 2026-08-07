@@ -88,6 +88,16 @@ fun MessageContentPreview(
                 fontSize = dateFontSize
             )
         }
+        is MessageContentInfo.Photo -> {
+            MessageMediaPreview(
+                content = content.content,
+                width = content.width,
+                height = content.height,
+                containerColor = containerColor,
+                date = date,
+                fontSize = dateFontSize
+            )
+        }
         is MessageContentInfo.UnSupported -> {
             val unsupportedMessage = stringResource(R.string.unsupported_message)
             MessageTextPreview(

@@ -19,17 +19,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
 import coil3.ImageLoader
 import coil3.compose.AsyncImage
+import org.gaziz.birgram.R
 import org.gaziz.birgram.features.chat.ui.model.MediaContent
 
 @Composable
 fun MessageMediaPreview(
-    content: MediaContent,
+    content: MediaContent?,
     width: Int,
     height: Int,
     loader: ImageLoader? = null,
@@ -82,6 +85,29 @@ fun MessageMediaPreview(
                 is MediaContent.PlaceHolder -> {
                     LaunchedEffect(Unit) {
                         content.downloadMedia()
+                    }
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(containerColor)
+                    )
+                }
+                null -> {
+                    val notFound = stringResource(R.string.not_found)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(containerColor),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = notFound,
+                            fontSize = 7.sp,
+                            lineHeight = 7.sp,
+                            color = MaterialTheme.colorScheme.error,
+                            textAlign = TextAlign.Center,
+                            maxLines = 1
+                        )
                     }
                 }
             }
