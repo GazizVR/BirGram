@@ -71,7 +71,6 @@ fun MessageContent.toInfo(
                 )
             }
             MessageContentInfo.GIF(
-                caption = this.caption.ifBlank { null },
                 content = content,
                 width = this.width,
                 height = this.height

@@ -1,13 +1,19 @@
 package org.gaziz.birgram.features.chat.ui.component
 
+import android.os.Build.VERSION.SDK_INT
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.ImageLoader
+import coil3.gif.AnimatedImageDecoder
+import coil3.gif.GifDecoder
 import org.gaziz.birgram.R
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSenderInfo
 import org.gaziz.birgram.features.chat.ui.model.MessageContentInfo
@@ -61,8 +67,22 @@ fun MessageContentPreview(
             }
         }
         is MessageContentInfo.GIF -> {
-            MessageGIFPreview(
-                content = content,
+            val context = LocalContext.current
+            val imageLoader = remember(context) {
+                ImageLoader.Builder(context)
+                    .components {
+                        if (SDK_INT >= 28) {
+                            add(AnimatedImageDecoder.Factory())
+                        } else {
+                            add(GifDecoder.Factory())
+                        }                        }
+                    .build()
+            }
+            MessageMediaPreview(
+                content = content.content,
+                width = content.width,
+                height = content.height,
+                loader = imageLoader,
                 containerColor = containerColor,
                 date = date,
                 fontSize = dateFontSize

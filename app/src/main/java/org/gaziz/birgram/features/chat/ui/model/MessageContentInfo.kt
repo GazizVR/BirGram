@@ -30,7 +30,6 @@ sealed interface MessageContentInfo {
         val content: StickerContent?
     ): MessageContentInfo
     data class GIF(
-        val caption: String?,
         val content: MediaContent,
         val width: Int,
         val height: Int

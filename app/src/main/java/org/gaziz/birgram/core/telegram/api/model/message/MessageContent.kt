@@ -2,6 +2,7 @@ package org.gaziz.birgram.core.telegram.api.model.message
 
 import org.gaziz.birgram.core.telegram.api.model.StickerFormat
 import org.gaziz.birgram.core.telegram.api.model.media.FileData
+import org.gaziz.birgram.core.telegram.api.model.media.PhotoSize
 
 sealed interface MessageContent {
     data class Text(val text: String): MessageContent
@@ -23,6 +24,7 @@ sealed interface MessageContent {
     ): MessageContent
     data class Photo(
         val miniThumbnail: ByteArray?,
+        val sizes: List<PhotoSize>,
         val caption: String
     ): MessageContent
     data class Video(
