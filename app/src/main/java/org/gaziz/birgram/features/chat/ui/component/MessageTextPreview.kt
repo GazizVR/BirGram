@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.DisableSelection
@@ -12,6 +13,10 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,6 +29,7 @@ import org.gaziz.birgram.core.telegram.api.model.message.MessageSenderInfo
 @Composable
 fun MessageTextPreview(
     text: String,
+    isSpacer: Boolean = false,
     date: String,
     fontSize: TextUnit,
     containerColor: Color,
@@ -52,12 +58,15 @@ fun MessageTextPreview(
             Box {
                 SelectionContainer {
                     Row {
+                        var isSingleLine by rememberSaveable { mutableStateOf(false) }
                         Text(
                             text = text,
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = fontSize,
+                            onTextLayout = { isSingleLine = it.lineCount < 2 },
                             lineHeight = fontSize
                         )
+                        if(isSpacer && isSingleLine) Spacer(Modifier.weight(1f))
                         DisableSelection {
                             Text(
                                 text = " 24:32",

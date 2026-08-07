@@ -31,11 +31,13 @@ sealed interface MessageContentInfo {
     ): MessageContentInfo
     data class GIF(
         val content: MediaContent,
+        val caption: String?,
         val width: Int,
         val height: Int
     ): MessageContentInfo
     data class Photo(
         val content: MediaContent?,
+        val caption: String?,
         val width: Int,
         val height: Int
     ): MessageContentInfo

@@ -3,8 +3,10 @@ package org.gaziz.birgram.features.chat.ui.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -33,6 +35,7 @@ import org.gaziz.birgram.features.chat.ui.model.MediaContent
 @Composable
 fun MessageMediaPreview(
     content: MediaContent?,
+    caption: String? = null,
     width: Int,
     height: Int,
     loader: ImageLoader? = null,
@@ -41,101 +44,124 @@ fun MessageMediaPreview(
     fontSize: TextUnit
 ) {
     val shape = RoundedCornerShape(18.dp)
-    BoxWithConstraints {
-        val scaleW = maxWidth/width
-        val scaleH = maxHeight/height
-        val scale = minOf(1.dp,scaleW,scaleH)
-        Box(
-            modifier = Modifier
-                .width(width*scale)
-                .height(height*scale)
-                .clip(shape)
-                .border(1.dp,containerColor,shape),
-            contentAlignment = Alignment.Center
+    Box(
+        modifier = Modifier
+            .clip(shape)
+            .border(1.dp,containerColor,shape)
+            .background(containerColor)
+    ) {
+        Column(
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            when(content) {
-                is MediaContent.Media -> {
-                    if(loader != null) {
-                        AsyncImage(
-                            model = content.file,
-                            contentDescription = null,
-                            imageLoader = loader,
-                            contentScale = ContentScale.FillBounds,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    } else {
-                        AsyncImage(
-                            model = content.file,
-                            contentDescription = null,
-                            contentScale = ContentScale.FillBounds,
-                            modifier = Modifier.fillMaxSize()
-                        )
+            BoxWithConstraints {
+                val scaleW = maxWidth/width
+                val scaleH = maxHeight/height
+                val scale = minOf(1.dp,scaleW,scaleH)
+                Box(
+                    modifier = Modifier
+                        .width(width*scale)
+                        .height(height*scale),
+                    contentAlignment = Alignment.Center
+                ) {
+                    when(content) {
+                        is MediaContent.Media -> {
+                            if(loader != null) {
+                                AsyncImage(
+                                    model = content.file,
+                                    contentDescription = null,
+                                    imageLoader = loader,
+                                    contentScale = ContentScale.FillBounds,
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            } else {
+                                AsyncImage(
+                                    model = content.file,
+                                    contentDescription = null,
+                                    contentScale = ContentScale.FillBounds,
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            }
+                        }
+                        is MediaContent.Thumbnail -> {
+                            LaunchedEffect(Unit) {
+                                content.downloadMedia()
+                            }
+                            Image(
+                                bitmap = content.data,
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                        is MediaContent.PlaceHolder -> {
+                            LaunchedEffect(Unit) {
+                                content.downloadMedia()
+                            }
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(containerColor)
+                            )
+                        }
+                        null -> {
+                            val notFound = stringResource(R.string.not_found)
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(containerColor),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = notFound,
+                                    fontSize = 7.sp,
+                                    lineHeight = 7.sp,
+                                    color = MaterialTheme.colorScheme.error,
+                                    textAlign = TextAlign.Center,
+                                    maxLines = 1
+                                )
+                            }
+                        }
                     }
-                }
-                is MediaContent.Thumbnail -> {
-                    LaunchedEffect(Unit) {
-                        content.downloadMedia()
-                    }
-                    Image(
-                        bitmap = content.data,
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
-                is MediaContent.PlaceHolder -> {
-                    LaunchedEffect(Unit) {
-                        content.downloadMedia()
-                    }
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(containerColor)
-                    )
-                }
-                null -> {
-                    val notFound = stringResource(R.string.not_found)
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(containerColor),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = notFound,
-                            fontSize = 7.sp,
-                            lineHeight = 7.sp,
-                            color = MaterialTheme.colorScheme.error,
-                            textAlign = TextAlign.Center,
-                            maxLines = 1
-                        )
+                    if(caption == null) {
+                        Box(
+                            modifier = Modifier.fillMaxSize().padding(8.dp),
+                            contentAlignment = Alignment.BottomEnd
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .background(
+                                        MaterialTheme.colorScheme.background.copy(0.35f),
+                                        RoundedCornerShape(20.dp)
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = date,
+                                    modifier = Modifier.padding(
+                                        vertical = 2.dp,
+                                        horizontal = 4.dp
+                                    ),
+                                    fontSize = fontSize,
+                                    lineHeight = fontSize,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    textAlign = TextAlign.Center,
+                                    maxLines = 1
+                                )
+                            }
+                        }
                     }
                 }
             }
-            Box(
-                modifier = Modifier.fillMaxSize().padding(8.dp),
-                contentAlignment = Alignment.BottomEnd
-            ) {
-                Box(
-                    modifier = Modifier
-                        .background(
-                            MaterialTheme.colorScheme.background.copy(0.35f),
-                            RoundedCornerShape(20.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = date,
-                        modifier = Modifier.padding(
-                            vertical = 2.dp,
-                            horizontal = 4.dp
-                        ),
-                        fontSize = fontSize,
-                        lineHeight = fontSize,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        textAlign = TextAlign.Center,
-                        maxLines = 1
-                    )
-                }
+            if(caption != null) {
+                val textSize = 6.sp
+                MessageTextPreview(
+                    text = caption,
+                    isSpacer = true,
+                    date = date,
+                    fontSize = textSize,
+                    containerColor = containerColor,
+                    senderInfo = null
+                )
             }
         }
     }

@@ -238,6 +238,7 @@ class ChatViewModel @Inject constructor(
                             }
                             MessageContentInfo.Photo(
                                 content = content,
+                                caption = msg.content.caption.ifBlank { null },
                                 width = width,
                                 height = heigh
                             ) 

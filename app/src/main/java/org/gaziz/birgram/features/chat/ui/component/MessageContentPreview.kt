@@ -80,6 +80,7 @@ fun MessageContentPreview(
             }
             MessageMediaPreview(
                 content = content.content,
+                caption = content.caption,
                 width = content.width,
                 height = content.height,
                 loader = imageLoader,
@@ -91,6 +92,7 @@ fun MessageContentPreview(
         is MessageContentInfo.Photo -> {
             MessageMediaPreview(
                 content = content.content,
+                caption = content.caption,
                 width = content.width,
                 height = content.height,
                 containerColor = containerColor,
