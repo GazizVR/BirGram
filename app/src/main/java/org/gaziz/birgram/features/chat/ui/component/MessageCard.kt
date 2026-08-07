@@ -3,9 +3,11 @@ package org.gaziz.birgram.features.chat.ui.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,9 +28,7 @@ fun MessageCard(
     } else {
         MaterialTheme.colorScheme.surfaceContainerLow
     }
-    val showAuthor =
-        message.sender != null &&
-        !message.isOutgoing
+    val spacerSize = 40.dp
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -43,24 +43,38 @@ fun MessageCard(
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            if(showAuthor) {
+            if(
+                message.sender != null &&
+                !message.isOutgoing
+            ) {
                 if(message.sender.avatar != null) {
                     ChatAvatar(
-                        modifier = Modifier.size(40.dp),
+                        modifier = Modifier.size(spacerSize),
                         avatar = message.sender.avatar,
                         placeHolderFontSize = 10.sp,
                     )
                 } else {
-                    Box(Modifier.size(40.dp))
+                    Spacer(Modifier.width(spacerSize))
+                }
+            } else {
+                if(message.isOutgoing) {
+                    Spacer(Modifier.width(spacerSize))
                 }
             }
-            MessageContentPreview(
-                content = message.content,
-                fontSize = fontSize,
-                date = message.date,
-                containerColor = containerColor,
-                sender = if(showAuthor) message.sender else null
-            )
+            Box(
+                modifier = Modifier.weight(1f)
+            ) {
+                MessageContentPreview(
+                    content = message.content,
+                    fontSize = fontSize,
+                    date = message.date,
+                    containerColor = containerColor,
+                    sender = if(!message.isOutgoing) message.sender else null
+                )
+            }
+            if(!message.isOutgoing) {
+                Spacer(Modifier.width(spacerSize))
+            }
         }
     }
 }
