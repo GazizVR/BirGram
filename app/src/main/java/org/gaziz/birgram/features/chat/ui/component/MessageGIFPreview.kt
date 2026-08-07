@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,10 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.times
 import coil3.ImageLoader
 import coil3.compose.AsyncImage
 import coil3.gif.AnimatedImageDecoder
@@ -38,74 +41,80 @@ fun MessageGIFPreview(
     fontSize: TextUnit
 ) {
     val shape = RoundedCornerShape(18.dp)
-    Box(
-        modifier = Modifier
-            .width(content.width.dp)
-            .height(content.height.dp)
-            .clip(shape)
-            .border(1.dp,containerColor,shape)
-            .background(containerColor)
-    ) {
-        when(content.content) {
-            is MediaContent.Media -> {
-                val context = LocalContext.current
-                val imageLoader = remember(context) {
-                    ImageLoader.Builder(context)
-                        .components {
-                            if (SDK_INT >= 28) {
-                                add(AnimatedImageDecoder.Factory())
-                            } else {
-                                add(GifDecoder.Factory())
-                            }                        }
-                        .build()
-                }
-                AsyncImage(
-                    model = content.content.file,
-                    contentDescription = null,
-                    imageLoader = imageLoader,
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-            is MediaContent.Thumbnail -> {
-                LaunchedEffect(Unit) {
-                    content.content.downloadMedia()
-                }
-                Image(
-                    bitmap = content.content.data,
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-            is MediaContent.PlaceHolder -> {
-                LaunchedEffect(Unit) {
-                    content.content.downloadMedia()
-                }
-            }
-        }
+    BoxWithConstraints {
+        val scaleW = maxWidth/content.width
+        val scaleH = maxHeight/content.height
+        val scale = minOf(1.dp,scaleW,scaleH)
         Box(
-            modifier = Modifier.fillMaxSize().padding(8.dp),
-            contentAlignment = Alignment.BottomEnd
+            modifier = Modifier
+                .width(content.width*scale)
+                .height(content.height*scale)
+                .clip(shape)
+                .border(1.dp,containerColor,shape),
+            contentAlignment = Alignment.Center
         ) {
+            when(content.content) {
+                is MediaContent.Media -> {
+                    val context = LocalContext.current
+                    val imageLoader = remember(context) {
+                        ImageLoader.Builder(context)
+                            .components {
+                                if (SDK_INT >= 28) {
+                                    add(AnimatedImageDecoder.Factory())
+                                } else {
+                                    add(GifDecoder.Factory())
+                                }                        }
+                            .build()
+                    }
+                    AsyncImage(
+                        model = content.content.file,
+                        contentDescription = null,
+                        contentScale = ContentScale.FillBounds,
+                        imageLoader = imageLoader,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+                is MediaContent.Thumbnail -> {
+                    LaunchedEffect(Unit) {
+                        content.content.downloadMedia()
+                    }
+                    Image(
+                        bitmap = content.content.data,
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+                is MediaContent.PlaceHolder -> {
+                    LaunchedEffect(Unit) {
+                        content.content.downloadMedia()
+                    }
+                }
+            }
             Box(
-                modifier = Modifier
-                    .background(
-                        MaterialTheme.colorScheme.background.copy(0.35f),
-                        RoundedCornerShape(20.dp)
-                    ),
-                contentAlignment = Alignment.Center
+                modifier = Modifier.fillMaxSize().padding(8.dp),
+                contentAlignment = Alignment.BottomEnd
             ) {
-                Text(
-                    text = date,
-                    modifier = Modifier.padding(
-                        vertical = 2.dp,
-                        horizontal = 4.dp
-                    ),
-                    fontSize = fontSize,
-                    lineHeight = fontSize,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    textAlign = TextAlign.Center,
-                    maxLines = 1
-                )
+                Box(
+                    modifier = Modifier
+                        .background(
+                            MaterialTheme.colorScheme.background.copy(0.35f),
+                            RoundedCornerShape(20.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = date,
+                        modifier = Modifier.padding(
+                            vertical = 2.dp,
+                            horizontal = 4.dp
+                        ),
+                        fontSize = fontSize,
+                        lineHeight = fontSize,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        textAlign = TextAlign.Center,
+                        maxLines = 1
+                    )
+                }
             }
         }
     }
