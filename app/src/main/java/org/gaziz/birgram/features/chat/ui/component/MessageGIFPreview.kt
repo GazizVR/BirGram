@@ -86,14 +86,27 @@ fun MessageGIFPreview(
             modifier = Modifier.fillMaxSize().padding(8.dp),
             contentAlignment = Alignment.BottomEnd
         ) {
-            Text(
-                text = date,
-                fontSize = fontSize,
-                lineHeight = fontSize,
-                color = MaterialTheme.colorScheme.onBackground,
-                textAlign = TextAlign.Center,
-                maxLines = 1
-            )
+            Box(
+                modifier = Modifier
+                    .background(
+                        MaterialTheme.colorScheme.background.copy(0.35f),
+                        RoundedCornerShape(20.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = date,
+                    modifier = Modifier.padding(
+                        vertical = 2.dp,
+                        horizontal = 4.dp
+                    ),
+                    fontSize = fontSize,
+                    lineHeight = fontSize,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1
+                )
+            }
         }
     }
 }

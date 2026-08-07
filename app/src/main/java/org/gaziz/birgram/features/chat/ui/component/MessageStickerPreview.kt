@@ -6,6 +6,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -111,17 +112,32 @@ fun MessageStickerPreview(
             }
         }
         Box(
-            modifier = Modifier.fillMaxSize().padding(datePadding),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(datePadding),
             contentAlignment = Alignment.BottomEnd
         ) {
-            Text(
-                text = date,
-                fontSize = fontSize,
-                lineHeight = fontSize,
-                color = MaterialTheme.colorScheme.onBackground,
-                textAlign = TextAlign.Center,
-                maxLines = 1
-            )
+            Box(
+                modifier = Modifier
+                    .background(
+                        MaterialTheme.colorScheme.background.copy(0.35f),
+                        RoundedCornerShape(20.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ){
+                Text(
+                    text = date,
+                    modifier = Modifier.padding(
+                        vertical = 2.dp,
+                        horizontal = 4.dp
+                    ),
+                    fontSize = fontSize,
+                    lineHeight = fontSize,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1
+                )
+            }
         }
     }
 }

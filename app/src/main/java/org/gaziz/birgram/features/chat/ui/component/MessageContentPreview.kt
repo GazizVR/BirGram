@@ -20,6 +20,7 @@ fun MessageContentPreview(
     containerColor: Color,
     sender: MessageSenderInfo?
 ) {
+    val dateFontSize = 5.sp
     when(content){
         is MessageContentInfo.Text -> {
             MessageTextPreview(
@@ -36,7 +37,7 @@ fun MessageContentPreview(
                 content = content.content,
                 date = date,
                 datePadding = 8.dp,
-                fontSize = 5.sp,
+                fontSize = dateFontSize,
                 containerColor = containerColor
             )
         }
@@ -46,7 +47,7 @@ fun MessageContentPreview(
                     modifier = Modifier.size(100.dp),
                     content = content.content,
                     date = date,
-                    fontSize = 5.sp,
+                    fontSize = dateFontSize,
                     containerColor = containerColor
                 )
             } else {
@@ -64,7 +65,7 @@ fun MessageContentPreview(
                 content = content,
                 containerColor = containerColor,
                 date = date,
-                fontSize = fontSize
+                fontSize = dateFontSize
             )
         }
         is MessageContentInfo.UnSupported -> {
