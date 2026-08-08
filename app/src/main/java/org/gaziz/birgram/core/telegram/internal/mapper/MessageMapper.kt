@@ -89,12 +89,13 @@ fun TdApi.MessageContent.toMessageCnt(): MessageContent {
             )
         }
 
-        is TdApi.MessageAnimation -> MessageContent.GIF(
+        is TdApi.MessageAnimation -> MessageContent.Animation(
             miniThumbnail = cnt.animation.minithumbnail?.data,
             caption = cnt.caption.text,
             file = cnt.animation.animation.toFileData(),
             width = cnt.animation.width,
-            height = cnt.animation.height
+            height = cnt.animation.height,
+            mimeType = cnt.animation.mimeType,
         )
 
         is TdApi.MessagePhoto -> {

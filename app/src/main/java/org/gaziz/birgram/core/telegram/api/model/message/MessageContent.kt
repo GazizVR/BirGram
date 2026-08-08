@@ -15,11 +15,12 @@ sealed interface MessageContent {
         val emoji: String,
         val animation: Sticker?
     ): MessageContent
-    data class GIF(
+    data class Animation(
         val file: FileData,
         val caption: String,
         val width: Int,
         val height: Int,
+        val mimeType: String,
         val miniThumbnail: ByteArray?
     ): MessageContent
     data class Photo(

@@ -104,7 +104,7 @@ fun LastMessagePreview(
                 )
             }
 
-            is MessageContent.GIF -> {
+            is MessageContent.Animation -> {
                 LastMsgMedia(
                     media = cnt.miniThumbnail,
                     caption = cnt.caption,

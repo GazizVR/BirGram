@@ -14,7 +14,10 @@ sealed interface StickerContent {
 }
 
 sealed interface MediaContent {
-    data class Media(val file: File): MediaContent
+    data class Image(
+        val file: File,
+        val isGIF: Boolean = false
+    ): MediaContent
     data class PlaceHolder(val downloadMedia: () -> Unit): MediaContent
     data class Thumbnail(
         val data: ImageBitmap,
@@ -29,7 +32,7 @@ sealed interface MessageContentInfo {
         val emoji: String,
         val content: StickerContent?
     ): MessageContentInfo
-    data class GIF(
+    data class Animation(
         val content: MediaContent,
         val caption: String?,
         val width: Int,

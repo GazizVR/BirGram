@@ -47,7 +47,7 @@ fun MessageContent.toInfo(
                 content = content
             )
         }
-        is MessageContent.GIF -> {
+        is MessageContent.Animation -> {
             val downloadAnimation = {
                 if(this.file.canDownload) {
                     downloadMedia(this.file.id)
@@ -66,11 +66,14 @@ fun MessageContent.toInfo(
                 )
             }
             if(this.file.path.isNotBlank()) {
-                content = MediaContent.Media(
-                    File(this.file.path)
-                )
+                if(this.mimeType == "image/gif") {
+                    content = MediaContent.Image(
+                        File(this.file.path),
+                        true
+                    )
+                }
             }
-            MessageContentInfo.GIF(
+            MessageContentInfo.Animation(
                 caption = this.caption.ifBlank { null },
                 content = content,
                 width = this.width,

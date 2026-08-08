@@ -1,4 +1,4 @@
-package org.gaziz.birgram.features.chat.ui.component
+package org.gaziz.birgram.features.chat.ui.component.messageContent
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSenderInfo
 
 @Composable
-fun MessageTextPreview(
+fun TextPreview(
     text: String,
     isSpacer: Boolean = false,
     date: String,

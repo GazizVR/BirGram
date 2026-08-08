@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.core.ui.component.ChatAvatar
+import org.gaziz.birgram.features.chat.ui.component.messageContent.ContentPreview
 import org.gaziz.birgram.features.chat.ui.model.MessageUiState
 
 @Composable
@@ -65,12 +66,12 @@ fun MessageCard(
                 modifier = Modifier.weight(1f),
                 contentAlignment = if(message.isOutgoing) Alignment.CenterEnd else Alignment.CenterStart
             ) {
-                MessageContentPreview(
+                ContentPreview(
                     content = message.content,
                     fontSize = fontSize,
                     date = message.date,
                     containerColor = containerColor,
-                    sender = if(!message.isOutgoing) message.sender else null
+                    sender = if (!message.isOutgoing) message.sender else null
                 )
             }
             if(!message.isOutgoing) {

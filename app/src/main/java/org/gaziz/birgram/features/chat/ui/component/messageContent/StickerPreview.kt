@@ -1,4 +1,4 @@
-package org.gaziz.birgram.features.chat.ui.component
+package org.gaziz.birgram.features.chat.ui.component.messageContent
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 import org.gaziz.birgram.features.chat.ui.model.StickerContent
 
 @Composable
-fun MessageStickerPreview(
+fun StickerPreview(
     modifier: Modifier = Modifier,
     content: StickerContent,
     date: String,

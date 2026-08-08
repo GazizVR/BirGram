@@ -228,7 +228,7 @@ class ChatViewModel @Inject constructor(
                                 heigh = photoSize.height
                                 content = when {
                                     photoSize.file.path.isNotBlank() -> {
-                                        MediaContent.Media(
+                                        MediaContent.Image(
                                             File(photoSize.file.path)
                                         )
                                     }

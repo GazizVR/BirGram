@@ -1,25 +1,19 @@
-package org.gaziz.birgram.features.chat.ui.component
+package org.gaziz.birgram.features.chat.ui.component.messageContent
 
-import android.os.Build.VERSION.SDK_INT
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.ImageLoader
-import coil3.gif.AnimatedImageDecoder
-import coil3.gif.GifDecoder
 import org.gaziz.birgram.R
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSenderInfo
 import org.gaziz.birgram.features.chat.ui.model.MessageContentInfo
 
 @Composable
-fun MessageContentPreview(
+fun ContentPreview(
     content: MessageContentInfo,
     date: String,
     fontSize: TextUnit,
@@ -29,7 +23,7 @@ fun MessageContentPreview(
     val dateFontSize = 5.sp
     when(content){
         is MessageContentInfo.Text -> {
-            MessageTextPreview(
+            TextPreview(
                 text = content.text,
                 date = date,
                 fontSize = fontSize,
@@ -38,7 +32,7 @@ fun MessageContentPreview(
             )
         }
         is MessageContentInfo.Sticker -> {
-            MessageStickerPreview(
+            StickerPreview(
                 modifier = Modifier.size(150.dp),
                 content = content.content,
                 date = date,
@@ -49,7 +43,7 @@ fun MessageContentPreview(
         }
         is MessageContentInfo.AnimatedEmoji -> {
             if(content.content != null) {
-                MessageStickerPreview(
+                StickerPreview(
                     modifier = Modifier.size(100.dp),
                     content = content.content,
                     date = date,
@@ -57,7 +51,7 @@ fun MessageContentPreview(
                     containerColor = containerColor
                 )
             } else {
-                MessageTextPreview(
+                TextPreview(
                     text = content.emoji,
                     date = date,
                     fontSize = fontSize,
@@ -66,31 +60,19 @@ fun MessageContentPreview(
                 )
             }
         }
-        is MessageContentInfo.GIF -> {
-            val context = LocalContext.current
-            val imageLoader = remember(context) {
-                ImageLoader.Builder(context)
-                    .components {
-                        if (SDK_INT >= 28) {
-                            add(AnimatedImageDecoder.Factory())
-                        } else {
-                            add(GifDecoder.Factory())
-                        }                        }
-                    .build()
-            }
-            MessageMediaPreview(
+        is MessageContentInfo.Animation -> {
+            MediaPreview(
                 content = content.content,
                 caption = content.caption,
                 width = content.width,
                 height = content.height,
-                loader = imageLoader,
                 containerColor = containerColor,
                 date = date,
                 fontSize = dateFontSize
             )
         }
         is MessageContentInfo.Photo -> {
-            MessageMediaPreview(
+            MediaPreview(
                 content = content.content,
                 caption = content.caption,
                 width = content.width,
@@ -102,7 +84,7 @@ fun MessageContentPreview(
         }
         is MessageContentInfo.UnSupported -> {
             val unsupportedMessage = stringResource(R.string.unsupported_message)
-            MessageTextPreview(
+            TextPreview(
                 text = unsupportedMessage,
                 date = date,
                 fontSize = fontSize,

@@ -33,7 +33,7 @@ class DownloadMessageMedia @Inject constructor(
                                 }
                                 msg.content.copy(animation = sticker)
                             }
-                            is MessageContent.GIF -> {
+                            is MessageContent.Animation -> {
                                 msg.content.copy(file = file)
                             }
                             is MessageContent.Document -> {
