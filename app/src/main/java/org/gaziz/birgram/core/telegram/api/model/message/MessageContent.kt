@@ -33,7 +33,9 @@ sealed interface MessageContent {
     ): MessageContent
     data class Audio(val caption: String): MessageContent
     data class Document(
+        val file: FileData,
         val fileName: String,
+        val mimeType: String,
         val caption: String
     ): MessageContent
     object VoiceNote: MessageContent

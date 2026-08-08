@@ -119,7 +119,9 @@ fun TdApi.MessageContent.toMessageCnt(): MessageContent {
 
         is TdApi.MessageDocument -> MessageContent.Document(
             fileName = cnt.document.fileName,
-            caption = cnt.caption.text
+            caption = cnt.caption.text,
+            file = cnt.document.document.toFileData(),
+            mimeType = cnt.document.mimeType
         )
 
         is TdApi.MessageVoiceNote -> MessageContent.VoiceNote
