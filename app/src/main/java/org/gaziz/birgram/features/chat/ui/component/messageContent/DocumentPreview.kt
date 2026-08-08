@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,6 +31,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.gaziz.birgram.core.ui.icon.arrowDownwardAlt
+import org.gaziz.birgram.core.ui.icon.fileOpen
 import org.gaziz.birgram.features.chat.ui.model.MessageContentInfo
 
 @Composable
@@ -39,7 +43,7 @@ fun DocumentPreview(
 ) {
     val fontSize = 6.sp
     val shape = RoundedCornerShape(16.dp)
-    val isDownloading by rememberSaveable { mutableStateOf(false) }
+    var isDownloading by rememberSaveable { mutableStateOf(false) }
     Box(
         modifier = Modifier
             .clip(shape)
@@ -60,15 +64,42 @@ fun DocumentPreview(
                         indication = null,
                         interactionSource = interactionSource
                     ) {
-
+                        if(
+                            !isDownloading &&
+                            document.file == null
+                        ) {
+                            isDownloading = true
+                            document.downloadDocument()
+                        }
                     },
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator(
-                    color = containerColor,
-                    modifier = Modifier.size(20.dp),
-                    strokeWidth = 2.dp
-                )
+                val size = 20.dp
+                when {
+                    document.file != null -> {
+                        Icon(
+                            imageVector = fileOpen,
+                            contentDescription = null,
+                            tint = containerColor,
+                            modifier = Modifier.size(size)
+                        )
+                    }
+                    isDownloading -> {
+                        CircularProgressIndicator(
+                            color = containerColor,
+                            modifier = Modifier.size(size),
+                            strokeWidth = 2.dp
+                        )
+                    }
+                    else -> {
+                        Icon(
+                            imageVector = arrowDownwardAlt,
+                            contentDescription = null,
+                            tint = containerColor,
+                            modifier = Modifier.size(size+5.dp)
+                        )
+                    }
+                }
             }
             Column(
                 verticalArrangement = Arrangement.Center,
