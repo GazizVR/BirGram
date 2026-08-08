@@ -85,7 +85,6 @@ fun ContentPreview(
         is MessageContentInfo.Document -> {
             DocumentPreview(
                 document = content,
-                fontSize = dateFontSize,
                 containerColor = containerColor,
                 date = date,
             )
