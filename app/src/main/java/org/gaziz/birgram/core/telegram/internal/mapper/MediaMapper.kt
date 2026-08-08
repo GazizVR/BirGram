@@ -11,6 +11,7 @@ fun TdApi.File.toFileData(): FileData {
         id = this.id,
         path = this.local.path,
         canDownload = this.local.canBeDownloaded,
+        size = this.size
     )
 }
 

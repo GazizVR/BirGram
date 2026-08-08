@@ -106,6 +106,7 @@ fun MediaPreview(
                             Image(
                                 bitmap = content.data,
                                 contentDescription = null,
+                                contentScale = ContentScale.FillBounds,
                                 modifier = Modifier.fillMaxSize()
                             )
                         }

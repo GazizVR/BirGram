@@ -80,6 +80,19 @@ fun MessageContent.toInfo(
                 height = this.height
             )
         }
+        is MessageContent.Document -> {
+            MessageContentInfo.Document(
+                file = if(this.file.path.isNotBlank()) File(this.file.path) else null,
+                fileName = this.fileName.ifBlank { null },
+                size = this.file.size.toByteCount(),
+                type = this.mimeType.ifBlank { null },
+                downloadDocument = {
+                    if(this.file.canDownload) {
+                        downloadMedia(this.file.id)
+                    }
+                }
+            )
+        }
         else -> MessageContentInfo.UnSupported
     }
 }

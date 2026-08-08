@@ -4,4 +4,5 @@ data class FileData(
     val id: Int,
     val path: String,
     val canDownload: Boolean,
+    val size: Long
 )

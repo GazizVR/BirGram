@@ -82,6 +82,14 @@ fun ContentPreview(
                 fontSize = dateFontSize
             )
         }
+        is MessageContentInfo.Document -> {
+            DocumentPreview(
+                document = content,
+                fontSize = dateFontSize,
+                containerColor = containerColor,
+                date = date,
+            )
+        }
         is MessageContentInfo.UnSupported -> {
             val unsupportedMessage = stringResource(R.string.unsupported_message)
             TextPreview(
