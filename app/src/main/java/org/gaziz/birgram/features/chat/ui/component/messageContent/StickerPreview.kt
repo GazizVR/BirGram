@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,11 +19,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.compose.PlayerSurface
+import androidx.media3.ui.compose.SURFACE_TYPE_TEXTURE_VIEW
 import coil3.compose.AsyncImage
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -37,12 +42,10 @@ fun StickerPreview(
     content: StickerContent,
     date: String,
     datePadding: Dp = 0.dp,
-    fontSize: TextUnit,
-    containerColor: Color
+    fontSize: TextUnit
 ) {
     Box(
-        modifier = modifier
-            .background(if(content is StickerContent.Empty) containerColor else Color.Transparent),
+        modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
         when(content) {
@@ -85,10 +88,36 @@ fun StickerPreview(
                 )
             }
             is StickerContent.Video -> {
-                AsyncImage(
-                    model = content.path,
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
+                val context = LocalContext.current
+                val player = remember {
+                    ExoPlayer
+                        .Builder(context)
+                        .build()
+                        .apply {
+                            setMediaItem(MediaItem.fromUri(getUriForFile(context,content.file)))
+                            prepare()
+                        }
+                }
+                DisposableEffect(Unit) {
+                    player.play()
+                    onDispose { player.release() }
+                }
+                val interactionSource = remember { MutableInteractionSource() }
+                PlayerSurface(
+                    player = player,
+                    surfaceType = SURFACE_TYPE_TEXTURE_VIEW,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.surfaceContainer)
+                        .clickable(
+                            indication = null,
+                            interactionSource = interactionSource
+                        ) {
+                            if(!player.isPlaying) {
+                                player.seekTo(0L)
+                                player.play()
+                            }
+                        }
                 )
             }
             is StickerContent.Empty -> {

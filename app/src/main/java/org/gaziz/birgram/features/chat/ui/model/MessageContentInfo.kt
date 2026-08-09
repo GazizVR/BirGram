@@ -5,7 +5,7 @@ import java.io.File
 
 sealed interface StickerContent {
     data class Picture(val file: File): StickerContent
-    data class Video(val path: String): StickerContent
+    data class Video(val file: File): StickerContent
     data class Animation(val path: String): StickerContent
     data class Empty(
         val emoji: String,

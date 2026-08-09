@@ -1,8 +1,6 @@
 package org.gaziz.birgram.features.chat.ui.component.messageContent
 
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -35,19 +33,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.FileProvider
 import org.gaziz.birgram.core.ui.icon.arrowDownwardAlt
 import org.gaziz.birgram.core.ui.icon.fileOpen
 import org.gaziz.birgram.features.chat.ui.model.MessageContentInfo
-import java.io.File
-
-fun getUriForFile(
-    context: Context,
-    file: File
-): Uri {
-    val authority = "${context.packageName}.fileProvider"
-    return FileProvider.getUriForFile(context,authority,file)
-}
 
 @Composable
 fun DocumentPreview(

@@ -15,7 +15,7 @@ fun MessageContent.Sticker.toCnt(
     return if(this.data.path.isNotBlank()) {
         when(this.format){
             StickerFormat.Tgs -> StickerContent.Animation(this.data.path)
-            StickerFormat.WebM -> StickerContent.Video(this.data.path)
+            StickerFormat.WebM -> StickerContent.Video(File(this.data.path))
             StickerFormat.WebP -> StickerContent.Picture(File(this.data.path))
         }
     } else {
