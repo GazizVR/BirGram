@@ -39,3 +39,47 @@ fun Long.toByteCount(): String? {
         String.format(Locale.US, "%.1f %s", value, units[index])
     }
 }
+
+fun String.toFileType(): String {
+
+    val mime = this.lowercase().trim()
+
+    return when {
+        mime == "application/pdf" -> "PDF"
+        mime == "application/msword" -> "DOC"
+        mime == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" -> "DOCX"
+        mime == "application/vnd.ms-excel" -> "XLS"
+        mime == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" -> "XLSX"
+        mime == "application/vnd.ms-powerpoint" -> "PPT"
+        mime == "application/vnd.openxmlformats-officedocument.presentationml.presentation" -> "PPTX"
+        mime == "text/plain" -> "TXT"
+        mime == "text/html" -> "HTML"
+        mime == "text/csv" -> "CSV"
+        mime == "application/json" -> "JSON"
+        mime == "application/zip" -> "ZIP"
+        mime == "application/x-rar-compressed" || mime == "application/vnd.rar" -> "RAR"
+        mime == "application/x-7z-compressed" -> "7Z"
+
+        mime == "image/png" -> "PNG"
+        mime == "image/jpeg" || mime == "image/jpg" -> "JPG"
+        mime == "image/webp" -> "WEBP"
+        mime == "image/gif" -> "GIF"
+        mime == "image/svg+xml" -> "SVG"
+        mime == "image/heic" || mime == "image/heif" -> "HEIC"
+
+        mime == "audio/mpeg" || mime == "audio/mp3" -> "MP3"
+        mime == "audio/wav" || mime == "audio/x-wav" -> "WAV"
+        mime == "audio/ogg" -> "OGG"
+        mime == "video/mp4" -> "MP4"
+        mime == "video/x-matroska" -> "MKV"
+        mime == "video/quicktime" -> "MOV"
+        mime == "video/webm" -> "WEBM"
+
+        mime.startsWith("image/") -> mime.substringAfter("image/").uppercase()
+        mime.startsWith("video/") -> mime.substringAfter("video/").uppercase()
+        mime.startsWith("audio/") -> mime.substringAfter("audio/").uppercase()
+        mime.startsWith("text/") -> "TXT"
+
+        else -> ""
+    }
+}

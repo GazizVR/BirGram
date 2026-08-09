@@ -86,7 +86,7 @@ fun MessageContent.toInfo(
                 mimeType = this.mimeType.ifBlank { null },
                 fileName = this.fileName.ifBlank { null },
                 size = this.file.size.toByteCount(),
-                type = this.mimeType.ifBlank { null },
+                type = this.mimeType.toFileType(),
                 downloadDocument = {
                     if(this.file.canDownload) {
                         downloadMedia(this.file.id)
