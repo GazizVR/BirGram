@@ -83,6 +83,7 @@ fun MessageContent.toInfo(
         is MessageContent.Document -> {
             MessageContentInfo.Document(
                 file = if(this.file.path.isNotBlank()) File(this.file.path) else null,
+                mimeType = this.mimeType.ifBlank { null },
                 fileName = this.fileName.ifBlank { null },
                 size = this.file.size.toByteCount(),
                 type = this.mimeType.ifBlank { null },

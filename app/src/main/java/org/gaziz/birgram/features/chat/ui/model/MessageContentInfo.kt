@@ -46,10 +46,11 @@ sealed interface MessageContentInfo {
     ): MessageContentInfo
     data class Document(
         val file: File?,
+        val mimeType: String?,
         val downloadDocument: () -> Unit,
         val fileName: String?,
         val size: String?,
-        val type: String?
+        val type: String?,
     ): MessageContentInfo
     object UnSupported: MessageContentInfo
 }
