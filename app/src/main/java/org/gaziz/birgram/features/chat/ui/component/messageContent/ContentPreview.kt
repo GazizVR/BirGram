@@ -1,7 +1,5 @@
 package org.gaziz.birgram.features.chat.ui.component.messageContent
 
-import android.content.Context
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,14 +22,6 @@ import org.gaziz.birgram.R
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSenderInfo
 import org.gaziz.birgram.features.chat.ui.model.MessageContentInfo
 import java.io.File
-
-fun getUriForFile(
-    context: Context,
-    file: File
-): Uri {
-    val authority = "${context.packageName}.fileProvider"
-    return FileProvider.getUriForFile(context,authority,file)
-}
 
 @Composable
 fun ContentPreview(

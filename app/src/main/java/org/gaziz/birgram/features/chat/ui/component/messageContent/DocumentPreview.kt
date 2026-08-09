@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -33,8 +34,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.ui.icon.arrowDownwardAlt
 import org.gaziz.birgram.core.ui.icon.fileOpen
+import org.gaziz.birgram.features.chat.ui.mapper.getUriForFile
 import org.gaziz.birgram.features.chat.ui.model.MessageContentInfo
 
 @Composable
@@ -58,6 +61,7 @@ fun DocumentPreview(
         ) {
             val interactionSource = remember { MutableInteractionSource() }
             val context = LocalContext.current
+            val scope = rememberCoroutineScope()
             Box(
                 modifier = Modifier
                     .size(40.dp)
@@ -68,14 +72,16 @@ fun DocumentPreview(
                         interactionSource = interactionSource
                     ) {
                         if(document.file != null) {
-                            val intent = Intent(Intent.ACTION_VIEW).apply {
-                                setDataAndType(
-                                    getUriForFile(context,document.file),
-                                    document.mimeType ?: "*/*"
-                                )
-                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            scope.launch {
+                                val intent = Intent(Intent.ACTION_VIEW).apply {
+                                    setDataAndType(
+                                        getUriForFile(context,document.file),
+                                        document.mimeType ?: "*/*"
+                                    )
+                                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                }
+                                context.startActivity(Intent.createChooser(intent,"Open with"))
                             }
-                            context.startActivity(Intent.createChooser(intent,"Open with"))
                         } else {
                             if(!isDownloading) {
                                 isDownloading = true

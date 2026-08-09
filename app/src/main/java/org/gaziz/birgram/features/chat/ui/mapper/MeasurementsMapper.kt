@@ -1,5 +1,9 @@
 package org.gaziz.birgram.features.chat.ui.mapper
 
+import android.content.Context
+import android.net.Uri
+import androidx.core.content.FileProvider
+import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.Year
@@ -82,4 +86,12 @@ fun String.toFileType(): String {
 
         else -> ""
     }
+}
+
+fun getUriForFile(
+    context: Context,
+    file: File
+): Uri {
+    val authority = "${context.packageName}.fileProvider"
+    return FileProvider.getUriForFile(context,authority,file)
 }

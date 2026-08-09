@@ -84,10 +84,7 @@ dependencies {
     //Coil
     implementation(libs.coil.compose)
     implementation(libs.coil.gif)
+    implementation(libs.coil.video)
     //Lottie
     implementation(libs.lottie.compose)
-    //ExoPlayer
-    implementation(libs.androidx.media3.exoplayer)
-    implementation(libs.androidx.media3.ui.compose.material3)
-
 }
