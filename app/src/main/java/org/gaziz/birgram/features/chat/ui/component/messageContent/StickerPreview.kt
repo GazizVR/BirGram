@@ -19,14 +19,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import coil3.ImageLoader
 import coil3.compose.AsyncImage
-import coil3.video.VideoFrameDecoder
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieAnimatable
@@ -88,16 +85,9 @@ fun StickerPreview(
                 )
             }
             is StickerContent.Video -> {
-                val context = LocalContext.current
-                val imageLoader = remember(context) {
-                    ImageLoader.Builder(context)
-                        .components { add(VideoFrameDecoder.Factory()) }
-                        .build()
-                }
                 AsyncImage(
                     model = content.path,
                     contentDescription = null,
-                    imageLoader = imageLoader,
                     modifier = Modifier.fillMaxSize()
                 )
             }
