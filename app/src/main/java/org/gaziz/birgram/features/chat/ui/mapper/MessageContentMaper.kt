@@ -72,6 +72,9 @@ fun MessageContent.toInfo(
                         true
                     )
                 }
+                if(this.mimeType == "video/mp4") {
+                    content = MediaContent.Video(File(this.file.path))
+                }
             }
             MessageContentInfo.Animation(
                 caption = this.caption.ifBlank { null },

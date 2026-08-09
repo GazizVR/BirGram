@@ -18,6 +18,9 @@ sealed interface MediaContent {
         val file: File,
         val isGIF: Boolean = false
     ): MediaContent
+    data class Video(
+        val file: File
+    ): MediaContent
     data class PlaceHolder(val downloadMedia: () -> Unit): MediaContent
     data class Thumbnail(
         val data: ImageBitmap,

@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -30,6 +31,11 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.compose.PlayerSurface
+import androidx.media3.ui.compose.SURFACE_TYPE_TEXTURE_VIEW
 import coil3.ImageLoader
 import coil3.compose.AsyncImage
 import coil3.gif.AnimatedImageDecoder
@@ -98,6 +104,34 @@ fun MediaPreview(
                                     modifier = Modifier.fillMaxSize()
                                 )
                             }
+                        }
+                        is MediaContent.Video -> {
+                            val context = LocalContext.current
+                            val player = remember {
+                                ExoPlayer
+                                    .Builder(context)
+                                    .build()
+                                    .apply {
+                                        repeatMode = Player.REPEAT_MODE_ALL
+                                        playWhenReady = true
+                                        setMediaItem(
+                                            MediaItem.fromUri(
+                                                getUriForFile(context,content.file)
+                                            )
+                                        )
+                                        prepare()
+                                    }
+                            }
+                            DisposableEffect(Unit) {
+                                onDispose {
+                                    player.release()
+                                }
+                            }
+                            PlayerSurface(
+                                player = player,
+                                modifier = Modifier.fillMaxSize(),
+                                surfaceType = SURFACE_TYPE_TEXTURE_VIEW
+                            )
                         }
                         is MediaContent.Thumbnail -> {
                             LaunchedEffect(Unit) {
