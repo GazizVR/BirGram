@@ -2,11 +2,20 @@ package org.gaziz.birgram.features.chat.ui.component.messageContent
 
 import android.content.Context
 import android.net.Uri
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -79,7 +88,34 @@ fun ContentPreview(
                 containerColor = containerColor,
                 date = date,
                 fontSize = dateFontSize
-            )
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize().padding(8.dp),
+                    contentAlignment = Alignment.TopStart
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .background(
+                                MaterialTheme.colorScheme.background.copy(0.35f),
+                                RoundedCornerShape(20.dp)
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "GIF",
+                            modifier = Modifier.padding(
+                                vertical = 2.dp,
+                                horizontal = 4.dp
+                            ),
+                            fontSize = fontSize,
+                            lineHeight = fontSize,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            textAlign = TextAlign.Center,
+                            maxLines = 1
+                        )
+                    }
+                }
+            }
         }
         is MessageContentInfo.Photo -> {
             MediaPreview(

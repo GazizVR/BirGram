@@ -75,7 +75,6 @@
 
     <string-array name="message_contents">
         <item>Sticker</item>
-        <item>GIF</item>
         <item>Photo</item>
         <item>Video</item>
         <item>Audio</item>

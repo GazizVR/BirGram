@@ -108,7 +108,7 @@ fun LastMessagePreview(
                 LastMsgMedia(
                     media = cnt.miniThumbnail,
                     caption = cnt.caption,
-                    captionPlaceHolder = msgContents[1],
+                    captionPlaceHolder = "GIF",
                     fontSize = fontSize
                 )
             }
@@ -125,7 +125,7 @@ fun LastMessagePreview(
                 LastMsgMedia(
                     media = cnt.miniThumbnail,
                     caption = cnt.caption,
-                    captionPlaceHolder = msgContents[2],
+                    captionPlaceHolder = msgContents[1],
                     fontSize = fontSize
                 )
             }
@@ -134,13 +134,13 @@ fun LastMessagePreview(
                 LastMsgMedia(
                     media = cnt.miniThumbnail,
                     caption = cnt.caption,
-                    captionPlaceHolder = msgContents[3],
+                    captionPlaceHolder = msgContents[2],
                     fontSize = fontSize
                 )
             }
 
             is MessageContent.Audio -> {
-                val caption = cnt.caption.ifBlank { msgContents[4] }
+                val caption = cnt.caption.ifBlank { msgContents[3] }
                 LastMsgText(
                     text = "\uD83C\uDFA7 $caption",
                     color = MaterialTheme.colorScheme.primary,
@@ -151,7 +151,7 @@ fun LastMessagePreview(
             is MessageContent.Document -> {
                 val text = cnt.caption.ifBlank {
                     cnt.fileName.ifBlank {
-                       msgContents[5]
+                       msgContents[4]
                     }
                 }
                 LastMsgText(
@@ -172,7 +172,7 @@ fun LastMessagePreview(
 
             is MessageContent.VoiceNote -> {
                 LastMsgText(
-                    text = msgContents[6],
+                    text = msgContents[5],
                     color = MaterialTheme.colorScheme.primary,
                     fontSize = fontSize
                 )
@@ -183,7 +183,7 @@ fun LastMessagePreview(
                     media = cnt.miniThumbnail,
                     caption = "",
                     modifier = Modifier.clip(CircleShape),
-                    captionPlaceHolder = msgContents[7],
+                    captionPlaceHolder = msgContents[6],
                     fontSize = fontSize
                 )
             }

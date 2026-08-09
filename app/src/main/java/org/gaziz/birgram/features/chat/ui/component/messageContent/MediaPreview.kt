@@ -51,7 +51,8 @@ fun MediaPreview(
     height: Int,
     containerColor: Color,
     date: String,
-    fontSize: TextUnit
+    fontSize: TextUnit,
+    overlay: @Composable () -> Unit = {}
 ) {
     val shape = RoundedCornerShape(18.dp)
     Box(
@@ -201,6 +202,7 @@ fun MediaPreview(
                             }
                         }
                     }
+                    overlay()
                 }
             }
             if(caption != null) {
