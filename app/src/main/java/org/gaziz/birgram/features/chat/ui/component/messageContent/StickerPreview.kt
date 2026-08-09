@@ -1,6 +1,8 @@
 package org.gaziz.birgram.features.chat.ui.component.messageContent
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -10,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -25,6 +28,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import org.gaziz.birgram.features.chat.ui.component.PlaybackButton
 import org.gaziz.birgram.features.chat.ui.model.StickerContent
 
 @Composable
@@ -63,14 +67,21 @@ fun StickerPreview(
             }
             is StickerContent.Video -> {
                 val context = LocalContext.current
+                val interactionSource = remember { MutableInteractionSource() }
                 AsyncImage(
                     model = ImageRequest.Builder(context)
                         .data(content.file)
                         .decoderFactory(VideoFrameDecoder.Factory())
                         .build(),
                     contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clickable(
+                            indication = null,
+                            interactionSource = interactionSource
+                        ){}
                 )
+                PlaybackButton()
             }
             is StickerContent.Empty -> {
                 LaunchedEffect(Unit) {

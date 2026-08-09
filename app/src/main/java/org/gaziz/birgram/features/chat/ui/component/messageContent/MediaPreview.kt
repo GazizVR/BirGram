@@ -37,6 +37,7 @@ import coil3.gif.GifDecoder
 import coil3.request.ImageRequest
 import coil3.video.VideoFrameDecoder
 import org.gaziz.birgram.R
+import org.gaziz.birgram.features.chat.ui.component.PlaybackButton
 import org.gaziz.birgram.features.chat.ui.model.MediaContent
 
 @Composable
@@ -112,6 +113,7 @@ fun MediaPreview(
                                 contentDescription = null,
                                 modifier = Modifier.fillMaxSize()
                             )
+                            PlaybackButton()
                         }
                         is MediaContent.Thumbnail -> {
                             LaunchedEffect(Unit) {
