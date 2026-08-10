@@ -82,6 +82,9 @@ fun ContentPreview(
             }
         }
         is MessageContentInfo.Animation -> {
+            val mediaFile by viewModel.mediaFile.collectAsState()
+            val context = LocalContext.current
+            val player by viewModel.player.collectAsState()
             MediaPreview(
                 content = content.content,
                 caption = content.caption,
@@ -89,7 +92,12 @@ fun ContentPreview(
                 height = content.height,
                 containerColor = containerColor,
                 date = date,
-                fontSize = dateFontSize
+                fontSize = dateFontSize,
+                player = player,
+                currentMedia = mediaFile,
+                onVideoClick = { file ->
+                    viewModel.setPlayerMedia(context,file)
+                },
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize().padding(8.dp),

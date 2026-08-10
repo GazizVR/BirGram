@@ -330,21 +330,16 @@ class ChatViewModel @Inject constructor(
                 }
         }
     }
-    private var isMediaPrepared = false
     fun setPlayerMedia(
         context: Context,
         file: File
     ){
-        val media = MediaItem.fromUri(getUriForFile(context,file))
         _mediaFile.update { file }
+        val media = MediaItem.fromUri(getUriForFile(context,file))
         _player.update { old ->
             old?.apply {
                 setMediaItem(media)
-                if(!isMediaPrepared) {
-                    isMediaPrepared = true
-                    prepare()
-                }
-                play()
+                prepare()
             }
         }
     }
