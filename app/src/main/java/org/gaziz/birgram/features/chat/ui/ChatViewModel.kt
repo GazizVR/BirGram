@@ -1,16 +1,23 @@
 package org.gaziz.birgram.features.chat.ui
 
+import android.content.Context
 import android.graphics.BitmapFactory
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.exoplayer.ExoPlayer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import org.gaziz.birgram.core.telegram.api.ChatService
 import org.gaziz.birgram.core.telegram.api.GroupService
 import org.gaziz.birgram.core.telegram.api.MessageService
@@ -31,6 +38,7 @@ import org.gaziz.birgram.features.chat.domain.usecase.GetChatById
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatMessages
 import org.gaziz.birgram.features.chat.domain.usecase.LoadChatMessages
 import org.gaziz.birgram.features.chat.ui.mapper.formatMonthDay
+import org.gaziz.birgram.features.chat.ui.mapper.getUriForFile
 import org.gaziz.birgram.features.chat.ui.mapper.toInfo
 import org.gaziz.birgram.features.chat.ui.mapper.toTimeString
 import org.gaziz.birgram.features.chat.ui.model.ChatUiState
@@ -296,5 +304,51 @@ class ChatViewModel @Inject constructor(
         message: String
     ) {
         messageService.sendMessage(chatId,message)
+    }
+
+    private val _mediaFile = MutableStateFlow<File?>(null)
+    val mediaFile = _mediaFile.asStateFlow()
+    private var _player = MutableStateFlow<ExoPlayer?>(null)
+    val player = _player.asStateFlow()
+    fun createPlayer(
+        context: Context
+    ) {
+        _player.update {
+            ExoPlayer
+                .Builder(context)
+                .build()
+                .apply {
+                    playWhenReady = true
+                    addListener(object : Player.Listener {
+                        override fun onIsPlayingChanged(isPlaying: Boolean) {
+                            if (!isPlaying && mediaItemCount > 0) {
+                                seekTo(0L)
+                                play()
+                            }
+                        }
+                    })
+                }
+        }
+    }
+    private var isMediaPrepared = false
+    fun setPlayerMedia(
+        context: Context,
+        file: File
+    ){
+        val media = MediaItem.fromUri(getUriForFile(context,file))
+        _mediaFile.update { file }
+        _player.update { old ->
+            old?.apply {
+                setMediaItem(media)
+                if(!isMediaPrepared) {
+                    isMediaPrepared = true
+                    prepare()
+                }
+                play()
+            }
+        }
+    }
+    fun releasePlayer() {
+        player.value?.release()
     }
 }

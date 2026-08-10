@@ -9,19 +9,22 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.FileProvider
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import org.gaziz.birgram.R
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSenderInfo
+import org.gaziz.birgram.features.chat.ui.ChatViewModel
 import org.gaziz.birgram.features.chat.ui.model.MessageContentInfo
-import java.io.File
 
 @Composable
 fun ContentPreview(
@@ -31,6 +34,7 @@ fun ContentPreview(
     containerColor: Color,
     sender: MessageSenderInfo?
 ) {
+    val viewModel = hiltViewModel<ChatViewModel>()
     val dateFontSize = 5.sp
     when(content){
         is MessageContentInfo.Text -> {
@@ -43,12 +47,20 @@ fun ContentPreview(
             )
         }
         is MessageContentInfo.Sticker -> {
+            val mediaFile by viewModel.mediaFile.collectAsState()
+            val context = LocalContext.current
+            val player by viewModel.player.collectAsState()
             StickerPreview(
                 modifier = Modifier.size(150.dp),
                 content = content.content,
                 date = date,
                 datePadding = 8.dp,
                 fontSize = dateFontSize,
+                player = player,
+                currentMedia = mediaFile,
+                onVideoClick = { file ->
+                    viewModel.setPlayerMedia(context,file)
+                },
             )
         }
         is MessageContentInfo.AnimatedEmoji -> {

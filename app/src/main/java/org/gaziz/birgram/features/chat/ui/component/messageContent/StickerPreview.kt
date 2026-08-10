@@ -20,6 +20,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.compose.PlayerSurface
+import androidx.media3.ui.compose.SURFACE_TYPE_SURFACE_VIEW
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.video.VideoFrameDecoder
@@ -30,6 +33,7 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import org.gaziz.birgram.features.chat.ui.component.PlaybackButton
 import org.gaziz.birgram.features.chat.ui.model.StickerContent
+import java.io.File
 
 @Composable
 fun StickerPreview(
@@ -37,7 +41,11 @@ fun StickerPreview(
     content: StickerContent,
     date: String,
     datePadding: Dp = 0.dp,
-    fontSize: TextUnit
+    fontSize: TextUnit,
+
+    player: ExoPlayer? = null,
+    currentMedia: File? = null,
+    onVideoClick: (File) -> Unit = {}
 ) {
     Box(
         modifier = modifier,
@@ -67,21 +75,34 @@ fun StickerPreview(
             }
             is StickerContent.Video -> {
                 val context = LocalContext.current
-                val interactionSource = remember { MutableInteractionSource() }
-                AsyncImage(
-                    model = ImageRequest.Builder(context)
-                        .data(content.file)
-                        .decoderFactory(VideoFrameDecoder.Factory())
-                        .build(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clickable(
-                            indication = null,
-                            interactionSource = interactionSource
-                        ){}
-                )
-                PlaybackButton()
+                if(
+                    content.file == currentMedia &&
+                    player != null
+                ) {
+                    PlayerSurface(
+                        player = player,
+                        modifier = Modifier.fillMaxSize(),
+                        surfaceType = SURFACE_TYPE_SURFACE_VIEW
+                    )
+                } else {
+                    val interactionSource = remember { MutableInteractionSource() }
+                    AsyncImage(
+                        model = ImageRequest.Builder(context)
+                            .data(content.file)
+                            .decoderFactory(VideoFrameDecoder.Factory())
+                            .build(),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clickable(
+                                indication = null,
+                                interactionSource = interactionSource
+                            ) {
+                                onVideoClick(content.file)
+                            }
+                    )
+                    PlaybackButton()
+                }
             }
             is StickerContent.Empty -> {
                 LaunchedEffect(Unit) {

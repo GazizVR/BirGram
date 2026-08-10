@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,9 +38,14 @@ fun ChatScreen(
     onBack: () -> Unit
 ) {
     val viewModel = hiltViewModel<ChatViewModel>()
+    val context = LocalContext.current
     DisposableEffect(Unit) {
+        viewModel.createPlayer(context)
         viewModel.openChat(chatId)
-        onDispose { viewModel.closeChat(chatId) }
+        onDispose {
+            viewModel.releasePlayer()
+            viewModel.closeChat(chatId)
+        }
     }
     val chat by viewModel.chat(chatId).collectAsState()
     val messages by viewModel.messages(chatId).collectAsState()
