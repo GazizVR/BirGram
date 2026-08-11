@@ -44,7 +44,7 @@ fun StickerPreview(
     fontSize: TextUnit,
 
     player: Player? = null,
-    currentMedia: File? = null,
+    isCurrentMedia: Boolean = false,
     onVideoClick: (File) -> Unit = {}
 ) {
     Box(
@@ -76,7 +76,7 @@ fun StickerPreview(
             is StickerContent.Video -> {
                 val context = LocalContext.current
                 if(
-                    content.file == currentMedia &&
+                    isCurrentMedia &&
                     player != null
                 ) {
                     PlayerSurface(

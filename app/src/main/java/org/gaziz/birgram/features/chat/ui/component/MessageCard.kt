@@ -67,6 +67,7 @@ fun MessageCard(
                 contentAlignment = if(message.isOutgoing) Alignment.CenterEnd else Alignment.CenterStart
             ) {
                 ContentPreview(
+                    msgId = message.id,
                     content = message.content,
                     fontSize = fontSize,
                     date = message.date,

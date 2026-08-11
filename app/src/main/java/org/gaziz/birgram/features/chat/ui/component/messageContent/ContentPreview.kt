@@ -30,6 +30,7 @@ import java.io.File
 
 @Composable
 fun ContentPreview(
+    msgId: Long,
     content: MessageContentInfo,
     date: String,
     fontSize: TextUnit,
@@ -40,7 +41,7 @@ fun ContentPreview(
     val dateFontSize = 5.sp
     val context = LocalContext.current
     val onVideoClick: (File) -> Unit = {
-        viewModel.setMedia(it)
+        viewModel.setMediaId(msgId)
         val uri = getUriForFile(context,it)
         viewModel.setPlayerMedia(uri)
     }
@@ -55,7 +56,7 @@ fun ContentPreview(
             )
         }
         is MessageContentInfo.Sticker -> {
-            val mediaFile by viewModel.mediaFile.collectAsState()
+            val mediaId by viewModel.mediaId.collectAsState()
             StickerPreview(
                 modifier = Modifier.size(150.dp),
                 content = content.content,
@@ -63,7 +64,7 @@ fun ContentPreview(
                 datePadding = 8.dp,
                 fontSize = dateFontSize,
                 player = viewModel.player,
-                currentMedia = mediaFile,
+                isCurrentMedia = mediaId == msgId,
                 onVideoClick = onVideoClick
             )
         }
@@ -86,7 +87,7 @@ fun ContentPreview(
             }
         }
         is MessageContentInfo.Animation -> {
-            val mediaFile by viewModel.mediaFile.collectAsState()
+            val mediaId by viewModel.mediaId.collectAsState()
             MediaPreview(
                 content = content.content,
                 caption = content.caption,
@@ -96,7 +97,7 @@ fun ContentPreview(
                 date = date,
                 fontSize = dateFontSize,
                 player = viewModel.player,
-                currentMedia = mediaFile,
+                isCurrentMedia = mediaId == msgId,
                 onVideoClick = onVideoClick
             ) {
                 Box(

@@ -306,10 +306,10 @@ class ChatViewModel @Inject constructor(
         messageService.sendMessage(chatId,message)
     }
 
-    private val _mediaFile = MutableStateFlow<File?>(null)
-    val mediaFile = _mediaFile.asStateFlow()
-    fun setMedia(file: File){
-        _mediaFile.update { file }
+    private val _mediaId = MutableStateFlow<Long?>(null)
+    val mediaId = _mediaId.asStateFlow()
+    fun setMediaId(msgId: Long){
+        _mediaId.update { msgId }
     }
     var player: ExoPlayer? = null
     fun createPlayer(
@@ -341,7 +341,7 @@ class ChatViewModel @Inject constructor(
     }
     fun releasePlayer() {
         player?.release()
-        _mediaFile.update { null }
+        _mediaId.update { null }
         player = null
     }
 }

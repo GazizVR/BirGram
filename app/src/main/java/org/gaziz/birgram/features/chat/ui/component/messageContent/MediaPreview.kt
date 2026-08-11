@@ -57,7 +57,7 @@ fun MediaPreview(
     fontSize: TextUnit,
 
     player: Player? = null,
-    currentMedia: File? = null,
+    isCurrentMedia: Boolean = false,
     onVideoClick: (File) -> Unit = {},
 
     overlay: @Composable () -> Unit = {},
@@ -117,7 +117,7 @@ fun MediaPreview(
                         is MediaContent.Video -> {
                             val context = LocalContext.current
                             if(
-                                content.file == currentMedia &&
+                                isCurrentMedia &&
                                 player != null
                             ) {
                                 PlayerSurface(
