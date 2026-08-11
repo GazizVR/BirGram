@@ -24,7 +24,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import org.gaziz.birgram.R
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSenderInfo
 import org.gaziz.birgram.features.chat.ui.ChatViewModel
+import org.gaziz.birgram.features.chat.ui.mapper.getUriForFile
 import org.gaziz.birgram.features.chat.ui.model.MessageContentInfo
+import java.io.File
 
 @Composable
 fun ContentPreview(
@@ -36,6 +38,12 @@ fun ContentPreview(
 ) {
     val viewModel = hiltViewModel<ChatViewModel>()
     val dateFontSize = 5.sp
+    val context = LocalContext.current
+    val onVideoClick: (File) -> Unit = {
+        viewModel.setMedia(it)
+        val uri = getUriForFile(context,it)
+        viewModel.setPlayerMedia(uri)
+    }
     when(content){
         is MessageContentInfo.Text -> {
             TextPreview(
@@ -48,17 +56,15 @@ fun ContentPreview(
         }
         is MessageContentInfo.Sticker -> {
             val mediaFile by viewModel.mediaFile.collectAsState()
-            val context = LocalContext.current
-            val player by viewModel.player.collectAsState()
             StickerPreview(
                 modifier = Modifier.size(150.dp),
                 content = content.content,
                 date = date,
                 datePadding = 8.dp,
                 fontSize = dateFontSize,
-                player = player,
+                player = viewModel.player,
                 currentMedia = mediaFile,
-                onVideoClick = { viewModel.setPlayerMedia(context,it) },
+                onVideoClick = onVideoClick
             )
         }
         is MessageContentInfo.AnimatedEmoji -> {
@@ -81,8 +87,6 @@ fun ContentPreview(
         }
         is MessageContentInfo.Animation -> {
             val mediaFile by viewModel.mediaFile.collectAsState()
-            val context = LocalContext.current
-            val player by viewModel.player.collectAsState()
             MediaPreview(
                 content = content.content,
                 caption = content.caption,
@@ -91,9 +95,9 @@ fun ContentPreview(
                 containerColor = containerColor,
                 date = date,
                 fontSize = dateFontSize,
-                player = player,
+                player = viewModel.player,
                 currentMedia = mediaFile,
-                onVideoClick = { viewModel.setPlayerMedia(context,it) }
+                onVideoClick = onVideoClick
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize().padding(8.dp),

@@ -2,6 +2,7 @@ package org.gaziz.birgram.features.chat.ui
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -38,7 +39,6 @@ import org.gaziz.birgram.features.chat.domain.usecase.GetChatById
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatMessages
 import org.gaziz.birgram.features.chat.domain.usecase.LoadChatMessages
 import org.gaziz.birgram.features.chat.ui.mapper.formatMonthDay
-import org.gaziz.birgram.features.chat.ui.mapper.getUriForFile
 import org.gaziz.birgram.features.chat.ui.mapper.toInfo
 import org.gaziz.birgram.features.chat.ui.mapper.toTimeString
 import org.gaziz.birgram.features.chat.ui.model.ChatUiState
@@ -308,42 +308,40 @@ class ChatViewModel @Inject constructor(
 
     private val _mediaFile = MutableStateFlow<File?>(null)
     val mediaFile = _mediaFile.asStateFlow()
-    private var _player = MutableStateFlow<ExoPlayer?>(null)
-    val player = _player.asStateFlow()
+    fun setMedia(file: File){
+        _mediaFile.update { file }
+    }
+    var player: ExoPlayer? = null
     fun createPlayer(
         context: Context
     ) {
-        _player.update {
-            ExoPlayer
-                .Builder(context)
-                .build()
-                .apply {
-                    playWhenReady = true
-                    addListener(object : Player.Listener {
+        player = ExoPlayer
+            .Builder(context)
+            .build()
+            .apply {
+                playWhenReady = true
+                addListener(
+                    object : Player.Listener {
                         override fun onIsPlayingChanged(isPlaying: Boolean) {
                             if (!isPlaying && mediaItemCount > 0) {
                                 seekTo(0L)
                                 play()
                             }
                         }
-                    })
-                }
-        }
-    }
-    fun setPlayerMedia(
-        context: Context,
-        file: File
-    ){
-        _mediaFile.update { file }
-        val media = MediaItem.fromUri(getUriForFile(context,file))
-        _player.update { old ->
-            old?.apply {
-                setMediaItem(media)
-                prepare()
+                    }
+                )
             }
+    }
+    fun setPlayerMedia(uri: Uri) {
+        player?.apply {
+            val media = MediaItem.fromUri(uri)
+            setMediaItem(media,true)
+            prepare()
         }
     }
     fun releasePlayer() {
-        player.value?.release()
+        player?.release()
+        _mediaFile.update { null }
+        player = null
     }
 }

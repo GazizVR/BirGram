@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.Player
 import androidx.media3.ui.compose.PlayerSurface
-import androidx.media3.ui.compose.SURFACE_TYPE_SURFACE_VIEW
+import androidx.media3.ui.compose.SURFACE_TYPE_TEXTURE_VIEW
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.video.VideoFrameDecoder
@@ -82,7 +82,7 @@ fun StickerPreview(
                     PlayerSurface(
                         player = player,
                         modifier = Modifier.fillMaxSize(),
-                        surfaceType = SURFACE_TYPE_SURFACE_VIEW
+                        surfaceType = SURFACE_TYPE_TEXTURE_VIEW
                     )
                 } else {
                     val interactionSource = remember { MutableInteractionSource() }
