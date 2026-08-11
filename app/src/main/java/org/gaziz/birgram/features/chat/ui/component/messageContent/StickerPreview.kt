@@ -20,7 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.common.Player
 import androidx.media3.ui.compose.PlayerSurface
 import androidx.media3.ui.compose.SURFACE_TYPE_SURFACE_VIEW
 import coil3.compose.AsyncImage
@@ -43,7 +43,7 @@ fun StickerPreview(
     datePadding: Dp = 0.dp,
     fontSize: TextUnit,
 
-    player: ExoPlayer? = null,
+    player: Player? = null,
     currentMedia: File? = null,
     onVideoClick: (File) -> Unit = {}
 ) {

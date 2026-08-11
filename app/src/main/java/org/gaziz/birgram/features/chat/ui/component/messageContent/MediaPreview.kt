@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
-import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.common.Player
 import androidx.media3.ui.compose.PlayerSurface
 import androidx.media3.ui.compose.SURFACE_TYPE_SURFACE_VIEW
 import coil3.ImageLoader
@@ -56,7 +56,7 @@ fun MediaPreview(
     date: String,
     fontSize: TextUnit,
 
-    player: ExoPlayer? = null,
+    player: Player? = null,
     currentMedia: File? = null,
     onVideoClick: (File) -> Unit = {},
 

@@ -58,9 +58,7 @@ fun ContentPreview(
                 fontSize = dateFontSize,
                 player = player,
                 currentMedia = mediaFile,
-                onVideoClick = { file ->
-                    viewModel.setPlayerMedia(context,file)
-                },
+                onVideoClick = { viewModel.setPlayerMedia(context,it) },
             )
         }
         is MessageContentInfo.AnimatedEmoji -> {
@@ -95,9 +93,7 @@ fun ContentPreview(
                 fontSize = dateFontSize,
                 player = player,
                 currentMedia = mediaFile,
-                onVideoClick = { file ->
-                    viewModel.setPlayerMedia(context,file)
-                },
+                onVideoClick = { viewModel.setPlayerMedia(context,it) }
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize().padding(8.dp),
