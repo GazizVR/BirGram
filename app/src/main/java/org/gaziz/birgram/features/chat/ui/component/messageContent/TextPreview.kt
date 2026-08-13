@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.gaziz.birgram.core.telegram.api.model.message.MessageSenderInfo
+import org.gaziz.birgram.core.ui.model.MessageSenderInfo
 
 @Composable
 fun TextPreview(

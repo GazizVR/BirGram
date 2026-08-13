@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.telegram.api.usecase
+package org.gaziz.birgram.core.ui.usecase
 
 import androidx.compose.ui.graphics.Color
 import kotlinx.coroutines.flow.Flow

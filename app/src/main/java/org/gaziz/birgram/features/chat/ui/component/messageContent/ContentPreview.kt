@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.telegram.api.model.message.MessageSenderInfo
+import org.gaziz.birgram.core.ui.model.MessageSenderInfo
 import org.gaziz.birgram.features.chat.ui.ChatViewModel
 import org.gaziz.birgram.features.chat.ui.mapper.getUriForFile
 import org.gaziz.birgram.features.chat.ui.model.MessageContentInfo

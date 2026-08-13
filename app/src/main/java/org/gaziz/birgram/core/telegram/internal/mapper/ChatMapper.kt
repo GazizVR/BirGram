@@ -4,7 +4,7 @@ import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.api.model.chat.Chat
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatListType
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatPermissions
-import org.gaziz.birgram.core.telegram.api.model.media.ProfilePhoto
+import org.gaziz.birgram.core.telegram.api.model.media.ChatPhoto
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatPosition
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
 
@@ -24,9 +24,9 @@ fun TdApi.ChatPosition.toChatPosition(): ChatPosition {
     )
 }
 
-fun TdApi.ChatPhotoInfo?.toPhotoInfo(): ProfilePhoto? {
+fun TdApi.ChatPhotoInfo?.toPhotoInfo(): ChatPhoto? {
     return if(this != null) {
-        ProfilePhoto(
+        ChatPhoto(
             miniThumbnail = this.minithumbnail?.data,
             small = this.small.toFileData()
         )

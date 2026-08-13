@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.telegram.api.usecase
+package org.gaziz.birgram.features.chat.domain.usecase
 
 import org.gaziz.birgram.core.telegram.api.model.media.PhotoSize
 import javax.inject.Inject

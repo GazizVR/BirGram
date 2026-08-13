@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.telegram.api.usecase
+package org.gaziz.birgram.core.ui.usecase
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.stateIn
 import org.gaziz.birgram.core.telegram.api.ChatService
 import org.gaziz.birgram.core.telegram.api.UserService
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
-import org.gaziz.birgram.core.telegram.api.model.message.MessageSenderInfo
+import org.gaziz.birgram.core.ui.model.MessageSenderInfo
 import javax.inject.Inject
 
 class GetMessageSenderInfo @Inject constructor(

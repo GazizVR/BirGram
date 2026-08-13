@@ -55,7 +55,6 @@ class UpdateDispatcher @Inject constructor(
 
             is TdApi.UpdateBasicGroup -> groupUpdater.onBasicGroupUpdate(u)
             is TdApi.UpdateSupergroup -> groupUpdater.onSuperGroupUpdate(u)
-
         }
     }
 }

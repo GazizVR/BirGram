@@ -12,7 +12,7 @@ import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
 import org.gaziz.birgram.core.telegram.api.model.user.UserStatus
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
-import org.gaziz.birgram.core.telegram.api.usecase.GetChatAvatar
+import org.gaziz.birgram.core.ui.usecase.GetChatAvatar
 import org.gaziz.birgram.features.chatList.domain.mapper.formatChatTime
 import org.gaziz.birgram.features.chatList.domain.model.ChatListItem
 import java.time.LocalDateTime

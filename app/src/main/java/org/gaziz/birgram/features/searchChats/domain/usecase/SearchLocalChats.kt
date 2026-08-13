@@ -8,7 +8,7 @@ import org.gaziz.birgram.core.telegram.api.GroupService
 import org.gaziz.birgram.core.telegram.api.UserService
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
-import org.gaziz.birgram.core.telegram.api.usecase.GetChatAvatar
+import org.gaziz.birgram.core.ui.usecase.GetChatAvatar
 import org.gaziz.birgram.core.ui.model.ChatTypeInfo
 import org.gaziz.birgram.features.searchChats.domain.model.SearchedItem
 import org.gaziz.birgram.features.searchChats.domain.repository.ChatSearchRepository

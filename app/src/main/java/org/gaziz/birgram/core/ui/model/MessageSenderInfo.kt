@@ -1,7 +1,7 @@
-package org.gaziz.birgram.core.telegram.api.model.message
+package org.gaziz.birgram.core.ui.model
 
 import androidx.compose.ui.graphics.Color
-import org.gaziz.birgram.core.telegram.api.model.media.Avatar
+import org.gaziz.birgram.core.ui.model.Avatar
 
 data class MessageSenderInfo(
     val name: String? = null,

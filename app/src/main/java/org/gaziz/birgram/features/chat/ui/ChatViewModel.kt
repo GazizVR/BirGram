@@ -31,9 +31,9 @@ import org.gaziz.birgram.core.telegram.api.model.message.MessageContent
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.telegram.api.usecase.DownloadMessageMedia
-import org.gaziz.birgram.core.telegram.api.usecase.GetChatAvatar
-import org.gaziz.birgram.core.telegram.api.usecase.GetMessageSenderInfo
-import org.gaziz.birgram.core.telegram.api.usecase.GetPhotoBySizes
+import org.gaziz.birgram.core.ui.usecase.GetChatAvatar
+import org.gaziz.birgram.core.ui.usecase.GetMessageSenderInfo
+import org.gaziz.birgram.features.chat.domain.usecase.GetPhotoBySizes
 import org.gaziz.birgram.core.ui.model.ChatTypeInfo
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatById
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatMessages

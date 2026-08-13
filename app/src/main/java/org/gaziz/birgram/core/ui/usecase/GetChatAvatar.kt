@@ -1,74 +1,81 @@
-package org.gaziz.birgram.core.telegram.api.usecase
+package org.gaziz.birgram.core.ui.usecase
 
 import android.graphics.BitmapFactory
 import androidx.compose.ui.graphics.asImageBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.stateIn
+import org.gaziz.birgram.core.telegram.api.ChatService
 import org.gaziz.birgram.core.telegram.api.UserService
-import org.gaziz.birgram.core.telegram.api.model.media.Avatar
+import org.gaziz.birgram.core.telegram.api.model.chat.Chat
+import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
+import org.gaziz.birgram.core.telegram.api.model.media.ChatPhoto
 import org.gaziz.birgram.core.telegram.api.model.media.FileData
-import org.gaziz.birgram.core.telegram.api.model.media.ProfilePhoto
-import org.gaziz.birgram.core.telegram.api.model.user.User
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
+import org.gaziz.birgram.core.telegram.api.usecase.DownloadOrGetFileDataById
 import org.gaziz.birgram.core.ui.icon.skull
+import org.gaziz.birgram.core.ui.model.Avatar
 import javax.inject.Inject
 
-class GetUserAvatar @Inject constructor(
+class GetChatAvatar @Inject constructor(
     private val getAccentColorById: GetAccentColorById,
     private val downloadOrGetFileDataById: DownloadOrGetFileDataById,
+    private val chatService: ChatService,
     private val userService: UserService
 ) {
     private fun updateAvatar(
-        userId: Long,
+        chatId: Long,
         file: FileData
     ) {
-        userService.updateUsers { old ->
-            val user = old[userId] ?: return@updateUsers old
-            var newPhoto = ProfilePhoto(
+        chatService.updateChats { old ->
+            val chat = old[chatId] ?: return@updateChats old
+            var chatPhoto = ChatPhoto(
                 small = file,
                 miniThumbnail = null
             )
-            if(user.photo != null) {
-                newPhoto = user.photo.copy(small = file)
+            if(chat.photo != null) {
+                chatPhoto = chat.photo.copy(small = file)
             }
-            val newUser = user.copy(photo = newPhoto)
-            old + (userId to newUser)
+            val newChat = chat.copy(photo = chatPhoto)
+            old + (chatId to newChat)
         }
     }
     suspend operator fun invoke(
-        user: User
+        chat: Chat,
     ): Avatar {
-        val accentColor = getAccentColorById(user.accentColorId)
+        val accentColor = getAccentColorById(chat.accentColorId)
             .stateIn(CoroutineScope(Dispatchers.IO))
-        val isDeleted = user.type is UserType.Deleted || user.type is UserType.Unknown
+        val placeHolderText = if(chat.title.isNotBlank()) chat.title[0].toString() else ""
         val downloadPhoto = {
-            if(user.photo != null) {
-                if(user.photo.small.canDownload) {
+            if(chat.photo != null) {
+                if(chat.photo.small.canDownload) {
                     downloadOrGetFileDataById(
-                        user.photo.small.id
-                    ) {
-                        updateAvatar(user.id,it)
-                    }
+                        chat.photo.small.id
+                    ) { updateAvatar(chat.id,it) }
                 }
             }
         }
+        val isDeleted =
+            chat.type is ChatType.Private &&
+            userService.users.value[chat.type.userId]?.type is UserType.Deleted ||
+            chat.type is ChatType.Private &&
+            userService.users.value[chat.type.userId]?.type is UserType.Unknown
         return when {
             isDeleted -> Avatar.Icon(
                 imageVector = skull,
                 background = accentColor.value
             )
-            user.photo != null && user.photo.small.path.isNotBlank() -> {
+            chat.photo != null && chat.photo.small.path.isNotBlank() -> {
                 val bitmap = BitmapFactory
-                    .decodeFile(user.photo.small.path)
+                    .decodeFile(chat.photo.small.path)
                     .asImageBitmap()
                 Avatar.Photo(
                     bitmap = bitmap,
                     onEmpty = downloadPhoto
                 )
             }
-            user.photo != null && user.photo.miniThumbnail != null -> {
-                val miniThumbnail = user.photo.miniThumbnail
+            chat.photo != null && chat.photo.miniThumbnail != null -> {
+                val miniThumbnail = chat.photo.miniThumbnail
                 val bitmap = BitmapFactory
                     .decodeByteArray(miniThumbnail,0,miniThumbnail.size)
                     .asImageBitmap()
@@ -78,7 +85,7 @@ class GetUserAvatar @Inject constructor(
                 )
             }
             else -> Avatar.PlaceHolder(
-                text = if(user.firstName.isNotBlank()) user.firstName[0].toString() else "",
+                text = placeHolderText,
                 color = accentColor.value,
                 downloadPhoto = downloadPhoto
             )
