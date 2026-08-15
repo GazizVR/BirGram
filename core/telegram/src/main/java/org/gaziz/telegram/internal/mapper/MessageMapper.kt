@@ -1,10 +1,6 @@
 package org.gaziz.telegram.internal.mapper
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
-import org.gaziz.birgram.core.telegram.api.model.message.Message
-import org.gaziz.birgram.core.telegram.api.model.message.MessageContent
-import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
 import org.gaziz.telegram.api.model.message.DraftMessage
 import org.gaziz.telegram.api.model.message.DraftMessageContent
 import org.gaziz.telegram.api.model.message.Message

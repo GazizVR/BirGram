@@ -1,7 +1,6 @@
 package org.gaziz.telegram.internal.mapper
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.api.model.group.BasicGroup
 import org.gaziz.telegram.api.model.group.BasicGroup
 import org.gaziz.telegram.api.model.group.GroupMemberStatus
 import org.gaziz.telegram.api.model.group.SuperGroup

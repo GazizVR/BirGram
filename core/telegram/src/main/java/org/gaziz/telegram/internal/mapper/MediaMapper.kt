@@ -1,9 +1,6 @@
 package org.gaziz.telegram.internal.mapper
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.api.model.AccentColor
-import org.gaziz.birgram.core.telegram.api.model.StickerFormat
-import org.gaziz.birgram.core.telegram.api.model.media.PhotoSize
 import org.gaziz.telegram.api.model.AccentColor
 import org.gaziz.telegram.api.model.StickerFormat
 import org.gaziz.telegram.api.model.media.FileData

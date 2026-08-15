@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.BuildConfig
+import org.gaziz.telegram.BuildConfig
 import org.gaziz.telegram.api.AuthService
 import org.gaziz.telegram.api.ErrorService
 import org.gaziz.telegram.api.model.auth.AuthState
