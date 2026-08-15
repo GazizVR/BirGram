@@ -1,6 +1,5 @@
 package org.gaziz.birgram.features.chat.ui.component.messageContent
 
-import android.os.Build.VERSION.SDK_INT
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -38,7 +37,6 @@ import androidx.media3.ui.compose.SURFACE_TYPE_TEXTURE_VIEW
 import coil3.ImageLoader
 import coil3.compose.AsyncImage
 import coil3.gif.AnimatedImageDecoder
-import coil3.gif.GifDecoder
 import coil3.request.ImageRequest
 import coil3.video.VideoFrameDecoder
 import org.gaziz.birgram.R
@@ -89,13 +87,7 @@ fun MediaPreview(
                                 val context = LocalContext.current
                                 val imageLoader = remember(context) {
                                     ImageLoader.Builder(context)
-                                        .components {
-                                            if (SDK_INT >= 28) {
-                                                add(AnimatedImageDecoder.Factory())
-                                            } else {
-                                                add(GifDecoder.Factory())
-                                            }
-                                        }
+                                        .components { add(AnimatedImageDecoder.Factory()) }
                                         .build()
                                 }
                                 AsyncImage(
