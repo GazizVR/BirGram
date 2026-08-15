@@ -26,3 +26,4 @@ dependencyResolutionManagement {
 rootProject.name = "BirGram"
 include(":app")
 include(":core:telegram")
+include(":core:tdlib")
