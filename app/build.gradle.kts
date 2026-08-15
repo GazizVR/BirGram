@@ -1,5 +1,3 @@
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -7,13 +5,6 @@ plugins {
     id("com.google.dagger.hilt.android")
     kotlin("plugin.serialization") version "2.3.21"
 }
-
-val properties = Properties().apply {
-    load(rootProject.file("local.properties").inputStream())
-}
-
-val apiId = properties.getProperty("api_id") ?: ""
-val apiHash = properties.getProperty("api_hash") ?: ""
 
 android {
     namespace = "org.gaziz.birgram"
@@ -23,16 +14,12 @@ android {
 
     buildFeatures {
         compose = true
-        buildConfig = true
     }
 
     defaultConfig {
-        buildConfigField("String", "API_ID", apiId)
-        buildConfigField("String", "API_HASH", apiHash)
         applicationId = "org.gaziz.birgram"
         minSdk = 26
         targetSdk = 36
-        compileSdk = 37
         versionCode = 1
         versionName = "1.0"
 
@@ -52,17 +39,18 @@ android {
 }
 
 dependencies {
+    //Android
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
-
+    //Compose
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.navigation.compose)
-
+    //Junit and tests
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -70,15 +58,14 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-
-    //Tdlib
-    implementation(libs.tdlib.android)
+    //Internal modules
+    implementation(project(":core:telegram"))
     //DataStore
     implementation(libs.androidx.datastore.preferences)
     //Hilt
+    ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
-    ksp(libs.hilt.android.compiler)
     //Material
     implementation(libs.material)
     //Coil

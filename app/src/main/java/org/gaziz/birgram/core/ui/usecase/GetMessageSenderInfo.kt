@@ -6,10 +6,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import org.gaziz.birgram.core.telegram.api.ChatService
-import org.gaziz.birgram.core.telegram.api.UserService
-import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
 import org.gaziz.birgram.core.ui.model.MessageSenderInfo
+import org.gaziz.telegram.api.ChatService
+import org.gaziz.telegram.api.UserService
+import org.gaziz.telegram.api.model.message.MessageSender
 import javax.inject.Inject
 
 class GetMessageSenderInfo @Inject constructor(

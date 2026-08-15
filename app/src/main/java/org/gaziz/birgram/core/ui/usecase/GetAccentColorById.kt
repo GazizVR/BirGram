@@ -3,7 +3,7 @@ package org.gaziz.birgram.core.ui.usecase
 import androidx.compose.ui.graphics.Color
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import org.gaziz.birgram.core.telegram.api.ChatService
+import org.gaziz.telegram.api.ChatService
 import javax.inject.Inject
 
 class GetAccentColorById @Inject constructor(

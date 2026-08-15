@@ -1,0 +1,87 @@
+package org.gaziz.telegram.impl
+
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import org.drinkless.tdlib.TdApi
+import org.gaziz.telegram.api.MessageService
+import org.gaziz.telegram.api.model.ResponseData
+import org.gaziz.telegram.api.model.message.DraftMessage
+import org.gaziz.telegram.api.model.message.Message
+import org.gaziz.telegram.internal.ClientManager
+import org.gaziz.telegram.internal.mapper.toMessage
+import org.gaziz.telegram.internal.mapper.toTgDraftMessage
+import javax.inject.Inject
+import kotlin.collections.forEach
+
+class MessageServiceImpl @Inject constructor(
+    private val manager: ClientManager
+): MessageService {
+    private val _messages = MutableStateFlow<Map<Long, Message>>(emptyMap())
+    override val messages = _messages.asStateFlow()
+
+    override fun updateMessages(updFun: (Map<Long, Message>) -> Map<Long, Message>) {
+        _messages.update(updFun)
+    }
+
+    override fun getChatHistory(
+        chatId: Long,
+        fromMessage: Long,
+        onError: (ResponseData.Error) -> Unit,
+        onResult: () -> Unit
+    ) {
+        manager.sendRequest(
+            TdApi.GetChatHistory().apply {
+                this.chatId = chatId
+                this.fromMessageId = fromMessage
+                this.offset = 0
+                this.limit = 50
+                this.onlyLocal = false
+            },
+            onError
+        ) { resp ->
+            if(resp is TdApi.Messages) {
+                _messages.update { map ->
+                    map.toMutableMap().apply {
+                        resp.messages.forEach { msg -> put(msg.id,msg.toMessage()) }
+                    }.toMap()
+                }.let {
+                    onResult()
+                }
+            }
+        }
+    }
+
+    override fun sendMessage(
+        chatId: Long,
+        content: String
+    ) {
+        manager.sendRequest(
+            TdApi.SendMessage().apply {
+                this.chatId = chatId
+                this.topicId = null
+                this.replyTo = null
+                this.options = null
+                this.replyMarkup = null
+                this.inputMessageContent = TdApi.InputMessageText().apply {
+                    this.text = TdApi.FormattedText().apply { this.text = content }
+                    this.linkPreviewOptions = null
+                    this.clearDraft = true
+                }
+            },
+        )
+    }
+
+    override fun setDraftMessage(
+        chatId: Long,
+        draftMessage: DraftMessage
+    ) {
+        manager.sendRequest(
+            TdApi.SetChatDraftMessage().apply {
+                this.chatId = chatId
+                this.topicId = null
+                this.draftMessage = draftMessage.toTgDraftMessage()
+            }
+        )
+    }
+}

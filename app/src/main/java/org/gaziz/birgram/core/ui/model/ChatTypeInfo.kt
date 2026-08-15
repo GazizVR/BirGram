@@ -1,6 +1,6 @@
 package org.gaziz.birgram.core.ui.model
 
-import org.gaziz.birgram.core.telegram.api.model.user.UserStatus
+import org.gaziz.telegram.api.model.user.UserStatus
 
 interface ChatTypeInfo {
     data class User(

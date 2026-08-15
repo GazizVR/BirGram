@@ -46,8 +46,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.telegram.api.model.auth.AuthCodeInfo
 import org.gaziz.birgram.core.ui.icon.arrowBack
+import org.gaziz.telegram.api.model.auth.AuthCodeInfo
 
 @Composable
 fun WaitCode(
@@ -191,8 +191,9 @@ fun WaitCode(
                     }
                 },
             )
-            if(codeInfo.nextType != null) {
-                val nextType = stringArrayResource(R.array.next_types)[codeInfo.nextType.type.ordinal]
+            val codeNextType = codeInfo.nextType
+            if(codeNextType != null) {
+                val nextType = stringArrayResource(R.array.next_types)[codeNextType.type.ordinal]
                 val nextTypeSuffix = stringResource(R.string.suffix_waiting)
                 Spacer(Modifier.height(8.dp))
                 TextButton(

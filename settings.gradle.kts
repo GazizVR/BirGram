@@ -22,4 +22,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "BirGram"
 include(":app")
- 
+include(":core:telegram")

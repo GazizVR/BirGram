@@ -2,8 +2,8 @@ package org.gaziz.birgram.features.auth.ui
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import org.gaziz.birgram.core.telegram.api.AuthService
-import org.gaziz.birgram.core.telegram.api.ErrorService
+import org.gaziz.telegram.api.AuthService
+import org.gaziz.telegram.api.ErrorService
 import javax.inject.Inject
 
 @HiltViewModel

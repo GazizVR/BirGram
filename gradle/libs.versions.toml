@@ -17,6 +17,7 @@ material = "1.14.0"
 media3Exoplayer = "1.11.0"
 tdlibAndroid = "1.8.61"
 navigationCompose = "2.9.8"
+appcompat = "1.7.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -46,8 +47,10 @@ lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "
 material = { module = "com.google.android.material:material", version.ref = "material" }
 tdlib-android = { module = "com.github.fazilus:tdlib-android", version.ref = "tdlibAndroid" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 

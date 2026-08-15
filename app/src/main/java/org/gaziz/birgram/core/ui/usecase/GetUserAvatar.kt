@@ -5,14 +5,14 @@ import androidx.compose.ui.graphics.asImageBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.stateIn
-import org.gaziz.birgram.core.telegram.api.UserService
-import org.gaziz.birgram.core.telegram.api.model.media.ChatPhoto
-import org.gaziz.birgram.core.telegram.api.model.media.FileData
-import org.gaziz.birgram.core.telegram.api.model.user.User
-import org.gaziz.birgram.core.telegram.api.model.user.UserType
-import org.gaziz.birgram.core.telegram.api.usecase.DownloadOrGetFileDataById
 import org.gaziz.birgram.core.ui.icon.skull
 import org.gaziz.birgram.core.ui.model.Avatar
+import org.gaziz.telegram.api.UserService
+import org.gaziz.telegram.api.model.media.FileData
+import org.gaziz.telegram.api.model.media.ProfilePhoto
+import org.gaziz.telegram.api.model.user.User
+import org.gaziz.telegram.api.model.user.UserType
+import org.gaziz.telegram.api.usecase.DownloadOrGetFileDataById
 import javax.inject.Inject
 
 class GetUserAvatar @Inject constructor(
@@ -26,12 +26,12 @@ class GetUserAvatar @Inject constructor(
     ) {
         userService.updateUsers { old ->
             val user = old[userId] ?: return@updateUsers old
-            var newPhoto = ChatPhoto(
+            var newPhoto = ProfilePhoto(
                 small = file,
                 miniThumbnail = null
             )
-            if(user.photo != null) {
-                newPhoto = user.photo.copy(small = file)
+            user.photo?.let { photo ->
+                newPhoto = photo.copy(small = file)
             }
             val newUser = user.copy(photo = newPhoto)
             old + (userId to newUser)
@@ -43,12 +43,10 @@ class GetUserAvatar @Inject constructor(
         val accentColor = getAccentColorById(user.accentColorId)
             .stateIn(CoroutineScope(Dispatchers.IO))
         val isDeleted = user.type is UserType.Deleted || user.type is UserType.Unknown
-        val downloadPhoto = {
-            if(user.photo != null) {
-                if(user.photo.small.canDownload) {
-                    downloadOrGetFileDataById(
-                        user.photo.small.id
-                    ) {
+        val downloadPhoto: () -> Unit = {
+            user.photo?.let { photo ->
+                if(photo.small.canDownload) {
+                    downloadOrGetFileDataById(photo.small.id) {
                         updateAvatar(user.id,it)
                     }
                 }
@@ -59,17 +57,17 @@ class GetUserAvatar @Inject constructor(
                 imageVector = skull,
                 background = accentColor.value
             )
-            user.photo != null && user.photo.small.path.isNotBlank() -> {
+            user.photo != null && user.photo?.small?.path?.isNotBlank() == true -> {
                 val bitmap = BitmapFactory
-                    .decodeFile(user.photo.small.path)
+                    .decodeFile(user.photo!!.small.path)
                     .asImageBitmap()
                 Avatar.Photo(
                     bitmap = bitmap,
                     onEmpty = downloadPhoto
                 )
             }
-            user.photo != null && user.photo.miniThumbnail != null -> {
-                val miniThumbnail = user.photo.miniThumbnail
+            user.photo != null && user.photo?.miniThumbnail != null -> {
+                val miniThumbnail = user.photo!!.miniThumbnail!!
                 val bitmap = BitmapFactory
                     .decodeByteArray(miniThumbnail,0,miniThumbnail.size)
                     .asImageBitmap()
