@@ -5,27 +5,20 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.gaziz.telegram.api.AuthService
-import org.gaziz.telegram.api.ErrorService
-import org.gaziz.telegram.internal.ClientManager
+import org.gaziz.telegram.api.usecase.InitClient
 import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val authService: AuthService,
-    private val errorService: ErrorService,
-    private val manager: ClientManager
+    private val initClient: InitClient
 ): ViewModel() {
     fun initApplication(
         onNonReady: () -> Unit,
         isForce: Boolean = false
     ) {
-        if(
-            !manager.isClientActive() ||
-            isForce
-        ) {
-            authService.onLoggingOut = onNonReady
-            manager.createClient()
-        }
+        authService.onLoggingOut = onNonReady
+        initClient(isForce)
     }
     val authState = authService.authState
     fun loadState() {

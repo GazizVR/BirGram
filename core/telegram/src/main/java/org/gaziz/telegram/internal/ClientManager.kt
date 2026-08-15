@@ -2,27 +2,26 @@ package org.gaziz.telegram.internal
 
 import org.drinkless.tdlib.Client
 import org.drinkless.tdlib.TdApi
-import org.gaziz.telegram.api.ErrorService
 import org.gaziz.telegram.api.model.ResponseData
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ClientManager @Inject constructor(
-    private val updateDispatcher: UpdateDispatcher,
-    private val errorService: ErrorService
-) {
+class ClientManager @Inject constructor() {
     private var client: Client? = null
 
     fun isClientActive(): Boolean {
         return client != null
     }
 
-    fun createClient() {
+    fun createClient(
+        onUpdate: (TdApi.Object) -> Unit,
+        onException: (Throwable) -> Unit
+    ) {
         client = Client.create(
-            { updateDispatcher.dispatch(it) },
-            { errorService.setErrorFromException(it) },
-            null
+            onUpdate,
+            onException,
+            onException
         )
         client?.send(
             TdApi.SetLogVerbosityLevel().apply {
