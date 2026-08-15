@@ -12,8 +12,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.TextUnit
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
-import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
+import org.gaziz.telegram.api.model.message.DraftMessage
+import org.gaziz.telegram.api.model.message.DraftMessageContent
 
 @Composable
 fun DraftMessagePreview(
@@ -30,10 +30,11 @@ fun DraftMessagePreview(
                 withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.error)) {
                     append("$draftMsgPlaceHolder ")
                 }
+                val draftMsgCnt = draftMessage.content
                 if (
-                    draftMessage.content is DraftMessageContent.Text
+                    draftMsgCnt is DraftMessageContent.Text
                 ) {
-                    append(draftMessage.content.text)
+                    append(draftMsgCnt.text)
                 }
             },
             color = MaterialTheme.colorScheme.onBackground.copy(0.5f),

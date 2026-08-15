@@ -9,7 +9,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val authService: AuthService,
-    private val errorService: ErrorService
+    errorService: ErrorService
 ): ViewModel() {
 
     val errorMessage = errorService.error

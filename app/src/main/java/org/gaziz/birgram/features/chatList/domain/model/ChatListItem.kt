@@ -1,8 +1,8 @@
 package org.gaziz.birgram.features.chatList.domain.model
 
-import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
-import org.gaziz.birgram.core.telegram.api.model.message.Message
 import org.gaziz.birgram.core.ui.model.Avatar
+import org.gaziz.telegram.api.model.message.DraftMessage
+import org.gaziz.telegram.api.model.message.Message
 
 data class ChatListItem(
     val id: Long,

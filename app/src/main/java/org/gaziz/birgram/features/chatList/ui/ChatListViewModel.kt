@@ -7,10 +7,10 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.datastore.UserPreferencesRepository
-import org.gaziz.birgram.core.telegram.api.AuthService
-import org.gaziz.birgram.core.telegram.api.model.chat.ChatListType
 import org.gaziz.birgram.features.chatList.domain.usecase.GetChatList
 import org.gaziz.birgram.features.chatList.domain.usecase.LoadChatList
+import org.gaziz.telegram.api.AuthService
+import org.gaziz.telegram.api.model.chat.ChatListType
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,9 +25,7 @@ class ChatListViewModel @Inject constructor(
         loadChatList(ChatListType.Archive)
     }
     fun logOut(onOk: () -> Unit) {
-        authService.logOut {
-            onOk()
-        }
+        authService.logOut(onOk)
     }
     val isDark = userPreferencesRepository.isDark.stateIn(
         viewModelScope,

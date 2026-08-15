@@ -21,8 +21,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import org.gaziz.birgram.R
-import org.gaziz.birgram.core.telegram.api.model.message.Message
-import org.gaziz.birgram.core.telegram.api.model.message.MessageContent
+import org.gaziz.telegram.api.model.message.Message
+import org.gaziz.telegram.api.model.message.MessageContent
 
 @Composable
 fun LastMsgText(
