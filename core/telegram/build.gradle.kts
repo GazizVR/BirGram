@@ -33,18 +33,19 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-
 }
 
 dependencies {
+    //Android framework
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.material)
+    //Junit and tests
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
-    //Tdlib
-    implementation(libs.tdlib.android)
+    //Internal modules
+    implementation(project(":core:tdlib"))
     //Hilt
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.android)

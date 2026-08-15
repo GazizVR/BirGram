@@ -18,11 +18,10 @@ fun Int.fromUnixTimeStamp(zoneId: ZoneId = ZoneId.systemDefault()): LocalDateTim
         .toLocalDateTime()
 }
 
-fun TdApi.InputMessageContent.toDraftMsgCnt(): DraftMessageContent {
+fun TdApi.DraftMessageContent.toDraftMsgCnt(): DraftMessageContent {
     return when(this) {
-        is TdApi.InputMessageText -> DraftMessageContent.Text(
-            text = this.text.text,
-            clearDraft = this.clearDraft
+        is TdApi.DraftMessageContentText -> DraftMessageContent.Text(
+            text = this.text.text
         )
         else -> DraftMessageContent.Other
     }
@@ -31,22 +30,22 @@ fun TdApi.InputMessageContent.toDraftMsgCnt(): DraftMessageContent {
 fun TdApi.DraftMessage?.toDraftMessage(): DraftMessage? {
     if(this == null) return null
     return DraftMessage(
-        content = this.inputMessageText.toDraftMsgCnt(),
+        content = this.content.toDraftMsgCnt(),
         date = this.date.fromUnixTimeStamp()
     )
 }
 
-fun DraftMessageContent.toTgDraftMsgCnt(): TdApi.InputMessageContent {
+fun DraftMessageContent.toTgDraftMsgCnt(): TdApi.DraftMessageContent {
     return when(val msg = this) {
         is DraftMessageContent.Text -> {
-            TdApi.InputMessageText().apply {
+            TdApi.DraftMessageContentText().apply {
                 text = TdApi.FormattedText().apply {
                     text = msg.text
                 }
             }
         }
         DraftMessageContent.Other -> {
-            TdApi.InputMessageText().apply {
+            TdApi.DraftMessageContentText().apply {
                 text = TdApi.FormattedText().apply {
                     text = ""
                 }
@@ -59,7 +58,7 @@ fun DraftMessage.toTgDraftMessage(): TdApi.DraftMessage {
     val msg = this
     return TdApi.DraftMessage().apply {
         date = msg.date.toEpochSecond(ZoneOffset.UTC).toInt()
-        inputMessageText = msg.content.toTgDraftMsgCnt()
+        content = msg.content.toTgDraftMsgCnt()
     }
 }
 

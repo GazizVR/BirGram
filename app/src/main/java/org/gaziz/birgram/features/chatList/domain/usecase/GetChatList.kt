@@ -39,8 +39,7 @@ class GetChatList @Inject constructor(
                     val draftMsg = chat.draftMessage
                     val isDraftMsg =
                         draftMsg != null &&
-                        draftMsg.content is DraftMessageContent.Text &&
-                        !(draftMsg.content as DraftMessageContent.Text).clearDraft
+                        draftMsg.content is DraftMessageContent.Text
 
                     var sender: String? = null
                     val chatType = chat.type

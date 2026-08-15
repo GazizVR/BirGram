@@ -147,8 +147,7 @@ class ChatViewModel @Inject constructor(
             val draftMsg = chat.draftMessage
             if(
                 draftMsg != null &&
-                draftMsg.content is DraftMessageContent.Text &&
-                !(draftMsg.content as DraftMessageContent.Text).clearDraft
+                draftMsg.content is DraftMessageContent.Text
             ) {
                 draftMessageText = (draftMsg.content as DraftMessageContent.Text).text
             }
@@ -301,7 +300,7 @@ class ChatViewModel @Inject constructor(
         messageService.setDraftMessage(
             chatId,
             DraftMessage(
-                content = DraftMessageContent.Text(draft, false),
+                content = DraftMessageContent.Text(draft),
                 date = LocalDateTime.now()
             )
         )

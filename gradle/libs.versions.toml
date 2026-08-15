@@ -1,5 +1,6 @@
 [versions]
 agp = "9.2.1"
+annotation = "1.10.0"
 coilCompose = "3.5.0"
 coreKtx = "1.19.0"
 datastorePreferences = "1.2.1"
@@ -11,15 +12,15 @@ espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.11.0"
 activityCompose = "1.13.0"
 kotlin = "2.4.10"
-composeBom = "2026.06.01"
+composeBom = "2026.08.00"
 lottieCompose = "6.7.1"
 material = "1.14.0"
 media3Exoplayer = "1.11.0"
-tdlibAndroid = "1.8.61"
 navigationCompose = "2.9.8"
-appcompat = "1.7.1"
+appcompat = "1.8.0"
 
 [libraries]
+androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
@@ -45,7 +46,6 @@ androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-te
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
-tdlib-android = { module = "com.github.fazilus:tdlib-android", version.ref = "tdlibAndroid" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 
