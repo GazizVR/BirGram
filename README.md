@@ -2,167 +2,161 @@
 
 # 💬 BirGram
 
-### Modern Telegram Client for Android
+### A Telegram Client for Android, built from scratch
 
-Built with **Kotlin**, **Jetpack Compose**, **Material 3**, and **TDLib**
+Built with **Kotlin**, **Jetpack Compose**, **Material 3**, **Hilt**, and **TDLib**
 
-![Android](https://img.shields.io/badge/Android-8.0%2B-3DDC84?style=for-the-badge&logo=android)
-![Kotlin](https://img.shields.io/badge/Kotlin-2.x-7F52FF?style=for-the-badge&logo=kotlin)
+![Android](https://img.shields.io/badge/Android-9.0%2B-3DDC84?style=for-the-badge&logo=android)
+![Kotlin](https://img.shields.io/badge/Kotlin-2.4-7F52FF?style=for-the-badge&logo=kotlin)
 ![Jetpack Compose](https://img.shields.io/badge/Jetpack-Compose-4285F4?style=for-the-badge)
 ![Material 3](https://img.shields.io/badge/Material-3-6750A4?style=for-the-badge)
 ![TDLib](https://img.shields.io/badge/TDLib-Telegram-26A5E4?style=for-the-badge&logo=telegram)
-
-*A clean, fast, and modern Telegram client for Android.*
+![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
 
 </div>
 
 ---
 
-# ✨ About
+## ✨ About
 
-**BirGram** is an open-source Telegram client for Android built with modern Android technologies.
+**BirGram** is an open-source Telegram client for Android, written entirely in Kotlin with Jetpack Compose. It talks to Telegram through **TDLib** (the official Telegram Database Library), which is bundled as a precompiled native library rather than fetched from Maven.
 
-The project focuses on:
+The project is a personal/learning build focused on:
 
-- ⚡ High performance
-- 🎨 Modern Material 3 UI
-- 🧩 Modular architecture
-- 🏛 Clean Architecture
-- 🚀 Scalability
-- 🛠 Easy maintenance
+- 🏛 A clean, modular architecture (separate Gradle modules for the app, the Telegram service layer, and the raw TDLib bindings)
+- 🔄 MVVM + unidirectional UI state with Kotlin Flow
+- 🎨 A hand-built Material 3 UI, including a custom vector icon set
+- 📦 Dependency injection with Hilt
 
-BirGram uses **Telegram TDLib** as its networking layer and is built entirely with **Jetpack Compose**.
+> **Status:** BirGram is under active development. Core flows like login, browsing chats, and reading messages work; some capabilities (see [Features](#-features) below) are still partial.
 
 ---
 
-# 📱 Features
+## 📱 Features
 
-## 💬 Messaging
+### 🔐 Authentication
+- Phone-number login via TDLib
+- Verification via Telegram message, SMS, call, or flash/missed call, with automatic resend flow
+- Two-factor (cloud password) login support
+- Log out
 
-- Telegram authentication
-- Private chats
-- Groups
-- Supergroups
-- Channels
-- Chat list
-- Message history
-- Send text messages
-- Image support
-- File support
+### 💬 Chats & Messaging
+- Private chats, basic groups, supergroups, and channels
+- Chat list with unread counters, online status, drafts, and last-message previews
+- Archived chats
+- Paginated message history
+- **Sending:** plain text messages, with per-chat draft saving
+- **Viewing:** rich rendering and download of photos, videos, voice & video messages, documents, and stickers, with in-app playback for audio/video via Media3 (ExoPlayer)
 
-## 🔍 Search
+### 🔍 Search
+- Fast local (on-device) chat search and filtering
 
-- Fast local chat search
-- Optimized filtering
-- Instant search results
+### 🎨 UI/UX
+- Material 3 theming with light/dark mode (persisted via DataStore)
+- Custom-drawn icon set (not just default Material icons)
+- Animated splash screen and screen transitions
+- Type-safe navigation (Navigation Compose + Kotlin Serialization routes)
 
-## 🎨 User Interface
-
-- Material 3
-- Jetpack Compose
-- Dark Theme
-- Splash Screen
-- Adaptive layouts
-- Smooth animations
+### 🧭 Not yet implemented
+- Sending media (photos/files/voice messages)
+- Reactions, stickers picker, calls, stories
+- These are tracked in the [Roadmap](#-roadmap) below.
 
 ---
 
-# 🏗 Architecture
+## 🏗 Architecture
 
-BirGram follows a modular architecture with a clear separation of responsibilities.
+BirGram is split into three Gradle modules, plus feature packages inside the app module:
 
 ```text
-Application
+BirGram
 │
-├── Core
+├── :app                    → UI, navigation, DI wiring, feature screens
+│   └── org.gaziz.birgram
+│       ├── core/
+│       │   ├── datastore/      # user preferences (theme, etc.) via DataStore
+│       │   ├── navigation/     # NavHost + type-safe routes
+│       │   └── ui/             # shared theme, components, icons, mappers
+│       └── features/
+│           ├── auth/           # phone number → code → 2FA password
+│           ├── splash/         # startup / auth-state routing
+│           ├── chatList/       # chat list + archive
+│           ├── chat/           # message list, input bar, media previews
+│           └── searchChats/    # local chat search
 │
-├── Features
-│   ├── Auth
-│   ├── Chats
-│   ├── Search
-│   └── Splash
+├── :core:telegram          → org.gaziz.telegram
+│   ├── api/                    # service interfaces + domain models
+│   ├── impl/                   # service implementations
+│   ├── internal/               # TDLib client manager, update dispatcher
+│   │   ├── mapper/              # TdApi → domain model mapping
+│   │   └── updaters/             # TDLib update → state reducers
+│   └── di/                     # Hilt modules exposing each service
 │
-├── Telegram
-│   ├── API
-│   ├── Implementation
-│   ├── Internal
-│   ├── Mapper
-│   └── Services
-│
-└── UI
+└── :core:tdlib              → org.gaziz.tdlib
+    └── Vendored TDLib JNI bindings (TdApi.java, Client.java)
+        + prebuilt native libraries (armeabi-v7a, arm64-v8a, x86, x86_64)
 ```
 
-### Design Principles
+### Design principles
 
-- 🧩 Feature-based modules
-- 🏛 Clean Architecture
-- 🔄 MVVM
-- 🌊 Kotlin Flow
-- ⚙ Kotlin Coroutines
-- 📦 Dependency Injection
-- 🔌 Service-oriented Telegram layer
-- 🎯 Immutable UI state
+- 🧩 Feature-based package structure
+- 🔄 MVVM with unidirectional state
+- 🌊 Kotlin Flow + Coroutines throughout
+- 🔌 A dedicated Telegram service layer (`AuthService`, `ChatService`, `MessageService`, `UserService`, `GroupService`, `FileService`, `ErrorService`) so the UI never talks to TDLib directly
+- 📦 Hilt for dependency injection, KSP for annotation processing
 
 ---
 
-# 🛠 Tech Stack
+## 🛠 Tech Stack
 
-| Technology | Description |
-|------------|-------------|
-| Kotlin | Main programming language |
-| Jetpack Compose | Declarative UI Toolkit |
-| Material 3 | Modern Android Design |
-| TDLib | Telegram Client Library |
-| Kotlin Coroutines | Asynchronous programming |
-| Kotlin Flow | Reactive data streams |
-| AndroidX | Android Jetpack libraries |
-| Navigation Compose | Navigation |
-| MVVM | Presentation architecture |
-| Gradle Version Catalog | Dependency management |
-
----
-
-# 📂 Project Structure
-
-```text
-app/
-core/
-
-features/
-├── auth
-├── chats
-├── search
-└── splash
-
-telegram/
-├── api
-├── impl
-├── internal
-├── mapper
-└── services
-
-ui/
-```
+| Technology | Notes |
+|------------|-------|
+| Kotlin 2.4 | Application language (100% Kotlin in app code) |
+| Jetpack Compose | UI toolkit, with Compose BOM `2026.08.00` |
+| Material 3 | Design system |
+| TDLib | Telegram protocol implementation, vendored as prebuilt `.so` + Java bindings |
+| Hilt 2.60 | Dependency injection |
+| Kotlin Coroutines & Flow | Async & reactive state |
+| Navigation Compose 2.9 | Type-safe navigation with Kotlin Serialization routes |
+| DataStore Preferences | Persisting user settings (e.g. dark mode) |
+| Coil 3 | Image, GIF, and video thumbnail loading |
+| Media3 / ExoPlayer | Audio & video playback |
+| Lottie | Vector animations |
+| AGP 9.2 / Gradle 9.5 | Build tooling |
 
 ---
 
-# 🚀 Getting Started
+## 🚀 Getting Started
 
-## Requirements
+### Requirements
 
-- Android Studio Hedgehog or newer
-- Android SDK
-- JDK 17+
-- Gradle 8+
-- Android 8.0+
+- Android Studio (a recent version supporting AGP 9.2 and compileSdk 37)
+- JDK 21 — the project pins its Gradle daemon toolchain to JDK 21 (JetBrains distribution) and will auto-provision it via the Foojay resolver if it isn't already installed
+- Android SDK with platform 37 installed
+- A physical device or emulator running **Android 9.0 (API 28) or newer**
 
-## Clone the Repository
+### Get Telegram API credentials
+
+BirGram needs its own Telegram API credentials to talk to TDLib:
+
+1. Register an application at [my.telegram.org](https://my.telegram.org) to obtain an **`api_id`** and **`api_hash`**.
+2. In the project root, create (or edit) a `local.properties` file — this file is git-ignored and never committed — and add:
+
+   ```properties
+   api_id=YOUR_API_ID
+   api_hash=YOUR_API_HASH
+   ```
+
+   These values are wired into `BuildConfig.API_ID` / `BuildConfig.API_HASH` by the `:core:telegram` module and are required for the app to build.
+
+### Clone the repository
 
 ```bash
 git clone https://github.com/yourusername/BirGram.git
+cd BirGram
 ```
 
-## Build
+### Build
 
 Debug build:
 
@@ -176,49 +170,34 @@ Release build:
 ./gradlew assembleRelease
 ```
 
+> TDLib's native libraries are already bundled for `armeabi-v7a`, `arm64-v8a`, `x86`, and `x86_64` — no separate native build step is required.
+
 ---
 
-# ⚡ Performance
+## ⚡ Performance
 
 > [!IMPORTANT]
 > **Release builds provide the best performance.**
 
-Debug builds are intended for development and include:
-
-- Additional runtime checks
-- Debug instrumentation
-- Extensive logging
-- Disabled compiler optimizations
-
-As a result, **Debug APKs may experience**:
-
-- Lower FPS
-- Slower startup
-- UI lag
-- Reduced responsiveness
-
-For the best user experience and accurate performance testing, always use a **Release APK**.
+Debug builds are intended for development and include extra runtime checks, debug instrumentation, extensive logging, and disabled compiler optimizations. As a result, debug APKs may show lower FPS, slower startup, and UI lag. For accurate performance testing, always use a **release APK**.
 
 ---
 
-# 🗺 Roadmap
+## 🗺 Roadmap
 
-- 🎙 Voice messages
+- 📤 Sending media (photos, files, voice messages)
 - 😀 Message reactions
+- 🎭 Sticker picker
 - 📸 Stories
 - 📞 Voice & video calls
-- 🎭 Stickers
-- 📁 Improved media viewer
-- 📱 Tablet optimization
+- 📱 Tablet-optimized layouts
 - ⌚ Wear OS support
 
 ---
 
-# 🤝 Contributing
+## 🤝 Contributing
 
 Contributions are welcome!
-
-If you'd like to improve BirGram:
 
 1. Fork the repository.
 2. Create a feature branch.
@@ -227,20 +206,17 @@ If you'd like to improve BirGram:
 
 ---
 
-# ❤️ Acknowledgements
+## ❤️ Acknowledgements
 
-Special thanks to:
-
-- Telegram
-- TDLib
-- Jetpack Compose Team
-- Android Open Source Community
+- [Telegram](https://telegram.org) & [TDLib](https://github.com/tdlib/td)
+- The Jetpack Compose team
+- The Android open-source community
 
 ---
 
-# 📄 License
+## 📄 License
 
-This project is licensed under the **MIT License**.
+This project is licensed under the **MIT License** — see [LICENSE](LICENSE) for details.
 
 ---
 
