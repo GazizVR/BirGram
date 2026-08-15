@@ -19,24 +19,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import org.gaziz.birgram.core.telegram.api.ChatService
-import org.gaziz.birgram.core.telegram.api.GroupService
-import org.gaziz.birgram.core.telegram.api.MessageService
-import org.gaziz.birgram.core.telegram.api.UserService
-import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
-import org.gaziz.birgram.core.telegram.api.model.group.GroupMemberStatus
-import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
-import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
-import org.gaziz.birgram.core.telegram.api.model.message.MessageContent
-import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
-import org.gaziz.birgram.core.telegram.api.model.user.UserType
-import org.gaziz.birgram.core.telegram.api.usecase.DownloadMessageMedia
+import org.gaziz.birgram.core.ui.model.ChatTypeInfo
 import org.gaziz.birgram.core.ui.usecase.GetChatAvatar
 import org.gaziz.birgram.core.ui.usecase.GetMessageSenderInfo
-import org.gaziz.birgram.features.chat.domain.usecase.GetPhotoBySizes
-import org.gaziz.birgram.core.ui.model.ChatTypeInfo
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatById
 import org.gaziz.birgram.features.chat.domain.usecase.GetChatMessages
+import org.gaziz.birgram.features.chat.domain.usecase.GetPhotoBySizes
 import org.gaziz.birgram.features.chat.domain.usecase.LoadChatMessages
 import org.gaziz.birgram.features.chat.ui.mapper.formatMonthDay
 import org.gaziz.birgram.features.chat.ui.mapper.toInfo
@@ -45,6 +33,18 @@ import org.gaziz.birgram.features.chat.ui.model.ChatUiState
 import org.gaziz.birgram.features.chat.ui.model.MediaContent
 import org.gaziz.birgram.features.chat.ui.model.MessageContentInfo
 import org.gaziz.birgram.features.chat.ui.model.MessageUiState
+import org.gaziz.telegram.api.ChatService
+import org.gaziz.telegram.api.GroupService
+import org.gaziz.telegram.api.MessageService
+import org.gaziz.telegram.api.UserService
+import org.gaziz.telegram.api.model.chat.ChatType
+import org.gaziz.telegram.api.model.group.GroupMemberStatus
+import org.gaziz.telegram.api.model.message.DraftMessage
+import org.gaziz.telegram.api.model.message.DraftMessageContent
+import org.gaziz.telegram.api.model.message.MessageContent
+import org.gaziz.telegram.api.model.message.MessageSender
+import org.gaziz.telegram.api.model.user.UserType
+import org.gaziz.telegram.api.usecase.DownloadMessageMedia
 import java.io.File
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -80,10 +80,11 @@ class ChatViewModel @Inject constructor(
     val chat: (Long) -> StateFlow<ChatUiState?> = {
         getChatById(it).map { chat ->
             chat ?: return@map null
+            val chatType = chat.type
             val isDeleted =
-                chat.type is ChatType.Private &&
-                userService.users.value[chat.type.userId]?.type == UserType.Deleted &&
-                userService.users.value[chat.type.userId]?.type == UserType.Unknown
+                chatType is ChatType.Private &&
+                userService.users.value[chatType.userId]?.type == UserType.Deleted &&
+                userService.users.value[chatType.userId]?.type == UserType.Unknown
             val avatar = getChatAvatar(chat)
             var canSendTextMessages = chat.permissions.canSendBasicMessages
             val typeInfo: ChatTypeInfo? = when(val type = chat.type) {
@@ -92,7 +93,8 @@ class ChatViewModel @Inject constructor(
                     canSendTextMessages =
                         chat.permissions.canSendBasicMessages ||
                         group?.memberStatus is GroupMemberStatus.Creator ||
-                        (group?.memberStatus is GroupMemberStatus.Admin && group.memberStatus.canPostMessages)
+                        (group?.memberStatus is GroupMemberStatus.Admin &&
+                        (group.memberStatus as GroupMemberStatus.Admin).canPostMessages)
                     if(group != null) {
                         ChatTypeInfo.BasicGroup(
                             memberCount = group.memberCount,
@@ -105,8 +107,9 @@ class ChatViewModel @Inject constructor(
                     val group = groupService.superGroups.value[type.groupId]
                     canSendTextMessages =
                         chat.permissions.canSendBasicMessages ||
-                                group?.memberStatus is GroupMemberStatus.Creator ||
-                                (group?.memberStatus is GroupMemberStatus.Admin && group.memberStatus.canPostMessages)
+                        group?.memberStatus is GroupMemberStatus.Creator ||
+                        (group?.memberStatus is GroupMemberStatus.Admin &&
+                        (group.memberStatus as GroupMemberStatus.Admin).canPostMessages)
                     if(group != null) {
                         ChatTypeInfo.SuperGroup(
                             memberCount = group.memberCount,
@@ -141,12 +144,13 @@ class ChatViewModel @Inject constructor(
                 else -> null
             }
             var draftMessageText = ""
+            val draftMsg = chat.draftMessage
             if(
-                chat.draftMessage != null &&
-                chat.draftMessage.content is DraftMessageContent.Text &&
-                !chat.draftMessage.content.clearDraft
+                draftMsg != null &&
+                draftMsg.content is DraftMessageContent.Text &&
+                !(draftMsg.content as DraftMessageContent.Text).clearDraft
             ) {
-                draftMessageText = chat.draftMessage.content.text
+                draftMessageText = (draftMsg.content as DraftMessageContent.Text).text
             }
             ChatUiState(
                 id = chat.id,
@@ -190,23 +194,26 @@ class ChatViewModel @Inject constructor(
                             if(chat?.type is ChatType.Private || chat?.type is ChatType.Secret) {
                                 newData = null
                             }
-                            if(msg.sender is MessageSender.Chat && msg.sender.id == msg.chatId) {
+                            if(
+                                msg.sender is MessageSender.Chat &&
+                                (msg.sender as MessageSender.Chat).id == msg.chatId
+                            ) {
                                 newData = null
                             }
                             newData
                         }
                         .stateIn(CoroutineScope(Dispatchers.IO))
-                    val msgContent = when(msg.content) {
+                    val msgContent = when(val cnt = msg.content) {
                         is MessageContent.Photo -> {
-                            val photoSize = getPhotoBySizes(msg.content.sizes)
+                            val photoSize = getPhotoBySizes(cnt.sizes)
                             var width = 150
                             var heigh = 150
                             var content: MediaContent? = null
-                            if(msg.content.miniThumbnail != null) {
+                            if(cnt.miniThumbnail != null) {
                                 val bitmap = BitmapFactory.decodeByteArray(
-                                    msg.content.miniThumbnail,
+                                    cnt.miniThumbnail,
                                     0,
-                                    msg.content.miniThumbnail.size
+                                    cnt.miniThumbnail?.size ?: 0
                                 ).asImageBitmap()
                                 content = MediaContent.Thumbnail(
                                     data = bitmap,
@@ -221,8 +228,8 @@ class ChatViewModel @Inject constructor(
                                         onFile = { file, msg ->
                                             var newMsg = msg
                                             if(msg.content is MessageContent.Photo) {
-                                                val content = msg.content.copy(
-                                                    sizes = msg.content.sizes.map { size ->
+                                                val content = cnt.copy(
+                                                    sizes = cnt.sizes.map { size ->
                                                         if(size.type == photoSize.type) size.copy(file = file) else size
                                                     }
                                                 )
@@ -246,7 +253,7 @@ class ChatViewModel @Inject constructor(
                             }
                             MessageContentInfo.Photo(
                                 content = content,
-                                caption = msg.content.caption.ifBlank { null },
+                                caption = cnt.caption.ifBlank { null },
                                 width = width,
                                 height = heigh
                             ) 
@@ -294,7 +301,7 @@ class ChatViewModel @Inject constructor(
         messageService.setDraftMessage(
             chatId,
             DraftMessage(
-                content = DraftMessageContent.Text(draft,false),
+                content = DraftMessageContent.Text(draft, false),
                 date = LocalDateTime.now()
             )
         )

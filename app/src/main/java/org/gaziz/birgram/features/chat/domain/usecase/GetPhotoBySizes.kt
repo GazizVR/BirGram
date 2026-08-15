@@ -1,6 +1,6 @@
 package org.gaziz.birgram.features.chat.domain.usecase
 
-import org.gaziz.birgram.core.telegram.api.model.media.PhotoSize
+import org.gaziz.telegram.api.model.media.PhotoSize
 import javax.inject.Inject
 
 class GetPhotoBySizes @Inject constructor() {

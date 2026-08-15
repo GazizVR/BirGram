@@ -2,11 +2,11 @@ package org.gaziz.birgram.features.chat.ui.mapper
 
 import android.graphics.BitmapFactory
 import androidx.compose.ui.graphics.asImageBitmap
-import org.gaziz.birgram.core.telegram.api.model.StickerFormat
-import org.gaziz.birgram.core.telegram.api.model.message.MessageContent
 import org.gaziz.birgram.features.chat.ui.model.MediaContent
 import org.gaziz.birgram.features.chat.ui.model.MessageContentInfo
 import org.gaziz.birgram.features.chat.ui.model.StickerContent
+import org.gaziz.telegram.api.model.StickerFormat
+import org.gaziz.telegram.api.model.message.MessageContent
 import java.io.File
 
 fun MessageContent.Sticker.toCnt(
@@ -39,8 +39,9 @@ fun MessageContent.toInfo(
         }
         is MessageContent.AnimatedEmoji -> {
             var content: StickerContent? = null
-            if(this.animation != null) {
-                content = this.animation.toCnt(downloadMedia)
+            val animation = this.animation
+            if(animation != null) {
+                content = animation.toCnt(downloadMedia)
             }
             MessageContentInfo.AnimatedEmoji(
                 emoji = this.emoji,
@@ -54,11 +55,12 @@ fun MessageContent.toInfo(
                 }
             }
             var content: MediaContent = MediaContent.PlaceHolder(downloadAnimation)
-            if(this.miniThumbnail != null) {
+            val miniThumbnail = this.miniThumbnail
+            if(miniThumbnail != null) {
                 val bitmap = BitmapFactory.decodeByteArray(
-                    this.miniThumbnail,
+                    miniThumbnail,
                     0,
-                    this.miniThumbnail.size
+                    miniThumbnail.size
                 ).asImageBitmap()
                 content = MediaContent.Thumbnail(
                     data = bitmap,

@@ -1,6 +1,6 @@
 package org.gaziz.birgram.features.chat.domain.usecase
 
-import org.gaziz.birgram.core.telegram.api.MessageService
+import org.gaziz.telegram.api.MessageService
 import javax.inject.Inject
 
 class LoadChatMessages @Inject constructor(
