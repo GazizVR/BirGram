@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.gaziz.birgram.BuildConfig
 import org.gaziz.telegram.api.AuthService
 import org.gaziz.telegram.api.usecase.InitClient
 import javax.inject.Inject
@@ -33,6 +34,7 @@ class SplashViewModel @Inject constructor(
         viewModelScope.launch {
             authService.setParameters(
                 dbPath,
+                BuildConfig.VERSION_NAME,
                 onErr
             )
         }

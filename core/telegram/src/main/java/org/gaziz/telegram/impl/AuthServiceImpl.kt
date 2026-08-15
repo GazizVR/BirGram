@@ -50,6 +50,7 @@ class AuthServiceImpl @Inject constructor(
 
     override fun setParameters(
         databasePath: String,
+        appVersion: String,
         onError: (String) -> Unit
     ) {
         val parameters = TdApi.SetTdlibParameters().apply {
@@ -63,7 +64,7 @@ class AuthServiceImpl @Inject constructor(
             useSecretChats = false
             systemLanguageCode = "${Locale.getDefault().language}-${Locale.getDefault().country}"
             deviceModel = Build.MODEL
-            applicationVersion = "1.0"
+            applicationVersion = appVersion
         }
         manager.sendRequest(
             query = parameters,

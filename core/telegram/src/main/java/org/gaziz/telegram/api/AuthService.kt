@@ -13,6 +13,7 @@ interface AuthService {
 
     fun setParameters(
         databasePath: String,
+        appVersion: String,
         onError: (String) -> Unit
     )
     fun setPhoneNumber(phoneNumber: String)
