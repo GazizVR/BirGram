@@ -29,6 +29,9 @@ sealed interface MessageContent {
         val caption: String
     ): MessageContent
     data class Video(
+        val file: FileData,
+        val width: Int,
+        val height: Int,
         val miniThumbnail: ByteArray?,
         val caption: String
     ): MessageContent

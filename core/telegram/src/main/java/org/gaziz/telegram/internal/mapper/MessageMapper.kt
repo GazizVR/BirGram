@@ -110,7 +110,10 @@ fun TdApi.MessageContent.toMessageCnt(): MessageContent {
 
         is TdApi.MessageVideo -> MessageContent.Video(
             miniThumbnail = cnt.video.minithumbnail?.data,
-            caption = cnt.caption.text
+            caption = cnt.caption.text,
+            file = cnt.video.video.toFileData(),
+            width = cnt.video.width,
+            height = cnt.video.height
         )
 
         is TdApi.MessageAudio -> MessageContent.Audio(
