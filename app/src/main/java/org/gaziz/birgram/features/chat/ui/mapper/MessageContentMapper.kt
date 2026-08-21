@@ -99,6 +99,33 @@ fun MessageContent.toInfo(
                 }
             )
         }
+        is MessageContent.Video -> {
+            val content: MediaContent = when {
+                this.file.path.isNotBlank() -> {
+                    MediaContent.Video(
+                        File(this.file.path)
+                    )
+                }
+                this.miniThumbnail != null -> {
+                    val bitmap = BitmapFactory.decodeByteArray(
+                        this.miniThumbnail,
+                        0,
+                        this.miniThumbnail?.size ?: 0
+                    ).asImageBitmap()
+                    MediaContent.Thumbnail(
+                        data = bitmap,
+                        downloadMedia = { downloadMedia(this.file.id) }
+                    )
+                }
+                else -> MediaContent.PlaceHolder { downloadMedia(this.file.id) }
+            }
+            MessageContentInfo.Video(
+                content = content,
+                caption = this.caption.ifBlank { null },
+                width = this.width,
+                height = this.height
+            )
+        }
         else -> MessageContentInfo.UnSupported
     }
 }

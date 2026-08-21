@@ -146,6 +146,22 @@ fun ContentPreview(
                 date = date,
             )
         }
+        is MessageContentInfo.Video -> {
+            val mediaId by viewModel.mediaId.collectAsState()
+            MediaPreview(
+                content = content.content,
+                caption = content.caption,
+                width = content.width,
+                height = content.height,
+                containerColor = containerColor,
+                date = date,
+                fontSize = dateFontSize,
+                player = viewModel.player,
+                isCurrentMedia = mediaId == msgId,
+                onVideoClick = onVideoClick,
+                overlay = {}
+            )
+        }
         is MessageContentInfo.UnSupported -> {
             val unsupportedMessage = stringResource(R.string.unsupported_message)
             TextPreview(

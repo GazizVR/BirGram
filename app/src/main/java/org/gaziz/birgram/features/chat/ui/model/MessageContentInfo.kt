@@ -55,5 +55,11 @@ sealed interface MessageContentInfo {
         val size: String?,
         val type: String?,
     ): MessageContentInfo
+    data class Video(
+        val content: MediaContent?,
+        val caption: String?,
+        val width: Int,
+        val height: Int
+    ): MessageContentInfo
     object UnSupported: MessageContentInfo
 }
