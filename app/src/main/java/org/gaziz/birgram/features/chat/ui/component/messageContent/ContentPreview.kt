@@ -159,6 +159,7 @@ fun ContentPreview(
                 player = viewModel.player,
                 isCurrentMedia = mediaId == msgId,
                 onVideoClick = onVideoClick,
+                onDispose = viewModel::removePlayerMedia,
                 overlay = {}
             )
         }

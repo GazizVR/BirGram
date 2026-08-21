@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -57,9 +58,13 @@ fun MediaPreview(
     player: Player? = null,
     isCurrentMedia: Boolean = false,
     onVideoClick: (File) -> Unit = {},
+    onDispose: () -> Unit = {},
 
     overlay: @Composable () -> Unit = {},
 ) {
+    DisposableEffect(Unit) {
+        onDispose(onDispose)
+    }
     val shape = RoundedCornerShape(18.dp)
     Box(
         modifier = Modifier

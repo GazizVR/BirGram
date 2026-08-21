@@ -345,6 +345,13 @@ class ChatViewModel @Inject constructor(
             prepare()
         }
     }
+    fun removePlayerMedia(){
+        player?.apply {
+            stop()
+            clearMediaItems()
+            _mediaId.update { null }
+        }
+    }
     fun releasePlayer() {
         player?.release()
         _mediaId.update { null }
