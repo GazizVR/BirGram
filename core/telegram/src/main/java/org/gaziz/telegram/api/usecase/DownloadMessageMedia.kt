@@ -39,6 +39,9 @@ class DownloadMessageMedia @Inject constructor(
                             is MessageContent.Document -> {
                                 msg.content.copy(file = file)
                             }
+                            is MessageContent.Video -> {
+                                msg.content.copy(file = file)
+                            }
                             else -> return@updateMessages old
                         }
                         val newMsg = msg.copy(content = content)
