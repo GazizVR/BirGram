@@ -176,7 +176,12 @@ fun ContentPreview(
                             contentAlignment = Alignment.Center
                         ){
                             Text(
-                                text = content.duration.toDurationStr(),
+                                text = if(mediaId == msgId) {
+                                    val mediaPosition by viewModel.mediaPosition.collectAsState()
+                                    mediaPosition.toDurationStr()
+                                } else {
+                                    content.duration.toDurationStr()
+                                },
                                 modifier = Modifier.padding(
                                     vertical = 2.dp,
                                     horizontal = 4.dp

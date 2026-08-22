@@ -12,6 +12,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.ui.model.ChatTypeInfo
 import org.gaziz.birgram.core.ui.usecase.GetChatAvatar
 import org.gaziz.birgram.core.ui.usecase.GetMessageSenderInfo
@@ -318,6 +320,8 @@ class ChatViewModel @Inject constructor(
         _mediaId.update { msgId }
     }
     var player: ExoPlayer? = null
+    private val _mediaPosition = MutableStateFlow(0)
+    val mediaPosition = _mediaPosition.asStateFlow()
     fun createPlayer(
         context: Context
     ) {
@@ -329,9 +333,19 @@ class ChatViewModel @Inject constructor(
                 addListener(
                     object : Player.Listener {
                         override fun onIsPlayingChanged(isPlaying: Boolean) {
-                            if (!isPlaying && mediaItemCount > 0) {
-                                seekTo(0L)
-                                play()
+                            if(mediaItemCount > 0) {
+                                if (!isPlaying) {
+                                    seekTo(0L)
+                                    play()
+                                } else {
+                                    viewModelScope.launch {
+                                        _mediaPosition.update { (duration/1000).toInt() }
+                                        while(mediaPosition.value > 0){
+                                            delay(1000)
+                                            _mediaPosition.update { it-1 }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
