@@ -25,6 +25,7 @@ import org.gaziz.birgram.R
 import org.gaziz.birgram.core.ui.model.MessageSenderInfo
 import org.gaziz.birgram.features.chat.ui.ChatViewModel
 import org.gaziz.birgram.features.chat.ui.mapper.getUriForFile
+import org.gaziz.birgram.features.chat.ui.mapper.toDurationStr
 import org.gaziz.birgram.features.chat.ui.model.MessageContentInfo
 import java.io.File
 
@@ -175,7 +176,7 @@ fun ContentPreview(
                             contentAlignment = Alignment.Center
                         ){
                             Text(
-                                text = "0:38",
+                                text = content.duration.toDurationStr(),
                                 modifier = Modifier.padding(
                                     vertical = 2.dp,
                                     horizontal = 4.dp
