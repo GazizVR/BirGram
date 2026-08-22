@@ -123,7 +123,8 @@ fun MessageContent.toInfo(
                 content = content,
                 caption = this.caption.ifBlank { null },
                 width = this.width,
-                height = this.height
+                height = this.height,
+                duration = this.duration
             )
         }
         else -> MessageContentInfo.UnSupported

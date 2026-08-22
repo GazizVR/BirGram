@@ -160,7 +160,33 @@ fun ContentPreview(
                 isCurrentMedia = mediaId == msgId,
                 onVideoClick = onVideoClick,
                 onDispose = viewModel::removePlayerMedia,
-                overlay = {}
+                overlay = {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.TopStart
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .background(
+                                    MaterialTheme.colorScheme.background.copy(0.5f),
+                                    RoundedCornerShape(20.dp)
+                                ),
+                            contentAlignment = Alignment.Center
+                        ){
+                            Text(
+                                text = "0:38",
+                                modifier = Modifier.padding(
+                                    vertical = 2.dp,
+                                    horizontal = 4.dp
+                                ),
+                                fontSize = fontSize,
+                                lineHeight = fontSize,
+                                maxLines = 1
+                            )
+                        }
+                    }
+                }
             )
         }
         is MessageContentInfo.UnSupported -> {
