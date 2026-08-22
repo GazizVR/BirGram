@@ -30,10 +30,11 @@ sealed interface MessageContent {
     ): MessageContent
     data class Video(
         val file: FileData,
+        val caption: String,
+        val miniThumbnail: ByteArray?,
         val width: Int,
         val height: Int,
-        val miniThumbnail: ByteArray?,
-        val caption: String
+        val duration: Int
     ): MessageContent
     data class Audio(val caption: String): MessageContent
     data class Document(

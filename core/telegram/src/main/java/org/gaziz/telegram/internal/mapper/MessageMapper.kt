@@ -113,7 +113,8 @@ fun TdApi.MessageContent.toMessageCnt(): MessageContent {
             caption = cnt.caption.text,
             file = cnt.video.video.toFileData(),
             width = cnt.video.width,
-            height = cnt.video.height
+            height = cnt.video.height,
+            duration = cnt.video.duration
         )
 
         is TdApi.MessageAudio -> MessageContent.Audio(
