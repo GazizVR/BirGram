@@ -64,6 +64,7 @@ dependencies {
     implementation(project(":core:navigation"))
     implementation(project(":feature:chat"))
     implementation(project(":feature:chat-list"))
+    implementation(project(":feature:search-chats"))
     //Hilt
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.android)

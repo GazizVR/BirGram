@@ -18,8 +18,8 @@ import org.gaziz.birgram.core.navigation.SplashRoute
 import org.gaziz.birgram.feature.chat.ui.ChatScreen
 import org.gaziz.birgram.feature.chatlist.ui.navigation.chatListGraph
 import org.gaziz.birgram.features.auth.ui.AuthScreen
-import org.gaziz.birgram.features.searchChats.ui.SearchChatsScreen
 import org.gaziz.birgram.features.splash.ui.SplashScreen
+import org.gaziz.searchchats.ui.SearchChatsScreen
 
 @Composable
 fun Navigation(
