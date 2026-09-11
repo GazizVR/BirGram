@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.navigation
+package org.gaziz.birgram
 
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
