@@ -62,6 +62,7 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:datastore"))
     implementation(project(":feature:chat"))
+    implementation(project(":feature:chat-list"))
     //Hilt
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.android)
