@@ -6,6 +6,9 @@ import android.net.Uri
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.exoplayer.ExoPlayer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,11 +21,15 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.gaziz.birgram.core.ui.model.ChatTypeInfo
+import org.gaziz.birgram.core.ui.usecase.GetChatAvatar
+import org.gaziz.birgram.core.ui.usecase.GetMessageSenderInfo
 import org.gaziz.birgram.feature.chat.domain.usecase.GetChatById
 import org.gaziz.birgram.feature.chat.domain.usecase.GetChatMessages
 import org.gaziz.birgram.feature.chat.domain.usecase.GetPhotoBySizes
 import org.gaziz.birgram.feature.chat.domain.usecase.LoadChatMessages
 import org.gaziz.birgram.feature.chat.ui.mapper.formatMonthDay
+import org.gaziz.birgram.feature.chat.ui.mapper.toInfo
 import org.gaziz.birgram.feature.chat.ui.mapper.toTimeString
 import org.gaziz.birgram.feature.chat.ui.model.ChatUiState
 import org.gaziz.birgram.feature.chat.ui.model.MediaContent

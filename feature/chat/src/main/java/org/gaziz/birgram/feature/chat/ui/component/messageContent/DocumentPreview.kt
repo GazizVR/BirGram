@@ -37,8 +37,8 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.ui.icon.arrowDownwardAlt
 import org.gaziz.birgram.core.ui.icon.fileOpen
-import org.gaziz.birgram.features.chat.ui.mapper.getUriForFile
-import org.gaziz.birgram.features.chat.ui.model.MessageContentInfo
+import org.gaziz.birgram.feature.chat.ui.mapper.getUriForFile
+import org.gaziz.birgram.feature.chat.ui.model.MessageContentInfo
 
 @Composable
 fun DocumentPreview(

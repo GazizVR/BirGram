@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.gaziz.birgram.core.ui.component.ChatAvatar
 import org.gaziz.birgram.feature.chat.ui.component.messageContent.ContentPreview
 import org.gaziz.birgram.feature.chat.ui.model.MessageUiState
 
@@ -50,7 +51,7 @@ fun MessageCard(
                 if(message.sender.avatar != null) {
                     ChatAvatar(
                         modifier = Modifier.size(spacerSize),
-                        avatar = message.sender.avatar,
+                        avatar = message.sender.avatar!!,
                         placeHolderFontSize = 10.sp,
                     )
                 } else {

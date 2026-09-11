@@ -33,9 +33,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.gaziz.birgram.R
 import org.gaziz.birgram.core.ui.icon.send
 import org.gaziz.birgram.core.ui.theme.BirGramTheme
+import org.gaziz.birgram.feature.chat.R
 
 @Composable
 fun MessageInputBar(

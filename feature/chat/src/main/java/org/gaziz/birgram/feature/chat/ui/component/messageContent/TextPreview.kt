@@ -43,7 +43,7 @@ fun TextPreview(
             if(senderInfo != null) {
                 if(senderInfo.name != null) {
                     Text(
-                        text = senderInfo.name,
+                        text = senderInfo.name!!,
                         color = senderInfo.accentColor,
                         fontSize = fontSize,
                         lineHeight = fontSize

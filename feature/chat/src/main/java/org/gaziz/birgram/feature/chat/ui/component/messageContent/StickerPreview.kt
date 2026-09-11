@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.compose.PlayerSurface
 import androidx.media3.ui.compose.SURFACE_TYPE_TEXTURE_VIEW
 import coil3.compose.AsyncImage
@@ -31,8 +32,8 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
-import org.gaziz.birgram.features.chat.ui.component.PlaybackButton
-import org.gaziz.birgram.features.chat.ui.model.StickerContent
+import org.gaziz.birgram.feature.chat.ui.component.PlaybackButton
+import org.gaziz.birgram.feature.chat.ui.model.StickerContent
 import java.io.File
 
 @Composable
@@ -79,6 +80,7 @@ fun StickerPreview(
                     isCurrentMedia &&
                     player != null
                 ) {
+                    @UnstableApi
                     PlayerSurface(
                         player = player,
                         modifier = Modifier.fillMaxSize(),
