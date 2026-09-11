@@ -4,7 +4,6 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.gaziz.birgram.core.datastore.UserPreferencesRepository
 
 @Module
 @InstallIn(SingletonComponent::class)

@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp") version "2.3.7"
     id("com.google.dagger.hilt.android")
-    kotlin("plugin.serialization") version "2.3.21"
 }
 
 android {
@@ -49,7 +48,6 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.navigation.compose)
     //Junit and tests
     testImplementation(libs.junit)
@@ -63,8 +61,6 @@ dependencies {
     implementation(project(":core:telegram"))
     implementation(project(":feature:chat"))
     implementation(project(":core:ui"))
-    //DataStore
-    implementation(libs.androidx.datastore.preferences)
     //Hilt
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.android)
