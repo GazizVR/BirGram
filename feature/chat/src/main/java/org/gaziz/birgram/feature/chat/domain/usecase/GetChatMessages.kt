@@ -1,0 +1,26 @@
+package org.gaziz.birgram.feature.chat.domain.usecase
+
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import org.gaziz.telegram.api.MessageService
+import org.gaziz.telegram.api.model.message.Message
+import java.time.LocalDate
+import javax.inject.Inject
+
+class GetChatMessages @Inject constructor(
+    private val messageService: MessageService
+) {
+    operator fun invoke(
+        chatId: Long
+    ): Flow<Map<LocalDate,List<Message>>> {
+        return messageService.messages.map { map ->
+            map.values
+                .mapNotNull { msg ->
+                    if (msg.chatId != chatId) return@mapNotNull null
+                    msg
+                }
+                .sortedByDescending { it.date }
+                .groupBy { it.date.toLocalDate() }
+        }
+    }
+}

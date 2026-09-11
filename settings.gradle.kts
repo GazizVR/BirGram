@@ -27,3 +27,5 @@ rootProject.name = "BirGram"
 include(":app")
 include(":core:telegram")
 include(":core:tdlib")
+include(":feature:chat")
+include(":core:ui")

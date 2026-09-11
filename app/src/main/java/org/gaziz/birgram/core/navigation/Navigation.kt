@@ -11,10 +11,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import org.gaziz.birgram.features.auth.ui.AuthScreen
-import org.gaziz.birgram.features.chat.ui.ChatScreen
 import org.gaziz.birgram.features.chatList.ui.navigation.chatListGraph
 import org.gaziz.birgram.features.searchChats.ui.SearchChatsScreen
 import org.gaziz.birgram.features.splash.ui.SplashScreen
+import org.gaziz.birgram.feature.chat.ui.ChatScreen
 
 @Composable
 fun Navigation(
