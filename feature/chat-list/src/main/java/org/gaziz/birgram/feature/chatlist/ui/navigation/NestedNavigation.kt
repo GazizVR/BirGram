@@ -14,8 +14,6 @@ import org.gaziz.birgram.core.navigation.ChatRoute
 import org.gaziz.birgram.core.navigation.SearchChatsRoute
 import org.gaziz.birgram.feature.chatlist.ui.screen.ArchiveScreen
 import org.gaziz.birgram.feature.chatlist.ui.screen.MainScreen
-import org.gaziz.birgram.features.chatList.ui.screen.ArchiveScreen
-import org.gaziz.birgram.features.chatList.ui.screen.MainScreen
 
 fun NavGraphBuilder.chatListGraph(
     navController: NavController

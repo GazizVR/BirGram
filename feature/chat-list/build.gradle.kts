@@ -42,6 +42,7 @@ dependencies {
     implementation(project(":core:telegram"))
     implementation(project(":core:ui"))
     implementation(project(":core:datastore"))
+    implementation(project(":core:navigation"))
     //Hilt
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.android)
