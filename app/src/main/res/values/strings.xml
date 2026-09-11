@@ -56,30 +56,8 @@
 
     <string name="empty_search">Nothing to show</string>
 
-    <string-array name="chat_list_menu_cnt">
-        <item>Night Mode</item>
-        <item>Log out</item>
-    </string-array>
-
-    <string-array name="log_out_cnt">
-        <item>Log Out</item>
-        <item>Are you sure you want to log out?</item>
-        <item>Cancel</item>
-    </string-array>
 
     <string name="unsupported_message">Unsupported message</string>
 
-    <string name="archived_chats">Archived chats</string>
     <string name="deleted_account">Deleted Account</string>
-    <string name="draft_message">Draft</string>
-
-    <string-array name="message_contents">
-        <item>Sticker</item>
-        <item>Photo</item>
-        <item>Video</item>
-        <item>Audio</item>
-        <item>Document</item>
-        <item>Voice message</item>
-        <item>Video message</item>
-    </string-array>
 </resources>
