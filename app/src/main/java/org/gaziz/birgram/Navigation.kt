@@ -10,6 +10,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import org.gaziz.birgram.core.navigation.AuthRoute
+import org.gaziz.birgram.core.navigation.ChatListRoute
+import org.gaziz.birgram.core.navigation.ChatRoute
+import org.gaziz.birgram.core.navigation.SearchChatsRoute
+import org.gaziz.birgram.core.navigation.SplashRoute
 import org.gaziz.birgram.feature.chat.ui.ChatScreen
 import org.gaziz.birgram.feature.chatlist.ui.navigation.chatListGraph
 import org.gaziz.birgram.features.auth.ui.AuthScreen

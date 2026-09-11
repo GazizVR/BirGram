@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.navigation.compose)
     //Junit and tests
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -60,6 +61,7 @@ dependencies {
     implementation(project(":core:telegram"))
     implementation(project(":core:ui"))
     implementation(project(":core:datastore"))
+    implementation(project(":core:navigation"))
     implementation(project(":feature:chat"))
     implementation(project(":feature:chat-list"))
     //Hilt
