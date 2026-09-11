@@ -52,11 +52,6 @@
 
     <string name="suffix_waiting">in</string>
 
-    <string name="search_placeholder">Search…</string>
-
-    <string name="empty_search">Nothing to show</string>
-
-
     <string name="unsupported_message">Unsupported message</string>
 
     <string name="deleted_account">Deleted Account</string>
