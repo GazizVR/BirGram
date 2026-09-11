@@ -66,17 +66,13 @@ class ChatViewModel @Inject constructor(
     private val getPhotoBySizes: GetPhotoBySizes
 ): ViewModel() {
     private var isLoading = false
-    fun openChat(
-        chatId: Long,
-    ) {
+    fun openChat(chatId: Long) {
         chatService.openChat(chatId) {
             isLoading = true
             loadChatMessages(chatId, onResp = { isLoading = false } )
         }
     }
-    fun closeChat(
-        chatId: Long,
-    ) {
+    fun closeChat(chatId: Long) {
         chatService.closeChat(chatId)
     }
     val chat: (Long) -> StateFlow<ChatUiState?> = {
@@ -324,9 +320,7 @@ class ChatViewModel @Inject constructor(
     val mediaPosition = _mediaPosition.asStateFlow()
     private var _isMediaPlaying = MutableStateFlow(false)
     val isMediaPlaying = _isMediaPlaying.asStateFlow()
-    fun createPlayer(
-        context: Context
-    ) {
+    fun createPlayer(context: Context) {
         player = ExoPlayer
             .Builder(context)
             .build()

@@ -38,16 +38,19 @@ fun ChatScreen(
 ) {
     val viewModel = hiltViewModel<ChatViewModel>()
     val context = LocalContext.current
+    val messages by viewModel.messages(chatId).collectAsState()
     DisposableEffect(Unit) {
         viewModel.createPlayer(context)
         viewModel.openChat(chatId)
+        messages.values.lastOrNull()?.lastOrNull()?.let { msg ->
+            viewModel.loadMessages(chatId,msg.id)
+        }
         onDispose {
             viewModel.releasePlayer()
             viewModel.closeChat(chatId)
         }
     }
     val chat by viewModel.chat(chatId).collectAsState()
-    val messages by viewModel.messages(chatId).collectAsState()
     val containerColor = MaterialTheme.colorScheme.surfaceContainer
     val listState = rememberLazyListState()
     LaunchedEffect(Unit) {
@@ -58,7 +61,7 @@ fun ChatScreen(
             .collect { (lastItem,total) ->
                 if(lastItem != null) {
                     if(total-lastItem <= 10) {
-                        messages.values.lastOrNull()?.last()?.let { msg ->
+                        messages.values.lastOrNull()?.lastOrNull()?.let { msg ->
                             viewModel.loadMessages(chatId,msg.id)
                         }
                     }
