@@ -24,7 +24,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import org.gaziz.birgram.feature.chat.R
 import org.gaziz.birgram.feature.chat.ui.component.ChatTopBar
 import org.gaziz.birgram.feature.chat.ui.component.MessageCard
@@ -69,6 +71,12 @@ fun ChatScreen(
                     }
                 }
             }
+    }
+    LaunchedEffect(chatId) {
+        viewModel.messages(chatId)
+            .map { it.values.lastOrNull()?.size ?: 0 }
+            .debounce(100)
+            .collect { listState.animateScrollToItem(0) }
     }
     Scaffold(
         modifier = Modifier
