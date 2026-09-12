@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -56,12 +55,11 @@ fun MessageInputBar(
     }
     val scrollState = rememberScrollState()
     val window = LocalWindowInfo.current
-    val height = window.containerDpSize.height/4
+    val height = window.containerDpSize.height/5
     Box(
         modifier = modifier
             .fillMaxWidth()
             .background(containerColor)
-            .navigationBarsPadding()
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically

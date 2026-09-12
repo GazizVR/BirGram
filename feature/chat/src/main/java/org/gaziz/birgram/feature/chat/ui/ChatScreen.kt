@@ -2,6 +2,7 @@ package org.gaziz.birgram.feature.chat.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -102,42 +103,48 @@ fun ChatScreen(
         }
     ) { paddingValues ->
         val fontSize = 6.sp
-        if (messages.isNotEmpty()) {
-            LazyColumn(
-                state = listState,
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .background(containerColor),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Bottom,
-                reverseLayout = true
-            ) {
-                messages.forEach { (date, messages) ->
-                    items(
-                        items = messages,
-                        key = { it.id }
-                    ) { msg ->
-                        MessageCard(
-                            message = msg,
-                            fontSize = 6.sp
-                        )
-                    }
-                    item {
-                        TextBox(
-                            text = date,
-                            modifier = Modifier.fillMaxSize().background(containerColor),
-                            fontSize = fontSize
-                        )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            if (messages.isNotEmpty()) {
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(containerColor),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Bottom,
+                    reverseLayout = true
+                ) {
+                    messages.forEach { (date, messages) ->
+                        items(
+                            items = messages,
+                            key = { it.id }
+                        ) { msg ->
+                            MessageCard(
+                                message = msg,
+                                fontSize = 6.sp
+                            )
+                        }
+                        item {
+                            TextBox(
+                                text = date,
+                                modifier = Modifier.fillMaxSize().background(containerColor),
+                                fontSize = fontSize
+                            )
+                        }
                     }
                 }
+            } else {
+                val noMessagesYet = stringResource(R.string.no_messages_yet)
+                TextBox(
+                    text = noMessagesYet,
+                    modifier = Modifier.fillMaxSize().background(containerColor),
+                    fontSize = fontSize
+                )
             }
-        } else {
-            val noMessagesYet = stringResource(R.string.no_messages_yet)
-            TextBox(
-                text = noMessagesYet,
-                modifier = Modifier.fillMaxSize().background(containerColor),
-                fontSize = fontSize
-            )
         }
     }
 }
