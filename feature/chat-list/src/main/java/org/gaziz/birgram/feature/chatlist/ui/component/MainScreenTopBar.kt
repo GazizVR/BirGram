@@ -12,9 +12,12 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import org.gaziz.birgram.core.ui.icon.menu
 import org.gaziz.birgram.core.ui.icon.search
@@ -24,6 +27,11 @@ fun MainScreenTopBar(
     navigateToSearch: () -> Unit,
     onMenu: () -> Unit
 ) {
+    val context = LocalContext.current
+    val label = remember(context) {
+        val pm = context.packageManager
+        context.applicationInfo.loadLabel(pm).toString()
+    }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -42,6 +50,10 @@ fun MainScreenTopBar(
                 modifier = Modifier.size(26.dp)
             )
         }
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall
+        )
         IconButton(
             onClick = { navigateToSearch() },
         ) {
