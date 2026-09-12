@@ -84,6 +84,7 @@ fun ChatScreen(
                 }
             }
     }
+    var msgSize = 0
     LaunchedEffect(chatId) {
         viewModel.messages(chatId)
             .map {
@@ -92,13 +93,12 @@ fun ChatScreen(
                 val second = data?.firstOrNull()?.isOutgoing ?: false
                 first to second
             }
+            .distinctUntilChanged()
             .debounce(100)
-            .collect { ( _,isOutgoing) ->
-                val id = listState.firstVisibleItemIndex
-                if(isOutgoing) {
-                    listState.animateScrollToItem(0)
-                } else {
-                    if(id < 3) {
+            .collect { ( size,isOutgoing) ->
+                if(msgSize < size) {
+                    if(isOutgoing || listState.firstVisibleItemIndex < 3) {
+                        msgSize = size
                         listState.animateScrollToItem(0)
                     }
                 }
