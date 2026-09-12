@@ -74,9 +74,23 @@ fun ChatScreen(
     }
     LaunchedEffect(chatId) {
         viewModel.messages(chatId)
-            .map { it.values.lastOrNull()?.size ?: 0 }
+            .map {
+                val data = it.values.lastOrNull()
+                val first = data?.size ?: 0
+                val second = data?.firstOrNull()?.isOutgoing ?: false
+                first to second
+            }
             .debounce(100)
-            .collect { listState.animateScrollToItem(0) }
+            .collect { ( _,isOutgoing) ->
+                val id = listState.firstVisibleItemIndex
+                if(isOutgoing) {
+                    listState.animateScrollToItem(0)
+                } else {
+                    if(id < 3) {
+                        listState.animateScrollToItem(0)
+                    }
+                }
+            }
     }
     Scaffold(
         modifier = Modifier
