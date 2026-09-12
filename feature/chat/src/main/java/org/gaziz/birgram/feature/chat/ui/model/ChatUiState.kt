@@ -11,4 +11,5 @@ data class ChatUiState(
     val typeInfo: ChatTypeInfo?,
     val draftText: String = "",
     val canSendTextMessages: Boolean = false,
+    val unreadCount: Int? = null
 )

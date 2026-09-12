@@ -1,5 +1,9 @@
 package org.gaziz.birgram.feature.chat.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,6 +20,10 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,10 +35,12 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import org.gaziz.birgram.feature.chat.R
 import org.gaziz.birgram.feature.chat.ui.component.ChatTopBar
 import org.gaziz.birgram.feature.chat.ui.component.MessageCard
 import org.gaziz.birgram.feature.chat.ui.component.MessageInputBar
+import org.gaziz.birgram.feature.chat.ui.component.ScrollDownButton
 import org.gaziz.birgram.feature.chat.ui.component.TextBox
 import org.gaziz.birgram.feature.chat.ui.model.AvatarUiState
 import org.gaziz.birgram.feature.chat.ui.model.TitleUiState
@@ -57,12 +67,14 @@ fun ChatScreen(
     val chat by viewModel.chat(chatId).collectAsState()
     val containerColor = MaterialTheme.colorScheme.surfaceContainer
     val listState = rememberLazyListState()
+    var isScrollDownButton by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         snapshotFlow {
             listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index to listState.layoutInfo.totalItemsCount
         }
             .distinctUntilChanged()
             .collect { (lastItem,total) ->
+                isScrollDownButton = listState.firstVisibleItemIndex > 0
                 if(lastItem != null) {
                     if(total-lastItem <= 10) {
                         messages.values.lastOrNull()?.lastOrNull()?.let { msg ->
@@ -168,6 +180,27 @@ fun ChatScreen(
                     modifier = Modifier.fillMaxSize().background(containerColor),
                     fontSize = fontSize
                 )
+            }
+            Box(
+                modifier = Modifier.fillMaxSize().padding(4.dp),
+                contentAlignment = Alignment.BottomEnd
+            ) {
+                AnimatedVisibility(
+                    visible = isScrollDownButton,
+                    enter = slideInVertically(tween()) { it },
+                    exit = slideOutVertically(tween()) { it }
+                ) {
+                    val scope = rememberCoroutineScope()
+                    ScrollDownButton(
+                        onClick = {
+                            scope.launch {
+                                listState.animateScrollToItem(0)
+                                isScrollDownButton = false
+                            }
+                        },
+                        unreadCount = chat?.unreadCount
+                    )
+                }
             }
         }
     }

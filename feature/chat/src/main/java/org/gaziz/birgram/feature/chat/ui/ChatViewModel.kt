@@ -157,6 +157,7 @@ class ChatViewModel @Inject constructor(
                 typeInfo = typeInfo,
                 draftText = draftMessageText,
                 canSendTextMessages = canSendTextMessages,
+                unreadCount = if(chat.unreadCount > 0) chat.unreadCount else null
             )
         }.stateIn(
             viewModelScope,

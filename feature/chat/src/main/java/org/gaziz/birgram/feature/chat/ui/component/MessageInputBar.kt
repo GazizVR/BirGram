@@ -119,9 +119,7 @@ fun MessageInputBar(
 @Preview
 @Composable
 fun MessageInputBarPreview() {
-BirGramTheme(
-    darkTheme = true
-    ) {
+    BirGramTheme(darkTheme = true) {
         MessageInputBar(
             modifier = Modifier.height(80.dp),
             defaultText = "",
