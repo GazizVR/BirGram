@@ -33,6 +33,7 @@ class UpdateDispatcher @Inject constructor(
 
             is TdApi.UpdateNewMessage -> messageUpdater.onNewUpdate(u)
             is TdApi.UpdateMessageSendSucceeded -> messageUpdater.onSendSucceedUpdate(u)
+            is TdApi.UpdateMessageSendFailed -> messageUpdater.onSendFailedUpdate(u)
 
             is TdApi.UpdateNewChat -> chatUpdater.onNewUpdate(u)
             is TdApi.UpdateChatTitle -> chatUpdater.onTitleUpdate(u)

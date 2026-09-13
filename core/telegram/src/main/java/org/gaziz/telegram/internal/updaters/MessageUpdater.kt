@@ -25,6 +25,12 @@ class MessageUpdater @Inject constructor(
         }
     }
 
+    fun onSendFailedUpdate(u: TdApi.UpdateMessageSendFailed) {
+        messageService.updateMessages { old ->
+            old + (u.oldMessageId to u.message.toMessage())
+        }
+    }
+
     fun onLoggingOut() {
         messageService.updateMessages { emptyMap() }
     }
