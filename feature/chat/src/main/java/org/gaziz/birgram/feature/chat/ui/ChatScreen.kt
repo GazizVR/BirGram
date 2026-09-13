@@ -2,6 +2,8 @@ package org.gaziz.birgram.feature.chat.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
@@ -68,19 +70,47 @@ fun ChatScreen(
     val chat by viewModel.chat(chatId).collectAsState()
     val containerColor = MaterialTheme.colorScheme.surfaceContainer
     val listState = rememberLazyListState()
-    var isScrollDownButton by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         snapshotFlow {
             listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index to listState.layoutInfo.totalItemsCount
         }
             .distinctUntilChanged()
             .collect { (lastItem,total) ->
-                isScrollDownButton = listState.firstVisibleItemIndex > 0
                 if(lastItem != null) {
                     if(total-lastItem <= 10) {
                         messages.values.lastOrNull()?.lastOrNull()?.let { msg ->
                             viewModel.loadMessages(chatId,msg.id)
                         }
+                    }
+                }
+            }
+    }
+    var isScrollDownButton by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        var previousIndex = listState.firstVisibleItemIndex
+        var previousOffset = listState.firstVisibleItemScrollOffset
+        snapshotFlow {
+            Triple(
+                listState.isScrollInProgress,
+                listState.firstVisibleItemIndex,
+                listState.firstVisibleItemScrollOffset
+            )
+        }
+            .distinctUntilChanged()
+            .collect { (isScroll,currentIndex,currentOffset) ->
+                if(listState.firstVisibleItemIndex == 0) {
+                    isScrollDownButton = false
+                } else {
+                    if(isScroll) {
+                        isScrollDownButton = when {
+                            currentIndex > previousIndex -> false
+                            currentIndex < previousIndex -> true
+                            currentOffset > previousOffset -> false
+                            currentOffset < previousOffset -> true
+                            else -> isScrollDownButton
+                        }
+                        previousIndex = currentIndex
+                        previousOffset = currentOffset
                     }
                 }
             }
@@ -98,6 +128,9 @@ fun ChatScreen(
             .debounce(100)
             .collect { (size,isOutgoing) ->
                 if(listSize < size) {
+                    if(!isOutgoing){
+                        isScrollDownButton = listState.firstVisibleItemIndex > 0
+                    }
                     if (isOutgoing || listState.firstVisibleItemIndex < 3) {
                         listSize = size
                         listState.animateScrollToItem(0)
@@ -183,13 +216,15 @@ fun ChatScreen(
                 )
             }
             Box(
-                modifier = Modifier.fillMaxSize().padding(4.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 8.dp, vertical = 12.dp),
                 contentAlignment = Alignment.BottomEnd
             ) {
                 AnimatedVisibility(
                     visible = isScrollDownButton,
-                    enter = slideInVertically(tween()) { it },
-                    exit = slideOutVertically(tween()) { it }
+                    enter = slideInVertically(tween()) { it } + scaleIn(),
+                    exit = slideOutVertically(tween()) { it } + scaleOut()
                 ) {
                     val scope = rememberCoroutineScope()
                     ScrollDownButton(
