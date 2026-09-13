@@ -20,7 +20,8 @@ class MessageUpdater @Inject constructor(
 
     fun onSendSucceedUpdate(u: TdApi.UpdateMessageSendSucceeded){
         messageService.updateMessages { old ->
-            old + (u.message.id to u.message.toMessage())
+            val new = old - u.oldMessageId
+            new + (u.message.id to u.message.toMessage())
         }
     }
 
