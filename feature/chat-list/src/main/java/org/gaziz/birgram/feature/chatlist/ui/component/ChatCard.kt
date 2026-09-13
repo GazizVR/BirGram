@@ -66,7 +66,9 @@ fun ChatCard(
                         )
                     }
                 }
-                Spacer(Modifier.height(10.dp))
+                if(lastMessage != null || unreadBadge != null) {
+                    Spacer(Modifier.height(10.dp))
+                }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
