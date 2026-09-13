@@ -21,6 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -84,21 +85,21 @@ fun ChatScreen(
                 }
             }
     }
-    var msgSize = 0
+    var listSize = remember { 0 }
     LaunchedEffect(chatId) {
         viewModel.messages(chatId)
             .map {
-                val data = it.values.lastOrNull()
-                val first = data?.size ?: 0
-                val second = data?.firstOrNull()?.isOutgoing ?: false
+                val list = it.values.firstOrNull()
+                val first = list?.size ?: 0
+                val second = list?.firstOrNull()?.isOutgoing ?: false
                 first to second
             }
             .distinctUntilChanged()
             .debounce(100)
-            .collect { ( size,isOutgoing) ->
-                if(msgSize < size) {
-                    if(isOutgoing || listState.firstVisibleItemIndex < 3) {
-                        msgSize = size
+            .collect { (size,isOutgoing) ->
+                if(listSize < size) {
+                    if (isOutgoing || listState.firstVisibleItemIndex < 3) {
+                        listSize = size
                         listState.animateScrollToItem(0)
                     }
                 }
