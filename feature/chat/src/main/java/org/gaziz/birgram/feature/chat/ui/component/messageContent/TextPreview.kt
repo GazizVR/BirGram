@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,14 +22,41 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.gaziz.birgram.core.ui.icon.clock
+import org.gaziz.birgram.core.ui.icon.error
 import org.gaziz.birgram.core.ui.model.MessageSenderInfo
 import org.gaziz.birgram.core.ui.theme.BirGramTheme
 import org.gaziz.telegram.api.model.message.SendingState
+
+@Composable
+fun SendingStatePreview(
+    modifier: Modifier = Modifier,
+    sendingState: SendingState,
+    color: Color? = null
+) {
+    when (sendingState) {
+        is SendingState.Pending -> {
+            Icon(
+                imageVector = clock,
+                contentDescription = null,
+                modifier = modifier,
+                tint = color ?: MaterialTheme.colorScheme.secondary
+            )
+        }
+        is SendingState.Failed -> {
+            Icon(
+                imageVector = error,
+                contentDescription = null,
+                modifier = modifier,
+                tint = color ?: MaterialTheme.colorScheme.error
+            )
+        }
+    }
+}
 
 @Composable
 fun TextPreview(
@@ -40,6 +69,7 @@ fun TextPreview(
     sendingState: SendingState?
 ) {
     var isSingleLine by rememberSaveable { mutableStateOf(false) }
+    val stateModifier = Modifier.size(5.dp)
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(16.dp))
@@ -56,7 +86,8 @@ fun TextPreview(
                         text = senderInfo.name!!,
                         color = senderInfo.accentColor,
                         fontSize = fontSize,
-                        lineHeight = fontSize
+                        lineHeight = fontSize,
+                        maxLines = 1
                     )
                 }
             }
@@ -82,15 +113,18 @@ fun TextPreview(
                                 maxLines = 1
                             )
                         }
+                        if(sendingState != null) {
+                            DisableSelection {
+                                SendingStatePreview(
+                                    modifier = stateModifier,
+                                    sendingState = sendingState,
+                                    color = Color.Transparent
+                                )
+                            }
+                        }
                     }
                 }
-                Text(
-                    text = date,
-                    color = MaterialTheme.colorScheme.onBackground.copy(0.5f),
-                    fontSize = 5.sp,
-                    lineHeight = 5.sp,
-                    maxLines = 1,
-                    textAlign = TextAlign.Center,
+                Box(
                     modifier = Modifier.align(
                         if(isSingleLine) {
                             Alignment.CenterEnd
@@ -98,7 +132,26 @@ fun TextPreview(
                             Alignment.BottomEnd
                         }
                     )
-                )
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        Text(
+                            text = date,
+                            color = MaterialTheme.colorScheme.onBackground.copy(0.5f),
+                            fontSize = 5.sp,
+                            lineHeight = 5.sp,
+                            maxLines = 1
+                        )
+                        if(sendingState != null) {
+                            SendingStatePreview(
+                                modifier = stateModifier,
+                                sendingState = sendingState
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -107,6 +160,12 @@ fun TextPreview(
 @Preview
 @Composable
 fun ThisPreview() {
+    val senderInfo = MessageSenderInfo(
+        name = "User",
+        avatar = null,
+        accentColor = Color.Red
+    )
+//    val senderInfo = null
     BirGramTheme {
         TextPreview(
             text = "Message",
@@ -114,12 +173,8 @@ fun ThisPreview() {
             date = "09:53",
             fontSize = 6.sp,
             containerColor = MaterialTheme.colorScheme.primary,
-            senderInfo = MessageSenderInfo(
-                name = "User",
-                avatar = null,
-                accentColor = Color.Red
-            ),
-            sendingState = SendingState.Pending
+            senderInfo = senderInfo,
+            sendingState = SendingState.Failed
         )
     }
 }

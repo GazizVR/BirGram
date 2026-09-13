@@ -223,7 +223,8 @@ fun MediaPreview(
                     date = date,
                     fontSize = textSize,
                     containerColor = containerColor,
-                    senderInfo = null
+                    senderInfo = null,
+                    sendingState = null
                 )
             }
         }
