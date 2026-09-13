@@ -31,6 +31,20 @@ class MessageUpdater @Inject constructor(
         }
     }
 
+    fun onDeleteMessagesUpdate(u: TdApi.UpdateDeleteMessages) {
+       messageService.updateMessages { old ->
+           old
+               .toMutableMap()
+               .apply {
+                   for(msgId in u.messageIds) {
+                       val chatId = get(msgId)?.chatId ?: continue
+                       if(chatId == u.chatId) remove(msgId)
+                   }
+               }
+               .toMap()
+       }
+    }
+
     fun onLoggingOut() {
         messageService.updateMessages { emptyMap() }
     }
