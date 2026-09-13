@@ -6,6 +6,7 @@ import org.gaziz.telegram.api.model.message.DraftMessageContent
 import org.gaziz.telegram.api.model.message.Message
 import org.gaziz.telegram.api.model.message.MessageContent
 import org.gaziz.telegram.api.model.message.MessageSender
+import org.gaziz.telegram.api.model.message.SendingState
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -146,6 +147,14 @@ fun TdApi.MessageSender.toSender(): MessageSender {
     }
 }
 
+fun TdApi.MessageSendingState?.toSendingState(): SendingState? {
+    return when(this) {
+        is TdApi.MessageSendingStatePending -> SendingState.Pending
+        is TdApi.MessageSendingStateFailed -> SendingState.Failed
+        else -> null
+    }
+}
+
 fun TdApi.Message.toMessage(): Message {
     return Message(
         id = this.id,
@@ -153,6 +162,7 @@ fun TdApi.Message.toMessage(): Message {
         date = this.date.fromUnixTimeStamp(),
         isOutgoing = this.isOutgoing,
         chatId = this.chatId,
-        sender = this.senderId.toSender()
+        sender = this.senderId.toSender(),
+        sendingState = this.sendingState.toSendingState()
     )
 }
