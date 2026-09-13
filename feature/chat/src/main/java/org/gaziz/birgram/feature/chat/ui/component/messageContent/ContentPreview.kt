@@ -27,6 +27,7 @@ import org.gaziz.birgram.feature.chat.ui.ChatViewModel
 import org.gaziz.birgram.feature.chat.ui.mapper.getUriForFile
 import org.gaziz.birgram.feature.chat.ui.mapper.toDurationStr
 import org.gaziz.birgram.feature.chat.ui.model.MessageContentInfo
+import org.gaziz.telegram.api.model.message.SendingState
 import java.io.File
 
 @Composable
@@ -36,7 +37,8 @@ fun ContentPreview(
     date: String,
     fontSize: TextUnit,
     containerColor: Color,
-    sender: MessageSenderInfo?
+    sender: MessageSenderInfo?,
+    sendingState: SendingState?
 ) {
     val viewModel = hiltViewModel<ChatViewModel>()
     val dateFontSize = 5.sp
@@ -53,7 +55,8 @@ fun ContentPreview(
                 date = date,
                 fontSize = fontSize,
                 containerColor = containerColor,
-                senderInfo = sender
+                senderInfo = sender,
+                sendingState = sendingState
             )
         }
         is MessageContentInfo.Sticker -> {
@@ -83,7 +86,8 @@ fun ContentPreview(
                     date = date,
                     fontSize = fontSize,
                     containerColor = containerColor,
-                    senderInfo = sender
+                    senderInfo = sender,
+                    sendingState = sendingState
                 )
             }
         }
@@ -202,7 +206,8 @@ fun ContentPreview(
                 date = date,
                 fontSize = fontSize,
                 containerColor = containerColor,
-                senderInfo = sender
+                senderInfo = sender,
+                sendingState = sendingState
             )
         }
     }

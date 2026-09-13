@@ -268,7 +268,8 @@ class ChatViewModel @Inject constructor(
                         content = msgContent,
                         isOutgoing = msg.isOutgoing,
                         date = msg.date.toTimeString(),
-                        sender = senderInfo.value
+                        sender = senderInfo.value,
+                        sendingState = msg.sendingState
                     )
                 }
                 key.formatMonthDay() to messages
