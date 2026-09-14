@@ -9,7 +9,6 @@ import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
 import org.gaziz.birgram.core.navigation.AuthRoute
 import org.gaziz.birgram.core.navigation.ChatListRoute
 import org.gaziz.birgram.core.navigation.ChatRoute
@@ -117,9 +116,8 @@ fun Navigation(
                     targetOffsetX = {it}
                 )
             },
-        ) { backStackEntry ->
-            val chat = backStackEntry.toRoute<ChatRoute>()
-            ChatScreen(chat.chatId) {
+        ) {
+            ChatScreen {
                 val backStackEntry = navController.previousBackStackEntry
                 if(backStackEntry != null) {
                     navController.popBackStack()

@@ -4,12 +4,14 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -53,8 +55,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
-    private val getChatById: GetChatById,
-    private val getChatMessages: GetChatMessages,
+    savedStateHandle: SavedStateHandle,
+    @ApplicationContext private val context: Context,
+
+    getChatById: GetChatById,
+    getChatMessages: GetChatMessages,
     private val chatService: ChatService,
     private val loadChatMessages: LoadChatMessages,
     private val userService: UserService,
@@ -65,18 +70,24 @@ class ChatViewModel @Inject constructor(
     private val downloadMessageMedia: DownloadMessageMedia,
     private val getPhotoBySizes: GetPhotoBySizes
 ): ViewModel() {
-    private var isLoading = false
-    fun openChat(chatId: Long) {
+    private val chatId = checkNotNull<Long>(savedStateHandle["chatId"])
+    private var historyLoading = false
+    init {
+        createPlayer()
         chatService.openChat(chatId) {
-            isLoading = true
-            loadChatMessages(chatId, onResp = { isLoading = false } )
+            historyLoading = true
+            loadChatMessages(
+                chatId,
+                onResp = { historyLoading = false }
+            )
         }
     }
-    fun closeChat(chatId: Long) {
+    override fun onCleared() {
         chatService.closeChat(chatId)
+        releasePlayer()
     }
-    val chat: (Long) -> StateFlow<ChatUiState?> = {
-        getChatById(it).map { chat ->
+    val chat: StateFlow<ChatUiState?> =
+        getChatById(chatId).map { chat ->
             chat ?: return@map null
             val chatType = chat.type
             val isDeleted =
@@ -164,9 +175,9 @@ class ChatViewModel @Inject constructor(
             SharingStarted.Eagerly,
             null
         )
-    }
-    val messages: (Long) -> StateFlow<Map<String, List<MessageUiState>>> = { msgId ->
-        getChatMessages(msgId).map { map ->
+
+    val messages: StateFlow<Map<String, List<MessageUiState>>> =
+        getChatMessages(chatId).map { map ->
             map.entries.associate { (key,value) ->
                 val messages = value.mapIndexed { ind, msg ->
                     val chat = chatService.chats.value[msg.chatId]
@@ -279,24 +290,18 @@ class ChatViewModel @Inject constructor(
             SharingStarted.Eagerly,
             emptyMap()
         )
-    }
-    fun loadMessages(
-        chatId: Long,
-        fromMessageId: Long
-    ){
-        if(isLoading) return
-        isLoading = true
+
+    fun loadMessages(fromMessageId: Long){
+        if(historyLoading) return
+        historyLoading = true
         loadChatMessages(
             chatId,
             fromMessageId
         ) {
-            isLoading = false
+            historyLoading = false
         }
     }
-    fun setDraftMessageText(
-        chatId: Long,
-        draft: String
-    ) {
+    fun setDraftMessageText(draft: String) {
         messageService.setDraftMessage(
             chatId,
             DraftMessage(
@@ -305,10 +310,7 @@ class ChatViewModel @Inject constructor(
             )
         )
     }
-    fun sendMessageText(
-        chatId: Long,
-        message: String
-    ) {
+    fun sendMessageText(message: String) {
         messageService.sendMessage(chatId,message)
     }
 
@@ -322,7 +324,7 @@ class ChatViewModel @Inject constructor(
     val mediaPosition = _mediaPosition.asStateFlow()
     private var _isMediaPlaying = MutableStateFlow(false)
     val isMediaPlaying = _isMediaPlaying.asStateFlow()
-    fun createPlayer(context: Context) {
+    private fun createPlayer() {
         player = ExoPlayer
             .Builder(context)
             .build()

@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -30,7 +29,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,24 +48,11 @@ import org.gaziz.birgram.feature.chat.ui.model.TitleUiState
 
 @Composable
 fun ChatScreen(
-    chatId: Long,
+    viewModel: ChatViewModel = hiltViewModel(),
     onBack: () -> Unit
 ) {
-    val viewModel = hiltViewModel<ChatViewModel>()
-    val context = LocalContext.current
-    val messages by viewModel.messages(chatId).collectAsState()
-    DisposableEffect(Unit) {
-        viewModel.createPlayer(context)
-        viewModel.openChat(chatId)
-        messages.values.lastOrNull()?.lastOrNull()?.let { msg ->
-            viewModel.loadMessages(chatId,msg.id)
-        }
-        onDispose {
-            viewModel.releasePlayer()
-            viewModel.closeChat(chatId)
-        }
-    }
-    val chat by viewModel.chat(chatId).collectAsState()
+    val messages by viewModel.messages.collectAsState()
+    val chat by viewModel.chat.collectAsState()
     val containerColor = MaterialTheme.colorScheme.surfaceContainer
     val listState = rememberLazyListState()
     LaunchedEffect(Unit) {
@@ -79,7 +64,7 @@ fun ChatScreen(
                 if(lastItem != null) {
                     if(total-lastItem <= 10) {
                         messages.values.lastOrNull()?.lastOrNull()?.let { msg ->
-                            viewModel.loadMessages(chatId,msg.id)
+                            viewModel.loadMessages(msg.id)
                         }
                     }
                 }
@@ -116,8 +101,8 @@ fun ChatScreen(
             }
     }
     var listSize = remember { 0 }
-    LaunchedEffect(chatId) {
-        viewModel.messages(chatId)
+    LaunchedEffect(Unit) {
+        viewModel.messages
             .map {
                 val list = it.values.firstOrNull()
                 val first = list?.size ?: 0
@@ -165,8 +150,8 @@ fun ChatScreen(
                         modifier = Modifier.imePadding(),
                         defaultText = c.draftText,
                         fontSize = 8.sp,
-                        sendMessage = { viewModel.sendMessageText(c.id,it) },
-                        setDraft = { viewModel.setDraftMessageText(c.id,it) }
+                        sendMessage = { viewModel.sendMessageText(it) },
+                        setDraft = { viewModel.setDraftMessageText(it) }
                     )
                 }
             }
