@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -69,7 +71,7 @@ fun TextPreview(
     sendingState: SendingState?
 ) {
     var isSingleLine by rememberSaveable { mutableStateOf(false) }
-    val stateModifier = Modifier.size(5.dp)
+    val stateModifier = Modifier.size(10.dp)
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(16.dp))
@@ -115,6 +117,7 @@ fun TextPreview(
                         }
                         if(sendingState != null) {
                             DisableSelection {
+                                Spacer(Modifier.width(2.dp))
                                 SendingStatePreview(
                                     modifier = stateModifier,
                                     sendingState = sendingState,
@@ -145,6 +148,7 @@ fun TextPreview(
                             maxLines = 1
                         )
                         if(sendingState != null) {
+                            Spacer(Modifier.width(2.dp))
                             SendingStatePreview(
                                 modifier = stateModifier,
                                 sendingState = sendingState
