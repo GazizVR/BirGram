@@ -33,24 +33,26 @@ fun ChatUnreadBadge(
                     lineHeight = unreadBadge.fontSize*1.35,
                 )
             }
-            Spacer(Modifier.width(3.dp))
-            Box(
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.onBackground.copy(0.35f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = (unreadBadge.mentionCount+unreadBadge.unreadCount).toString(),
-                    fontSize = unreadBadge.fontSize,
-                    lineHeight = unreadBadge.fontSize,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.padding(
-                        horizontal = 5.dp,
-                        vertical = 3.dp
-                    ),
-                    maxLines = 1
-                )
+            if(unreadBadge.unreadCount > 0 || unreadBadge.mentionCount > 0) {
+                Spacer(Modifier.width(3.dp))
+                Box(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.onBackground.copy(0.35f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = (unreadBadge.mentionCount+unreadBadge.unreadCount).toString(),
+                        fontSize = unreadBadge.fontSize,
+                        lineHeight = unreadBadge.fontSize,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.padding(
+                            horizontal = 5.dp,
+                            vertical = 3.dp
+                        ),
+                        maxLines = 1
+                    )
+                }
             }
         }
     }
