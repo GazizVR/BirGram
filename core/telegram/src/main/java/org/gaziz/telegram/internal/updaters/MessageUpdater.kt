@@ -11,10 +11,8 @@ class MessageUpdater @Inject constructor(
     private val messageService: MessageService
 ) {
     fun onNewUpdate(u: TdApi.UpdateNewMessage) {
-        if(!u.message.isOutgoing) {
-            messageService.updateMessages { old ->
-                old + (u.message.id to u.message.toMessage())
-            }
+        messageService.updateMessages { old ->
+            old + (u.message.id to u.message.toMessage())
         }
     }
 
