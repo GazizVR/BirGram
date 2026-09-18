@@ -41,9 +41,11 @@ import coil3.compose.AsyncImage
 import coil3.gif.AnimatedImageDecoder
 import coil3.request.ImageRequest
 import coil3.video.VideoFrameDecoder
+import org.gaziz.birgram.core.ui.model.MessageSenderInfo
 import org.gaziz.birgram.feature.chat.R
 import org.gaziz.birgram.feature.chat.ui.component.PlaybackButton
 import org.gaziz.birgram.feature.chat.ui.model.MediaContent
+import org.gaziz.telegram.api.model.message.SendingState
 import java.io.File
 
 @Composable
@@ -53,8 +55,10 @@ fun MediaPreview(
     width: Int,
     height: Int,
     containerColor: Color,
-    date: String,
+    dateStr: String,
     fontSize: TextUnit,
+    senderInfo: MessageSenderInfo?,
+    sendingState: SendingState?,
 
     player: Player? = null,
     isCurrentMedia: Boolean = false,
@@ -198,7 +202,7 @@ fun MediaPreview(
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    text = date,
+                                    text = dateStr,
                                     modifier = Modifier.padding(
                                         vertical = 2.dp,
                                         horizontal = 4.dp
@@ -216,15 +220,13 @@ fun MediaPreview(
                 }
             }
             if(caption != null) {
-                val textSize = 6.sp
                 TextPreview(
                     text = caption,
-                    isSpacer = true,
-                    date = date,
-                    fontSize = textSize,
+                    dateStr = dateStr,
                     containerColor = containerColor,
-                    senderInfo = null,
-                    sendingState = null
+                    senderInfo = senderInfo,
+                    sendingState = sendingState,
+                    isSpacer = true
                 )
             }
         }

@@ -34,10 +34,10 @@ import java.io.File
 fun ContentPreview(
     msgId: Long,
     content: MessageContentInfo,
-    date: String,
+    dateStr: String,
     fontSize: TextUnit,
     containerColor: Color,
-    sender: MessageSenderInfo?,
+    senderInfo: MessageSenderInfo?,
     sendingState: SendingState?
 ) {
     val viewModel = hiltViewModel<ChatViewModel>()
@@ -52,10 +52,9 @@ fun ContentPreview(
         is MessageContentInfo.Text -> {
             TextPreview(
                 text = content.text,
-                date = date,
-                fontSize = fontSize,
+                dateStr = dateStr,
                 containerColor = containerColor,
-                senderInfo = sender,
+                senderInfo = senderInfo,
                 sendingState = sendingState
             )
         }
@@ -64,7 +63,7 @@ fun ContentPreview(
             StickerPreview(
                 modifier = Modifier.size(150.dp),
                 content = content.content,
-                date = date,
+                date = dateStr,
                 datePadding = 8.dp,
                 fontSize = dateFontSize,
                 player = viewModel.player,
@@ -77,16 +76,15 @@ fun ContentPreview(
                 StickerPreview(
                     modifier = Modifier.size(100.dp),
                     content = content.content,
-                    date = date,
+                    date = dateStr,
                     fontSize = dateFontSize
                 )
             } else {
                 TextPreview(
                     text = content.emoji,
-                    date = date,
-                    fontSize = fontSize,
+                    dateStr = dateStr,
                     containerColor = containerColor,
-                    senderInfo = sender,
+                    senderInfo = senderInfo,
                     sendingState = sendingState
                 )
             }
@@ -99,11 +97,13 @@ fun ContentPreview(
                 width = content.width,
                 height = content.height,
                 containerColor = containerColor,
-                date = date,
+                dateStr = dateStr,
                 fontSize = dateFontSize,
+                senderInfo = senderInfo,
                 player = viewModel.player,
                 isCurrentMedia = mediaId == msgId,
-                onVideoClick = onVideoClick
+                onVideoClick = onVideoClick,
+                sendingState = sendingState
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize().padding(8.dp),
@@ -140,15 +140,17 @@ fun ContentPreview(
                 width = content.width,
                 height = content.height,
                 containerColor = containerColor,
-                date = date,
-                fontSize = dateFontSize
+                dateStr = dateStr,
+                fontSize = dateFontSize,
+                senderInfo = senderInfo,
+                sendingState = sendingState
             )
         }
         is MessageContentInfo.Document -> {
             DocumentPreview(
                 document = content,
                 containerColor = containerColor,
-                date = date,
+                date = dateStr,
             )
         }
         is MessageContentInfo.Video -> {
@@ -159,8 +161,9 @@ fun ContentPreview(
                 width = content.width,
                 height = content.height,
                 containerColor = containerColor,
-                date = date,
+                dateStr = dateStr,
                 fontSize = dateFontSize,
+                senderInfo = senderInfo,
                 player = viewModel.player,
                 isCurrentMedia = mediaId == msgId,
                 onVideoClick = onVideoClick,
@@ -196,17 +199,17 @@ fun ContentPreview(
                             )
                         }
                     }
-                }
+                },
+                sendingState = sendingState
             )
         }
         is MessageContentInfo.UnSupported -> {
             val unsupportedMessage = stringResource(R.string.unsupported_message)
             TextPreview(
                 text = unsupportedMessage,
-                date = date,
-                fontSize = fontSize,
+                dateStr = dateStr,
                 containerColor = containerColor,
-                senderInfo = sender,
+                senderInfo = senderInfo,
                 sendingState = sendingState
             )
         }
