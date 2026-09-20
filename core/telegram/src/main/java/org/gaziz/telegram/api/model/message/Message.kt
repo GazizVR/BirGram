@@ -9,5 +9,6 @@ data class Message(
     val isOutgoing: Boolean,
     val chatId: Long,
     val sender: MessageSender,
-    val sendingState: SendingState?
+    val sendingState: SendingState?,
+    val forwardInfo: ForwardInfo?
 )

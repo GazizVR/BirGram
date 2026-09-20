@@ -3,9 +3,11 @@ package org.gaziz.telegram.internal.mapper
 import org.drinkless.tdlib.TdApi
 import org.gaziz.telegram.api.model.message.DraftMessage
 import org.gaziz.telegram.api.model.message.DraftMessageContent
+import org.gaziz.telegram.api.model.message.ForwardInfo
 import org.gaziz.telegram.api.model.message.Message
 import org.gaziz.telegram.api.model.message.MessageContent
 import org.gaziz.telegram.api.model.message.MessageSender
+import org.gaziz.telegram.api.model.message.Origin
 import org.gaziz.telegram.api.model.message.SendingState
 import java.time.Instant
 import java.time.LocalDateTime
@@ -155,6 +157,22 @@ fun TdApi.MessageSendingState?.toSendingState(): SendingState? {
     }
 }
 
+fun TdApi.MessageOrigin.toOrigin(): Origin {
+    return when(this){
+        is TdApi.MessageOriginChannel -> Origin.Channel(this.chatId)
+        is TdApi.MessageOriginChat -> Origin.Chat(this.senderChatId)
+        is TdApi.MessageOriginHiddenUser -> Origin.HiddenUser(this.senderName)
+        is TdApi.MessageOriginUser -> Origin.User(this.senderUserId)
+        else -> Origin.Other
+    }
+}
+
+fun TdApi.MessageForwardInfo.toForwardInfo(): ForwardInfo {
+    return ForwardInfo(
+        origin = this.origin.toOrigin()
+    )
+}
+
 fun TdApi.Message.toMessage(): Message {
     return Message(
         id = this.id,
@@ -163,6 +181,7 @@ fun TdApi.Message.toMessage(): Message {
         isOutgoing = this.isOutgoing,
         chatId = this.chatId,
         sender = this.senderId.toSender(),
-        sendingState = this.sendingState.toSendingState()
+        sendingState = this.sendingState.toSendingState(),
+        forwardInfo = this.forwardInfo?.toForwardInfo()
     )
 }
