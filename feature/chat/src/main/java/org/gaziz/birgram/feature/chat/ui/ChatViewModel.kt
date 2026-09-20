@@ -275,13 +275,17 @@ class ChatViewModel @Inject constructor(
                             )
                         }
                     }
+                    val originSenderTitle = when(msg.forwardInfo?.origin) {
+                        else -> null
+                    }
                     MessageUiState(
                         id = msg.id,
                         content = msgContent,
                         isOutgoing = msg.isOutgoing,
                         date = msg.date.toTimeString(),
                         sender = senderInfo.value,
-                        sendingState = msg.sendingState
+                        sendingState = msg.sendingState,
+                        originSenderTitle = originSenderTitle
                     )
                 }
                 key.formatMonthDay() to messages

@@ -9,5 +9,6 @@ data class MessageUiState(
     val isOutgoing: Boolean,
     val date: String,
     val sender: MessageSenderInfo?,
-    val sendingState: SendingState?
+    val sendingState: SendingState?,
+    val originSenderTitle: String?
 )
