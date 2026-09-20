@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -47,6 +48,7 @@ import org.gaziz.telegram.api.model.message.DraftMessage
 import org.gaziz.telegram.api.model.message.DraftMessageContent
 import org.gaziz.telegram.api.model.message.MessageContent
 import org.gaziz.telegram.api.model.message.MessageSender
+import org.gaziz.telegram.api.model.message.Origin
 import org.gaziz.telegram.api.model.user.UserType
 import org.gaziz.telegram.api.usecase.DownloadMessageMedia
 import java.io.File
@@ -275,7 +277,16 @@ class ChatViewModel @Inject constructor(
                             )
                         }
                     }
-                    val originSenderTitle = when(msg.forwardInfo?.origin) {
+                    val originSenderTitle = when(val cnt = msg.forwardInfo?.origin) {
+                        is Origin.HiddenUser -> cnt.name
+                        is Origin.Channel -> getChatById(cnt.id).stateIn(viewModelScope).value?.title
+                        is Origin.Chat -> getChatById(cnt.id).stateIn(viewModelScope).value?.title
+                        is Origin.User -> {
+                            userService.users
+                                .mapNotNull { it[cnt.id] }
+                                .stateIn(viewModelScope)
+                                .value.firstName
+                        }
                         else -> null
                     }
                     MessageUiState(
