@@ -8,6 +8,7 @@ import org.gaziz.telegram.api.model.message.Message
 import org.gaziz.telegram.api.model.message.MessageContent
 import org.gaziz.telegram.api.model.message.MessageSender
 import org.gaziz.telegram.api.model.message.Origin
+import org.gaziz.telegram.api.model.message.ReplyTo
 import org.gaziz.telegram.api.model.message.SendingState
 import java.time.Instant
 import java.time.LocalDateTime
@@ -173,6 +174,17 @@ fun TdApi.MessageForwardInfo.toForwardInfo(): ForwardInfo {
     )
 }
 
+fun TdApi.MessageReplyTo?.toReplyTo(): ReplyTo? {
+    return when(this) {
+        is TdApi.MessageReplyToMessage -> ReplyTo.Message(
+            this.messageId,
+            this.chatId,
+            this.quote?.text?.text
+        )
+        else -> null
+    }
+}
+
 fun TdApi.Message.toMessage(): Message {
     return Message(
         id = this.id,
@@ -182,6 +194,7 @@ fun TdApi.Message.toMessage(): Message {
         chatId = this.chatId,
         sender = this.senderId.toSender(),
         sendingState = this.sendingState.toSendingState(),
-        forwardInfo = this.forwardInfo?.toForwardInfo()
+        forwardInfo = this.forwardInfo?.toForwardInfo(),
+        replyTo = this.replyTo.toReplyTo()
     )
 }

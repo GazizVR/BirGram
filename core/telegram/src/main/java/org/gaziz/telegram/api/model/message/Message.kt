@@ -10,5 +10,6 @@ data class Message(
     val chatId: Long,
     val sender: MessageSender,
     val sendingState: SendingState?,
-    val forwardInfo: ForwardInfo?
+    val forwardInfo: ForwardInfo?,
+    val replyTo: ReplyTo?
 )
