@@ -22,7 +22,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -35,7 +34,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.feature.chat.R
 import org.gaziz.birgram.feature.chat.ui.component.ChatTopBar
@@ -100,26 +100,15 @@ fun ChatScreen(
                 }
             }
     }
-    var listSize = remember { 0 }
     LaunchedEffect(Unit) {
-        viewModel.messages
-            .map {
-                val list = it.values.firstOrNull()
-                val first = list?.size ?: 0
-                val second = list?.firstOrNull()?.isOutgoing ?: false
-                first to second
-            }
-            .distinctUntilChanged()
+        viewModel.chat
+            .mapNotNull { it?.lastMessage }
+            .distinctUntilChangedBy { it.id }
             .debounce(100)
-            .collect { (size,isOutgoing) ->
-                if(listSize < size) {
-                    if(!isOutgoing){
-                        isScrollDownButton = listState.firstVisibleItemIndex > 0
-                    }
-                    if (isOutgoing || listState.firstVisibleItemIndex < 3) {
-                        listSize = size
-                        listState.animateScrollToItem(0)
-                    }
+            .collect { msg ->
+                val isOutgoing = msg.isOutgoing
+                if (isOutgoing || listState.firstVisibleItemIndex < 3) {
+                    listState.animateScrollToItem(0)
                 }
             }
     }
