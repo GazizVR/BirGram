@@ -20,12 +20,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.core.ui.icon.clock
 import org.gaziz.birgram.core.ui.icon.error
 import org.gaziz.birgram.core.ui.model.MessageSenderInfo
+import org.gaziz.birgram.core.ui.theme.BirGramTheme
 import org.gaziz.telegram.api.model.message.SendingState
 
 @Composable
@@ -87,11 +89,11 @@ fun TextPreview(
                     maxLines = 1
                 )
             }
-            Box {
+            Box(contentAlignment = Alignment.Center) {
                 val stateModifier = Modifier.size(10.dp)
                 FlowRow {
                     SelectionContainer(
-                        modifier = if (isSpacer) Modifier.weight(1f) else Modifier
+                        modifier = if(isSpacer) Modifier.weight(1f) else Modifier
                     ) {
                         Text(
                             text = text,
@@ -118,7 +120,8 @@ fun TextPreview(
                 }
                 Row(
                     modifier = Modifier.align(Alignment.BottomEnd),
-                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                    horizontalArrangement = Arrangement.spacedBy(2.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = " $dateStr",
@@ -136,5 +139,22 @@ fun TextPreview(
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun TextPrevPreview() {
+    BirGramTheme(true) {
+        TextPreview(
+            text = "hello",
+            fontSize = 6.sp,
+            dateStr = "21:32",
+            dateFontSize = 5.sp,
+            containerColor = MaterialTheme.colorScheme.primary,
+            senderInfo = null,
+            sendingState = SendingState.Pending,
+            isSpacer = false
+        )
     }
 }
