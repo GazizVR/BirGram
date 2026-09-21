@@ -38,7 +38,9 @@ fun ContentPreview(
     fontSize: TextUnit,
     containerColor: Color,
     senderInfo: MessageSenderInfo?,
-    sendingState: SendingState?
+    sendingState: SendingState?,
+    originSenderTitle: String?,
+    isOutgoing: Boolean
 ) {
     val viewModel = hiltViewModel<ChatViewModel>()
     val dateFontSize = 5.sp
@@ -55,7 +57,9 @@ fun ContentPreview(
                 dateStr = dateStr,
                 containerColor = containerColor,
                 senderInfo = senderInfo,
-                sendingState = sendingState
+                sendingState = sendingState,
+                originSenderTitle = originSenderTitle,
+                isOutgoing = isOutgoing,
             )
         }
         is MessageContentInfo.Sticker -> {
@@ -68,7 +72,8 @@ fun ContentPreview(
                 fontSize = dateFontSize,
                 player = viewModel.player,
                 isCurrentMedia = mediaId == msgId,
-                onVideoClick = onVideoClick
+                onVideoClick = onVideoClick,
+                originSenderTitle = originSenderTitle
             )
         }
         is MessageContentInfo.AnimatedEmoji -> {
@@ -77,7 +82,8 @@ fun ContentPreview(
                     modifier = Modifier.size(100.dp),
                     content = content.content,
                     date = dateStr,
-                    fontSize = dateFontSize
+                    fontSize = dateFontSize,
+                    originSenderTitle = originSenderTitle
                 )
             } else {
                 TextPreview(
@@ -85,7 +91,9 @@ fun ContentPreview(
                     dateStr = dateStr,
                     containerColor = containerColor,
                     senderInfo = senderInfo,
-                    sendingState = sendingState
+                    sendingState = sendingState,
+                    originSenderTitle = originSenderTitle,
+                    isOutgoing = isOutgoing
                 )
             }
         }
@@ -103,7 +111,9 @@ fun ContentPreview(
                 player = viewModel.player,
                 isCurrentMedia = mediaId == msgId,
                 onVideoClick = onVideoClick,
-                sendingState = sendingState
+                sendingState = sendingState,
+                originSenderTitle = originSenderTitle,
+                isOutgoing = isOutgoing,
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize().padding(8.dp),
@@ -143,7 +153,9 @@ fun ContentPreview(
                 dateStr = dateStr,
                 fontSize = dateFontSize,
                 senderInfo = senderInfo,
-                sendingState = sendingState
+                sendingState = sendingState,
+                originSenderTitle = originSenderTitle,
+                isOutgoing = isOutgoing
             )
         }
         is MessageContentInfo.Document -> {
@@ -151,6 +163,8 @@ fun ContentPreview(
                 document = content,
                 containerColor = containerColor,
                 date = dateStr,
+                originSenderTitle = originSenderTitle,
+                isOutgoing = isOutgoing
             )
         }
         is MessageContentInfo.Video -> {
@@ -200,7 +214,9 @@ fun ContentPreview(
                         }
                     }
                 },
-                sendingState = sendingState
+                sendingState = sendingState,
+                originSenderTitle = originSenderTitle,
+                isOutgoing = isOutgoing
             )
         }
         is MessageContentInfo.UnSupported -> {
@@ -210,7 +226,9 @@ fun ContentPreview(
                 dateStr = dateStr,
                 containerColor = containerColor,
                 senderInfo = senderInfo,
-                sendingState = sendingState
+                sendingState = sendingState,
+                originSenderTitle = originSenderTitle,
+                isOutgoing = isOutgoing
             )
         }
     }

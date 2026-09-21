@@ -73,7 +73,9 @@ fun MessageCard(
                     dateStr = message.date,
                     containerColor = containerColor,
                     senderInfo = if(!message.isOutgoing) message.sender else null,
-                    sendingState = message.sendingState
+                    sendingState = message.sendingState,
+                    originSenderTitle = message.originSenderTitle,
+                    isOutgoing = message.isOutgoing
                 )
             }
             if(!message.isOutgoing) {

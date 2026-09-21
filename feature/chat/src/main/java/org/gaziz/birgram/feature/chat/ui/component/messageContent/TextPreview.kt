@@ -65,7 +65,9 @@ fun TextPreview(
     containerColor: Color,
     senderInfo: MessageSenderInfo?,
     sendingState: SendingState?,
-    isSpacer: Boolean = false
+    isSpacer: Boolean = false,
+    originSenderTitle: String?,
+    isOutgoing: Boolean = true
 ) {
     Card(
         colors = CardDefaults.cardColors(
@@ -74,10 +76,10 @@ fun TextPreview(
         shape = RoundedCornerShape(12.dp)
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+            verticalArrangement = Arrangement.spacedBy(3.dp),
             modifier = Modifier.padding(
                 vertical = 6.dp,
-                horizontal = 10.dp
+                horizontal = 8.dp
             )
         ) {
             if(senderInfo?.name != null) {
@@ -88,6 +90,9 @@ fun TextPreview(
                     lineHeight = fontSize,
                     maxLines = 1
                 )
+            }
+            if(originSenderTitle != null) {
+                ForwardedText(originSenderTitle, isOutgoing)
             }
             Box(contentAlignment = Alignment.Center) {
                 val stateModifier = Modifier.size(10.dp)
@@ -154,7 +159,9 @@ fun TextPrevPreview() {
             containerColor = MaterialTheme.colorScheme.primary,
             senderInfo = null,
             sendingState = SendingState.Pending,
-            isSpacer = false
+            isSpacer = false,
+            originSenderTitle = null,
+            isOutgoing = true
         )
     }
 }

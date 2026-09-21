@@ -6,4 +6,6 @@
     <string name="not_found">Not Found</string>
 
     <string name="unsupported_message">Unsupported message</string>
+
+    <string name="forwarded_from">Forwarded from</string>
 </resources>

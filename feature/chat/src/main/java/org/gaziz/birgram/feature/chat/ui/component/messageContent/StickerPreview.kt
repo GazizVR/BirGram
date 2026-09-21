@@ -43,6 +43,7 @@ fun StickerPreview(
     date: String,
     datePadding: Dp = 0.dp,
     fontSize: TextUnit,
+    originSenderTitle: String?,
 
     player: Player? = null,
     isCurrentMedia: Boolean = false,
@@ -52,7 +53,7 @@ fun StickerPreview(
         modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
-        when(content) {
+        when (content) {
             is StickerContent.Picture -> {
                 AsyncImage(
                     model = content.file,
@@ -60,6 +61,7 @@ fun StickerPreview(
                     modifier = Modifier.fillMaxSize()
                 )
             }
+
             is StickerContent.Animation -> {
                 val composition by rememberLottieComposition(
                     LottieCompositionSpec.File(content.path)
@@ -74,9 +76,10 @@ fun StickerPreview(
                     modifier = Modifier.fillMaxSize()
                 )
             }
+
             is StickerContent.Video -> {
                 val context = LocalContext.current
-                if(
+                if (
                     isCurrentMedia &&
                     player != null
                 ) {
@@ -106,6 +109,7 @@ fun StickerPreview(
                     PlaybackButton()
                 }
             }
+
             is StickerContent.Empty -> {
                 LaunchedEffect(Unit) {
                     content.downloadContent()
@@ -115,6 +119,12 @@ fun StickerPreview(
                     textAlign = TextAlign.Center
                 )
             }
+        }
+        if (originSenderTitle != null) {
+            ForwardedBadge(
+                senderName = originSenderTitle,
+                modifier = Modifier.align(Alignment.TopStart)
+            )
         }
         Box(
             modifier = Modifier
@@ -129,7 +139,7 @@ fun StickerPreview(
                         RoundedCornerShape(20.dp)
                     ),
                 contentAlignment = Alignment.Center
-            ){
+            ) {
                 Text(
                     text = date,
                     modifier = Modifier.padding(

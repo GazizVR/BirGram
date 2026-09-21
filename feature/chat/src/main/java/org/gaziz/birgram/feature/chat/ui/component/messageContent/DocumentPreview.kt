@@ -44,7 +44,9 @@ import org.gaziz.birgram.feature.chat.ui.model.MessageContentInfo
 fun DocumentPreview(
     document: MessageContentInfo.Document,
     containerColor: Color,
-    date: String
+    date: String,
+    originSenderTitle: String?,
+    isOutgoing: Boolean
 ) {
     val fontSize = 6.sp
     val shape = RoundedCornerShape(16.dp)
@@ -54,111 +56,118 @@ fun DocumentPreview(
             .clip(shape)
             .background(containerColor,shape)
     ) {
-        Row (
-            modifier = Modifier.padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        Column(
+            modifier = Modifier.padding(8.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            val interactionSource = remember { MutableInteractionSource() }
-            val context = LocalContext.current
-            val scope = rememberCoroutineScope()
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.onBackground)
-                    .clickable(
-                        indication = null,
-                        interactionSource = interactionSource
-                    ) {
-                        if(document.file != null) {
-                            scope.launch {
-                                val intent = Intent(Intent.ACTION_VIEW).apply {
-                                    setDataAndType(
-                                        getUriForFile(context,document.file),
-                                        document.mimeType ?: "*/*"
-                                    )
-                                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                                }
-                                context.startActivity(Intent.createChooser(intent,"Open with"))
-                            }
-                        } else {
-                            if(!isDownloading) {
-                                isDownloading = true
-                                document.downloadDocument()
-                            }
-                        }
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-                val size = 20.dp
-                when {
-                    document.file != null -> {
-                        Icon(
-                            imageVector = fileOpen,
-                            contentDescription = null,
-                            tint = containerColor,
-                            modifier = Modifier.size(size)
-                        )
-                    }
-                    isDownloading -> {
-                        CircularProgressIndicator(
-                            color = containerColor,
-                            modifier = Modifier.size(size),
-                            strokeWidth = 2.dp
-                        )
-                    }
-                    else -> {
-                        Icon(
-                            imageVector = arrowDownwardAlt,
-                            contentDescription = null,
-                            tint = containerColor,
-                            modifier = Modifier.size(size+5.dp)
-                        )
-                    }
-                }
+            if(originSenderTitle != null) {
+                ForwardedText(originSenderTitle, isOutgoing)
             }
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.Start
-            ){
-                if(document.fileName != null) {
-                    Text(
-                        text = document.fileName,
-                        overflow = TextOverflow.Ellipsis,
-                        fontSize = fontSize,
-                        lineHeight = fontSize,
-                        fontWeight = FontWeight.Bold,
-                        maxLines = 2
-                    )
-                }
-                if(
-                    document.size != null ||
-                    document.type != null
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                val interactionSource = remember { MutableInteractionSource() }
+                val context = LocalContext.current
+                val scope = rememberCoroutineScope()
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.onBackground)
+                        .clickable(
+                            indication = null,
+                            interactionSource = interactionSource
+                        ) {
+                            if(document.file != null) {
+                                scope.launch {
+                                    val intent = Intent(Intent.ACTION_VIEW).apply {
+                                        setDataAndType(
+                                            getUriForFile(context,document.file),
+                                            document.mimeType ?: "*/*"
+                                        )
+                                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                    }
+                                    context.startActivity(Intent.createChooser(intent,"Open with"))
+                                }
+                            } else {
+                                if(!isDownloading) {
+                                    isDownloading = true
+                                    document.downloadDocument()
+                                }
+                            }
+                        },
+                    contentAlignment = Alignment.Center
                 ) {
-                    Spacer(Modifier.height(4.dp))
-                    var text = ""
-                    if(document.size != null) text += document.size
-                    if(document.type != null) text += " ${document.type}"
-                    Box {
-                        Row {
-                            Text(
-                                text = text,
-                                overflow = TextOverflow.Ellipsis,
-                                fontSize = fontSize,
-                                lineHeight = fontSize,
-                                fontWeight = FontWeight.Thin,
-                                maxLines = 1,
-                                modifier = Modifier.weight(1f)
+                    val size = 20.dp
+                    when {
+                        document.file != null -> {
+                            Icon(
+                                imageVector = fileOpen,
+                                contentDescription = null,
+                                tint = containerColor,
+                                modifier = Modifier.size(size)
                             )
-                            Text(
-                                text = "24:35",
-                                color = Color.Transparent,
-                                fontSize = fontSize,
-                                lineHeight = fontSize,
-                                fontWeight = FontWeight.Thin,
-                                maxLines = 1
+                        }
+                        isDownloading -> {
+                            CircularProgressIndicator(
+                                color = containerColor,
+                                modifier = Modifier.size(size),
+                                strokeWidth = 2.dp
                             )
+                        }
+                        else -> {
+                            Icon(
+                                imageVector = arrowDownwardAlt,
+                                contentDescription = null,
+                                tint = containerColor,
+                                modifier = Modifier.size(size+5.dp)
+                            )
+                        }
+                    }
+                }
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.Start
+                ){
+                    if(document.fileName != null) {
+                        Text(
+                            text = document.fileName,
+                            overflow = TextOverflow.Ellipsis,
+                            fontSize = fontSize,
+                            lineHeight = fontSize,
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 2
+                        )
+                    }
+                    if(
+                        document.size != null ||
+                        document.type != null
+                    ) {
+                        Spacer(Modifier.height(4.dp))
+                        var text = ""
+                        if(document.size != null) text += document.size
+                        if(document.type != null) text += " ${document.type}"
+                        Box {
+                            Row {
+                                Text(
+                                    text = text,
+                                    overflow = TextOverflow.Ellipsis,
+                                    fontSize = fontSize,
+                                    lineHeight = fontSize,
+                                    fontWeight = FontWeight.Thin,
+                                    maxLines = 1,
+                                    modifier = Modifier.weight(1f)
+                                )
+                                Text(
+                                    text = "24:35",
+                                    color = Color.Transparent,
+                                    fontSize = fontSize,
+                                    lineHeight = fontSize,
+                                    fontWeight = FontWeight.Thin,
+                                    maxLines = 1
+                                )
+                            }
                         }
                     }
                 }

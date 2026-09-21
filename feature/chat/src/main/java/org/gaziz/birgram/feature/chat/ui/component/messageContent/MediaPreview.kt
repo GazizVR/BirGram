@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -59,6 +58,8 @@ fun MediaPreview(
     fontSize: TextUnit,
     senderInfo: MessageSenderInfo?,
     sendingState: SendingState?,
+    originSenderTitle: String?,
+    isOutgoing: Boolean,
 
     player: Player? = null,
     isCurrentMedia: Boolean = false,
@@ -70,7 +71,7 @@ fun MediaPreview(
     DisposableEffect(Unit) {
         onDispose(onDispose)
     }
-    val shape = RoundedCornerShape(18.dp)
+    val shape = RoundedCornerShape(12.dp)
     Box(
         modifier = Modifier
             .clip(shape)
@@ -79,8 +80,17 @@ fun MediaPreview(
     ) {
         Column(
             horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
+            if(originSenderTitle != null) {
+                Box(
+                    modifier = Modifier.padding(
+                        horizontal = 6.dp,
+                        vertical = 4.dp
+                    )
+                ) {
+                    ForwardedText(originSenderTitle, isOutgoing)
+                }
+            }
             BoxWithConstraints {
                 val scaleW = maxWidth/width
                 val scaleH = maxHeight/height
@@ -226,7 +236,8 @@ fun MediaPreview(
                     containerColor = containerColor,
                     senderInfo = senderInfo,
                     sendingState = sendingState,
-                    isSpacer = true
+                    isSpacer = true,
+                    originSenderTitle = null
                 )
             }
         }
