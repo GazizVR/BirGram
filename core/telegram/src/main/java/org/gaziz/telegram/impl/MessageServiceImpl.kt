@@ -12,7 +12,6 @@ import org.gaziz.telegram.internal.ClientManager
 import org.gaziz.telegram.internal.mapper.toMessage
 import org.gaziz.telegram.internal.mapper.toTgDraftMessage
 import javax.inject.Inject
-import kotlin.collections.forEach
 
 class MessageServiceImpl @Inject constructor(
     private val manager: ClientManager
@@ -83,5 +82,18 @@ class MessageServiceImpl @Inject constructor(
                 this.draftMessage = draftMessage.toTgDraftMessage()
             }
         )
+    }
+
+    override fun deleteMessages(
+        chatId: Long,
+        msgIds: LongArray,
+        forAll: Boolean
+    ) {
+        val query = TdApi.DeleteMessages().apply {
+            this.chatId = chatId
+            this.messageIds = msgIds
+            this.revoke = forAll
+        }
+       manager.sendRequest(query)
     }
 }

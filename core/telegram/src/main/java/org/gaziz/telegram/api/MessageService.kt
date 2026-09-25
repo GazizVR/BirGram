@@ -22,4 +22,9 @@ interface MessageService {
         chatId: Long,
         draftMessage: DraftMessage
     )
+    fun deleteMessages(
+        chatId: Long,
+        msgIds: LongArray,
+        forAll: Boolean
+    )
 }
