@@ -48,7 +48,7 @@ import org.gaziz.telegram.api.model.message.DraftMessage
 import org.gaziz.telegram.api.model.message.DraftMessageContent
 import org.gaziz.telegram.api.model.message.MessageContent
 import org.gaziz.telegram.api.model.message.MessageSender
-import org.gaziz.telegram.api.model.message.Origin
+import org.gaziz.telegram.api.model.message.MessageOrigin
 import org.gaziz.telegram.api.model.user.UserType
 import org.gaziz.telegram.api.usecase.DownloadMessageMedia
 import java.io.File
@@ -278,10 +278,10 @@ class ChatViewModel @Inject constructor(
                         }
                     }
                     val originSenderTitle = when(val cnt = msg.forwardInfo?.origin) {
-                        is Origin.HiddenUser -> cnt.name
-                        is Origin.Channel -> getChatById(cnt.id).stateIn(viewModelScope).value?.title
-                        is Origin.Chat -> getChatById(cnt.id).stateIn(viewModelScope).value?.title
-                        is Origin.User -> {
+                        is MessageOrigin.HiddenUser -> cnt.name
+                        is MessageOrigin.Channel -> getChatById(cnt.id).stateIn(viewModelScope).value?.title
+                        is MessageOrigin.Chat -> getChatById(cnt.id).stateIn(viewModelScope).value?.title
+                        is MessageOrigin.User -> {
                             userService.users
                                 .mapNotNull { it[cnt.id] }
                                 .stateIn(viewModelScope)

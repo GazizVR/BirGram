@@ -27,7 +27,7 @@ import org.gaziz.birgram.feature.chat.ui.ChatViewModel
 import org.gaziz.birgram.feature.chat.ui.mapper.getUriForFile
 import org.gaziz.birgram.feature.chat.ui.mapper.toDurationStr
 import org.gaziz.birgram.feature.chat.ui.model.MessageContentInfo
-import org.gaziz.telegram.api.model.message.SendingState
+import org.gaziz.telegram.api.model.message.MessageSendingState
 import java.io.File
 
 @Composable
@@ -38,7 +38,7 @@ fun ContentPreview(
     fontSize: TextUnit,
     containerColor: Color,
     senderInfo: MessageSenderInfo?,
-    sendingState: SendingState?,
+    sendingState: MessageSendingState?,
     originSenderTitle: String?,
     isOutgoing: Boolean
 ) {

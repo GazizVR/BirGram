@@ -3,13 +3,13 @@ package org.gaziz.telegram.internal.mapper
 import org.drinkless.tdlib.TdApi
 import org.gaziz.telegram.api.model.message.DraftMessage
 import org.gaziz.telegram.api.model.message.DraftMessageContent
-import org.gaziz.telegram.api.model.message.ForwardInfo
+import org.gaziz.telegram.api.model.message.MessageForwardInfo
 import org.gaziz.telegram.api.model.message.Message
 import org.gaziz.telegram.api.model.message.MessageContent
 import org.gaziz.telegram.api.model.message.MessageSender
-import org.gaziz.telegram.api.model.message.Origin
-import org.gaziz.telegram.api.model.message.ReplyTo
-import org.gaziz.telegram.api.model.message.SendingState
+import org.gaziz.telegram.api.model.message.MessageOrigin
+import org.gaziz.telegram.api.model.message.MessageReplyTo
+import org.gaziz.telegram.api.model.message.MessageSendingState
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -150,33 +150,33 @@ fun TdApi.MessageSender.toSender(): MessageSender {
     }
 }
 
-fun TdApi.MessageSendingState?.toSendingState(): SendingState? {
+fun TdApi.MessageSendingState?.toSendingState(): MessageSendingState? {
     return when(this) {
-        is TdApi.MessageSendingStatePending -> SendingState.Pending
-        is TdApi.MessageSendingStateFailed -> SendingState.Failed
+        is TdApi.MessageSendingStatePending -> MessageSendingState.Pending
+        is TdApi.MessageSendingStateFailed -> MessageSendingState.Failed
         else -> null
     }
 }
 
-fun TdApi.MessageOrigin.toOrigin(): Origin {
+fun TdApi.MessageOrigin.toOrigin(): MessageOrigin {
     return when(this){
-        is TdApi.MessageOriginChannel -> Origin.Channel(this.chatId)
-        is TdApi.MessageOriginChat -> Origin.Chat(this.senderChatId)
-        is TdApi.MessageOriginHiddenUser -> Origin.HiddenUser(this.senderName)
-        is TdApi.MessageOriginUser -> Origin.User(this.senderUserId)
-        else -> Origin.Other
+        is TdApi.MessageOriginChannel -> MessageOrigin.Channel(this.chatId)
+        is TdApi.MessageOriginChat -> MessageOrigin.Chat(this.senderChatId)
+        is TdApi.MessageOriginHiddenUser -> MessageOrigin.HiddenUser(this.senderName)
+        is TdApi.MessageOriginUser -> MessageOrigin.User(this.senderUserId)
+        else -> MessageOrigin.Other
     }
 }
 
-fun TdApi.MessageForwardInfo.toForwardInfo(): ForwardInfo {
-    return ForwardInfo(
+fun TdApi.MessageForwardInfo.toForwardInfo(): MessageForwardInfo {
+    return MessageForwardInfo(
         origin = this.origin.toOrigin()
     )
 }
 
-fun TdApi.MessageReplyTo?.toReplyTo(): ReplyTo? {
+fun TdApi.MessageReplyTo?.toReplyTo(): MessageReplyTo? {
     return when(this) {
-        is TdApi.MessageReplyToMessage -> ReplyTo.Message(
+        is TdApi.MessageReplyToMessage -> MessageReplyTo.Message(
             this.messageId,
             this.chatId,
             this.quote?.text?.text

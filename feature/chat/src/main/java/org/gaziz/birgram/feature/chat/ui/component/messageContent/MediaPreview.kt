@@ -44,7 +44,7 @@ import org.gaziz.birgram.core.ui.model.MessageSenderInfo
 import org.gaziz.birgram.feature.chat.R
 import org.gaziz.birgram.feature.chat.ui.component.PlaybackButton
 import org.gaziz.birgram.feature.chat.ui.model.MediaContent
-import org.gaziz.telegram.api.model.message.SendingState
+import org.gaziz.telegram.api.model.message.MessageSendingState
 import java.io.File
 
 @Composable
@@ -57,7 +57,7 @@ fun MediaPreview(
     dateStr: String,
     fontSize: TextUnit,
     senderInfo: MessageSenderInfo?,
-    sendingState: SendingState?,
+    sendingState: MessageSendingState?,
     originSenderTitle: String?,
     isOutgoing: Boolean,
 

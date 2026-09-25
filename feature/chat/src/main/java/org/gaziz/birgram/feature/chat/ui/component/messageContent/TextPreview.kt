@@ -28,16 +28,16 @@ import org.gaziz.birgram.core.ui.icon.clock
 import org.gaziz.birgram.core.ui.icon.error
 import org.gaziz.birgram.core.ui.model.MessageSenderInfo
 import org.gaziz.birgram.core.ui.theme.BirGramTheme
-import org.gaziz.telegram.api.model.message.SendingState
+import org.gaziz.telegram.api.model.message.MessageSendingState
 
 @Composable
 fun SendingStatePreview(
     modifier: Modifier = Modifier,
-    sendingState: SendingState,
+    sendingState: MessageSendingState,
     color: Color? = null
 ) {
     when (sendingState) {
-        is SendingState.Pending -> {
+        is MessageSendingState.Pending -> {
             Icon(
                 imageVector = clock,
                 contentDescription = null,
@@ -45,7 +45,7 @@ fun SendingStatePreview(
                 tint = color ?: MaterialTheme.colorScheme.secondary
             )
         }
-        is SendingState.Failed -> {
+        is MessageSendingState.Failed -> {
             Icon(
                 imageVector = error,
                 contentDescription = null,
@@ -64,7 +64,7 @@ fun TextPreview(
     dateFontSize: TextUnit = (fontSize.value-1.sp.value).sp,
     containerColor: Color,
     senderInfo: MessageSenderInfo?,
-    sendingState: SendingState?,
+    sendingState: MessageSendingState?,
     isSpacer: Boolean = false,
     originSenderTitle: String?,
     isOutgoing: Boolean = true
@@ -158,7 +158,7 @@ fun TextPrevPreview() {
             dateFontSize = 5.sp,
             containerColor = MaterialTheme.colorScheme.primary,
             senderInfo = null,
-            sendingState = SendingState.Pending,
+            sendingState = MessageSendingState.Pending,
             isSpacer = false,
             originSenderTitle = null,
             isOutgoing = true
