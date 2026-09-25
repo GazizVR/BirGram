@@ -8,4 +8,6 @@
     <string name="unsupported_message">Unsupported message</string>
 
     <string name="forwarded_from">Forwarded from</string>
+
+    <string name="copy">Copy</string>
 </resources>
