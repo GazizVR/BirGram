@@ -8,6 +8,7 @@ import org.gaziz.telegram.api.MessageService
 import org.gaziz.telegram.api.model.ResponseData
 import org.gaziz.telegram.api.model.message.DraftMessage
 import org.gaziz.telegram.api.model.message.Message
+import org.gaziz.telegram.api.model.message.MessageProperties
 import org.gaziz.telegram.internal.ClientManager
 import org.gaziz.telegram.internal.mapper.toMessage
 import org.gaziz.telegram.internal.mapper.toTgDraftMessage
@@ -16,6 +17,9 @@ import javax.inject.Inject
 class MessageServiceImpl @Inject constructor(
     private val manager: ClientManager
 ): MessageService {
+    private val _messageProperties = MutableStateFlow<Map<Long, MessageProperties>>(emptyMap())
+    override val messageProperties = _messageProperties.asStateFlow()
+
     private val _messages = MutableStateFlow<Map<Long, Message>>(emptyMap())
     override val messages = _messages.asStateFlow()
 
