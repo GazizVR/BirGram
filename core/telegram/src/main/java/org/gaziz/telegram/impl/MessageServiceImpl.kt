@@ -11,6 +11,7 @@ import org.gaziz.telegram.api.model.message.Message
 import org.gaziz.telegram.api.model.message.MessageProperties
 import org.gaziz.telegram.internal.ClientManager
 import org.gaziz.telegram.internal.mapper.toMessage
+import org.gaziz.telegram.internal.mapper.toProperties
 import org.gaziz.telegram.internal.mapper.toTgDraftMessage
 import javax.inject.Inject
 
@@ -19,6 +20,39 @@ class MessageServiceImpl @Inject constructor(
 ): MessageService {
     private val _messageProperties = MutableStateFlow<Map<Long, MessageProperties>>(emptyMap())
     override val messageProperties = _messageProperties.asStateFlow()
+
+    private fun getMessageProperties(
+        chatId: Long,
+        messageId: Long,
+        onResult: (MessageProperties) -> Unit
+    ) {
+        val query = TdApi.GetMessageProperties().apply {
+            this.chatId = chatId
+            this.messageId = messageId
+        }
+        manager.sendRequest(
+            query,
+            onResult = {
+                if(it is TdApi.MessageProperties) {
+                    onResult(it.toProperties())
+                }
+            }
+        )
+    }
+
+    override fun setMessageProperties(
+        chatId: Long,
+        messageId: Long
+    ) {
+        getMessageProperties(
+            chatId,
+            messageId
+        ) { properties ->
+            _messageProperties.update { old ->
+                old + (messageId to properties)
+            }
+        }
+    }
 
     private val _messages = MutableStateFlow<Map<Long, Message>>(emptyMap())
     override val messages = _messages.asStateFlow()

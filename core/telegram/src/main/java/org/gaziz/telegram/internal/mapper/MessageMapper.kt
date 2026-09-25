@@ -3,12 +3,13 @@ package org.gaziz.telegram.internal.mapper
 import org.drinkless.tdlib.TdApi
 import org.gaziz.telegram.api.model.message.DraftMessage
 import org.gaziz.telegram.api.model.message.DraftMessageContent
-import org.gaziz.telegram.api.model.message.MessageForwardInfo
 import org.gaziz.telegram.api.model.message.Message
 import org.gaziz.telegram.api.model.message.MessageContent
-import org.gaziz.telegram.api.model.message.MessageSender
+import org.gaziz.telegram.api.model.message.MessageForwardInfo
 import org.gaziz.telegram.api.model.message.MessageOrigin
+import org.gaziz.telegram.api.model.message.MessageProperties
 import org.gaziz.telegram.api.model.message.MessageReplyTo
+import org.gaziz.telegram.api.model.message.MessageSender
 import org.gaziz.telegram.api.model.message.MessageSendingState
 import java.time.Instant
 import java.time.LocalDateTime
@@ -196,5 +197,12 @@ fun TdApi.Message.toMessage(): Message {
         sendingState = this.sendingState.toSendingState(),
         forwardInfo = this.forwardInfo?.toForwardInfo(),
         replyTo = this.replyTo.toReplyTo()
+    )
+}
+
+fun TdApi.MessageProperties.toProperties(): MessageProperties {
+    return MessageProperties(
+        canDeleteForSelf = this.canBeDeletedOnlyForSelf,
+        canDeleteForAll = this.canBeDeletedForAllUsers
     )
 }
