@@ -24,9 +24,8 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.core.ui.component.ChatAvatar
-import org.gaziz.birgram.feature.chat.ui.component.dropDownContent.CopyButton
+import org.gaziz.birgram.feature.chat.ui.component.dropDownContent.CopyButtonWrapper
 import org.gaziz.birgram.feature.chat.ui.component.messageContent.ContentPreview
-import org.gaziz.birgram.feature.chat.ui.model.MessageContentInfo
 import org.gaziz.birgram.feature.chat.ui.model.MessageUiState
 
 @Composable
@@ -107,15 +106,11 @@ fun MessageCard(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 shape = RoundedCornerShape(8.dp),
             ) {
-                if(
-                    message.content is MessageContentInfo.Text
-                ) {
-                    CopyButton(
-                        cnt = message.content,
-                        fontSize = fontSize,
-                        onClick = { expanded = false }
-                    )
-                }
+                CopyButtonWrapper(
+                    msgCnt = message.content,
+                    fontSize = fontSize,
+                    onClick = { expanded = false }
+                )
             }
         }
     }

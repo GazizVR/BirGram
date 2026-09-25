@@ -18,7 +18,7 @@ import org.gaziz.birgram.feature.chat.ui.model.MessageContentInfo
 
 @Composable
 fun CopyButton(
-    cnt: MessageContentInfo,
+    text: String,
     fontSize: TextUnit,
     onClick: () -> Unit,
 ) {
@@ -42,10 +42,6 @@ fun CopyButton(
         },
         onClick = {
             scope.launch {
-                val text = when(cnt) {
-                    is MessageContentInfo.Text -> cnt.text
-                    else -> ""
-                }
                 val data = ClipData.newPlainText("", text)
                 val clip = ClipEntry(data)
                 clipboardManager.setClipEntry(clip)
@@ -53,4 +49,34 @@ fun CopyButton(
             onClick()
         }
     )
+}
+
+@Composable
+fun CopyButtonWrapper(
+    msgCnt: MessageContentInfo,
+    fontSize: TextUnit,
+    onClick: () -> Unit,
+) {
+    when(msgCnt) {
+        is MessageContentInfo.Text -> CopyButton(msgCnt.text,fontSize,onClick)
+        is MessageContentInfo.Animation -> {
+            val text = msgCnt.caption
+            if(text != null) {
+                CopyButton(text,fontSize,onClick)
+            }
+        }
+        is MessageContentInfo.Photo -> {
+            val text = msgCnt.caption
+            if(text != null) {
+                CopyButton(text,fontSize,onClick)
+            }
+        }
+        is MessageContentInfo.Video -> {
+            val text = msgCnt.caption
+            if(text != null) {
+                CopyButton(text,fontSize,onClick)
+            }
+        }
+        else -> {}
+    }
 }
