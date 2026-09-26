@@ -169,7 +169,8 @@ fun ChatScreen(
                         ) { msg ->
                             MessageCard(
                                 message = msg,
-                                fontSize = 6.sp
+                                fontSize = 6.sp,
+                                onDelete = {}
                             )
                         }
                         item {

@@ -10,5 +10,7 @@ data class MessageUiState(
     val date: String,
     val sender: MessageSenderInfo?,
     val sendingState: MessageSendingState?,
-    val originSenderTitle: String?
+    val originSenderTitle: String?,
+    val canDeleteForSelf: Boolean,
+    val canDeleteForAll: Boolean
 )

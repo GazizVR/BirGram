@@ -47,8 +47,8 @@ import org.gaziz.telegram.api.model.group.GroupMemberStatus
 import org.gaziz.telegram.api.model.message.DraftMessage
 import org.gaziz.telegram.api.model.message.DraftMessageContent
 import org.gaziz.telegram.api.model.message.MessageContent
-import org.gaziz.telegram.api.model.message.MessageSender
 import org.gaziz.telegram.api.model.message.MessageOrigin
+import org.gaziz.telegram.api.model.message.MessageSender
 import org.gaziz.telegram.api.model.user.UserType
 import org.gaziz.telegram.api.usecase.DownloadMessageMedia
 import java.io.File
@@ -289,6 +289,9 @@ class ChatViewModel @Inject constructor(
                         }
                         else -> null
                     }
+                    val props = messageService.messageProperties
+                        .map{ it[msg.id] }
+                        .stateIn(viewModelScope)
                     MessageUiState(
                         id = msg.id,
                         content = msgContent,
@@ -296,7 +299,9 @@ class ChatViewModel @Inject constructor(
                         date = msg.date.toTimeString(),
                         sender = senderInfo.value,
                         sendingState = msg.sendingState,
-                        originSenderTitle = originSenderTitle
+                        originSenderTitle = originSenderTitle,
+                        canDeleteForSelf = props.value?.canDeleteForSelf ?: false,
+                        canDeleteForAll = props.value?.canDeleteForAll ?: false
                     )
                 }
                 key.formatMonthDay() to messages

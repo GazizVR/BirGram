@@ -25,13 +25,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.core.ui.component.ChatAvatar
 import org.gaziz.birgram.feature.chat.ui.component.dropDownContent.CopyButtonWrapper
+import org.gaziz.birgram.feature.chat.ui.component.dropDownContent.DeleteButton
 import org.gaziz.birgram.feature.chat.ui.component.messageContent.ContentPreview
 import org.gaziz.birgram.feature.chat.ui.model.MessageUiState
 
 @Composable
 fun MessageCard(
     message: MessageUiState,
-    fontSize: TextUnit
+    fontSize: TextUnit,
+    onDelete: () -> Unit
 ) {
     val containerColor = if(message.isOutgoing){
         MaterialTheme.colorScheme.primaryContainer
@@ -111,6 +113,15 @@ fun MessageCard(
                     fontSize = fontSize,
                     onClick = { expanded = false }
                 )
+                if(message.canDeleteForSelf || message.canDeleteForAll) {
+                    DeleteButton(
+                        onClick = {
+                            expanded = false
+                            onDelete()
+                        },
+                        fontSize = fontSize
+                    )
+                }
             }
         }
     }

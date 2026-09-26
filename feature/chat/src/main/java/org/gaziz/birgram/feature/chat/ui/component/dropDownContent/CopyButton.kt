@@ -30,7 +30,8 @@ fun CopyButton(
                 text = stringResource(R.string.copy),
                 fontSize = fontSize,
                 lineHeight = fontSize,
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onBackground,
+                maxLines = 1
             )
         },
         leadingIcon = {
@@ -41,12 +42,12 @@ fun CopyButton(
             )
         },
         onClick = {
+            onClick()
             scope.launch {
                 val data = ClipData.newPlainText("", text)
                 val clip = ClipEntry(data)
                 clipboardManager.setClipEntry(clip)
             }
-            onClick()
         }
     )
 }
