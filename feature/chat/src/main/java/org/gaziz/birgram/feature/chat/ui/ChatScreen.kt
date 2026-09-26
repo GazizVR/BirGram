@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
+import org.gaziz.birgram.core.ui.model.ChatTypeInfo
 import org.gaziz.birgram.feature.chat.R
 import org.gaziz.birgram.feature.chat.ui.component.MessageCard
 import org.gaziz.birgram.feature.chat.ui.component.TextBox
@@ -218,13 +219,19 @@ fun ChatScreen(
             }
         }
     }
+    val othersStr = stringResource(R.string.others)
     DeleteMessageDialog(
         deleteMessageIds = deleteMessageIds,
         onValueChange = { deleteMessageIds = it },
-        onDelete = {
+        user = when(chat?.typeInfo) {
+            is ChatTypeInfo.User -> chat?.title ?: othersStr
+            is ChatTypeInfo.BasicGroup -> othersStr
+            else -> null
+        },
+        onDelete = { ids, forAll ->
             viewModel.deleteMessages(
-                it,
-                true
+                ids,
+                forAll
             )
         }
     )
