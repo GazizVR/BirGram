@@ -1,7 +1,7 @@
 package org.gaziz.birgram.feature.chat.ui.model
 
 import org.gaziz.birgram.core.ui.model.MessageSenderInfo
-import org.gaziz.telegram.api.model.message.MessageSendingState
+import org.gaziz.birgram.core.telegram.api.model.message.MessageSendingState
 
 data class MessageUiState(
     val id: Long,

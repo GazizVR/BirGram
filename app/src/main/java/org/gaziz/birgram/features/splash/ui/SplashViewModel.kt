@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.BuildConfig
-import org.gaziz.telegram.api.AuthService
-import org.gaziz.telegram.api.usecase.InitClient
+import org.gaziz.birgram.core.telegram.api.AuthService
+import org.gaziz.birgram.core.telegram.api.usecase.InitClient
 import javax.inject.Inject
 
 @HiltViewModel

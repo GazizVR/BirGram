@@ -1,0 +1,20 @@
+package org.gaziz.birgram.core.telegram.api.model.chat
+
+import org.gaziz.birgram.core.telegram.api.model.media.ProfilePhoto
+import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
+import org.gaziz.birgram.core.telegram.api.model.message.Message
+
+data class Chat(
+    val id: Long,
+    val title: String,
+    val type: ChatType,
+    val photo: ProfilePhoto?,
+    val lastMessage: Message?,
+    val draftMessage: DraftMessage?,
+    val positions: List<ChatPosition>,
+    val unreadCount: Int,
+    val mentionCount: Int,
+    val reactionCount: Int,
+    val permissions: ChatPermissions,
+    val accentColorId: Int
+)

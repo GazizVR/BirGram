@@ -84,7 +84,7 @@ BirGram
 │           ├── chat/           # message list, input bar, media previews
 │           └── searchChats/    # local chat search
 │
-├── :core:telegram          → org.gaziz.telegram
+├── :core:telegram          → org.gaziz.birgram.core.telegram
 │   ├── api/                    # service interfaces + domain models
 │   ├── impl/                   # service implementations
 │   ├── internal/               # TDLib client manager, update dispatcher

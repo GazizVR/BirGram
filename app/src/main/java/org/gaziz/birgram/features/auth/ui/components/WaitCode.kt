@@ -47,7 +47,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import org.gaziz.birgram.R
 import org.gaziz.birgram.core.ui.icon.arrowBack
-import org.gaziz.telegram.api.model.auth.AuthCodeInfo
+import org.gaziz.birgram.core.telegram.api.model.auth.AuthCodeInfo
 
 @Composable
 fun WaitCode(

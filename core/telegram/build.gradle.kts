@@ -14,7 +14,7 @@ val apiId = properties.getProperty("api_id") ?: ""
 val apiHash = properties.getProperty("api_hash") ?: ""
 
 android {
-    namespace = "org.gaziz.telegram"
+    namespace = "org.gaziz.birgram.core.telegram"
     compileSdk {
         version = release(37)
     }

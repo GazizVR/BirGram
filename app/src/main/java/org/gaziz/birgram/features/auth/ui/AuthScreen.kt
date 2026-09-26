@@ -13,7 +13,7 @@ import org.gaziz.birgram.features.auth.ui.components.OtherState
 import org.gaziz.birgram.features.auth.ui.components.WaitCode
 import org.gaziz.birgram.features.auth.ui.components.WaitPassword
 import org.gaziz.birgram.features.auth.ui.components.WaitPhoneNumber
-import org.gaziz.telegram.api.model.auth.AuthState
+import org.gaziz.birgram.core.telegram.api.model.auth.AuthState
 
 @Composable
 fun AuthScreen(

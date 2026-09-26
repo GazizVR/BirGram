@@ -9,7 +9,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import org.gaziz.birgram.core.ui.R
 import org.gaziz.birgram.core.ui.model.ChatTypeInfo
-import org.gaziz.telegram.api.model.user.UserStatus
+import org.gaziz.birgram.core.telegram.api.model.user.UserStatus
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

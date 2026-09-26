@@ -5,8 +5,8 @@ import androidx.compose.ui.graphics.asImageBitmap
 import org.gaziz.birgram.feature.chat.ui.model.MediaContent
 import org.gaziz.birgram.feature.chat.ui.model.MessageContentInfo
 import org.gaziz.birgram.feature.chat.ui.model.StickerContent
-import org.gaziz.telegram.api.model.StickerFormat
-import org.gaziz.telegram.api.model.message.MessageContent
+import org.gaziz.birgram.core.telegram.api.model.StickerFormat
+import org.gaziz.birgram.core.telegram.api.model.message.MessageContent
 import java.io.File
 
 fun MessageContent.Sticker.toCnt(

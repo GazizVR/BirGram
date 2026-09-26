@@ -7,14 +7,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.stateIn
 import org.gaziz.birgram.core.ui.icon.skull
 import org.gaziz.birgram.core.ui.model.Avatar
-import org.gaziz.telegram.api.ChatService
-import org.gaziz.telegram.api.UserService
-import org.gaziz.telegram.api.model.chat.Chat
-import org.gaziz.telegram.api.model.chat.ChatType
-import org.gaziz.telegram.api.model.media.ProfilePhoto
-import org.gaziz.telegram.api.model.media.FileData
-import org.gaziz.telegram.api.model.user.UserType
-import org.gaziz.telegram.api.usecase.DownloadOrGetFileDataById
+import org.gaziz.birgram.core.telegram.api.ChatService
+import org.gaziz.birgram.core.telegram.api.UserService
+import org.gaziz.birgram.core.telegram.api.model.chat.Chat
+import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
+import org.gaziz.birgram.core.telegram.api.model.media.ProfilePhoto
+import org.gaziz.birgram.core.telegram.api.model.media.FileData
+import org.gaziz.birgram.core.telegram.api.model.user.UserType
+import org.gaziz.birgram.core.telegram.api.usecase.DownloadOrGetFileDataById
 import javax.inject.Inject
 
 class GetChatAvatar @Inject constructor(

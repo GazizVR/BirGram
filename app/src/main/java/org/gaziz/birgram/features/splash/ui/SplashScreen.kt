@@ -18,7 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import org.gaziz.birgram.R
-import org.gaziz.telegram.api.model.auth.AuthState
+import org.gaziz.birgram.core.telegram.api.model.auth.AuthState
 
 @Composable
 fun SplashScreen(

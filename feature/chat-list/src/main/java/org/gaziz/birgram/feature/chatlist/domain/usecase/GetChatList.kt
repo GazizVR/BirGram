@@ -5,16 +5,16 @@ import kotlinx.coroutines.flow.map
 import org.gaziz.birgram.core.ui.usecase.GetChatAvatar
 import org.gaziz.birgram.feature.chatlist.domain.mapper.formatChatTime
 import org.gaziz.birgram.feature.chatlist.domain.model.ChatListItem
-import org.gaziz.telegram.api.ChatService
-import org.gaziz.telegram.api.UserService
-import org.gaziz.telegram.api.model.chat.Chat
-import org.gaziz.telegram.api.model.chat.ChatListType
-import org.gaziz.telegram.api.model.chat.ChatPosition
-import org.gaziz.telegram.api.model.chat.ChatType
-import org.gaziz.telegram.api.model.message.DraftMessageContent
-import org.gaziz.telegram.api.model.message.MessageSender
-import org.gaziz.telegram.api.model.user.UserStatus
-import org.gaziz.telegram.api.model.user.UserType
+import org.gaziz.birgram.core.telegram.api.ChatService
+import org.gaziz.birgram.core.telegram.api.UserService
+import org.gaziz.birgram.core.telegram.api.model.chat.Chat
+import org.gaziz.birgram.core.telegram.api.model.chat.ChatListType
+import org.gaziz.birgram.core.telegram.api.model.chat.ChatPosition
+import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
+import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
+import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
+import org.gaziz.birgram.core.telegram.api.model.user.UserStatus
+import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import java.time.LocalDateTime
 import javax.inject.Inject
 

@@ -7,11 +7,11 @@ import org.gaziz.birgram.core.ui.model.ChatTypeInfo
 import org.gaziz.birgram.core.ui.usecase.GetChatAvatar
 import org.gaziz.searchchats.domain.model.SearchedItem
 import org.gaziz.searchchats.domain.repository.ChatSearchRepository
-import org.gaziz.telegram.api.ChatService
-import org.gaziz.telegram.api.GroupService
-import org.gaziz.telegram.api.UserService
-import org.gaziz.telegram.api.model.chat.ChatType
-import org.gaziz.telegram.api.model.user.UserType
+import org.gaziz.birgram.core.telegram.api.ChatService
+import org.gaziz.birgram.core.telegram.api.GroupService
+import org.gaziz.birgram.core.telegram.api.UserService
+import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
+import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import javax.inject.Inject
 
 class SearchLocalChats @Inject constructor(

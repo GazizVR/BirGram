@@ -28,7 +28,7 @@ import org.gaziz.birgram.core.ui.icon.clock
 import org.gaziz.birgram.core.ui.icon.error
 import org.gaziz.birgram.core.ui.model.MessageSenderInfo
 import org.gaziz.birgram.core.ui.theme.BirGramTheme
-import org.gaziz.telegram.api.model.message.MessageSendingState
+import org.gaziz.birgram.core.telegram.api.model.message.MessageSendingState
 
 @Composable
 fun SendingStatePreview(

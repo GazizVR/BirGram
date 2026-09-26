@@ -12,8 +12,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.TextUnit
 import org.gaziz.birgram.feature.chatlist.R
-import org.gaziz.telegram.api.model.message.DraftMessage
-import org.gaziz.telegram.api.model.message.DraftMessageContent
+import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
+import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
 
 @Composable
 fun DraftMessagePreview(

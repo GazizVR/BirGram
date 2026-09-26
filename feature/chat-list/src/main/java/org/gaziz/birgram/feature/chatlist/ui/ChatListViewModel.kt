@@ -9,8 +9,8 @@ import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.datastore.UserPreferencesRepository
 import org.gaziz.birgram.feature.chatlist.domain.usecase.GetChatList
 import org.gaziz.birgram.feature.chatlist.domain.usecase.LoadChatList
-import org.gaziz.telegram.api.AuthService
-import org.gaziz.telegram.api.model.chat.ChatListType
+import org.gaziz.birgram.core.telegram.api.AuthService
+import org.gaziz.birgram.core.telegram.api.model.chat.ChatListType
 import javax.inject.Inject
 
 @HiltViewModel
