@@ -170,7 +170,13 @@ fun ChatScreen(
                             MessageCard(
                                 message = msg,
                                 fontSize = 6.sp,
-                                onDelete = {}
+                                onDelete = {
+                                    viewModel.deleteMessages(
+                                        LongArray(1) { msg.id },
+                                        msg.canDeleteForAll
+                                    )
+                                },
+                                onDropdownOpen = { viewModel.loadMessageProperties(msg.id) }
                             )
                         }
                         item {

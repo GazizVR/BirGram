@@ -19,11 +19,25 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.gaziz.birgram.core.telegram.api.ChatService
+import org.gaziz.birgram.core.telegram.api.GroupService
+import org.gaziz.birgram.core.telegram.api.MessageService
+import org.gaziz.birgram.core.telegram.api.UserService
+import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
+import org.gaziz.birgram.core.telegram.api.model.group.GroupMemberStatus
+import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
+import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
+import org.gaziz.birgram.core.telegram.api.model.message.MessageContent
+import org.gaziz.birgram.core.telegram.api.model.message.MessageOrigin
+import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
+import org.gaziz.birgram.core.telegram.api.model.user.UserType
+import org.gaziz.birgram.core.telegram.api.usecase.DownloadMessageMedia
 import org.gaziz.birgram.core.ui.model.ChatTypeInfo
 import org.gaziz.birgram.core.ui.usecase.GetChatAvatar
 import org.gaziz.birgram.core.ui.usecase.GetMessageSenderInfo
@@ -38,19 +52,6 @@ import org.gaziz.birgram.feature.chat.ui.model.ChatUiState
 import org.gaziz.birgram.feature.chat.ui.model.MediaContent
 import org.gaziz.birgram.feature.chat.ui.model.MessageContentInfo
 import org.gaziz.birgram.feature.chat.ui.model.MessageUiState
-import org.gaziz.birgram.core.telegram.api.ChatService
-import org.gaziz.birgram.core.telegram.api.GroupService
-import org.gaziz.birgram.core.telegram.api.MessageService
-import org.gaziz.birgram.core.telegram.api.UserService
-import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
-import org.gaziz.birgram.core.telegram.api.model.group.GroupMemberStatus
-import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
-import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
-import org.gaziz.birgram.core.telegram.api.model.message.MessageContent
-import org.gaziz.birgram.core.telegram.api.model.message.MessageOrigin
-import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
-import org.gaziz.birgram.core.telegram.api.model.user.UserType
-import org.gaziz.birgram.core.telegram.api.usecase.DownloadMessageMedia
 import java.io.File
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -180,8 +181,10 @@ class ChatViewModel @Inject constructor(
         )
 
     val messages: StateFlow<Map<String, List<MessageUiState>>> =
-        getChatMessages(chatId).map { map ->
-            map.entries.associate { (key,value) ->
+        combine(
+            getChatMessages(chatId),messageService.messageProperties
+        ) { dateToMessagesMap, propertiesMap ->
+            dateToMessagesMap.entries.associate { (key,value) ->
                 val messages = value.mapIndexed { ind, msg ->
                     val chat = chatService.chats.value[msg.chatId]
                     val senderInfo = getMessageSenderInfo(msg.sender)
@@ -289,9 +292,11 @@ class ChatViewModel @Inject constructor(
                         }
                         else -> null
                     }
-                    val props = messageService.messageProperties
-                        .map{ it[msg.id] }
-                        .stateIn(viewModelScope)
+
+                    val properties = propertiesMap[msg.id]
+                    val canDeleteForSelf = properties?.canDeleteForSelf ?: false
+                    val canDeleteForAll = properties?.canDeleteForAll ?: false
+
                     MessageUiState(
                         id = msg.id,
                         content = msgContent,
@@ -300,8 +305,8 @@ class ChatViewModel @Inject constructor(
                         sender = senderInfo.value,
                         sendingState = msg.sendingState,
                         originSenderTitle = originSenderTitle,
-                        canDeleteForSelf = props.value?.canDeleteForSelf ?: false,
-                        canDeleteForAll = props.value?.canDeleteForAll ?: false
+                        canDeleteForSelf = canDeleteForSelf,
+                        canDeleteForAll = canDeleteForAll
                     )
                 }
                 key.formatMonthDay() to messages
@@ -333,6 +338,19 @@ class ChatViewModel @Inject constructor(
     }
     fun sendMessageText(message: String) {
         messageService.sendMessage(chatId,message)
+    }
+    fun deleteMessages(
+        msgIds: LongArray,
+        forAll: Boolean
+    ) {
+        messageService.deleteMessages(
+            chatId = chatId,
+            msgIds = msgIds,
+            forAll = forAll
+        )
+    }
+    fun loadMessageProperties(messageId: Long) {
+       messageService.loadMessageProperties(chatId,messageId)
     }
 
     private val _mediaId = MutableStateFlow<Long?>(null)

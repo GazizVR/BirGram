@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +34,7 @@ import org.gaziz.birgram.feature.chat.ui.model.MessageUiState
 fun MessageCard(
     message: MessageUiState,
     fontSize: TextUnit,
+    onDropdownOpen: () -> Unit,
     onDelete: () -> Unit
 ) {
     val containerColor = if(message.isOutgoing){
@@ -42,6 +44,7 @@ fun MessageCard(
     }
     val spacerSize = 40.dp
     var expanded by remember { mutableStateOf(false) }
+    var hasMenuOpened by rememberSaveable { mutableStateOf(false) }
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -53,6 +56,10 @@ fun MessageCard(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
             ) {
+                if(!hasMenuOpened) {
+                    onDropdownOpen()
+                    hasMenuOpened = true
+                }
                 expanded = true
             },
         contentAlignment = if(message.isOutgoing) Alignment.CenterEnd else Alignment.CenterStart,
