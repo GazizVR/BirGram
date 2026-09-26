@@ -5,7 +5,6 @@ import kotlinx.coroutines.flow.map
 import org.gaziz.telegram.api.ChatService
 import org.gaziz.telegram.api.model.chat.Chat
 import javax.inject.Inject
-import kotlin.collections.get
 
 class GetChatById @Inject constructor(
     private val chatService: ChatService,

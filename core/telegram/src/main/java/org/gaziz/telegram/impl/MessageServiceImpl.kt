@@ -40,7 +40,7 @@ class MessageServiceImpl @Inject constructor(
         )
     }
 
-    override fun setMessageProperties(
+    override fun loadMessageProperties(
         chatId: Long,
         messageId: Long
     ) {

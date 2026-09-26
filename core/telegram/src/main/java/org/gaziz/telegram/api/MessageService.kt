@@ -8,7 +8,7 @@ import org.gaziz.telegram.api.model.message.MessageProperties
 
 interface MessageService {
     val messageProperties: StateFlow<Map<Long, MessageProperties>>
-    fun setMessageProperties(
+    fun loadMessageProperties(
         chatId: Long,
         messageId: Long
     )
