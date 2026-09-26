@@ -23,7 +23,7 @@ Built with **Kotlin**, **Jetpack Compose**, **Material 3**, **Hilt**, and **TDLi
 
 The project is a personal/learning build focused on:
 
-- 🏛 A clean, modular architecture (separate Gradle modules for the app, the Telegram service layer, and the raw TDLib bindings)
+- 🏛 A clean, modular architecture (separate Gradle modules for app, features, core services, and raw TDLib bindings)
 - 🔄 MVVM + unidirectional UI state with Kotlin Flow
 - 🎨 A hand-built Material 3 UI, including a custom vector icon set
 - 📦 Dependency injection with Hilt
@@ -66,43 +66,53 @@ The project is a personal/learning build focused on:
 
 ## 🏗 Architecture
 
-BirGram is split into three Gradle modules, plus feature packages inside the app module:
+BirGram is modularized into 9 Gradle modules split across app, feature, and core layers:
 
 ```text
 BirGram
 │
-├── :app                    → UI, navigation, DI wiring, feature screens
-│   └── org.gaziz.birgram
-│       ├── core/
-│       │   ├── datastore/      # user preferences (theme, etc.) via DataStore
-│       │   ├── navigation/     # NavHost + type-safe routes
-│       │   └── ui/             # shared theme, components, icons, mappers
-│       └── features/
-│           ├── auth/           # phone number → code → 2FA password
-│           ├── splash/         # startup / auth-state routing
-│           ├── chatList/       # chat list + archive
-│           ├── chat/           # message list, input bar, media previews
-│           └── searchChats/    # local chat search
+├── :app                       → App entry point, Hilt setup, Root NavHost
+│   └── org.gaziz.birgram.features
+│       ├── auth/              # Phone number login, SMS/code & 2FA password verification
+│       └── splash/            # Startup splash & auth-state routing
 │
-├── :core:telegram          → org.gaziz.birgram.core.telegram
-│   ├── api/                    # service interfaces + domain models
-│   ├── impl/                   # service implementations
-│   ├── internal/               # TDLib client manager, update dispatcher
-│   │   ├── mapper/              # TdApi → domain model mapping
-│   │   └── updaters/             # TDLib update → state reducers
-│   └── di/                     # Hilt modules exposing each service
+├── :feature:chat              → org.gaziz.birgram.feature.chat
+│   └── Message list, input bar, media previews, message loading/fetching use cases
 │
-└── :core:tdlib              → org.gaziz.tdlib
+├── :feature:chat-list         → org.gaziz.birgram.feature.chatlist
+│   └── Chat list screen, archive, chat previews, chat list loading use cases
+│
+├── :feature:search-chats      → org.gaziz.searchchats
+│   └── Local chat search and filtering
+│
+├── :core:telegram             → org.gaziz.birgram.core.telegram
+│   ├── api/                   # Service interfaces + domain models
+│   ├── impl/                  # Service implementations
+│   ├── internal/              # TDLib client manager, update dispatcher
+│   │   ├── mapper/            # TdApi → domain model mapping
+│   │   └── updaters/          # TDLib update → state reducers
+│   └── di/                    # Hilt modules exposing each service
+│
+├── :core:ui                   → org.gaziz.birgram.core.ui
+│   └── Shared Material 3 components, theme, custom vector icons, avatar & sender use cases
+│
+├── :core:navigation           → org.gaziz.birgram.core.navigation
+│   └── Type-safe navigation routes (Navigation Compose + Kotlin Serialization)
+│
+├── :core:datastore            → org.gaziz.birgram.core.datastore
+│   └── User preferences (theme, dark mode settings) via DataStore Preferences
+│
+└── :core:tdlib                → org.gaziz.tdlib
     └── Vendored TDLib JNI bindings (TdApi.java, Client.java)
         + prebuilt native libraries (armeabi-v7a, arm64-v8a, x86, x86_64)
 ```
 
 ### Design principles
 
-- 🧩 Feature-based package structure
+- 🧩 Multi-module feature & core layer separation
 - 🔄 MVVM with unidirectional state
 - 🌊 Kotlin Flow + Coroutines throughout
-- 🔌 A dedicated Telegram service layer (`AuthService`, `ChatService`, `MessageService`, `UserService`, `GroupService`, `FileService`, `ErrorService`) so the UI never talks to TDLib directly
+- 🔌 A dedicated Telegram service layer (`AuthService`, `ChatService`, `MessageService`, `UserService`, `GroupService`, `FileService`, `ErrorService`) in `:core:telegram` so the UI never talks to TDLib directly
 - 📦 Hilt for dependency injection, KSP for annotation processing
 
 ---
