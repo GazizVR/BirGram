@@ -1,4 +1,4 @@
-package org.gaziz.birgram.feature.chat.ui.component
+package org.gaziz.birgram.feature.chat.ui.component.bar
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInHorizontally

@@ -1,4 +1,4 @@
-package org.gaziz.birgram.feature.chat.ui.component
+package org.gaziz.birgram.feature.chat.ui.component.bar
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

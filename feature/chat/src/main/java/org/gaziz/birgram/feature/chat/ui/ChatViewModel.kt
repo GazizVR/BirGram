@@ -182,7 +182,8 @@ class ChatViewModel @Inject constructor(
 
     val messages: StateFlow<Map<String, List<MessageUiState>>> =
         combine(
-            getChatMessages(chatId),messageService.messageProperties
+            getChatMessages(chatId),
+            messageService.messageProperties
         ) { dateToMessagesMap, propertiesMap ->
             dateToMessagesMap.entries.associate { (key,value) ->
                 val messages = value.mapIndexed { ind, msg ->

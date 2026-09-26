@@ -32,7 +32,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
-import org.gaziz.birgram.feature.chat.ui.component.PlaybackButton
+import org.gaziz.birgram.feature.chat.ui.component.button.PlaybackButton
 import org.gaziz.birgram.feature.chat.ui.model.StickerContent
 import java.io.File
 

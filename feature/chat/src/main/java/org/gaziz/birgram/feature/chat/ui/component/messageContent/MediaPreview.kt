@@ -42,7 +42,7 @@ import coil3.request.ImageRequest
 import coil3.video.VideoFrameDecoder
 import org.gaziz.birgram.core.ui.model.MessageSenderInfo
 import org.gaziz.birgram.feature.chat.R
-import org.gaziz.birgram.feature.chat.ui.component.PlaybackButton
+import org.gaziz.birgram.feature.chat.ui.component.button.PlaybackButton
 import org.gaziz.birgram.feature.chat.ui.model.MediaContent
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSendingState
 import java.io.File

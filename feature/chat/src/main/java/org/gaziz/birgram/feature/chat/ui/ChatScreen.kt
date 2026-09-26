@@ -38,11 +38,12 @@ import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.feature.chat.R
-import org.gaziz.birgram.feature.chat.ui.component.ChatTopBar
 import org.gaziz.birgram.feature.chat.ui.component.MessageCard
-import org.gaziz.birgram.feature.chat.ui.component.MessageInputBar
-import org.gaziz.birgram.feature.chat.ui.component.ScrollDownButton
 import org.gaziz.birgram.feature.chat.ui.component.TextBox
+import org.gaziz.birgram.feature.chat.ui.component.bar.ChatTopBar
+import org.gaziz.birgram.feature.chat.ui.component.bar.MessageInputBar
+import org.gaziz.birgram.feature.chat.ui.component.button.ScrollDownButton
+import org.gaziz.birgram.feature.chat.ui.component.dialog.DeleteMessageDialog
 import org.gaziz.birgram.feature.chat.ui.model.AvatarUiState
 import org.gaziz.birgram.feature.chat.ui.model.TitleUiState
 
@@ -112,6 +113,7 @@ fun ChatScreen(
                 }
             }
     }
+    var deleteMessageIds by rememberSaveable { mutableStateOf<LongArray?>(null) }
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -170,12 +172,7 @@ fun ChatScreen(
                             MessageCard(
                                 message = msg,
                                 fontSize = 6.sp,
-                                onDelete = {
-                                    viewModel.deleteMessages(
-                                        LongArray(1) { msg.id },
-                                        msg.canDeleteForAll
-                                    )
-                                },
+                                onDelete = { deleteMessageIds = LongArray(1) { msg.id } },
                                 onDropdownOpen = { viewModel.loadMessageProperties(msg.id) }
                             )
                         }
@@ -221,4 +218,14 @@ fun ChatScreen(
             }
         }
     }
+    DeleteMessageDialog(
+        deleteMessageIds = deleteMessageIds,
+        onValueChange = { deleteMessageIds = it },
+        onDelete = {
+            viewModel.deleteMessages(
+                it,
+                true
+            )
+        }
+    )
 }
