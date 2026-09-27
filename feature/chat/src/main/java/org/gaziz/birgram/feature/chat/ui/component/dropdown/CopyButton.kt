@@ -10,7 +10,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.text.font.FontWeight
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.ui.icon.contentCopy
 import org.gaziz.birgram.feature.chat.R
@@ -19,7 +19,6 @@ import org.gaziz.birgram.feature.chat.ui.model.MessageContentInfo
 @Composable
 fun CopyButton(
     text: String,
-    fontSize: TextUnit,
     onClick: () -> Unit,
 ) {
     val clipboardManager = LocalClipboard.current
@@ -28,10 +27,10 @@ fun CopyButton(
         text = {
             Text(
                 text = stringResource(R.string.copy),
-                fontSize = fontSize,
-                lineHeight = fontSize,
+                style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onBackground,
-                maxLines = 1
+                fontWeight = FontWeight.Normal,
+                maxLines = 1,
             )
         },
         leadingIcon = {
@@ -48,34 +47,33 @@ fun CopyButton(
                 val clip = ClipEntry(data)
                 clipboardManager.setClipEntry(clip)
             }
-        }
+        },
     )
 }
 
 @Composable
 fun CopyButtonWrapper(
     msgCnt: MessageContentInfo,
-    fontSize: TextUnit,
     onClick: () -> Unit,
 ) {
     when(msgCnt) {
-        is MessageContentInfo.Text -> CopyButton(msgCnt.text,fontSize,onClick)
+        is MessageContentInfo.Text -> CopyButton(msgCnt.text, onClick)
         is MessageContentInfo.Animation -> {
             val text = msgCnt.caption
             if(text != null) {
-                CopyButton(text,fontSize,onClick)
+                CopyButton(text, onClick)
             }
         }
         is MessageContentInfo.Photo -> {
             val text = msgCnt.caption
             if(text != null) {
-                CopyButton(text,fontSize,onClick)
+                CopyButton(text, onClick)
             }
         }
         is MessageContentInfo.Video -> {
             val text = msgCnt.caption
             if(text != null) {
-                CopyButton(text,fontSize,onClick)
+                CopyButton(text, onClick)
             }
         }
         else -> {}

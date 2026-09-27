@@ -6,6 +6,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSendingState
 import org.gaziz.birgram.core.ui.icon.refresh
 import org.gaziz.birgram.feature.chat.R
@@ -20,6 +21,7 @@ fun RetryButton(
                 text = stringResource(R.string.retry),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onBackground,
+                fontWeight = FontWeight.Normal,
                 maxLines = 1
             )
         },

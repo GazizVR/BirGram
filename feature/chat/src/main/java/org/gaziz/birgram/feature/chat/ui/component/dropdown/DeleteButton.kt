@@ -6,7 +6,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.text.font.FontWeight
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSendingState
 import org.gaziz.birgram.core.ui.icon.delete
 import org.gaziz.birgram.feature.chat.R
@@ -15,8 +15,7 @@ import org.gaziz.birgram.feature.chat.ui.model.MessageUiState
 @Composable
 fun DeleteButton(
     onClick: () -> Unit,
-    fontSize: TextUnit,
-    isCancelSending: Boolean
+    isCancelSending: Boolean,
 ) {
     val text = if(isCancelSending) {
        stringResource(R.string.cancel_sending)
@@ -27,20 +26,20 @@ fun DeleteButton(
         text = {
             Text(
                 text = text,
-                fontSize = fontSize,
-                lineHeight = fontSize,
+                style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onBackground,
-                maxLines = 1
+                fontWeight = FontWeight.Normal,
+                maxLines = 1,
             )
         },
         leadingIcon = {
             Icon(
                 imageVector = delete,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onBackground
+                tint = MaterialTheme.colorScheme.onBackground,
             )
         },
-        onClick = onClick
+        onClick = onClick,
     )
 }
 
@@ -48,13 +47,11 @@ fun DeleteButton(
 fun DeleteButtonWrapper(
     message: MessageUiState,
     onClick: () -> Unit,
-    fontSize: TextUnit
 ) {
     if(message.canDeleteForSelf || message.canDeleteForAll) {
         DeleteButton(
             onClick = onClick,
-            fontSize = fontSize,
-            isCancelSending = message.sendingState is MessageSendingState.Pending
+            isCancelSending = message.sendingState is MessageSendingState.Pending,
         )
     }
 }

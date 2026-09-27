@@ -123,7 +123,6 @@ fun MessageCard(
                 )
                 CopyButtonWrapper(
                     msgCnt = message.content,
-                    fontSize = fontSize,
                     onClick = { expanded = false }
                 )
                 DeleteButtonWrapper(
@@ -131,8 +130,7 @@ fun MessageCard(
                     onClick = {
                         expanded = false
                         onDelete()
-                    },
-                    fontSize = fontSize
+                    }
                 )
             }
         }
