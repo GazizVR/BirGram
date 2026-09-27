@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.telegram.internal.updaters
+package org.gaziz.birgram.core.telegram.internal.updater
 
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.api.ErrorService

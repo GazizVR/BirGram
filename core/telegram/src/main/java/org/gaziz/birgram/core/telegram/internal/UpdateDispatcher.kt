@@ -1,12 +1,12 @@
 package org.gaziz.birgram.core.telegram.internal
 
 import org.drinkless.tdlib.TdApi
-import org.gaziz.birgram.core.telegram.internal.updaters.AuthUpdater
-import org.gaziz.birgram.core.telegram.internal.updaters.ChatUpdater
-import org.gaziz.birgram.core.telegram.internal.updaters.ErrorUpdater
-import org.gaziz.birgram.core.telegram.internal.updaters.GroupUpdater
-import org.gaziz.birgram.core.telegram.internal.updaters.MessageUpdater
-import org.gaziz.birgram.core.telegram.internal.updaters.UserUpdater
+import org.gaziz.birgram.core.telegram.internal.updater.AuthUpdater
+import org.gaziz.birgram.core.telegram.internal.updater.ChatUpdater
+import org.gaziz.birgram.core.telegram.internal.updater.ErrorUpdater
+import org.gaziz.birgram.core.telegram.internal.updater.GroupUpdater
+import org.gaziz.birgram.core.telegram.internal.updater.MessageUpdater
+import org.gaziz.birgram.core.telegram.internal.updater.UserUpdater
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,7 +17,7 @@ class UpdateDispatcher @Inject constructor(
     private val messageUpdater: MessageUpdater,
     private val errorUpdater: ErrorUpdater,
     private val userUpdater: UserUpdater,
-    private val groupUpdater: GroupUpdater
+    private val groupUpdater: GroupUpdater,
 ) {
     fun dispatch(u: TdApi.Object){
         when(u) {
@@ -28,36 +28,36 @@ class UpdateDispatcher @Inject constructor(
                     messageUpdater.onLoggingOut()
                     chatUpdater.onLoggingOut()
                 }
-                authUpdater.onAuthStateUpdate(u)
+                authUpdater.onAuthState(u)
             }
 
-            is TdApi.UpdateNewMessage -> messageUpdater.onNewUpdate(u)
-            is TdApi.UpdateMessageSendSucceeded -> messageUpdater.onSendSucceedUpdate(u)
-            is TdApi.UpdateMessageSendFailed -> messageUpdater.onSendFailedUpdate(u)
-            is TdApi.UpdateDeleteMessages -> messageUpdater.onDeleteMessagesUpdate(u)
-            is TdApi.UpdateMessageContent -> messageUpdater.onMessageContentUpdate(u)
+            is TdApi.UpdateNewMessage -> messageUpdater.onNewMessage(u)
+            is TdApi.UpdateMessageSendSucceeded -> messageUpdater.onSendSucceeded(u)
+            is TdApi.UpdateMessageSendFailed -> messageUpdater.onSendFailed(u)
+            is TdApi.UpdateDeleteMessages -> messageUpdater.onDeleteMessages(u)
+            is TdApi.UpdateMessageContent -> messageUpdater.onMessageContent(u)
 
-            is TdApi.UpdateNewChat -> chatUpdater.onNewUpdate(u)
-            is TdApi.UpdateChatTitle -> chatUpdater.onTitleUpdate(u)
-            is TdApi.UpdateChatPhoto -> chatUpdater.onPhotoUpdate(u)
+            is TdApi.UpdateNewChat -> chatUpdater.onNewChat(u)
+            is TdApi.UpdateChatTitle -> chatUpdater.onTitle(u)
+            is TdApi.UpdateChatPhoto -> chatUpdater.onPhoto(u)
 
-            is TdApi.UpdateChatPosition -> chatUpdater.onPositionUpdate(u)
-            is TdApi.UpdateChatLastMessage -> chatUpdater.onLastMsgUpdate(u)
-            is TdApi.UpdateChatDraftMessage -> chatUpdater.onDraftMsgUpdate(u)
-            is TdApi.UpdateChatPermissions -> chatUpdater.onPermissionsUpdate(u)
+            is TdApi.UpdateChatPosition -> chatUpdater.onPosition(u)
+            is TdApi.UpdateChatLastMessage -> chatUpdater.onLastMessage(u)
+            is TdApi.UpdateChatDraftMessage -> chatUpdater.onDraftMessage(u)
+            is TdApi.UpdateChatPermissions -> chatUpdater.onPermissions(u)
 
-            is TdApi.UpdateChatAccentColors -> chatUpdater.onChatAccentColorsUpdate(u)
-            is TdApi.UpdateAccentColors -> chatUpdater.onAccentColorsUpdate(u)
+            is TdApi.UpdateChatAccentColors -> chatUpdater.onChatAccentColors(u)
+            is TdApi.UpdateAccentColors -> chatUpdater.onAccentColors(u)
 
-            is TdApi.UpdateChatReadInbox -> chatUpdater.onInboxUpdate(u)
-            is TdApi.UpdateChatUnreadReactionCount -> chatUpdater.onReactionCountUpdate(u)
-            is TdApi.UpdateChatUnreadMentionCount -> chatUpdater.onMentionCountUpdate(u)
+            is TdApi.UpdateChatReadInbox -> chatUpdater.onInbox(u)
+            is TdApi.UpdateChatUnreadReactionCount -> chatUpdater.onReactionCount(u)
+            is TdApi.UpdateChatUnreadMentionCount -> chatUpdater.onMentionCount(u)
 
-            is TdApi.UpdateUser -> userUpdater.onUserUpdate(u)
-            is TdApi.UpdateUserStatus -> userUpdater.onUserStatusUpdate(u)
+            is TdApi.UpdateUser -> userUpdater.onUser(u)
+            is TdApi.UpdateUserStatus -> userUpdater.onUserStatus(u)
 
-            is TdApi.UpdateBasicGroup -> groupUpdater.onBasicGroupUpdate(u)
-            is TdApi.UpdateSupergroup -> groupUpdater.onSuperGroupUpdate(u)
+            is TdApi.UpdateBasicGroup -> groupUpdater.onBasicGroup(u)
+            is TdApi.UpdateSupergroup -> groupUpdater.onSuperGroup(u)
         }
     }
 }

@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.telegram.internal.updaters
+package org.gaziz.birgram.core.telegram.internal.updater
 
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.api.UserService
@@ -12,12 +12,12 @@ class UserUpdater @Inject constructor(
     private val userService: UserService
 ) {
 
-    fun onUserUpdate(u: TdApi.UpdateUser) {
+    fun onUser(u: TdApi.UpdateUser) {
         userService.updateUsers { old ->
             old + (u.user.id to u.user.toUser())
         }
     }
-    fun onUserStatusUpdate(u: TdApi.UpdateUserStatus){
+    fun onUserStatus(u: TdApi.UpdateUserStatus){
         userService.updateUsers { old ->
             val user = old[u.userId] ?: return@updateUsers old
             old + (u.userId to user.copy(status = u.status.toStatus()))

@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.telegram.internal.updaters
+package org.gaziz.birgram.core.telegram.internal.updater
 
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.api.ChatService
@@ -17,18 +17,18 @@ import kotlin.collections.minus
 
 @Singleton
 class ChatUpdater @Inject constructor(
-    private val chatService: ChatService
+    private val chatService: ChatService,
 ) {
     fun onLoggingOut() {
         chatService.updateChats { emptyMap() }
     }
 
-    fun onNewUpdate(u: TdApi.UpdateNewChat){
+    fun onNewChat(u: TdApi.UpdateNewChat){
         chatService.updateChats { map ->
             map + (u.chat.id to u.chat.toChat())
         }
     }
-    fun onPositionUpdate(u: TdApi.UpdateChatPosition){
+    fun onPosition(u: TdApi.UpdateChatPosition){
         chatService.updateChats { old ->
             val chat = old[u.chatId] ?: return@updateChats old
             if (u.position.order == 0L) {
@@ -42,7 +42,7 @@ class ChatUpdater @Inject constructor(
             }
         }
     }
-    fun onLastMsgUpdate(u: TdApi.UpdateChatLastMessage){
+    fun onLastMessage(u: TdApi.UpdateChatLastMessage){
         chatService.updateChats { old ->
             val chat = old[u.chatId] ?: return@updateChats old
             val positions = mutableListOf<ChatPosition>().apply {
@@ -57,7 +57,7 @@ class ChatUpdater @Inject constructor(
             old + (u.chatId to newChat)
         }
     }
-    fun onDraftMsgUpdate(u: TdApi.UpdateChatDraftMessage) {
+    fun onDraftMessage(u: TdApi.UpdateChatDraftMessage) {
         chatService.updateChats { old ->
             val chat = old[u.chatId] ?: return@updateChats old
             val positions = mutableListOf<ChatPosition>().apply {
@@ -72,21 +72,21 @@ class ChatUpdater @Inject constructor(
             old + (u.chatId to newChat)
         }
     }
-    fun onPermissionsUpdate(u: TdApi.UpdateChatPermissions) {
+    fun onPermissions(u: TdApi.UpdateChatPermissions) {
         chatService.updateChats { old ->
             val chat = old[u.chatId] ?: return@updateChats old
             val newChat = chat.copy(permissions = u.permissions.toPermissions())
             old + (u.chatId to newChat)
         }
     }
-    fun onChatAccentColorsUpdate(u: TdApi.UpdateChatAccentColors){
+    fun onChatAccentColors(u: TdApi.UpdateChatAccentColors){
         chatService.updateChats { old ->
             val chat = old[u.chatId] ?: return@updateChats old
             val newChat = chat.copy(accentColorId = u.accentColorId)
             old + (u.chatId to newChat)
         }
     }
-    fun onAccentColorsUpdate(u: TdApi.UpdateAccentColors) {
+    fun onAccentColors(u: TdApi.UpdateAccentColors) {
         chatService.updateAccentColors { old ->
             old.toMutableMap().apply {
                 u.colors.forEach { color ->
@@ -96,14 +96,14 @@ class ChatUpdater @Inject constructor(
         }
     }
 
-    fun onTitleUpdate(u: TdApi.UpdateChatTitle){
+    fun onTitle(u: TdApi.UpdateChatTitle){
         chatService.updateChats { old ->
             val chat = old[u.chatId] ?: return@updateChats old
             val newChat = chat.copy(title = u.title)
             old + (u.chatId to newChat)
         }
     }
-    fun onPhotoUpdate(u: TdApi.UpdateChatPhoto){
+    fun onPhoto(u: TdApi.UpdateChatPhoto){
         chatService.updateChats { old ->
             val chat = old[u.chatId] ?: return@updateChats old
             val newChat = chat.copy(photo = u.photo.toPhotoInfo())
@@ -111,21 +111,21 @@ class ChatUpdater @Inject constructor(
         }
     }
 
-    fun onInboxUpdate(u: TdApi.UpdateChatReadInbox){
+    fun onInbox(u: TdApi.UpdateChatReadInbox){
         chatService.updateChats { old ->
             val chat = old[u.chatId] ?: return@updateChats old
             val newChat = chat.copy(unreadCount = u.unreadCount)
             old + (u.chatId to newChat)
         }
     }
-    fun onMentionCountUpdate(u: TdApi.UpdateChatUnreadMentionCount){
+    fun onMentionCount(u: TdApi.UpdateChatUnreadMentionCount){
         chatService.updateChats { old ->
             val chat = old[u.chatId] ?: return@updateChats old
             val newChat = chat.copy(mentionCount = u.unreadMentionCount)
             old + (u.chatId to newChat)
         }
     }
-    fun onReactionCountUpdate(u: TdApi.UpdateChatUnreadReactionCount){
+    fun onReactionCount(u: TdApi.UpdateChatUnreadReactionCount){
         chatService.updateChats { old ->
             val chat = old[u.chatId] ?: return@updateChats old
             val newChat = chat.copy(reactionCount = u.unreadReactionCount)

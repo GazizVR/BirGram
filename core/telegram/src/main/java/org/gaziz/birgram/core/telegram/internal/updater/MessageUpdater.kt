@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.telegram.internal.updaters
+package org.gaziz.birgram.core.telegram.internal.updater
 
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.api.MessageService
@@ -9,28 +9,28 @@ import javax.inject.Singleton
 
 @Singleton
 class MessageUpdater @Inject constructor(
-    private val messageService: MessageService
+    private val messageService: MessageService,
 ) {
-    fun onNewUpdate(u: TdApi.UpdateNewMessage) {
+    fun onNewMessage(u: TdApi.UpdateNewMessage) {
         messageService.updateMessages { old ->
             old + (u.message.id to u.message.toMessage())
         }
     }
 
-    fun onSendSucceedUpdate(u: TdApi.UpdateMessageSendSucceeded){
+    fun onSendSucceeded(u: TdApi.UpdateMessageSendSucceeded){
         messageService.updateMessages { old ->
             val new = old - u.oldMessageId
             new + (u.message.id to u.message.toMessage())
         }
     }
 
-    fun onSendFailedUpdate(u: TdApi.UpdateMessageSendFailed) {
+    fun onSendFailed(u: TdApi.UpdateMessageSendFailed) {
         messageService.updateMessages { old ->
             old + (u.oldMessageId to u.message.toMessage())
         }
     }
 
-    fun onDeleteMessagesUpdate(u: TdApi.UpdateDeleteMessages) {
+    fun onDeleteMessages(u: TdApi.UpdateDeleteMessages) {
        messageService.updateMessages { old ->
            old
                .toMutableMap()
@@ -44,7 +44,7 @@ class MessageUpdater @Inject constructor(
        }
     }
 
-    fun onMessageContentUpdate(u: TdApi.UpdateMessageContent){
+    fun onMessageContent(u: TdApi.UpdateMessageContent){
         messageService.updateMessages { old ->
             old
                 .toMutableMap()
@@ -57,7 +57,7 @@ class MessageUpdater @Inject constructor(
                         put(
                             u.messageId,
                             message.copy(
-                                content = u.newContent.toMessageCnt()
+                                content = u.newContent.toMessageCnt(),
                             )
                         )
                     }

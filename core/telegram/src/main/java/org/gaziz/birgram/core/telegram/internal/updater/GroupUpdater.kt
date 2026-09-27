@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.telegram.internal.updaters
+package org.gaziz.birgram.core.telegram.internal.updater
 
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.api.GroupService
@@ -11,12 +11,12 @@ import javax.inject.Singleton
 class GroupUpdater @Inject constructor(
     private val groupService: GroupService
 ) {
-    fun onBasicGroupUpdate(u: TdApi.UpdateBasicGroup){
+    fun onBasicGroup(u: TdApi.UpdateBasicGroup){
         groupService.updateBasicGroups { old ->
             old + (u.basicGroup.id to u.basicGroup.toBasicGroup())
         }
     }
-    fun onSuperGroupUpdate(u: TdApi.UpdateSupergroup) {
+    fun onSuperGroup(u: TdApi.UpdateSupergroup) {
         groupService.updateSuperGroups { old ->
             old + (u.supergroup.id to u.supergroup.toSuperGroup())
         }
