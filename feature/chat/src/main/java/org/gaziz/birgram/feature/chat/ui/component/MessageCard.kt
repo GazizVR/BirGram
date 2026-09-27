@@ -24,10 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.gaziz.birgram.core.telegram.api.model.message.MessageSendingState
 import org.gaziz.birgram.core.ui.component.ChatAvatar
 import org.gaziz.birgram.feature.chat.ui.component.dropdown.CopyButtonWrapper
-import org.gaziz.birgram.feature.chat.ui.component.dropdown.DeleteButton
+import org.gaziz.birgram.feature.chat.ui.component.dropdown.DeleteButtonWrapper
 import org.gaziz.birgram.feature.chat.ui.component.dropdown.RetryButtonWrapper
 import org.gaziz.birgram.feature.chat.ui.component.messagecontent.ContentPreview
 import org.gaziz.birgram.feature.chat.ui.model.MessageUiState
@@ -127,16 +126,14 @@ fun MessageCard(
                     fontSize = fontSize,
                     onClick = { expanded = false }
                 )
-                if(message.canDeleteForSelf || message.canDeleteForAll) {
-                    DeleteButton(
-                        onClick = {
-                            expanded = false
-                            onDelete()
-                        },
-                        fontSize = fontSize,
-                        isCancelSending = message.sendingState is MessageSendingState.Pending
-                    )
-                }
+                DeleteButtonWrapper(
+                    message = message,
+                    onClick = {
+                        expanded = false
+                        onDelete()
+                    },
+                    fontSize = fontSize
+                )
             }
         }
     }
