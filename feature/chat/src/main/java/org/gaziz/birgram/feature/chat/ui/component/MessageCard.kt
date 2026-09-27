@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,19 +23,13 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.core.ui.component.ChatAvatar
-import org.gaziz.birgram.feature.chat.ui.component.dropdown.CopyButtonWrapper
-import org.gaziz.birgram.feature.chat.ui.component.dropdown.DeleteButtonWrapper
-import org.gaziz.birgram.feature.chat.ui.component.dropdown.RetryButtonWrapper
 import org.gaziz.birgram.feature.chat.ui.component.messagecontent.ContentPreview
 import org.gaziz.birgram.feature.chat.ui.model.MessageUiState
 
 @Composable
 fun MessageCard(
     message: MessageUiState,
-    fontSize: TextUnit,
-    onDropdownOpen: () -> Unit,
-    onDelete: () -> Unit,
-    onRetry: () -> Unit
+    fontSize: TextUnit
 ) {
     val containerColor = if(message.isOutgoing){
         MaterialTheme.colorScheme.primaryContainer
@@ -45,25 +37,13 @@ fun MessageCard(
         MaterialTheme.colorScheme.surfaceContainerLow
     }
     val spacerSize = 40.dp
-    var expanded by remember { mutableStateOf(false) }
-    var hasMenuOpened by rememberSaveable { mutableStateOf(false) }
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
                 horizontal = 8.dp,
                 vertical = 4.dp
-            )
-            .clickable(
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() }
-            ) {
-                if (!hasMenuOpened) {
-                    onDropdownOpen()
-                    hasMenuOpened = true
-                }
-                expanded = true
-            },
+            ),
         contentAlignment = if(message.isOutgoing) Alignment.CenterEnd else Alignment.CenterStart,
     ) {
         Row(
@@ -108,31 +88,32 @@ fun MessageCard(
                 Spacer(Modifier.width(spacerSize))
             }
         }
-        Box(
-            contentAlignment = Alignment.Center
+    }
+}
+
+@Composable
+fun MessageCardWrapper(
+    message: MessageUiState,
+    fontSize: TextUnit,
+    onFirstClick: () -> Unit,
+    onClick: () -> Unit
+) {
+    var isClicked by rememberSaveable { mutableStateOf(false) }
+    Box(
+        modifier = Modifier.clickable(
+            indication = null,
+            interactionSource = remember { MutableInteractionSource() }
         ) {
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                shape = RoundedCornerShape(8.dp),
-            ) {
-                RetryButtonWrapper(
-                    sendingState = message.sendingState,
-                    onRetry = onRetry
-                )
-                CopyButtonWrapper(
-                    msgCnt = message.content,
-                    onClick = { expanded = false }
-                )
-                DeleteButtonWrapper(
-                    message = message,
-                    onClick = {
-                        expanded = false
-                        onDelete()
-                    }
-                )
+            if (!isClicked) {
+                isClicked = true
+                onFirstClick()
             }
+            onClick()
         }
+    ) {
+        MessageCard(
+            message = message,
+            fontSize = fontSize
+        )
     }
 }
