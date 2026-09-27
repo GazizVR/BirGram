@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
+import org.gaziz.birgram.core.telegram.api.model.message.MessageSendingState
 import org.gaziz.birgram.core.ui.model.ChatTypeInfo
 import org.gaziz.birgram.feature.chat.R
 import org.gaziz.birgram.feature.chat.ui.component.MessageCard
@@ -173,7 +174,16 @@ fun ChatScreen(
                             MessageCard(
                                 message = msg,
                                 fontSize = 6.sp,
-                                onDelete = { deleteMessageIds = LongArray(1) { msg.id } },
+                                onDelete = {
+                                    if(msg.sendingState is MessageSendingState.Pending) {
+                                        viewModel.deleteMessages(
+                                            LongArray(1){ msg.id },
+                                            msg.canDeleteForAll
+                                        )
+                                    } else {
+                                        deleteMessageIds = LongArray(1) { msg.id }
+                                    }
+                                },
                                 onDropdownOpen = { viewModel.loadMessageProperties(msg.id) }
                             )
                         }

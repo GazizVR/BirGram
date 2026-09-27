@@ -13,12 +13,18 @@ import org.gaziz.birgram.feature.chat.R
 @Composable
 fun DeleteButton(
     onClick: () -> Unit,
-    fontSize: TextUnit
+    fontSize: TextUnit,
+    isCancelSending: Boolean
 ) {
+    val text = if(isCancelSending) {
+       stringResource(R.string.cancel_sending)
+    } else {
+        stringResource(R.string.delete)
+    }
     DropdownMenuItem(
         text = {
             Text(
-                text = stringResource(R.string.delete),
+                text = text,
                 fontSize = fontSize,
                 lineHeight = fontSize,
                 maxLines = 1,

@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.gaziz.birgram.core.telegram.api.model.message.MessageSendingState
 import org.gaziz.birgram.core.ui.component.ChatAvatar
 import org.gaziz.birgram.feature.chat.ui.component.dropDownContent.CopyButtonWrapper
 import org.gaziz.birgram.feature.chat.ui.component.dropDownContent.DeleteButton
@@ -126,7 +127,8 @@ fun MessageCard(
                             expanded = false
                             onDelete()
                         },
-                        fontSize = fontSize
+                        fontSize = fontSize,
+                        isCancelSending = message.sendingState is MessageSendingState.Pending
                     )
                 }
             }

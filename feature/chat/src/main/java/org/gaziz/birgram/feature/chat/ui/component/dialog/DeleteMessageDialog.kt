@@ -78,7 +78,7 @@ fun DeleteMessageDialog(
                         text = stringResource(R.string.delete_message_prompt),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = MaterialTheme.typography.labelSmall,
-                        maxLines = 1
+                        maxLines = 2
                     )
                     if(user != null) {
                         Row(
@@ -94,7 +94,8 @@ fun DeleteMessageDialog(
                                 text = stringResource(R.string.also_delete_for_user,user),
                                 color = MaterialTheme.colorScheme.onBackground,
                                 style = MaterialTheme.typography.labelSmall,
-                                maxLines = 1
+                                maxLines = 1,
+                                modifier = Modifier.weight(1f)
                             )
                         }
                     }
