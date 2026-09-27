@@ -1,4 +1,4 @@
-package org.gaziz.birgram.feature.chat.ui.component.dropDownContent
+package org.gaziz.birgram.feature.chat.ui.component.dropdown
 
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
