@@ -1,4 +1,4 @@
-package org.gaziz.birgram.feature.chat.ui.component.messageContent
+package org.gaziz.birgram.feature.chat.ui.component.messagecontent
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

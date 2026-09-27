@@ -29,7 +29,7 @@ import org.gaziz.birgram.core.ui.component.ChatAvatar
 import org.gaziz.birgram.feature.chat.ui.component.dropdown.CopyButtonWrapper
 import org.gaziz.birgram.feature.chat.ui.component.dropdown.DeleteButton
 import org.gaziz.birgram.feature.chat.ui.component.dropdown.RetryButtonWrapper
-import org.gaziz.birgram.feature.chat.ui.component.messageContent.ContentPreview
+import org.gaziz.birgram.feature.chat.ui.component.messagecontent.ContentPreview
 import org.gaziz.birgram.feature.chat.ui.model.MessageUiState
 
 @Composable
