@@ -154,7 +154,7 @@ fun TdApi.MessageSender.toSender(): MessageSender {
 fun TdApi.MessageSendingState?.toSendingState(): MessageSendingState? {
     return when(this) {
         is TdApi.MessageSendingStatePending -> MessageSendingState.Pending
-        is TdApi.MessageSendingStateFailed -> MessageSendingState.Failed
+        is TdApi.MessageSendingStateFailed -> MessageSendingState.Failed(canRetry = this.canRetry)
         else -> null
     }
 }
