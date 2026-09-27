@@ -9,6 +9,7 @@
 
     <string name="forwarded_from">Forwarded from</string>
 
+    <string name="retry">Retry</string>
     <string name="copy">Copy</string>
     <string name="delete">Delete</string>
     <string name="cancel_sending">Cancel sending</string>

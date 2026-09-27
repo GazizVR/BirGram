@@ -174,6 +174,7 @@ fun ChatScreen(
                             MessageCard(
                                 message = msg,
                                 fontSize = 6.sp,
+                                onDropdownOpen = { viewModel.loadMessageProperties(msg.id) },
                                 onDelete = {
                                     if(msg.sendingState is MessageSendingState.Pending) {
                                         viewModel.deleteMessages(
@@ -184,7 +185,11 @@ fun ChatScreen(
                                         deleteMessageIds = LongArray(1) { msg.id }
                                     }
                                 },
-                                onDropdownOpen = { viewModel.loadMessageProperties(msg.id) }
+                                onRetry = {
+                                    viewModel.resendMessages(
+                                        LongArray(1){ msg.id }
+                                    )
+                                }
                             )
                         }
                         item {

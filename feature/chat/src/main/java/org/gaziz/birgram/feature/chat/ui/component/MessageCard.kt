@@ -28,6 +28,7 @@ import org.gaziz.birgram.core.telegram.api.model.message.MessageSendingState
 import org.gaziz.birgram.core.ui.component.ChatAvatar
 import org.gaziz.birgram.feature.chat.ui.component.dropDownContent.CopyButtonWrapper
 import org.gaziz.birgram.feature.chat.ui.component.dropDownContent.DeleteButton
+import org.gaziz.birgram.feature.chat.ui.component.dropDownContent.RetryButtonWrapper
 import org.gaziz.birgram.feature.chat.ui.component.messageContent.ContentPreview
 import org.gaziz.birgram.feature.chat.ui.model.MessageUiState
 
@@ -36,7 +37,8 @@ fun MessageCard(
     message: MessageUiState,
     fontSize: TextUnit,
     onDropdownOpen: () -> Unit,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    onRetry: () -> Unit
 ) {
     val containerColor = if(message.isOutgoing){
         MaterialTheme.colorScheme.primaryContainer
@@ -57,7 +59,7 @@ fun MessageCard(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
             ) {
-                if(!hasMenuOpened) {
+                if (!hasMenuOpened) {
                     onDropdownOpen()
                     hasMenuOpened = true
                 }
@@ -116,6 +118,10 @@ fun MessageCard(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 shape = RoundedCornerShape(8.dp),
             ) {
+                RetryButtonWrapper(
+                    sendingState = message.sendingState,
+                    onRetry = onRetry
+                )
                 CopyButtonWrapper(
                     msgCnt = message.content,
                     fontSize = fontSize,

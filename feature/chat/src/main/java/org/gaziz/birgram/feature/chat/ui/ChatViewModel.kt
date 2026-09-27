@@ -350,6 +350,12 @@ class ChatViewModel @Inject constructor(
             forAll = forAll
         )
     }
+    fun resendMessages(msgIds: LongArray) {
+        messageService.resendMessages(
+            chatId = chatId,
+            msgIds = msgIds
+        )
+    }
     fun loadMessageProperties(messageId: Long) {
        messageService.loadMessageProperties(chatId,messageId)
     }
