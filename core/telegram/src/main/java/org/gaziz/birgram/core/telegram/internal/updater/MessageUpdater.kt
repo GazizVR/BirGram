@@ -44,7 +44,7 @@ class MessageUpdater @Inject constructor(
        }
     }
 
-    fun onMessageContent(u: TdApi.UpdateMessageContent){
+    fun onContent(u: TdApi.UpdateMessageContent){
         messageService.updateMessages { old ->
             old
                 .toMutableMap()

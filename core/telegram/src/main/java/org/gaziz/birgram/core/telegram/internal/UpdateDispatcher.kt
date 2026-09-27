@@ -35,7 +35,7 @@ class UpdateDispatcher @Inject constructor(
             is TdApi.UpdateMessageSendSucceeded -> messageUpdater.onSendSucceeded(u)
             is TdApi.UpdateMessageSendFailed -> messageUpdater.onSendFailed(u)
             is TdApi.UpdateDeleteMessages -> messageUpdater.onDeleteMessages(u)
-            is TdApi.UpdateMessageContent -> messageUpdater.onMessageContent(u)
+            is TdApi.UpdateMessageContent -> messageUpdater.onContent(u)
 
             is TdApi.UpdateNewChat -> chatUpdater.onNewChat(u)
             is TdApi.UpdateChatTitle -> chatUpdater.onTitle(u)
@@ -54,7 +54,7 @@ class UpdateDispatcher @Inject constructor(
             is TdApi.UpdateChatUnreadMentionCount -> chatUpdater.onMentionCount(u)
 
             is TdApi.UpdateUser -> userUpdater.onUser(u)
-            is TdApi.UpdateUserStatus -> userUpdater.onUserStatus(u)
+            is TdApi.UpdateUserStatus -> userUpdater.onStatus(u)
 
             is TdApi.UpdateBasicGroup -> groupUpdater.onBasicGroup(u)
             is TdApi.UpdateSupergroup -> groupUpdater.onSuperGroup(u)

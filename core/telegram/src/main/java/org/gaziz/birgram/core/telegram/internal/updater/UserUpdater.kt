@@ -17,7 +17,7 @@ class UserUpdater @Inject constructor(
             old + (u.user.id to u.user.toUser())
         }
     }
-    fun onUserStatus(u: TdApi.UpdateUserStatus){
+    fun onStatus(u: TdApi.UpdateUserStatus){
         userService.updateUsers { old ->
             val user = old[u.userId] ?: return@updateUsers old
             old + (u.userId to user.copy(status = u.status.toStatus()))
