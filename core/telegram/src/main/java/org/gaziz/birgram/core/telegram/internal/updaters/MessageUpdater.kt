@@ -3,6 +3,7 @@ package org.gaziz.birgram.core.telegram.internal.updaters
 import org.drinkless.tdlib.TdApi
 import org.gaziz.birgram.core.telegram.api.MessageService
 import org.gaziz.birgram.core.telegram.internal.mapper.toMessage
+import org.gaziz.birgram.core.telegram.internal.mapper.toMessageCnt
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -41,6 +42,28 @@ class MessageUpdater @Inject constructor(
                }
                .toMap()
        }
+    }
+
+    fun onMessageContentUpdate(u: TdApi.UpdateMessageContent){
+        messageService.updateMessages { old ->
+            old
+                .toMutableMap()
+                .apply {
+                    val message = get(u.messageId)
+                    if(
+                        message != null &&
+                        message.chatId == u.chatId
+                    ) {
+                        put(
+                            u.messageId,
+                            message.copy(
+                                content = u.newContent.toMessageCnt()
+                            )
+                        )
+                    }
+                }
+                .toMap()
+        }
     }
 
     fun onLoggingOut() {
