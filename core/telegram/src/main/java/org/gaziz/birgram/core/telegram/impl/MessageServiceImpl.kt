@@ -134,4 +134,15 @@ class MessageServiceImpl @Inject constructor(
         }
        manager.sendRequest(query)
     }
+
+    override fun resendMessages(
+        chatId: Long,
+        msgIds: LongArray
+    ) {
+        val query = TdApi.ResendMessages().apply {
+            this.chatId = chatId
+            this.messageIds = msgIds
+        }
+        manager.sendRequest(query)
+    }
 }

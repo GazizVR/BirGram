@@ -33,4 +33,8 @@ interface MessageService {
         msgIds: LongArray,
         forAll: Boolean
     )
+    fun resendMessages(
+        chatId: Long,
+        msgIds: LongArray
+    )
 }
