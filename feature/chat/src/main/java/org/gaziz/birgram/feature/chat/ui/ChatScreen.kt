@@ -57,6 +57,7 @@ fun ChatScreen(
     val messages by viewModel.messages.collectAsState()
     val chat by viewModel.chat.collectAsState()
     val containerColor = MaterialTheme.colorScheme.surfaceContainer
+    // Message pagination
     val listState = rememberLazyListState()
     LaunchedEffect(Unit) {
         snapshotFlow {
@@ -73,6 +74,7 @@ fun ChatScreen(
                 }
             }
     }
+    // Scroll down button visibility
     var isScrollDownButton by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         var previousIndex = listState.firstVisibleItemIndex
@@ -103,6 +105,7 @@ fun ChatScreen(
                 }
             }
     }
+    // Auto-scroll on new messages
     LaunchedEffect(Unit) {
         viewModel.chat
             .mapNotNull { it?.lastMessage }
@@ -115,6 +118,7 @@ fun ChatScreen(
                 }
             }
     }
+    // UI Content
     var deleteMessageIds by rememberSaveable { mutableStateOf<LongArray?>(null) }
     Scaffold(
         modifier = Modifier
