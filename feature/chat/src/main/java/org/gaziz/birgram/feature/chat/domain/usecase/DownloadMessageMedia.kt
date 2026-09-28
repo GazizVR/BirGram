@@ -1,9 +1,10 @@
-package org.gaziz.birgram.core.telegram.api.usecase
+package org.gaziz.birgram.feature.chat.domain.usecase
 
 import org.gaziz.birgram.core.telegram.api.MessageService
 import org.gaziz.birgram.core.telegram.api.model.media.FileData
 import org.gaziz.birgram.core.telegram.api.model.message.Message
 import org.gaziz.birgram.core.telegram.api.model.message.MessageContent
+import org.gaziz.birgram.core.telegram.api.usecase.DownloadOrGetFileDataById
 import javax.inject.Inject
 
 class DownloadMessageMedia @Inject constructor(
