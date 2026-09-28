@@ -2,84 +2,63 @@ package org.gaziz.birgram.core.telegram.ui.mapper
 
 import android.graphics.BitmapFactory
 import androidx.compose.ui.graphics.asImageBitmap
-import org.gaziz.birgram.core.telegram.api.ChatService
 import org.gaziz.birgram.core.telegram.api.model.chat.Chat
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
-import org.gaziz.birgram.core.telegram.api.model.media.FileData
-import org.gaziz.birgram.core.telegram.api.model.media.ProfilePhoto
 import org.gaziz.birgram.core.telegram.api.model.user.User
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
-import org.gaziz.birgram.core.telegram.api.usecase.DownloadOrGetFileDataById
 import org.gaziz.birgram.core.telegram.ui.model.AvatarUiState
 import org.gaziz.birgram.core.ui.icon.skull
 import javax.inject.Inject
 
 class ChatAvatarUiMapper @Inject constructor(
-    private val accentColorMapper: AccentColorMapper,
-    private val downloadOrGetFileDataById: DownloadOrGetFileDataById,
-    private val chatService: ChatService
+    private val accentColorMapper: AccentColorMapper
 ) {
-    private fun updateAvatar(
-        chatId: Long,
-        file: FileData
-    ) {
-        chatService.updateChats { old ->
-            val chat = old[chatId] ?: return@updateChats old
-            var profilePhoto = ProfilePhoto(
-                small = file,
-                miniThumbnail = null
-            )
-            chat.photo?.let { photo ->
-                profilePhoto = photo.copy(small = file)
-            }
-            val newChat = chat.copy(photo = profilePhoto)
-            old + (chatId to newChat)
-        }
-    }
     operator fun invoke(
         chat: Chat,
         chatById: Map<Long, Chat>,
-        usersById: Map<Long, User>
+        usersById: Map<Long, User>,
+        onDownload: (Int) -> Unit
     ): AvatarUiState {
         val accentColor = accentColorMapper(chat.accentColorId)
         val placeHolderText = if(chat.title.isNotBlank()) chat.title[0].toString() else ""
-        val downloadPhoto: () -> Unit = {
-            chat.photo?.let { photo ->
-                if(photo.small.canDownload) {
-                    downloadOrGetFileDataById(
-                        photo.small.id
-                    ) { updateAvatar(chat.id,it) }
-                }
+        val isDeleted = run {
+            val type = chat.type
+            if(type is ChatType.Private) {
+                usersById[type.userId]?.type is UserType.Deleted ||
+                usersById[type.userId]?.type is UserType.Unknown
+            } else {
+                false
             }
         }
-        val isDeleted =
-            chat.type is ChatType.Private &&
-                    usersById[(chat.type as ChatType.Private).userId]?.type is UserType.Deleted ||
-                    chat.type is ChatType.Private &&
-                    usersById[(chat.type as ChatType.Private).userId]?.type is UserType.Unknown
+        val photo = chat.photo
         return when {
             isDeleted -> AvatarUiState.Icon(
                 imageVector = skull,
                 background = accentColor
             )
-            chat.photo != null && chat.photo?.small?.path?.isNotBlank() == true -> {
-                val path = chat.photo!!.small.path
+            photo != null && photo.small.path.isNotBlank() -> {
+                val path = photo.small.path
                 AvatarUiState.Photo(path)
             }
-            chat.photo != null && chat.photo?.miniThumbnail != null -> {
-                val miniThumbnail = chat.photo!!.miniThumbnail!!
+            photo != null && photo.miniThumbnail != null -> {
+                val miniThumbnail = photo.miniThumbnail!!
                 val bitmap = BitmapFactory
                     .decodeByteArray(miniThumbnail,0,miniThumbnail.size)
                     .asImageBitmap()
                 AvatarUiState.Thumbnail(
                     bitmap = bitmap,
-                    onDownload = downloadPhoto
+                    onDownload = { onDownload(photo.small.id) }
                 )
             }
+            photo != null -> AvatarUiState.PlaceHolder(
+                text = placeHolderText,
+                color = accentColor,
+                onDownload = { onDownload(photo.small.id) }
+            )
             else -> AvatarUiState.PlaceHolder(
                 text = placeHolderText,
                 color = accentColor,
-                onDownload = downloadPhoto
+                onDownload = {}
             )
         }
     }

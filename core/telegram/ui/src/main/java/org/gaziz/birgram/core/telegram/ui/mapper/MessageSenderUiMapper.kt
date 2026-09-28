@@ -14,7 +14,8 @@ class MessageSenderUiMapper @Inject constructor(
     operator fun invoke(
         messageSender: MessageSender,
         chatById: Map<Long, Chat>,
-        usersById: Map<Long, User>
+        usersById: Map<Long, User>,
+        onDownload: (Int) -> Unit
     ): MessageSenderUiState? {
         return when(messageSender) {
             is MessageSender.Chat -> {
@@ -22,7 +23,7 @@ class MessageSenderUiMapper @Inject constructor(
                 val accentColor = accentColorMapper(chat.accentColorId)
                 MessageSenderUiState(
                     name = chat.title,
-                    avatar = chatAvatarUiMapper(chat,chatById,usersById),
+                    avatar = chatAvatarUiMapper(chat,chatById,usersById,onDownload),
                     accentColor = accentColor
                 )
             }
@@ -31,7 +32,7 @@ class MessageSenderUiMapper @Inject constructor(
                 val accentColor = accentColorMapper(user.accentColorId)
                 MessageSenderUiState(
                     name = user.firstName,
-                    avatar = userAvatarUiMapper(user),
+                    avatar = userAvatarUiMapper(user,onDownload),
                     accentColor = accentColor
                 )
             }
