@@ -15,12 +15,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
-import org.gaziz.birgram.core.ui.model.Avatar
+import org.gaziz.birgram.core.ui.model.AvatarUiState
 
 @Composable
 fun ChatAvatar(
     modifier: Modifier,
-    avatar: Avatar,
+    avatar: AvatarUiState,
     placeHolderFontSize: TextUnit = 16.sp,
     overlay: @Composable () -> Unit = {}
 ) {
@@ -29,7 +29,7 @@ fun ChatAvatar(
         contentAlignment = Alignment.Center
     ) {
         when(avatar) {
-            is Avatar.Photo -> {
+            is AvatarUiState.Photo -> {
                 LaunchedEffect(Unit) {
                     avatar.onEmpty()
                 }
@@ -39,7 +39,7 @@ fun ChatAvatar(
                     modifier = modifier.clip(CircleShape),
                 )
             }
-            is Avatar.Icon -> {
+            is AvatarUiState.Icon -> {
                 Box(
                     modifier = modifier
                         .clip(CircleShape)
@@ -53,7 +53,7 @@ fun ChatAvatar(
                     )
                 }
             }
-            is Avatar.PlaceHolder -> {
+            is AvatarUiState.PlaceHolder -> {
                 LaunchedEffect(Unit) {
                     avatar.downloadPhoto()
                 }

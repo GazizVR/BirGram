@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.ui.icon.archive
-import org.gaziz.birgram.core.ui.model.Avatar
+import org.gaziz.birgram.core.ui.model.AvatarUiState
 import org.gaziz.birgram.feature.chatlist.R
 import org.gaziz.birgram.feature.chatlist.ui.ChatListViewModel
 import org.gaziz.birgram.feature.chatlist.ui.component.ChatCard
@@ -107,7 +107,7 @@ fun MainScreen(
                                     .width(cardWidth)
                                     .background(cardColor),
                                 photo = PhotoUiState(
-                                    photo = Avatar.Icon(
+                                    photo = AvatarUiState.Icon(
                                         imageVector = archive,
                                         background = MaterialTheme.colorScheme.onSurface.copy(0.25f)
                                     ),

@@ -1,10 +1,9 @@
 package org.gaziz.birgram.core.ui.model
 
 import androidx.compose.ui.graphics.Color
-import org.gaziz.birgram.core.ui.model.Avatar
 
-data class MessageSenderInfo(
+data class MessageSenderUiState(
     val name: String? = null,
-    val avatar: Avatar? = null,
+    val avatar: AvatarUiState? = null,
     val accentColor: Color
 )

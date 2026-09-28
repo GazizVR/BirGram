@@ -2,16 +2,16 @@ package org.gaziz.birgram.core.ui.model
 
 import org.gaziz.birgram.core.telegram.api.model.user.UserStatus
 
-interface ChatTypeInfo {
+interface ChatTypeUiState {
     data class User(
         val isBot: Boolean,
         val status: UserStatus
-    ): ChatTypeInfo
+    ): ChatTypeUiState
     data class BasicGroup(
         val memberCount: Int
-    ): ChatTypeInfo
+    ): ChatTypeUiState
     data class SuperGroup(
         val memberCount: Int,
         val isChannel: Boolean
-    ): ChatTypeInfo
+    ): ChatTypeUiState
 }

@@ -22,7 +22,7 @@ import org.gaziz.birgram.core.ui.component.ChatText
 import org.gaziz.birgram.core.ui.component.ChatTypePreview
 import org.gaziz.birgram.core.ui.icon.arrowBack
 import org.gaziz.birgram.core.ui.icon.moreVert
-import org.gaziz.birgram.core.ui.model.ChatTypeInfo
+import org.gaziz.birgram.core.ui.model.ChatTypeUiState
 import org.gaziz.birgram.feature.chat.ui.model.AvatarUiState
 import org.gaziz.birgram.feature.chat.ui.model.TitleUiState
 
@@ -32,7 +32,7 @@ fun ChatTopBar(
     modifier: Modifier = Modifier,
     avatar: AvatarUiState,
     title: TitleUiState,
-    info: ChatTypeInfo?,
+    info: ChatTypeUiState?,
     onBackClick: () -> Unit,
     onMoreClick: () -> Unit
 ) {

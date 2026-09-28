@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.map
 import org.gaziz.birgram.core.telegram.api.ChatService
 import org.gaziz.birgram.core.telegram.api.UserService
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
-import org.gaziz.birgram.core.ui.model.MessageSenderInfo
+import org.gaziz.birgram.core.ui.model.MessageSenderUiState
 import javax.inject.Inject
 
 class GetMessageSenderInfo @Inject constructor(
@@ -18,13 +18,13 @@ class GetMessageSenderInfo @Inject constructor(
 ) {
     operator fun invoke(
         messageSender: MessageSender
-    ): Flow<MessageSenderInfo?> {
+    ): Flow<MessageSenderUiState?> {
         return when(messageSender) {
             is MessageSender.Chat -> {
                 chatService.chats.map {
                     val chat = it[messageSender.id] ?: return@map null
                     val accentColor = getAccentColorById(chat.accentColorId)
-                    MessageSenderInfo(
+                    MessageSenderUiState(
                         name = chat.title,
                         avatar = getChatAvatar(chat),
                         accentColor = accentColor
@@ -35,7 +35,7 @@ class GetMessageSenderInfo @Inject constructor(
                 userService.users.map {
                     val user = it[messageSender.id] ?: return@map null
                     val accentColor = getAccentColorById(user.accentColorId)
-                    MessageSenderInfo(
+                    MessageSenderUiState(
                         name = user.firstName,
                         avatar = getUserAvatar(user),
                         accentColor = accentColor

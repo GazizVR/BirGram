@@ -7,7 +7,7 @@ import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
 import org.gaziz.birgram.core.telegram.api.model.group.GroupMemberStatus
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
-import org.gaziz.birgram.core.ui.model.ChatTypeInfo
+import org.gaziz.birgram.core.ui.model.ChatTypeUiState
 import org.gaziz.birgram.core.ui.usecase.GetChatAvatar
 import org.gaziz.birgram.feature.chat.ui.model.ChatUiState
 import javax.inject.Inject
@@ -25,7 +25,7 @@ class ChatUiMapper @Inject constructor(
             userService.users.value[chatType.userId]?.type == UserType.Unknown
         val avatar = getChatAvatar(chat)
         var canSendTextMessages = chat.permissions.canSendBasicMessages
-        val typeInfo: ChatTypeInfo? = when(val type = chat.type) {
+        val typeInfo: ChatTypeUiState? = when(val type = chat.type) {
             is ChatType.BasicGroup -> {
                 val group = groupService.basicGroups.value[type.groupId]
                 canSendTextMessages =
@@ -34,7 +34,7 @@ class ChatUiMapper @Inject constructor(
                             (group?.memberStatus is GroupMemberStatus.Admin &&
                                     (group.memberStatus as GroupMemberStatus.Admin).canPostMessages)
                 if(group != null) {
-                    ChatTypeInfo.BasicGroup(
+                    ChatTypeUiState.BasicGroup(
                         memberCount = group.memberCount,
                     )
                 } else {
@@ -49,7 +49,7 @@ class ChatUiMapper @Inject constructor(
                             (group?.memberStatus is GroupMemberStatus.Admin &&
                                     (group.memberStatus as GroupMemberStatus.Admin).canPostMessages)
                 if(group != null) {
-                    ChatTypeInfo.SuperGroup(
+                    ChatTypeUiState.SuperGroup(
                         memberCount = group.memberCount,
                         isChannel = type.isChannel
                     )
@@ -60,7 +60,7 @@ class ChatUiMapper @Inject constructor(
             is ChatType.Private -> {
                 val user = userService.users.value[type.userId]
                 if(user != null) {
-                    ChatTypeInfo.User(
+                    ChatTypeUiState.User(
                         status = user.status,
                         isBot = user.type is UserType.Bot
                     )
@@ -71,7 +71,7 @@ class ChatUiMapper @Inject constructor(
             is ChatType.Secret -> {
                 val user = userService.users.value[type.userId]
                 if(user != null) {
-                    ChatTypeInfo.User(
+                    ChatTypeUiState.User(
                         status = user.status,
                         isBot = user.type is UserType.Bot
                     )

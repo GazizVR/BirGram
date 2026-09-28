@@ -1,6 +1,6 @@
 package org.gaziz.birgram.feature.chat.ui.model
 
-import org.gaziz.birgram.core.ui.model.MessageSenderInfo
+import org.gaziz.birgram.core.ui.model.MessageSenderUiState
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSendingState
 
 data class MessageUiState(
@@ -8,7 +8,7 @@ data class MessageUiState(
     val content: MessageContentUiState,
     val isOutgoing: Boolean,
     val date: String,
-    val sender: MessageSenderInfo?,
+    val sender: MessageSenderUiState?,
     val sendingState: MessageSendingState?,
     val originSenderTitle: String?,
     val canDeleteForSelf: Boolean,

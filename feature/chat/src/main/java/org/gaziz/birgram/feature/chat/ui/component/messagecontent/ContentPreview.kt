@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import org.gaziz.birgram.core.ui.model.MessageSenderInfo
+import org.gaziz.birgram.core.ui.model.MessageSenderUiState
 import org.gaziz.birgram.feature.chat.R
 import org.gaziz.birgram.feature.chat.ui.ChatViewModel
 import org.gaziz.birgram.feature.chat.ui.mapper.getUriForFile
@@ -37,7 +37,7 @@ fun ContentPreview(
     dateStr: String,
     fontSize: TextUnit,
     containerColor: Color,
-    senderInfo: MessageSenderInfo?,
+    senderInfo: MessageSenderUiState?,
     sendingState: MessageSendingState?,
     originSenderTitle: String?,
     isOutgoing: Boolean

@@ -9,7 +9,7 @@ import org.gaziz.birgram.core.telegram.api.model.user.User
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.telegram.api.usecase.DownloadOrGetFileDataById
 import org.gaziz.birgram.core.ui.icon.skull
-import org.gaziz.birgram.core.ui.model.Avatar
+import org.gaziz.birgram.core.ui.model.AvatarUiState
 import javax.inject.Inject
 
 class GetUserAvatar @Inject constructor(
@@ -36,7 +36,7 @@ class GetUserAvatar @Inject constructor(
     }
     suspend operator fun invoke(
         user: User
-    ): Avatar {
+    ): AvatarUiState {
         val accentColor = getAccentColorById(user.accentColorId)
         val isDeleted = user.type is UserType.Deleted || user.type is UserType.Unknown
         val downloadPhoto: () -> Unit = {
@@ -49,7 +49,7 @@ class GetUserAvatar @Inject constructor(
             }
         }
         return when {
-            isDeleted -> Avatar.Icon(
+            isDeleted -> AvatarUiState.Icon(
                 imageVector = skull,
                 background = accentColor
             )
@@ -57,7 +57,7 @@ class GetUserAvatar @Inject constructor(
                 val bitmap = BitmapFactory
                     .decodeFile(user.photo!!.small.path)
                     .asImageBitmap()
-                Avatar.Photo(
+                AvatarUiState.Photo(
                     bitmap = bitmap,
                     onEmpty = downloadPhoto
                 )
@@ -67,12 +67,12 @@ class GetUserAvatar @Inject constructor(
                 val bitmap = BitmapFactory
                     .decodeByteArray(miniThumbnail,0,miniThumbnail.size)
                     .asImageBitmap()
-                Avatar.Photo(
+                AvatarUiState.Photo(
                     bitmap = bitmap,
                     onEmpty = downloadPhoto
                 )
             }
-            else -> Avatar.PlaceHolder(
+            else -> AvatarUiState.PlaceHolder(
                 text = if(user.firstName.isNotBlank()) user.firstName[0].toString() else "",
                 color = accentColor,
                 downloadPhoto = downloadPhoto

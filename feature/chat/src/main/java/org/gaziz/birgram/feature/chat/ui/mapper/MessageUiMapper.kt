@@ -11,7 +11,7 @@ import org.gaziz.birgram.core.telegram.api.model.message.MessageProperties
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
 import org.gaziz.birgram.core.telegram.api.model.user.User
 import org.gaziz.birgram.core.telegram.api.usecase.DownloadMessageMedia
-import org.gaziz.birgram.core.ui.model.MessageSenderInfo
+import org.gaziz.birgram.core.ui.model.MessageSenderUiState
 import org.gaziz.birgram.feature.chat.domain.usecase.GetPhotoBySizes
 import org.gaziz.birgram.feature.chat.ui.model.MediaUiState
 import org.gaziz.birgram.feature.chat.ui.model.MessageContentUiState
@@ -27,7 +27,7 @@ class MessageUiMapper @Inject constructor(
         msg: Message,
         prevMsg: Message? = null,
         nextMsg: Message? = null,
-        senderInfo: MessageSenderInfo? = null,
+        senderInfo: MessageSenderUiState? = null,
         chatById: Map<Long, Chat>,
         userById: Map<Long, User>,
         propertiesById: Map<Long, MessageProperties>

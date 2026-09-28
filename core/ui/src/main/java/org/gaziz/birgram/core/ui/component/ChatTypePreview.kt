@@ -8,7 +8,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import org.gaziz.birgram.core.ui.R
-import org.gaziz.birgram.core.ui.model.ChatTypeInfo
+import org.gaziz.birgram.core.ui.model.ChatTypeUiState
 import org.gaziz.birgram.core.telegram.api.model.user.UserStatus
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -59,7 +59,7 @@ fun userStatusString(status: UserStatus): String {
 @Composable
 fun ChatTypePreview(
     modifier: Modifier = Modifier,
-    info: ChatTypeInfo,
+    info: ChatTypeUiState,
     fontSize: TextUnit
 ) {
     var color = MaterialTheme.colorScheme.onBackground.copy(0.5f)
@@ -67,13 +67,13 @@ fun ChatTypePreview(
     val subscribers = stringResource(R.string.subscribers)
     val bot = stringResource(R.string.bot)
     val text: String = when(info) {
-        is ChatTypeInfo.BasicGroup -> "${info.memberCount} $members"
+        is ChatTypeUiState.BasicGroup -> "${info.memberCount} $members"
 
-        is ChatTypeInfo.SuperGroup -> {
+        is ChatTypeUiState.SuperGroup -> {
             "${info.memberCount} ${if (info.isChannel) subscribers else members}"
         }
 
-        is ChatTypeInfo.User -> {
+        is ChatTypeUiState.User -> {
             if(info.isBot) {
                 bot
             } else {

@@ -3,7 +3,7 @@ package org.gaziz.searchchats.domain.usecase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.gaziz.birgram.core.ui.model.ChatTypeInfo
+import org.gaziz.birgram.core.ui.model.ChatTypeUiState
 import org.gaziz.birgram.core.ui.usecase.GetChatAvatar
 import org.gaziz.searchchats.domain.model.SearchedItem
 import org.gaziz.searchchats.domain.repository.ChatSearchRepository
@@ -32,11 +32,11 @@ class SearchLocalChats @Inject constructor(
             CoroutineScope(Dispatchers.IO).launch {
                 val result = it.mapValues { e ->
                     val chat = e.value
-                    val typeInfo: ChatTypeInfo? = when(val type = chat.type) {
+                    val typeInfo: ChatTypeUiState? = when(val type = chat.type) {
                         is ChatType.BasicGroup -> {
                             val group = groupService.basicGroups.value[type.groupId]
                             if(group != null) {
-                                ChatTypeInfo.BasicGroup(
+                                ChatTypeUiState.BasicGroup(
                                     memberCount = group.memberCount,
                                 )
                             } else {
@@ -46,7 +46,7 @@ class SearchLocalChats @Inject constructor(
                         is ChatType.Private -> {
                             val user = userService.users.value[type.userId]
                             if(user != null) {
-                                ChatTypeInfo.User(
+                                ChatTypeUiState.User(
                                     status = user.status,
                                     isBot = user.type is UserType.Bot
                                 )
@@ -57,7 +57,7 @@ class SearchLocalChats @Inject constructor(
                         is ChatType.Secret -> {
                             val user = userService.users.value[type.userId]
                             if(user != null) {
-                                ChatTypeInfo.User(
+                                ChatTypeUiState.User(
                                     status = user.status,
                                     isBot = user.type is UserType.Bot
                                 )
@@ -68,7 +68,7 @@ class SearchLocalChats @Inject constructor(
                         is ChatType.SuperGroup -> {
                             val group = groupService.superGroups.value[type.groupId]
                             if(group != null) {
-                                ChatTypeInfo.SuperGroup(
+                                ChatTypeUiState.SuperGroup(
                                     memberCount = group.memberCount,
                                     isChannel = type.isChannel
                                 )

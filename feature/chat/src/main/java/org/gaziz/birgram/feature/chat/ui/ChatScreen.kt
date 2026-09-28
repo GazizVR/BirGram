@@ -39,7 +39,7 @@ import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSendingState
-import org.gaziz.birgram.core.ui.model.ChatTypeInfo
+import org.gaziz.birgram.core.ui.model.ChatTypeUiState
 import org.gaziz.birgram.feature.chat.R
 import org.gaziz.birgram.feature.chat.ui.component.MessageCardWrapper
 import org.gaziz.birgram.feature.chat.ui.component.TextBox
@@ -252,8 +252,8 @@ fun ChatScreen(
         deleteMessageIds = deleteMessageIds,
         onValueChange = { deleteMessageIds = it },
         user = when(chat?.typeInfo) {
-            is ChatTypeInfo.User -> chat?.title ?: othersStr
-            is ChatTypeInfo.BasicGroup -> othersStr
+            is ChatTypeUiState.User -> chat?.title ?: othersStr
+            is ChatTypeUiState.BasicGroup -> othersStr
             else -> null
         },
         onDelete = { ids, forAll ->

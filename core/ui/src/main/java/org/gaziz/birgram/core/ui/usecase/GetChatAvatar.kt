@@ -11,7 +11,7 @@ import org.gaziz.birgram.core.telegram.api.model.media.ProfilePhoto
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.telegram.api.usecase.DownloadOrGetFileDataById
 import org.gaziz.birgram.core.ui.icon.skull
-import org.gaziz.birgram.core.ui.model.Avatar
+import org.gaziz.birgram.core.ui.model.AvatarUiState
 import javax.inject.Inject
 
 class GetChatAvatar @Inject constructor(
@@ -39,7 +39,7 @@ class GetChatAvatar @Inject constructor(
     }
     operator fun invoke(
         chat: Chat,
-    ): Avatar {
+    ): AvatarUiState {
         val accentColor = getAccentColorById(chat.accentColorId)
         val placeHolderText = if(chat.title.isNotBlank()) chat.title[0].toString() else ""
         val downloadPhoto: () -> Unit = {
@@ -57,7 +57,7 @@ class GetChatAvatar @Inject constructor(
             chat.type is ChatType.Private &&
             userService.users.value[(chat.type as ChatType.Private).userId]?.type is UserType.Unknown
         return when {
-            isDeleted -> Avatar.Icon(
+            isDeleted -> AvatarUiState.Icon(
                 imageVector = skull,
                 background = accentColor
             )
@@ -65,7 +65,7 @@ class GetChatAvatar @Inject constructor(
                 val bitmap = BitmapFactory
                     .decodeFile(chat.photo!!.small.path)
                     .asImageBitmap()
-                Avatar.Photo(
+                AvatarUiState.Photo(
                     bitmap = bitmap,
                     onEmpty = downloadPhoto
                 )
@@ -75,12 +75,12 @@ class GetChatAvatar @Inject constructor(
                 val bitmap = BitmapFactory
                     .decodeByteArray(miniThumbnail,0,miniThumbnail.size)
                     .asImageBitmap()
-                Avatar.Photo(
+                AvatarUiState.Photo(
                     bitmap = bitmap,
                     onEmpty = downloadPhoto
                 )
             }
-            else -> Avatar.PlaceHolder(
+            else -> AvatarUiState.PlaceHolder(
                 text = placeHolderText,
                 color = accentColor,
                 downloadPhoto = downloadPhoto

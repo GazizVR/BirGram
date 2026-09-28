@@ -1,6 +1,6 @@
 package org.gaziz.birgram.feature.chatlist.domain.model
 
-import org.gaziz.birgram.core.ui.model.Avatar
+import org.gaziz.birgram.core.ui.model.AvatarUiState
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
 import org.gaziz.birgram.core.telegram.api.model.message.Message
 
@@ -15,7 +15,7 @@ data class ChatListItem(
 
     val isDeleted: Boolean,
     val lastMsgDate: String,
-    val avatar: Avatar,
+    val avatar: AvatarUiState,
     val isDraftMsg: Boolean,
     val isOnline: Boolean,
     val messageSender: String?
