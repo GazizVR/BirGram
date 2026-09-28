@@ -34,7 +34,7 @@ class GetUserAvatar @Inject constructor(
             old + (userId to newUser)
         }
     }
-    suspend operator fun invoke(
+    operator fun invoke(
         user: User
     ): AvatarUiState {
         val accentColor = getAccentColorById(user.accentColorId)
@@ -54,22 +54,17 @@ class GetUserAvatar @Inject constructor(
                 background = accentColor
             )
             user.photo != null && user.photo?.small?.path?.isNotBlank() == true -> {
-                val bitmap = BitmapFactory
-                    .decodeFile(user.photo!!.small.path)
-                    .asImageBitmap()
-                AvatarUiState.Photo(
-                    path = bitmap,
-                    onEmpty = downloadPhoto
-                )
+                val path = user.photo!!.small.path
+                AvatarUiState.Photo(path = path)
             }
             user.photo != null && user.photo?.miniThumbnail != null -> {
                 val miniThumbnail = user.photo!!.miniThumbnail!!
                 val bitmap = BitmapFactory
                     .decodeByteArray(miniThumbnail,0,miniThumbnail.size)
                     .asImageBitmap()
-                AvatarUiState.Photo(
-                    path = bitmap,
-                    onEmpty = downloadPhoto
+                AvatarUiState.Thumbnail(
+                    bitmap = bitmap,
+                    onDownload = downloadPhoto
                 )
             }
             else -> AvatarUiState.PlaceHolder(
