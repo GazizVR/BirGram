@@ -3,11 +3,11 @@ package org.gaziz.birgram.core.telegram.ui.mapper
 import android.graphics.BitmapFactory
 import androidx.compose.ui.graphics.asImageBitmap
 import org.gaziz.birgram.core.telegram.api.ChatService
-import org.gaziz.birgram.core.telegram.api.UserService
 import org.gaziz.birgram.core.telegram.api.model.chat.Chat
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
 import org.gaziz.birgram.core.telegram.api.model.media.FileData
 import org.gaziz.birgram.core.telegram.api.model.media.ProfilePhoto
+import org.gaziz.birgram.core.telegram.api.model.user.User
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.telegram.api.usecase.DownloadOrGetFileDataById
 import org.gaziz.birgram.core.telegram.ui.model.AvatarUiState
@@ -17,8 +17,7 @@ import javax.inject.Inject
 class ChatAvatarUiMapper @Inject constructor(
     private val accentColorMapper: AccentColorMapper,
     private val downloadOrGetFileDataById: DownloadOrGetFileDataById,
-    private val chatService: ChatService,
-    private val userService: UserService
+    private val chatService: ChatService
 ) {
     private fun updateAvatar(
         chatId: Long,
@@ -39,6 +38,8 @@ class ChatAvatarUiMapper @Inject constructor(
     }
     operator fun invoke(
         chat: Chat,
+        chatById: Map<Long, Chat>,
+        usersById: Map<Long, User>
     ): AvatarUiState {
         val accentColor = accentColorMapper(chat.accentColorId)
         val placeHolderText = if(chat.title.isNotBlank()) chat.title[0].toString() else ""
@@ -53,9 +54,9 @@ class ChatAvatarUiMapper @Inject constructor(
         }
         val isDeleted =
             chat.type is ChatType.Private &&
-            userService.users.value[(chat.type as ChatType.Private).userId]?.type is UserType.Deleted ||
-            chat.type is ChatType.Private &&
-            userService.users.value[(chat.type as ChatType.Private).userId]?.type is UserType.Unknown
+                    usersById[(chat.type as ChatType.Private).userId]?.type is UserType.Deleted ||
+                    chat.type is ChatType.Private &&
+                    usersById[(chat.type as ChatType.Private).userId]?.type is UserType.Unknown
         return when {
             isDeleted -> AvatarUiState.Icon(
                 imageVector = skull,
