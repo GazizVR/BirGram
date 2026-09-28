@@ -48,7 +48,7 @@ import org.gaziz.birgram.feature.chat.ui.component.bar.MessageInputBar
 import org.gaziz.birgram.feature.chat.ui.component.button.ScrollDownButton
 import org.gaziz.birgram.feature.chat.ui.component.dialog.DeleteMessageDialog
 import org.gaziz.birgram.feature.chat.ui.component.menu.MessageActionMenu
-import org.gaziz.birgram.feature.chat.ui.model.AvatarUiState
+import org.gaziz.birgram.feature.chat.ui.model.ChatAvatarUiState
 import org.gaziz.birgram.feature.chat.ui.model.TitleUiState
 
 @Composable
@@ -130,7 +130,7 @@ fun ChatScreen(
         topBar = {
             val deletedAccount = stringResource(R.string.deleted_account)
             ChatTopBar(
-                avatar = AvatarUiState(
+                avatar = ChatAvatarUiState(
                     avatar = chat?.avatar,
                     size = 40.dp
                 ),

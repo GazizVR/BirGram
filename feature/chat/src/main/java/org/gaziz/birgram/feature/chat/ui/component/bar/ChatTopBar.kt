@@ -18,19 +18,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.core.telegram.ui.component.Avatar
-import org.gaziz.birgram.core.telegram.ui.component.OneLineText
 import org.gaziz.birgram.core.telegram.ui.component.ChatTypePreview
+import org.gaziz.birgram.core.telegram.ui.component.OneLineText
+import org.gaziz.birgram.core.telegram.ui.model.ChatTypeUiState
 import org.gaziz.birgram.core.ui.icon.arrowBack
 import org.gaziz.birgram.core.ui.icon.moreVert
-import org.gaziz.birgram.core.telegram.ui.model.ChatTypeUiState
-import org.gaziz.birgram.feature.chat.ui.model.AvatarUiState
+import org.gaziz.birgram.feature.chat.ui.model.ChatAvatarUiState
 import org.gaziz.birgram.feature.chat.ui.model.TitleUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatTopBar(
     modifier: Modifier = Modifier,
-    avatar: AvatarUiState,
+    avatar: ChatAvatarUiState,
     title: TitleUiState,
     info: ChatTypeUiState?,
     onBackClick: () -> Unit,
