@@ -15,7 +15,7 @@ class ChatAvatarUiMapper @Inject constructor(
 ) {
     operator fun invoke(
         chat: Chat,
-        chatById: Map<Long, Chat>,
+        chatsById: Map<Long, Chat>,
         usersById: Map<Long, User>,
         onDownload: (Int) -> Unit
     ): AvatarUiState {

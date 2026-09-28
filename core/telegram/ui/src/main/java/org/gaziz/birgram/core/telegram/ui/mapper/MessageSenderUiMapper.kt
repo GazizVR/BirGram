@@ -4,18 +4,19 @@ import org.gaziz.birgram.core.telegram.api.model.chat.Chat
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
 import org.gaziz.birgram.core.telegram.api.model.user.User
 import org.gaziz.birgram.core.telegram.ui.model.MessageSenderUiState
+import org.gaziz.birgram.core.telegram.ui.provider.ChatAvatarProvider
+import org.gaziz.birgram.core.telegram.ui.provider.UserAvatarProvider
 import javax.inject.Inject
 
 class MessageSenderUiMapper @Inject constructor(
-    private val chatAvatarUiMapper: ChatAvatarUiMapper,
-    private val userAvatarUiMapper: UserAvatarUiMapper,
+    private val chatAvatarUiMapper: ChatAvatarProvider,
+    private val userAvatarUiMapper: UserAvatarProvider,
     private val accentColorMapper: AccentColorMapper
 ) {
     operator fun invoke(
         messageSender: MessageSender,
         chatById: Map<Long, Chat>,
-        usersById: Map<Long, User>,
-        onDownload: (Int) -> Unit
+        usersById: Map<Long, User>
     ): MessageSenderUiState? {
         return when(messageSender) {
             is MessageSender.Chat -> {
@@ -23,7 +24,7 @@ class MessageSenderUiMapper @Inject constructor(
                 val accentColor = accentColorMapper(chat.accentColorId)
                 MessageSenderUiState(
                     name = chat.title,
-                    avatar = chatAvatarUiMapper(chat,chatById,usersById,onDownload),
+                    avatar = chatAvatarUiMapper(chat,chatById,usersById),
                     accentColor = accentColor
                 )
             }
@@ -32,7 +33,7 @@ class MessageSenderUiMapper @Inject constructor(
                 val accentColor = accentColorMapper(user.accentColorId)
                 MessageSenderUiState(
                     name = user.firstName,
-                    avatar = userAvatarUiMapper(user,onDownload),
+                    avatar = userAvatarUiMapper(user),
                     accentColor = accentColor
                 )
             }
