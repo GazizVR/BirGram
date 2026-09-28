@@ -26,14 +26,14 @@ import org.gaziz.birgram.feature.chat.R
 import org.gaziz.birgram.feature.chat.ui.ChatViewModel
 import org.gaziz.birgram.feature.chat.ui.mapper.getUriForFile
 import org.gaziz.birgram.feature.chat.ui.mapper.toDurationStr
-import org.gaziz.birgram.feature.chat.ui.model.MessageContentInfo
+import org.gaziz.birgram.feature.chat.ui.model.MessageContentUiState
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSendingState
 import java.io.File
 
 @Composable
 fun ContentPreview(
     msgId: Long,
-    content: MessageContentInfo,
+    content: MessageContentUiState,
     dateStr: String,
     fontSize: TextUnit,
     containerColor: Color,
@@ -51,7 +51,7 @@ fun ContentPreview(
         viewModel.setPlayerMedia(uri)
     }
     when(content){
-        is MessageContentInfo.Text -> {
+        is MessageContentUiState.Text -> {
             TextPreview(
                 text = content.text,
                 dateStr = dateStr,
@@ -62,7 +62,7 @@ fun ContentPreview(
                 isOutgoing = isOutgoing,
             )
         }
-        is MessageContentInfo.Sticker -> {
+        is MessageContentUiState.Sticker -> {
             val mediaId by viewModel.mediaId.collectAsState()
             StickerPreview(
                 modifier = Modifier.size(150.dp),
@@ -76,7 +76,7 @@ fun ContentPreview(
                 originSenderTitle = originSenderTitle
             )
         }
-        is MessageContentInfo.AnimatedEmoji -> {
+        is MessageContentUiState.AnimatedEmoji -> {
             if(content.content != null) {
                 StickerPreview(
                     modifier = Modifier.size(100.dp),
@@ -97,7 +97,7 @@ fun ContentPreview(
                 )
             }
         }
-        is MessageContentInfo.Animation -> {
+        is MessageContentUiState.Animation -> {
             val mediaId by viewModel.mediaId.collectAsState()
             MediaPreview(
                 content = content.content,
@@ -143,7 +143,7 @@ fun ContentPreview(
                 }
             }
         }
-        is MessageContentInfo.Photo -> {
+        is MessageContentUiState.Photo -> {
             MediaPreview(
                 content = content.content,
                 caption = content.caption,
@@ -158,7 +158,7 @@ fun ContentPreview(
                 isOutgoing = isOutgoing
             )
         }
-        is MessageContentInfo.Document -> {
+        is MessageContentUiState.Document -> {
             DocumentPreview(
                 document = content,
                 containerColor = containerColor,
@@ -167,7 +167,7 @@ fun ContentPreview(
                 isOutgoing = isOutgoing
             )
         }
-        is MessageContentInfo.Video -> {
+        is MessageContentUiState.Video -> {
             val mediaId by viewModel.mediaId.collectAsState()
             MediaPreview(
                 content = content.content,
@@ -219,7 +219,7 @@ fun ContentPreview(
                 isOutgoing = isOutgoing
             )
         }
-        is MessageContentInfo.UnSupported -> {
+        is MessageContentUiState.UnSupported -> {
             val unsupportedMessage = stringResource(R.string.unsupported_message)
             TextPreview(
                 text = unsupportedMessage,

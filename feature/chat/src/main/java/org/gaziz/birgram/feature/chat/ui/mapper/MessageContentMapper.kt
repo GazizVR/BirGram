@@ -2,24 +2,24 @@ package org.gaziz.birgram.feature.chat.ui.mapper
 
 import android.graphics.BitmapFactory
 import androidx.compose.ui.graphics.asImageBitmap
-import org.gaziz.birgram.feature.chat.ui.model.MediaContent
-import org.gaziz.birgram.feature.chat.ui.model.MessageContentInfo
-import org.gaziz.birgram.feature.chat.ui.model.StickerContent
+import org.gaziz.birgram.feature.chat.ui.model.MediaUiState
+import org.gaziz.birgram.feature.chat.ui.model.MessageContentUiState
+import org.gaziz.birgram.feature.chat.ui.model.StickerUiState
 import org.gaziz.birgram.core.telegram.api.model.StickerFormat
 import org.gaziz.birgram.core.telegram.api.model.message.MessageContent
 import java.io.File
 
 fun MessageContent.Sticker.toCnt(
     downloadMedia: (Int) -> Unit
-): StickerContent {
+): StickerUiState {
     return if(this.data.path.isNotBlank()) {
         when(this.format){
-            StickerFormat.Tgs -> StickerContent.Animation(this.data.path)
-            StickerFormat.WebM -> StickerContent.Video(File(this.data.path))
-            StickerFormat.WebP -> StickerContent.Picture(File(this.data.path))
+            StickerFormat.Tgs -> StickerUiState.Animation(this.data.path)
+            StickerFormat.WebM -> StickerUiState.Video(File(this.data.path))
+            StickerFormat.WebP -> StickerUiState.Picture(File(this.data.path))
         }
     } else {
-        StickerContent.Empty(
+        StickerUiState.Empty(
             this.emoji
         ) {
             if(this.data.canDownload) {
@@ -31,19 +31,19 @@ fun MessageContent.Sticker.toCnt(
 
 fun MessageContent.toInfo(
     downloadMedia: (Int) -> Unit
-): MessageContentInfo {
+): MessageContentUiState {
     return when(this) {
-        is MessageContent.Text -> MessageContentInfo.Text(this.text)
+        is MessageContent.Text -> MessageContentUiState.Text(this.text)
         is MessageContent.Sticker -> {
-            MessageContentInfo.Sticker(content = this.toCnt(downloadMedia))
+            MessageContentUiState.Sticker(content = this.toCnt(downloadMedia))
         }
         is MessageContent.AnimatedEmoji -> {
-            var content: StickerContent? = null
+            var content: StickerUiState? = null
             val animation = this.animation
             if(animation != null) {
                 content = animation.toCnt(downloadMedia)
             }
-            MessageContentInfo.AnimatedEmoji(
+            MessageContentUiState.AnimatedEmoji(
                 emoji = this.emoji,
                 content = content
             )
@@ -54,7 +54,7 @@ fun MessageContent.toInfo(
                     downloadMedia(this.file.id)
                 }
             }
-            var content: MediaContent = MediaContent.PlaceHolder(downloadAnimation)
+            var content: MediaUiState = MediaUiState.Placeholder(downloadAnimation)
             val miniThumbnail = this.miniThumbnail
             if(miniThumbnail != null) {
                 val bitmap = BitmapFactory.decodeByteArray(
@@ -62,23 +62,23 @@ fun MessageContent.toInfo(
                     0,
                     miniThumbnail.size
                 ).asImageBitmap()
-                content = MediaContent.Thumbnail(
+                content = MediaUiState.Thumbnail(
                     data = bitmap,
-                    downloadMedia = downloadAnimation
+                    onDownloadClick = downloadAnimation
                 )
             }
             if(this.file.path.isNotBlank()) {
                 if(this.mimeType == "image/gif") {
-                    content = MediaContent.Image(
+                    content = MediaUiState.Image(
                         File(this.file.path),
                         true
                     )
                 }
                 if(this.mimeType == "video/mp4") {
-                    content = MediaContent.Video(File(this.file.path))
+                    content = MediaUiState.Video(File(this.file.path))
                 }
             }
-            MessageContentInfo.Animation(
+            MessageContentUiState.Animation(
                 caption = this.caption.ifBlank { null },
                 content = content,
                 width = this.width,
@@ -86,7 +86,7 @@ fun MessageContent.toInfo(
             )
         }
         is MessageContent.Document -> {
-            MessageContentInfo.Document(
+            MessageContentUiState.Document(
                 file = if(this.file.path.isNotBlank()) File(this.file.path) else null,
                 mimeType = this.mimeType.ifBlank { null },
                 fileName = this.fileName.ifBlank { null },
@@ -100,9 +100,9 @@ fun MessageContent.toInfo(
             )
         }
         is MessageContent.Video -> {
-            val content: MediaContent = when {
+            val content: MediaUiState = when {
                 this.file.path.isNotBlank() -> {
-                    MediaContent.Video(
+                    MediaUiState.Video(
                         File(this.file.path)
                     )
                 }
@@ -112,14 +112,14 @@ fun MessageContent.toInfo(
                         0,
                         this.miniThumbnail?.size ?: 0
                     ).asImageBitmap()
-                    MediaContent.Thumbnail(
+                    MediaUiState.Thumbnail(
                         data = bitmap,
-                        downloadMedia = { downloadMedia(this.file.id) }
+                        onDownloadClick = { downloadMedia(this.file.id) }
                     )
                 }
-                else -> MediaContent.PlaceHolder { downloadMedia(this.file.id) }
+                else -> MediaUiState.Placeholder { downloadMedia(this.file.id) }
             }
-            MessageContentInfo.Video(
+            MessageContentUiState.Video(
                 content = content,
                 caption = this.caption.ifBlank { null },
                 width = this.width,
@@ -127,6 +127,6 @@ fun MessageContent.toInfo(
                 duration = this.duration
             )
         }
-        else -> MessageContentInfo.UnSupported
+        else -> MessageContentUiState.UnSupported
     }
 }

@@ -5,7 +5,7 @@ import org.gaziz.birgram.core.telegram.api.model.message.MessageSendingState
 
 data class MessageUiState(
     val id: Long,
-    val content: MessageContentInfo,
+    val content: MessageContentUiState,
     val isOutgoing: Boolean,
     val date: String,
     val sender: MessageSenderInfo?,

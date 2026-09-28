@@ -13,8 +13,8 @@ import org.gaziz.birgram.core.telegram.api.model.user.User
 import org.gaziz.birgram.core.telegram.api.usecase.DownloadMessageMedia
 import org.gaziz.birgram.core.ui.model.MessageSenderInfo
 import org.gaziz.birgram.feature.chat.domain.usecase.GetPhotoBySizes
-import org.gaziz.birgram.feature.chat.ui.model.MediaContent
-import org.gaziz.birgram.feature.chat.ui.model.MessageContentInfo
+import org.gaziz.birgram.feature.chat.ui.model.MediaUiState
+import org.gaziz.birgram.feature.chat.ui.model.MessageContentUiState
 import org.gaziz.birgram.feature.chat.ui.model.MessageUiState
 import java.io.File
 import javax.inject.Inject
@@ -65,16 +65,16 @@ class MessageUiMapper @Inject constructor(
                 val photoSize = getPhotoBySizes(cnt.sizes)
                 var width = 150
                 var heigh = 150
-                var content: MediaContent? = null
+                var content: MediaUiState? = null
                 if(cnt.miniThumbnail != null) {
                     val bitmap = BitmapFactory.decodeByteArray(
                         cnt.miniThumbnail,
                         0,
                         cnt.miniThumbnail?.size ?: 0
                     ).asImageBitmap()
-                    content = MediaContent.Thumbnail(
+                    content = MediaUiState.Thumbnail(
                         data = bitmap,
-                        downloadMedia = {}
+                        onDownloadClick = {}
                     )
                 }
                 if(photoSize != null) {
@@ -100,15 +100,15 @@ class MessageUiMapper @Inject constructor(
                     heigh = photoSize.height
                     content = when {
                         photoSize.file.path.isNotBlank() -> {
-                            MediaContent.Image(
+                            MediaUiState.Image(
                                 File(photoSize.file.path)
                             )
                         }
-                        content is MediaContent.Thumbnail -> content.copy(downloadMedia = downloadPhoto)
-                        else -> MediaContent.PlaceHolder(downloadPhoto)
+                        content is MediaUiState.Thumbnail -> content.copy(onDownloadClick = downloadPhoto)
+                        else -> MediaUiState.Placeholder(downloadPhoto)
                     }
                 }
-                MessageContentInfo.Photo(
+                MessageContentUiState.Photo(
                     content = content,
                     caption = cnt.caption.ifBlank { null },
                     width = width,

@@ -43,13 +43,13 @@ import coil3.video.VideoFrameDecoder
 import org.gaziz.birgram.core.ui.model.MessageSenderInfo
 import org.gaziz.birgram.feature.chat.R
 import org.gaziz.birgram.feature.chat.ui.component.button.PlaybackButton
-import org.gaziz.birgram.feature.chat.ui.model.MediaContent
+import org.gaziz.birgram.feature.chat.ui.model.MediaUiState
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSendingState
 import java.io.File
 
 @Composable
 fun MediaPreview(
-    content: MediaContent?,
+    content: MediaUiState?,
     caption: String? = null,
     width: Int,
     height: Int,
@@ -102,7 +102,7 @@ fun MediaPreview(
                     contentAlignment = Alignment.Center
                 ) {
                     when(content) {
-                        is MediaContent.Image -> {
+                        is MediaUiState.Image -> {
                             if(content.isGIF) {
                                 val context = LocalContext.current
                                 val imageLoader = remember(context) {
@@ -126,7 +126,7 @@ fun MediaPreview(
                                 )
                             }
                         }
-                        is MediaContent.Video -> {
+                        is MediaUiState.Video -> {
                             val context = LocalContext.current
                             if(
                                 isCurrentMedia &&
@@ -158,9 +158,9 @@ fun MediaPreview(
                                 PlaybackButton()
                             }
                         }
-                        is MediaContent.Thumbnail -> {
+                        is MediaUiState.Thumbnail -> {
                             LaunchedEffect(Unit) {
-                                content.downloadMedia()
+                                content.onDownloadClick()
                             }
                             Image(
                                 bitmap = content.data,
@@ -169,9 +169,9 @@ fun MediaPreview(
                                 modifier = Modifier.fillMaxSize()
                             )
                         }
-                        is MediaContent.PlaceHolder -> {
+                        is MediaUiState.Placeholder -> {
                             LaunchedEffect(Unit) {
-                                content.downloadMedia()
+                                content.onDownloadClick()
                             }
                             Box(
                                 modifier = Modifier

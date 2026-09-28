@@ -14,7 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.ui.icon.contentCopy
 import org.gaziz.birgram.feature.chat.R
-import org.gaziz.birgram.feature.chat.ui.model.MessageContentInfo
+import org.gaziz.birgram.feature.chat.ui.model.MessageContentUiState
 
 @Composable
 fun CopyButton(
@@ -53,24 +53,24 @@ fun CopyButton(
 
 @Composable
 fun CopyButtonWrapper(
-    msgCnt: MessageContentInfo,
+    msgCnt: MessageContentUiState,
     onClick: () -> Unit,
 ) {
     when(msgCnt) {
-        is MessageContentInfo.Text -> CopyButton(msgCnt.text, onClick)
-        is MessageContentInfo.Animation -> {
+        is MessageContentUiState.Text -> CopyButton(msgCnt.text, onClick)
+        is MessageContentUiState.Animation -> {
             val text = msgCnt.caption
             if(text != null) {
                 CopyButton(text, onClick)
             }
         }
-        is MessageContentInfo.Photo -> {
+        is MessageContentUiState.Photo -> {
             val text = msgCnt.caption
             if(text != null) {
                 CopyButton(text, onClick)
             }
         }
-        is MessageContentInfo.Video -> {
+        is MessageContentUiState.Video -> {
             val text = msgCnt.caption
             if(text != null) {
                 CopyButton(text, onClick)

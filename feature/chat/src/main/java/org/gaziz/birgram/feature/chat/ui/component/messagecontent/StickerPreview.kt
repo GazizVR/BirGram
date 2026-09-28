@@ -33,13 +33,13 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import org.gaziz.birgram.feature.chat.ui.component.button.PlaybackButton
-import org.gaziz.birgram.feature.chat.ui.model.StickerContent
+import org.gaziz.birgram.feature.chat.ui.model.StickerUiState
 import java.io.File
 
 @Composable
 fun StickerPreview(
     modifier: Modifier = Modifier,
-    content: StickerContent,
+    content: StickerUiState,
     date: String,
     datePadding: Dp = 0.dp,
     fontSize: TextUnit,
@@ -54,7 +54,7 @@ fun StickerPreview(
         contentAlignment = Alignment.Center
     ) {
         when (content) {
-            is StickerContent.Picture -> {
+            is StickerUiState.Picture -> {
                 AsyncImage(
                     model = content.file,
                     contentDescription = null,
@@ -62,7 +62,7 @@ fun StickerPreview(
                 )
             }
 
-            is StickerContent.Animation -> {
+            is StickerUiState.Animation -> {
                 val composition by rememberLottieComposition(
                     LottieCompositionSpec.File(content.path)
                 )
@@ -77,7 +77,7 @@ fun StickerPreview(
                 )
             }
 
-            is StickerContent.Video -> {
+            is StickerUiState.Video -> {
                 val context = LocalContext.current
                 if (
                     isCurrentMedia &&
@@ -110,9 +110,9 @@ fun StickerPreview(
                 }
             }
 
-            is StickerContent.Empty -> {
+            is StickerUiState.Empty -> {
                 LaunchedEffect(Unit) {
-                    content.downloadContent()
+                    content.onDownloadClick()
                 }
                 Text(
                     text = content.emoji,
