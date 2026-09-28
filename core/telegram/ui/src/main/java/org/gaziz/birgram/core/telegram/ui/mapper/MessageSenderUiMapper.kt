@@ -9,7 +9,7 @@ import org.gaziz.birgram.core.telegram.ui.provider.UserAvatarProvider
 import javax.inject.Inject
 
 class MessageSenderUiMapper @Inject constructor(
-    private val chatAvatarUiMapper: ChatAvatarProvider,
+    private val chatAvatarProvider: ChatAvatarProvider,
     private val userAvatarUiMapper: UserAvatarProvider,
     private val accentColorMapper: AccentColorMapper
 ) {
@@ -24,7 +24,7 @@ class MessageSenderUiMapper @Inject constructor(
                 val accentColor = accentColorMapper(chat.accentColorId)
                 MessageSenderUiState(
                     name = chat.title,
-                    avatar = chatAvatarUiMapper(chat,chatById,usersById),
+                    avatar = chatAvatarProvider(chat, usersById),
                     accentColor = accentColor
                 )
             }

@@ -13,12 +13,10 @@ class ChatAvatarProvider @Inject constructor(
 ) {
     operator fun invoke(
         chat: Chat,
-        chatsById: Map<Long, Chat>,
         usersById: Map<Long, User>
     ): AvatarUiState {
         return chatAvatarUiMapper(
             chat = chat,
-            chatsById = chatsById,
             usersById = usersById,
             onDownload = { downloadChatPhotoSmall(it,chat.id) }
         )

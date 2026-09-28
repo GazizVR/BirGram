@@ -2,9 +2,6 @@ package org.gaziz.birgram.feature.chatlist.domain.usecase
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import org.gaziz.birgram.core.telegram.ui.mapper.ChatAvatarUiMapper
-import org.gaziz.birgram.feature.chatlist.domain.mapper.formatChatTime
-import org.gaziz.birgram.feature.chatlist.domain.model.ChatListItem
 import org.gaziz.birgram.core.telegram.api.ChatService
 import org.gaziz.birgram.core.telegram.api.UserService
 import org.gaziz.birgram.core.telegram.api.model.chat.Chat
@@ -15,13 +12,16 @@ import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
 import org.gaziz.birgram.core.telegram.api.model.user.UserStatus
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
+import org.gaziz.birgram.core.telegram.ui.provider.ChatAvatarProvider
+import org.gaziz.birgram.feature.chatlist.domain.mapper.formatChatTime
+import org.gaziz.birgram.feature.chatlist.domain.model.ChatListItem
 import java.time.LocalDateTime
 import javax.inject.Inject
 
 class GetChatList @Inject constructor(
     private val chatService: ChatService,
     private val userService: UserService,
-    private val chatAvatarUiMapper: ChatAvatarUiMapper
+    private val chatAvatarProvider: ChatAvatarProvider
 ) {
     operator fun invoke(type: ChatListType): Flow<List<ChatListItem>> {
         return chatService.chats.map { map ->
@@ -59,7 +59,7 @@ class GetChatList @Inject constructor(
                         userService.users.value[chatType.userId]?.type !is UserType.Regular &&
                         userService.users.value[chatType.userId]?.type !is UserType.Bot
                     )
-                    val avatar = chatAvatarUiMapper(chat)
+                    val avatar = chatAvatarProvider(chat,userService.users.value)
                     ChatListItem(
                         id = chat.id,
                         title = chat.title,

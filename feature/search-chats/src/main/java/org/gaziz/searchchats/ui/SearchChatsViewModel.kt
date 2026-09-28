@@ -1,7 +1,9 @@
 package org.gaziz.searchchats.ui
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import org.gaziz.searchchats.domain.repository.ChatSearchRepository
 import org.gaziz.searchchats.domain.usecase.SearchLocalChats
 import javax.inject.Inject
@@ -15,6 +17,8 @@ class SearchChatsViewModel @Inject constructor(
     fun sendSearchQuery(
         query: String
     ) {
-        searchLocalChats(query,20)
+        viewModelScope.launch {
+            searchLocalChats(query,20)
+        }
     }
 }
