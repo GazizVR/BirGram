@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.core.ui.model.AvatarUiState
 
 @Composable
-fun ChatAvatar(
+fun Avatar(
     modifier: Modifier,
     avatar: AvatarUiState,
     placeHolderFontSize: TextUnit = 16.sp,

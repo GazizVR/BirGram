@@ -17,8 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.gaziz.birgram.core.ui.component.ChatAvatar
-import org.gaziz.birgram.core.ui.component.ChatText
+import org.gaziz.birgram.core.ui.component.Avatar
+import org.gaziz.birgram.core.ui.component.OneLineText
 import org.gaziz.birgram.core.ui.component.ChatTypePreview
 import org.gaziz.birgram.core.ui.icon.arrowBack
 import org.gaziz.birgram.core.ui.icon.moreVert
@@ -54,7 +54,7 @@ fun ChatTopBar(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 if(avatar.avatar != null) {
-                    ChatAvatar(
+                    Avatar(
                         modifier = Modifier.size(avatar.size),
                         avatar = avatar.avatar,
                         placeHolderFontSize = 10.sp,
@@ -67,7 +67,7 @@ fun ChatTopBar(
                         horizontalAlignment = Alignment.Start,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        ChatText(
+                        OneLineText(
                             text = title.title,
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = title.fontSize

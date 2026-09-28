@@ -16,8 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.gaziz.birgram.core.ui.component.ChatAvatar
-import org.gaziz.birgram.core.ui.component.ChatText
+import org.gaziz.birgram.core.ui.component.Avatar
+import org.gaziz.birgram.core.ui.component.OneLineText
 import org.gaziz.birgram.core.ui.component.ChatTypePreview
 import org.gaziz.searchchats.ui.model.PhotoUiState
 import org.gaziz.searchchats.ui.model.TextUiState
@@ -41,7 +41,7 @@ fun SearchedCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            ChatAvatar(
+            Avatar(
                 modifier = Modifier.size(photo.size),
                 avatar = photo.avatar,
                 placeHolderFontSize = 10.sp,
@@ -51,7 +51,7 @@ fun SearchedCard(
                 modifier = Modifier.fillMaxHeight(),
                 verticalArrangement = Arrangement.Center
             ) {
-                ChatText(
+                OneLineText(
                     modifier = Modifier,
                     text = title.text,
                     color = title.color,
