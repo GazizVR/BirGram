@@ -1,6 +1,7 @@
 package org.gaziz.birgram.feature.chat.ui.model
 
-import org.gaziz.birgram.core.ui.model.ChatTypeUiState
+import org.gaziz.birgram.core.telegram.ui.model.AvatarUiState
+import org.gaziz.birgram.core.telegram.ui.model.ChatTypeUiState
 import org.gaziz.birgram.core.telegram.api.model.message.Message
 
 data class ChatUiState(

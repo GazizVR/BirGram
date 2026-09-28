@@ -39,7 +39,7 @@ import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSendingState
-import org.gaziz.birgram.core.ui.model.ChatTypeUiState
+import org.gaziz.birgram.core.telegram.ui.model.ChatTypeUiState
 import org.gaziz.birgram.feature.chat.R
 import org.gaziz.birgram.feature.chat.ui.component.MessageCardWrapper
 import org.gaziz.birgram.feature.chat.ui.component.TextBox

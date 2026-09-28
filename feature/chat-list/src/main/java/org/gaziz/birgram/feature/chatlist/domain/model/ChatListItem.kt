@@ -1,6 +1,6 @@
 package org.gaziz.birgram.feature.chatlist.domain.model
 
-import org.gaziz.birgram.core.ui.model.AvatarUiState
+import org.gaziz.birgram.core.telegram.ui.model.AvatarUiState
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
 import org.gaziz.birgram.core.telegram.api.model.message.Message
 

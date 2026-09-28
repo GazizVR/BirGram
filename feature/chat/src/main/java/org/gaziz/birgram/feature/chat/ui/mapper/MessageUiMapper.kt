@@ -11,7 +11,7 @@ import org.gaziz.birgram.core.telegram.api.model.message.MessageProperties
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
 import org.gaziz.birgram.core.telegram.api.model.user.User
 import org.gaziz.birgram.feature.chat.domain.usecase.DownloadMessageMedia
-import org.gaziz.birgram.core.ui.model.MessageSenderUiState
+import org.gaziz.birgram.core.telegram.ui.model.MessageSenderUiState
 import org.gaziz.birgram.feature.chat.domain.usecase.GetPhotoBySizes
 import org.gaziz.birgram.feature.chat.ui.model.MediaUiState
 import org.gaziz.birgram.feature.chat.ui.model.MessageContentUiState

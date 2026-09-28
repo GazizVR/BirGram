@@ -7,8 +7,8 @@ import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
 import org.gaziz.birgram.core.telegram.api.model.group.GroupMemberStatus
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
-import org.gaziz.birgram.core.ui.model.ChatTypeUiState
-import org.gaziz.birgram.core.ui.usecase.GetChatAvatar
+import org.gaziz.birgram.core.telegram.ui.model.ChatTypeUiState
+import org.gaziz.birgram.core.telegram.ui.usecase.GetChatAvatar
 import org.gaziz.birgram.feature.chat.ui.model.ChatUiState
 import javax.inject.Inject
 

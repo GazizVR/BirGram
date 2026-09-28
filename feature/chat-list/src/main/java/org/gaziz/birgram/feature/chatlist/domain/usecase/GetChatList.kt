@@ -2,7 +2,7 @@ package org.gaziz.birgram.feature.chatlist.domain.usecase
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import org.gaziz.birgram.core.ui.usecase.GetChatAvatar
+import org.gaziz.birgram.core.telegram.ui.usecase.GetChatAvatar
 import org.gaziz.birgram.feature.chatlist.domain.mapper.formatChatTime
 import org.gaziz.birgram.feature.chatlist.domain.model.ChatListItem
 import org.gaziz.birgram.core.telegram.api.ChatService

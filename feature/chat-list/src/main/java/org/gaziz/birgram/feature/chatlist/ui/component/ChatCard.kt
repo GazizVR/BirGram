@@ -14,8 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.gaziz.birgram.core.ui.component.Avatar
-import org.gaziz.birgram.core.ui.component.OneLineText
+import org.gaziz.birgram.core.telegram.ui.component.Avatar
+import org.gaziz.birgram.core.telegram.ui.component.OneLineText
 import org.gaziz.birgram.feature.chatlist.ui.component.chatCard.ChatTime
 import org.gaziz.birgram.feature.chatlist.ui.component.chatCard.ChatUnreadBadge
 import org.gaziz.birgram.feature.chatlist.ui.model.CardTextUiState

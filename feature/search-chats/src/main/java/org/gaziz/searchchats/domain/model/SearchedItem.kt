@@ -1,7 +1,7 @@
 package org.gaziz.searchchats.domain.model
 
-import org.gaziz.birgram.core.ui.model.AvatarUiState
-import org.gaziz.birgram.core.ui.model.ChatTypeUiState
+import org.gaziz.birgram.core.telegram.ui.model.AvatarUiState
+import org.gaziz.birgram.core.telegram.ui.model.ChatTypeUiState
 
 data class SearchedItem(
     val title: String,

@@ -3,8 +3,8 @@ package org.gaziz.searchchats.domain.usecase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.gaziz.birgram.core.ui.model.ChatTypeUiState
-import org.gaziz.birgram.core.ui.usecase.GetChatAvatar
+import org.gaziz.birgram.core.telegram.ui.model.ChatTypeUiState
+import org.gaziz.birgram.core.telegram.ui.usecase.GetChatAvatar
 import org.gaziz.searchchats.domain.model.SearchedItem
 import org.gaziz.searchchats.domain.repository.ChatSearchRepository
 import org.gaziz.birgram.core.telegram.api.ChatService

@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.gaziz.birgram.core.ui.component.Avatar
+import org.gaziz.birgram.core.telegram.ui.component.Avatar
 import org.gaziz.birgram.feature.chat.ui.component.messagecontent.ContentPreview
 import org.gaziz.birgram.feature.chat.ui.model.MessageUiState
 

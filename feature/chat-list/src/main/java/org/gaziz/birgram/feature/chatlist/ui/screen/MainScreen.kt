@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.ui.icon.archive
-import org.gaziz.birgram.core.ui.model.AvatarUiState
+import org.gaziz.birgram.core.telegram.ui.model.AvatarUiState
 import org.gaziz.birgram.feature.chatlist.R
 import org.gaziz.birgram.feature.chatlist.ui.ChatListViewModel
 import org.gaziz.birgram.feature.chatlist.ui.component.ChatCard

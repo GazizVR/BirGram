@@ -40,7 +40,7 @@ import coil3.compose.AsyncImage
 import coil3.gif.AnimatedImageDecoder
 import coil3.request.ImageRequest
 import coil3.video.VideoFrameDecoder
-import org.gaziz.birgram.core.ui.model.MessageSenderUiState
+import org.gaziz.birgram.core.telegram.ui.model.MessageSenderUiState
 import org.gaziz.birgram.feature.chat.R
 import org.gaziz.birgram.feature.chat.ui.component.button.PlaybackButton
 import org.gaziz.birgram.feature.chat.ui.model.MediaUiState

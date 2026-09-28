@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.core.ui.icon.clock
 import org.gaziz.birgram.core.ui.icon.error
-import org.gaziz.birgram.core.ui.model.MessageSenderUiState
+import org.gaziz.birgram.core.telegram.ui.model.MessageSenderUiState
 import org.gaziz.birgram.core.ui.theme.BirGramTheme
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSendingState
 

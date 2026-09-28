@@ -39,6 +39,7 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     //Internal modules
     implementation(project(":core:telegram"))
+    implementation(project(":core:telegram:ui"))
     implementation(project(":core:ui"))
     //Hilt
     ksp(libs.hilt.android.compiler)

@@ -16,9 +16,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.gaziz.birgram.core.ui.component.Avatar
-import org.gaziz.birgram.core.ui.component.OneLineText
-import org.gaziz.birgram.core.ui.component.ChatTypePreview
+import org.gaziz.birgram.core.telegram.ui.component.Avatar
+import org.gaziz.birgram.core.telegram.ui.component.OneLineText
+import org.gaziz.birgram.core.telegram.ui.component.ChatTypePreview
 import org.gaziz.searchchats.ui.model.PhotoUiState
 import org.gaziz.searchchats.ui.model.TextUiState
 import org.gaziz.searchchats.ui.model.TypeInfoUiState
