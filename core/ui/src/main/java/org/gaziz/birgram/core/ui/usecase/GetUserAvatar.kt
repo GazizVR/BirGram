@@ -2,17 +2,14 @@ package org.gaziz.birgram.core.ui.usecase
 
 import android.graphics.BitmapFactory
 import androidx.compose.ui.graphics.asImageBitmap
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.stateIn
-import org.gaziz.birgram.core.ui.icon.skull
-import org.gaziz.birgram.core.ui.model.Avatar
 import org.gaziz.birgram.core.telegram.api.UserService
 import org.gaziz.birgram.core.telegram.api.model.media.FileData
 import org.gaziz.birgram.core.telegram.api.model.media.ProfilePhoto
 import org.gaziz.birgram.core.telegram.api.model.user.User
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.telegram.api.usecase.DownloadOrGetFileDataById
+import org.gaziz.birgram.core.ui.icon.skull
+import org.gaziz.birgram.core.ui.model.Avatar
 import javax.inject.Inject
 
 class GetUserAvatar @Inject constructor(
@@ -41,7 +38,6 @@ class GetUserAvatar @Inject constructor(
         user: User
     ): Avatar {
         val accentColor = getAccentColorById(user.accentColorId)
-            .stateIn(CoroutineScope(Dispatchers.IO))
         val isDeleted = user.type is UserType.Deleted || user.type is UserType.Unknown
         val downloadPhoto: () -> Unit = {
             user.photo?.let { photo ->
@@ -55,7 +51,7 @@ class GetUserAvatar @Inject constructor(
         return when {
             isDeleted -> Avatar.Icon(
                 imageVector = skull,
-                background = accentColor.value
+                background = accentColor
             )
             user.photo != null && user.photo?.small?.path?.isNotBlank() == true -> {
                 val bitmap = BitmapFactory
@@ -78,7 +74,7 @@ class GetUserAvatar @Inject constructor(
             }
             else -> Avatar.PlaceHolder(
                 text = if(user.firstName.isNotBlank()) user.firstName[0].toString() else "",
-                color = accentColor.value,
+                color = accentColor,
                 downloadPhoto = downloadPhoto
             )
         }

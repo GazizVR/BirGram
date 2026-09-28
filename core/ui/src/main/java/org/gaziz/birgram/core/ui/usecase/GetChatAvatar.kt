@@ -2,19 +2,16 @@ package org.gaziz.birgram.core.ui.usecase
 
 import android.graphics.BitmapFactory
 import androidx.compose.ui.graphics.asImageBitmap
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.stateIn
-import org.gaziz.birgram.core.ui.icon.skull
-import org.gaziz.birgram.core.ui.model.Avatar
 import org.gaziz.birgram.core.telegram.api.ChatService
 import org.gaziz.birgram.core.telegram.api.UserService
 import org.gaziz.birgram.core.telegram.api.model.chat.Chat
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
-import org.gaziz.birgram.core.telegram.api.model.media.ProfilePhoto
 import org.gaziz.birgram.core.telegram.api.model.media.FileData
+import org.gaziz.birgram.core.telegram.api.model.media.ProfilePhoto
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.telegram.api.usecase.DownloadOrGetFileDataById
+import org.gaziz.birgram.core.ui.icon.skull
+import org.gaziz.birgram.core.ui.model.Avatar
 import javax.inject.Inject
 
 class GetChatAvatar @Inject constructor(
@@ -40,11 +37,10 @@ class GetChatAvatar @Inject constructor(
             old + (chatId to newChat)
         }
     }
-    suspend operator fun invoke(
+    operator fun invoke(
         chat: Chat,
     ): Avatar {
         val accentColor = getAccentColorById(chat.accentColorId)
-            .stateIn(CoroutineScope(Dispatchers.IO))
         val placeHolderText = if(chat.title.isNotBlank()) chat.title[0].toString() else ""
         val downloadPhoto: () -> Unit = {
             chat.photo?.let { photo ->
@@ -63,7 +59,7 @@ class GetChatAvatar @Inject constructor(
         return when {
             isDeleted -> Avatar.Icon(
                 imageVector = skull,
-                background = accentColor.value
+                background = accentColor
             )
             chat.photo != null && chat.photo?.small?.path?.isNotBlank() == true -> {
                 val bitmap = BitmapFactory
@@ -86,7 +82,7 @@ class GetChatAvatar @Inject constructor(
             }
             else -> Avatar.PlaceHolder(
                 text = placeHolderText,
-                color = accentColor.value,
+                color = accentColor,
                 downloadPhoto = downloadPhoto
             )
         }
