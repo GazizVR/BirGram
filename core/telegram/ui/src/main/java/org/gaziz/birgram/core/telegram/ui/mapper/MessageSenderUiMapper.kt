@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.telegram.ui.usecase
+package org.gaziz.birgram.core.telegram.ui.mapper
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -9,12 +9,12 @@ import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
 import org.gaziz.birgram.core.telegram.ui.model.MessageSenderUiState
 import javax.inject.Inject
 
-class GetMessageSenderInfo @Inject constructor(
+class MessageSenderUiMapper @Inject constructor(
     private val chatService: ChatService,
     private val userService: UserService,
-    private val getChatAvatar: GetChatAvatar,
-    private val getUserAvatar: GetUserAvatar,
-    private val getAccentColorById: GetAccentColorById
+    private val chatAvatarUiMapper: ChatAvatarUiMapper,
+    private val userAvatarUiMapper: UserAvatarUiMapper,
+    private val accentColorMapper: AccentColorMapper
 ) {
     operator fun invoke(
         messageSender: MessageSender
@@ -23,10 +23,10 @@ class GetMessageSenderInfo @Inject constructor(
             is MessageSender.Chat -> {
                 chatService.chats.map {
                     val chat = it[messageSender.id] ?: return@map null
-                    val accentColor = getAccentColorById(chat.accentColorId)
+                    val accentColor = accentColorMapper(chat.accentColorId)
                     MessageSenderUiState(
                         name = chat.title,
-                        avatar = getChatAvatar(chat),
+                        avatar = chatAvatarUiMapper(chat),
                         accentColor = accentColor
                     )
                 }
@@ -34,10 +34,10 @@ class GetMessageSenderInfo @Inject constructor(
             is MessageSender.User -> {
                 userService.users.map {
                     val user = it[messageSender.id] ?: return@map null
-                    val accentColor = getAccentColorById(user.accentColorId)
+                    val accentColor = accentColorMapper(user.accentColorId)
                     MessageSenderUiState(
                         name = user.firstName,
-                        avatar = getUserAvatar(user),
+                        avatar = userAvatarUiMapper(user),
                         accentColor = accentColor
                     )
                 }

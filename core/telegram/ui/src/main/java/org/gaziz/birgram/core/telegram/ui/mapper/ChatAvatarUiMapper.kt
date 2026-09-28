@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.telegram.ui.usecase
+package org.gaziz.birgram.core.telegram.ui.mapper
 
 import android.graphics.BitmapFactory
 import androidx.compose.ui.graphics.asImageBitmap
@@ -10,13 +10,12 @@ import org.gaziz.birgram.core.telegram.api.model.media.FileData
 import org.gaziz.birgram.core.telegram.api.model.media.ProfilePhoto
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.telegram.api.usecase.DownloadOrGetFileDataById
-import org.gaziz.birgram.core.ui.icon.skull
 import org.gaziz.birgram.core.telegram.ui.model.AvatarUiState
+import org.gaziz.birgram.core.ui.icon.skull
 import javax.inject.Inject
-import kotlin.collections.plus
 
-class GetChatAvatar @Inject constructor(
-    private val getAccentColorById: GetAccentColorById,
+class ChatAvatarUiMapper @Inject constructor(
+    private val accentColorMapper: AccentColorMapper,
     private val downloadOrGetFileDataById: DownloadOrGetFileDataById,
     private val chatService: ChatService,
     private val userService: UserService
@@ -41,7 +40,7 @@ class GetChatAvatar @Inject constructor(
     operator fun invoke(
         chat: Chat,
     ): AvatarUiState {
-        val accentColor = getAccentColorById(chat.accentColorId)
+        val accentColor = accentColorMapper(chat.accentColorId)
         val placeHolderText = if(chat.title.isNotBlank()) chat.title[0].toString() else ""
         val downloadPhoto: () -> Unit = {
             chat.photo?.let { photo ->

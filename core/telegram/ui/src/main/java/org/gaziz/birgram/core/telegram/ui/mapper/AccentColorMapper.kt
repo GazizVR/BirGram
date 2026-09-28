@@ -1,10 +1,10 @@
-package org.gaziz.birgram.core.telegram.ui.usecase
+package org.gaziz.birgram.core.telegram.ui.mapper
 
 import androidx.compose.ui.graphics.Color
 import org.gaziz.birgram.core.telegram.api.ChatService
 import javax.inject.Inject
 
-class GetAccentColorById @Inject constructor(
+class AccentColorMapper @Inject constructor(
     private val chatService: ChatService
 ) {
     operator fun invoke(id: Int): Color {

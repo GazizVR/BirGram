@@ -8,13 +8,13 @@ import org.gaziz.birgram.core.telegram.api.model.group.GroupMemberStatus
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.telegram.ui.model.ChatTypeUiState
-import org.gaziz.birgram.core.telegram.ui.usecase.GetChatAvatar
+import org.gaziz.birgram.core.telegram.ui.mapper.ChatAvatarUiMapper
 import org.gaziz.birgram.feature.chat.ui.model.ChatUiState
 import javax.inject.Inject
 
 class ChatUiMapper @Inject constructor(
     private val userService: UserService,
-    private val getChatAvatar: GetChatAvatar,
+    private val chatAvatarUiMapper: ChatAvatarUiMapper,
     private val groupService: GroupService,
 ) {
     fun map(chat: Chat): ChatUiState {
@@ -23,7 +23,7 @@ class ChatUiMapper @Inject constructor(
             chatType is ChatType.Private &&
             userService.users.value[chatType.userId]?.type == UserType.Deleted &&
             userService.users.value[chatType.userId]?.type == UserType.Unknown
-        val avatar = getChatAvatar(chat)
+        val avatar = chatAvatarUiMapper(chat)
         var canSendTextMessages = chat.permissions.canSendBasicMessages
         val typeInfo: ChatTypeUiState? = when(val type = chat.type) {
             is ChatType.BasicGroup -> {

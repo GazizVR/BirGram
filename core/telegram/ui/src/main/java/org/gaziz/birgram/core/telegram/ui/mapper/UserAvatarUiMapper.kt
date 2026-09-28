@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.telegram.ui.usecase
+package org.gaziz.birgram.core.telegram.ui.mapper
 
 import android.graphics.BitmapFactory
 import androidx.compose.ui.graphics.asImageBitmap
@@ -8,13 +8,12 @@ import org.gaziz.birgram.core.telegram.api.model.media.ProfilePhoto
 import org.gaziz.birgram.core.telegram.api.model.user.User
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.telegram.api.usecase.DownloadOrGetFileDataById
-import org.gaziz.birgram.core.ui.icon.skull
 import org.gaziz.birgram.core.telegram.ui.model.AvatarUiState
+import org.gaziz.birgram.core.ui.icon.skull
 import javax.inject.Inject
-import kotlin.collections.plus
 
-class GetUserAvatar @Inject constructor(
-    private val getAccentColorById: GetAccentColorById,
+class UserAvatarUiMapper @Inject constructor(
+    private val accentColorMapper: AccentColorMapper,
     private val downloadOrGetFileDataById: DownloadOrGetFileDataById,
     private val userService: UserService
 ) {
@@ -38,7 +37,7 @@ class GetUserAvatar @Inject constructor(
     operator fun invoke(
         user: User
     ): AvatarUiState {
-        val accentColor = getAccentColorById(user.accentColorId)
+        val accentColor = accentColorMapper(user.accentColorId)
         val isDeleted = user.type is UserType.Deleted || user.type is UserType.Unknown
         val downloadPhoto: () -> Unit = {
             user.photo?.let { photo ->

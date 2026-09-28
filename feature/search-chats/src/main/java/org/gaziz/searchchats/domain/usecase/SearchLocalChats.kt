@@ -4,7 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.telegram.ui.model.ChatTypeUiState
-import org.gaziz.birgram.core.telegram.ui.usecase.GetChatAvatar
+import org.gaziz.birgram.core.telegram.ui.mapper.ChatAvatarUiMapper
 import org.gaziz.searchchats.domain.model.SearchedItem
 import org.gaziz.searchchats.domain.repository.ChatSearchRepository
 import org.gaziz.birgram.core.telegram.api.ChatService
@@ -19,7 +19,7 @@ class SearchLocalChats @Inject constructor(
     private val chatSearchRepository: ChatSearchRepository,
     private val userService: UserService,
     private val groupService: GroupService,
-    private val getChatAvatar: GetChatAvatar
+    private val chatAvatarUiMapper: ChatAvatarUiMapper
 ) {
     operator fun invoke(
         query: String,
@@ -78,7 +78,7 @@ class SearchLocalChats @Inject constructor(
                         }
                         else -> null
                     }
-                    val avatar = getChatAvatar(chat)
+                    val avatar = chatAvatarUiMapper(chat)
                     SearchedItem(
                         title = chat.title,
                         avatar = avatar,
