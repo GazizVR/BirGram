@@ -1,6 +1,5 @@
 package org.gaziz.birgram.core.ui.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.CircleShape
@@ -15,6 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 import org.gaziz.birgram.core.ui.model.AvatarUiState
 
 @Composable
@@ -30,32 +30,25 @@ fun Avatar(
     ) {
         when(avatar) {
             is AvatarUiState.Photo -> {
-                LaunchedEffect(Unit) {
-                    avatar.onEmpty()
-                }
-                Image(
-                    bitmap = avatar.bitmap,
+                AsyncImage(
+                    model = avatar.path,
                     contentDescription = null,
                     modifier = modifier.clip(CircleShape),
                 )
             }
-            is AvatarUiState.Icon -> {
-                Box(
-                    modifier = modifier
-                        .clip(CircleShape)
-                        .background(avatar.background),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = avatar.imageVector,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onBackground
-                    )
+            is AvatarUiState.Thumbnail -> {
+                LaunchedEffect(Unit) {
+                    avatar.onDownload()
                 }
+                AsyncImage(
+                    model = avatar.bitmap,
+                    contentDescription = null,
+                    modifier = modifier.clip(CircleShape),
+                )
             }
             is AvatarUiState.PlaceHolder -> {
                 LaunchedEffect(Unit) {
-                    avatar.downloadPhoto()
+                    avatar.onDownload()
                 }
                 Box(
                     modifier = modifier
@@ -69,6 +62,20 @@ fun Avatar(
                         fontSize = placeHolderFontSize,
                         textAlign = TextAlign.Center,
                         lineHeight = placeHolderFontSize
+                    )
+                }
+            }
+            is AvatarUiState.Icon -> {
+                Box(
+                    modifier = modifier
+                        .clip(CircleShape)
+                        .background(avatar.background),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = avatar.imageVector,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
             }

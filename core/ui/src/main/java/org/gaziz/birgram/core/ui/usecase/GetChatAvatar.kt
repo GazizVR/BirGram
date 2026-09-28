@@ -62,28 +62,23 @@ class GetChatAvatar @Inject constructor(
                 background = accentColor
             )
             chat.photo != null && chat.photo?.small?.path?.isNotBlank() == true -> {
-                val bitmap = BitmapFactory
-                    .decodeFile(chat.photo!!.small.path)
-                    .asImageBitmap()
-                AvatarUiState.Photo(
-                    bitmap = bitmap,
-                    onEmpty = downloadPhoto
-                )
+                val path = chat.photo!!.small.path
+                AvatarUiState.Photo(path)
             }
             chat.photo != null && chat.photo?.miniThumbnail != null -> {
                 val miniThumbnail = chat.photo!!.miniThumbnail!!
                 val bitmap = BitmapFactory
                     .decodeByteArray(miniThumbnail,0,miniThumbnail.size)
                     .asImageBitmap()
-                AvatarUiState.Photo(
+                AvatarUiState.Thumbnail(
                     bitmap = bitmap,
-                    onEmpty = downloadPhoto
+                    onDownload = downloadPhoto
                 )
             }
             else -> AvatarUiState.PlaceHolder(
                 text = placeHolderText,
                 color = accentColor,
-                downloadPhoto = downloadPhoto
+                onDownload = downloadPhoto
             )
         }
     }

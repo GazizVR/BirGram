@@ -58,7 +58,7 @@ class GetUserAvatar @Inject constructor(
                     .decodeFile(user.photo!!.small.path)
                     .asImageBitmap()
                 AvatarUiState.Photo(
-                    bitmap = bitmap,
+                    path = bitmap,
                     onEmpty = downloadPhoto
                 )
             }
@@ -68,14 +68,14 @@ class GetUserAvatar @Inject constructor(
                     .decodeByteArray(miniThumbnail,0,miniThumbnail.size)
                     .asImageBitmap()
                 AvatarUiState.Photo(
-                    bitmap = bitmap,
+                    path = bitmap,
                     onEmpty = downloadPhoto
                 )
             }
             else -> AvatarUiState.PlaceHolder(
                 text = if(user.firstName.isNotBlank()) user.firstName[0].toString() else "",
                 color = accentColor,
-                downloadPhoto = downloadPhoto
+                onDownload = downloadPhoto
             )
         }
     }
