@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.ui.usecase
+package org.gaziz.birgram.core.telegram.ui.usecase
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.map
 import org.gaziz.birgram.core.telegram.api.ChatService
 import org.gaziz.birgram.core.telegram.api.UserService
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
-import org.gaziz.birgram.core.ui.model.MessageSenderUiState
+import org.gaziz.birgram.core.telegram.ui.model.MessageSenderUiState
 import javax.inject.Inject
 
 class GetMessageSenderInfo @Inject constructor(

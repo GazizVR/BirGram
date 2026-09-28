@@ -1,10 +1,12 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp") version "2.3.7"
+    id("com.google.dagger.hilt.android")
 }
 
 android {
-    namespace = "org.gaziz.birgram.core.ui"
+    namespace = "org.gaziz.birgram.core.telegram.ui"
     compileSdk {
         version = release(37)
     }
@@ -32,4 +34,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
+    //Internal modules
+    implementation(project(":core:telegram"))
+    //Hilt
+    ksp(libs.hilt.android.compiler)
+    implementation(libs.hilt.android)
+    //Coil
+    implementation(libs.coil.compose)
 }

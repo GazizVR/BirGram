@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.ui.model
+package org.gaziz.birgram.core.telegram.ui.model
 
 import androidx.compose.ui.graphics.Color
 

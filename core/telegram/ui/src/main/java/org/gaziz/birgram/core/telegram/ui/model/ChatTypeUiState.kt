@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.ui.model
+package org.gaziz.birgram.core.telegram.ui.model
 
 import org.gaziz.birgram.core.telegram.api.model.user.UserStatus
 

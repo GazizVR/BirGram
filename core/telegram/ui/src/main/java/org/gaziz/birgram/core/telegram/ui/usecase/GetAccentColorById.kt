@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.ui.usecase
+package org.gaziz.birgram.core.telegram.ui.usecase
 
 import androidx.compose.ui.graphics.Color
 import org.gaziz.birgram.core.telegram.api.ChatService

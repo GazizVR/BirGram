@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.ui.component
+package org.gaziz.birgram.core.telegram.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -15,7 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import org.gaziz.birgram.core.ui.model.AvatarUiState
+import org.gaziz.birgram.core.telegram.ui.model.AvatarUiState
 
 @Composable
 fun Avatar(

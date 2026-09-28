@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.ui.component
+package org.gaziz.birgram.core.telegram.ui.component
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

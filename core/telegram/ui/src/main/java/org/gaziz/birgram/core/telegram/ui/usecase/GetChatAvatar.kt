@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.ui.usecase
+package org.gaziz.birgram.core.telegram.ui.usecase
 
 import android.graphics.BitmapFactory
 import androidx.compose.ui.graphics.asImageBitmap
@@ -11,8 +11,9 @@ import org.gaziz.birgram.core.telegram.api.model.media.ProfilePhoto
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.telegram.api.usecase.DownloadOrGetFileDataById
 import org.gaziz.birgram.core.ui.icon.skull
-import org.gaziz.birgram.core.ui.model.AvatarUiState
+import org.gaziz.birgram.core.telegram.ui.model.AvatarUiState
 import javax.inject.Inject
+import kotlin.collections.plus
 
 class GetChatAvatar @Inject constructor(
     private val getAccentColorById: GetAccentColorById,

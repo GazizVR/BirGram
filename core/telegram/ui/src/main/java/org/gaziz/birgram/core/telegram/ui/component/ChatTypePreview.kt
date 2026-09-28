@@ -1,4 +1,4 @@
-package org.gaziz.birgram.core.ui.component
+package org.gaziz.birgram.core.telegram.ui.component
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -7,9 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
-import org.gaziz.birgram.core.ui.R
-import org.gaziz.birgram.core.ui.model.ChatTypeUiState
 import org.gaziz.birgram.core.telegram.api.model.user.UserStatus
+import org.gaziz.birgram.core.telegram.ui.R
+import org.gaziz.birgram.core.telegram.ui.model.ChatTypeUiState
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
