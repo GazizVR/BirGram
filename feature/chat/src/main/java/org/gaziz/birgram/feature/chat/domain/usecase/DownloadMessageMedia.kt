@@ -25,23 +25,23 @@ class DownloadMessageMedia @Inject constructor(
                         val newMsg = onFile(file,msg)
                         old + (messageId to newMsg)
                     } else {
-                        val content: MessageContent = when(msg.content) {
-                            is MessageContent.Sticker -> msg.content.copy(data = file)
+                        val content: MessageContent = when(val cnt = msg.content) {
+                            is MessageContent.Sticker -> cnt.copy(data = file)
                             is MessageContent.AnimatedEmoji -> {
                                 var sticker: MessageContent.Sticker? = null
-                                if(msg.content.animation != null) {
-                                    sticker =  msg.content.animation.copy(data = file)
+                                cnt.animation?.let { animation ->
+                                    sticker = animation.copy(data = file)
                                 }
-                                msg.content.copy(animation = sticker)
+                                cnt.copy(animation = sticker)
                             }
                             is MessageContent.Animation -> {
-                                msg.content.copy(file = file)
+                                cnt.copy(file = file)
                             }
                             is MessageContent.Document -> {
-                                msg.content.copy(file = file)
+                                cnt.copy(file = file)
                             }
                             is MessageContent.Video -> {
-                                msg.content.copy(file = file)
+                                cnt.copy(file = file)
                             }
                             else -> return@updateMessages old
                         }
