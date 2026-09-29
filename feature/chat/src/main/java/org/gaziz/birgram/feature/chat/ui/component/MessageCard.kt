@@ -111,6 +111,7 @@ fun MessageCardWrapper(
                 isClicked = true
                 onFirstClick()
             }
+            isMenu = !isMenu
         }
     ) {
         MessageCard(
