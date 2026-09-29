@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -31,7 +30,6 @@ import org.gaziz.birgram.feature.chat.domain.usecase.GetChatMessagesByDate
 import org.gaziz.birgram.feature.chat.domain.usecase.LoadChatMessages
 import org.gaziz.birgram.feature.chat.ui.mapper.ChatUiMapper
 import org.gaziz.birgram.feature.chat.ui.mapper.MessageGroupMapper
-import org.gaziz.birgram.feature.chat.ui.mapper.MessageUiMapper
 import org.gaziz.birgram.feature.chat.ui.model.ChatUiState
 import org.gaziz.birgram.feature.chat.ui.model.MessageUiState
 import java.time.LocalDateTime
@@ -52,8 +50,7 @@ class ChatViewModel @Inject constructor(
     private val messageService: MessageService,
 
     private val chatUiMapper: ChatUiMapper,
-    private val messageGroupMapper: MessageGroupMapper,
-    private val messageUiMapper: MessageUiMapper
+    private val messageGroupMapper: MessageGroupMapper
 ): ViewModel() {
     private val chatId = checkNotNull<Long>(savedStateHandle["chatId"])
     private var historyLoading = false
@@ -99,21 +96,6 @@ class ChatViewModel @Inject constructor(
             SharingStarted.Eagerly,
             emptyMap()
         )
-
-    fun getMessageById(id: Long): StateFlow<MessageUiState?> {
-        return combine(
-            messageService.messages.map { it[id] },
-            messageService.messageProperties.map { it[id] }
-        ) { msg, properties ->
-            msg ?: return@combine null
-            messageUiMapper.map(msg, properties)
-        }
-            .stateIn(
-                viewModelScope,
-                SharingStarted.Eagerly,
-                null
-            )
-    }
 
     fun loadMessages(fromMessageId: Long){
         if(historyLoading) return
