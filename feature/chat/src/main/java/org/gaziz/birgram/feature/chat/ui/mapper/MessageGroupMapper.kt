@@ -26,12 +26,12 @@ class MessageGroupMapper @Inject constructor(
         return format(formatter)
     }
     fun map(
-        messagesById: Map<LocalDate,List<Message>>,
+        messagesByDate: Map<LocalDate,List<Message>>,
         chatsById: Map<Long, Chat>,
         usersById: Map<Long, User>,
         propertiesById: Map<Long, MessageProperties>
     ): Map<String,List<MessageUiState>> {
-        return messagesById.entries.associate { (key,value) ->
+        return messagesByDate.entries.associate { (key,value) ->
             val messages = value.mapIndexed { ind, msg ->
                 messageUiMapper.map(
                     msg = msg,

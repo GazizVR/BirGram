@@ -16,18 +16,20 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.telegram.api.ChatService
+import org.gaziz.birgram.core.telegram.api.GroupService
 import org.gaziz.birgram.core.telegram.api.MessageService
+import org.gaziz.birgram.core.telegram.api.UserService
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
 import org.gaziz.birgram.feature.chat.domain.usecase.GetChatById
 import org.gaziz.birgram.feature.chat.domain.usecase.GetChatMessagesByDate
 import org.gaziz.birgram.feature.chat.domain.usecase.LoadChatMessages
 import org.gaziz.birgram.feature.chat.ui.mapper.ChatUiMapper
+import org.gaziz.birgram.feature.chat.ui.mapper.MessageGroupMapper
 import org.gaziz.birgram.feature.chat.ui.model.ChatUiState
 import org.gaziz.birgram.feature.chat.ui.model.MessageUiState
 import java.time.LocalDateTime
@@ -40,10 +42,15 @@ class ChatViewModel @Inject constructor(
 
     getChatById: GetChatById,
     getChatMessagesByDate: GetChatMessagesByDate,
-    private val chatService: ChatService,
     private val loadChatMessages: LoadChatMessages,
+
+    private val chatService: ChatService,
+    private val userService: UserService,
+    private val groupService: GroupService,
     private val messageService: MessageService,
-    private val chatUiMapper: ChatUiMapper
+
+    private val chatUiMapper: ChatUiMapper,
+    private val messageGroupMapper: MessageGroupMapper
 ): ViewModel() {
     private val chatId = checkNotNull<Long>(savedStateHandle["chatId"])
     private var historyLoading = false
@@ -62,9 +69,14 @@ class ChatViewModel @Inject constructor(
         releasePlayer()
     }
     val chat: StateFlow<ChatUiState?> =
-        getChatById(chatId).map { chat ->
-            chat ?: return@map null
-            chatUiMapper(chat)
+        combine(
+            getChatById(chatId),
+            userService.users,
+            groupService.basicGroups,
+            groupService.superGroups
+        ) { chat, usersById, basicGroupsById, superGroupsById ->
+            chat ?: return@combine null
+            chatUiMapper(chat,usersById,basicGroupsById,superGroupsById)
         }.stateIn(
             viewModelScope,
             SharingStarted.Eagerly,
@@ -74,9 +86,11 @@ class ChatViewModel @Inject constructor(
     val messages: StateFlow<Map<String, List<MessageUiState>>> =
         combine(
             getChatMessagesByDate(chatId),
+            chatService.chats,
+            userService.users,
             messageService.messageProperties
-        ) { messageMap, propertiesMap ->
-
+        ) { messagesByDate, chatsById, usersById, propertiesById ->
+            messageGroupMapper.map(messagesByDate,chatsById,usersById,propertiesById)
         }.stateIn(
             viewModelScope,
             SharingStarted.Eagerly,
