@@ -22,7 +22,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -47,7 +46,6 @@ import org.gaziz.birgram.feature.chat.ui.component.bar.ChatTopBar
 import org.gaziz.birgram.feature.chat.ui.component.bar.MessageInputBar
 import org.gaziz.birgram.feature.chat.ui.component.button.ScrollDownButton
 import org.gaziz.birgram.feature.chat.ui.component.dialog.DeleteMessageDialog
-import org.gaziz.birgram.feature.chat.ui.component.menu.MessageActionMenu
 import org.gaziz.birgram.feature.chat.ui.model.ChatAvatarUiState
 import org.gaziz.birgram.feature.chat.ui.model.TitleUiState
 
@@ -122,7 +120,6 @@ fun ChatScreen(
     }
     // UI Content
     var deleteMessageIds by rememberSaveable { mutableStateOf<LongArray?>(null) }
-    var selectedMessageId by remember { mutableStateOf<Long?>(null) }
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -182,7 +179,21 @@ fun ChatScreen(
                                 message = msg,
                                 fontSize = 6.sp,
                                 onFirstClick = { viewModel.loadMessageProperties(msg.id) },
-                                onClick = { selectedMessageId = msg.id }
+                                onDelete = { msgId ->
+                                    if(msg.sendingState is MessageSendingState.Pending) {
+                                        viewModel.deleteMessages(
+                                            LongArray(1){ msgId },
+                                            msg.canDeleteForAll
+                                        )
+                                    } else {
+                                        deleteMessageIds = LongArray(1) { msgId }
+                                    }
+                                },
+                                onRetry = { msgId ->
+                                    viewModel.resendMessages(
+                                        LongArray(1){ msgId }
+                                    )
+                                }
                             )
                         }
                         item {
@@ -227,26 +238,6 @@ fun ChatScreen(
             }
         }
     }
-    MessageActionMenu(
-        selectedMsgId = selectedMessageId,
-        getMessage = {  },
-        onDismissRequest = { selectedMessageId = null },
-        onDelete = {
-            if(msg.sendingState is MessageSendingState.Pending) {
-                viewModel.deleteMessages(
-                    LongArray(1){ msg.id },
-                    msg.canDeleteForAll
-                )
-            } else {
-                deleteMessageIds = LongArray(1) { it }
-            }
-        },
-        onRetry = {
-            viewModel.resendMessages(
-                LongArray(1){ it }
-            )
-        }
-    )
     val othersStr = stringResource(R.string.others)
     DeleteMessageDialog(
         deleteMessageIds = deleteMessageIds,

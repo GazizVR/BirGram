@@ -33,13 +33,14 @@ class MessageGroupMapper @Inject constructor(
     ): Map<String,List<MessageUiState>> {
         return messagesByDate.entries.associate { (key,value) ->
             val messages = value.mapIndexed { ind, msg ->
+                val properties = propertiesById[msg.id]
                 messageUiMapper.map(
                     msg = msg,
                     prevMsg = value.getOrNull(ind-1),
                     nextMsg = value.getOrNull(ind+1),
                     chatsById = chatsById,
                     usersById = usersById,
-                    propertiesById = propertiesById
+                    properties = properties
                 )
             }
             key.formatMonthDay() to messages

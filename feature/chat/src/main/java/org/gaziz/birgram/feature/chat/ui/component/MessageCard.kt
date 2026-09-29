@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.gaziz.birgram.core.telegram.ui.component.Avatar
+import org.gaziz.birgram.feature.chat.ui.component.menu.MessageActionMenu
 import org.gaziz.birgram.feature.chat.ui.component.messagecontent.ContentPreview
 import org.gaziz.birgram.feature.chat.ui.model.MessageUiState
 
@@ -96,9 +97,11 @@ fun MessageCardWrapper(
     message: MessageUiState,
     fontSize: TextUnit,
     onFirstClick: () -> Unit,
-    onClick: () -> Unit
+    onDelete: (Long) -> Unit,
+    onRetry: (Long) -> Unit,
 ) {
     var isClicked by rememberSaveable { mutableStateOf(false) }
+    var isMenu by remember { mutableStateOf(false) }
     Box(
         modifier = Modifier.clickable(
             indication = null,
@@ -108,12 +111,17 @@ fun MessageCardWrapper(
                 isClicked = true
                 onFirstClick()
             }
-            onClick()
         }
     ) {
         MessageCard(
             message = message,
             fontSize = fontSize
+        )
+        MessageActionMenu(
+            msg = if(isMenu) message else null,
+            onDismissRequest = { isMenu = false },
+            onDelete = onDelete,
+            onRetry = onRetry
         )
     }
 }

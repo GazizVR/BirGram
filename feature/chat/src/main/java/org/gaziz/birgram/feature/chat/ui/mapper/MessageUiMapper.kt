@@ -32,11 +32,11 @@ class MessageUiMapper @Inject constructor(
 
     fun map(
         msg: Message,
+        properties: MessageProperties?,
         prevMsg: Message? = null,
         nextMsg: Message? = null,
-        chatsById: Map<Long, Chat>,
-        usersById: Map<Long, User>,
-        propertiesById: Map<Long, MessageProperties>
+        chatsById: Map<Long, Chat> = emptyMap(),
+        usersById: Map<Long, User> = emptyMap()
     ): MessageUiState {
         val chat = chatsById[msg.chatId]
         val sender = run {
@@ -139,7 +139,6 @@ class MessageUiMapper @Inject constructor(
             else -> null
         }
 
-        val properties = propertiesById[msg.id]
         val canDeleteForSelf = properties?.canDeleteForSelf ?: false
         val canDeleteForAll = properties?.canDeleteForAll ?: false
 

@@ -7,14 +7,11 @@ import org.gaziz.birgram.feature.chat.ui.model.MessageUiState
 
 @Composable
 fun MessageActionMenu(
-    selectedMsgId: Long?,
-    getMessage: (Long) -> MessageUiState?,
+    msg: MessageUiState?,
     onDismissRequest: () -> Unit,
     onDelete: (Long) -> Unit,
     onRetry: (Long) -> Unit
 ) {
-    if(selectedMsgId == null) return
-    val msg = getMessage(selectedMsgId)
     if (msg != null) {
         Popup(
             alignment = Alignment.Center,
