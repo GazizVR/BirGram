@@ -1,11 +1,12 @@
 package org.gaziz.birgram.feature.chat.ui.mapper
 
-import org.gaziz.birgram.core.telegram.api.GroupService
-import org.gaziz.birgram.core.telegram.api.UserService
 import org.gaziz.birgram.core.telegram.api.model.chat.Chat
 import org.gaziz.birgram.core.telegram.api.model.chat.ChatType
+import org.gaziz.birgram.core.telegram.api.model.group.BasicGroup
 import org.gaziz.birgram.core.telegram.api.model.group.GroupMemberStatus
+import org.gaziz.birgram.core.telegram.api.model.group.SuperGroup
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
+import org.gaziz.birgram.core.telegram.api.model.user.User
 import org.gaziz.birgram.core.telegram.api.model.user.UserType
 import org.gaziz.birgram.core.telegram.ui.model.ChatTypeUiState
 import org.gaziz.birgram.core.telegram.ui.provider.ChatAvatarProvider
@@ -14,20 +15,24 @@ import javax.inject.Inject
 
 class ChatUiMapper @Inject constructor(
     private val chatAvatarProvider: ChatAvatarProvider,
-    private val userService: UserService,
-    private val groupService: GroupService,
 ) {
-    fun map(chat: Chat): ChatUiState {
-        val chatType = chat.type
-        val isDeleted =
+    operator fun invoke(
+        chat: Chat,
+        usersById: Map<Long, User>,
+        basicGroupsById: Map<Long, BasicGroup>,
+        superGroupsById: Map<Long, SuperGroup>,
+    ): ChatUiState {
+        val isDeleted = run {
+            val chatType = chat.type
             chatType is ChatType.Private &&
-            userService.users.value[chatType.userId]?.type == UserType.Deleted &&
-            userService.users.value[chatType.userId]?.type == UserType.Unknown
-        val avatar = chatAvatarProvider(chat,userService.users.value)
+            usersById[chatType.userId]?.type == UserType.Deleted &&
+            usersById[chatType.userId]?.type == UserType.Unknown
+        }
+        val avatar = chatAvatarProvider(chat,usersById)
         var canSendTextMessages = chat.permissions.canSendBasicMessages
         val typeInfo: ChatTypeUiState? = when(val type = chat.type) {
             is ChatType.BasicGroup -> {
-                val group = groupService.basicGroups.value[type.groupId]
+                val group = basicGroupsById[type.groupId]
                 canSendTextMessages =
                     chat.permissions.canSendBasicMessages ||
                             group?.memberStatus is GroupMemberStatus.Creator ||
@@ -42,7 +47,7 @@ class ChatUiMapper @Inject constructor(
                 }
             }
             is ChatType.SuperGroup -> {
-                val group = groupService.superGroups.value[type.groupId]
+                val group = superGroupsById[type.groupId]
                 canSendTextMessages =
                     chat.permissions.canSendBasicMessages ||
                             group?.memberStatus is GroupMemberStatus.Creator ||
@@ -58,7 +63,7 @@ class ChatUiMapper @Inject constructor(
                 }
             }
             is ChatType.Private -> {
-                val user = userService.users.value[type.userId]
+                val user = usersById[type.userId]
                 if(user != null) {
                     ChatTypeUiState.User(
                         status = user.status,
@@ -69,7 +74,7 @@ class ChatUiMapper @Inject constructor(
                 }
             }
             is ChatType.Secret -> {
-                val user = userService.users.value[type.userId]
+                val user = usersById[type.userId]
                 if(user != null) {
                     ChatTypeUiState.User(
                         status = user.status,

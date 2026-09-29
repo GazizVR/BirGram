@@ -21,13 +21,13 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import org.gaziz.birgram.core.telegram.api.model.message.MessageSendingState
 import org.gaziz.birgram.core.telegram.ui.model.MessageSenderUiState
 import org.gaziz.birgram.feature.chat.R
 import org.gaziz.birgram.feature.chat.ui.ChatViewModel
 import org.gaziz.birgram.feature.chat.ui.mapper.getUriForFile
 import org.gaziz.birgram.feature.chat.ui.mapper.toDurationStr
 import org.gaziz.birgram.feature.chat.ui.model.MessageContentUiState
-import org.gaziz.birgram.core.telegram.api.model.message.MessageSendingState
 import java.io.File
 
 @Composable

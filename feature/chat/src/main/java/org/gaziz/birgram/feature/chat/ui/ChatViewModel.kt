@@ -25,10 +25,9 @@ import org.gaziz.birgram.core.telegram.api.MessageService
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
 import org.gaziz.birgram.feature.chat.domain.usecase.GetChatById
-import org.gaziz.birgram.feature.chat.domain.usecase.GetChatMessages
+import org.gaziz.birgram.feature.chat.domain.usecase.GetChatMessagesByDate
 import org.gaziz.birgram.feature.chat.domain.usecase.LoadChatMessages
 import org.gaziz.birgram.feature.chat.ui.mapper.ChatUiMapper
-import org.gaziz.birgram.feature.chat.ui.mapper.formatMonthDay
 import org.gaziz.birgram.feature.chat.ui.model.ChatUiState
 import org.gaziz.birgram.feature.chat.ui.model.MessageUiState
 import java.time.LocalDateTime
@@ -40,7 +39,7 @@ class ChatViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
 
     getChatById: GetChatById,
-    getChatMessages: GetChatMessages,
+    getChatMessagesByDate: GetChatMessagesByDate,
     private val chatService: ChatService,
     private val loadChatMessages: LoadChatMessages,
     private val messageService: MessageService,
@@ -65,7 +64,7 @@ class ChatViewModel @Inject constructor(
     val chat: StateFlow<ChatUiState?> =
         getChatById(chatId).map { chat ->
             chat ?: return@map null
-            chatUiMapper.map(chat)
+            chatUiMapper(chat)
         }.stateIn(
             viewModelScope,
             SharingStarted.Eagerly,
@@ -74,15 +73,10 @@ class ChatViewModel @Inject constructor(
 
     val messages: StateFlow<Map<String, List<MessageUiState>>> =
         combine(
-            getChatMessages(chatId),
+            getChatMessagesByDate(chatId),
             messageService.messageProperties
         ) { messageMap, propertiesMap ->
-            messageMap.entries.associate { (key,value) ->
-                val messages = value.mapIndexed { ind, msg ->
-                    MessageUiState()
-                }
-                key.formatMonthDay() to messages
-            }
+
         }.stateIn(
             viewModelScope,
             SharingStarted.Eagerly,

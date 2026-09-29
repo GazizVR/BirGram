@@ -7,7 +7,7 @@ import org.gaziz.birgram.core.telegram.api.model.message.Message
 import java.time.LocalDate
 import javax.inject.Inject
 
-class GetChatMessages @Inject constructor(
+class GetChatMessagesByDate @Inject constructor(
     private val messageService: MessageService
 ) {
     operator fun invoke(

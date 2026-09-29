@@ -10,61 +10,68 @@ import org.gaziz.birgram.core.telegram.api.model.message.MessageOrigin
 import org.gaziz.birgram.core.telegram.api.model.message.MessageProperties
 import org.gaziz.birgram.core.telegram.api.model.message.MessageSender
 import org.gaziz.birgram.core.telegram.api.model.user.User
+import org.gaziz.birgram.core.telegram.ui.mapper.MessageSenderUiMapper
 import org.gaziz.birgram.feature.chat.domain.usecase.DownloadMessageMedia
-import org.gaziz.birgram.core.telegram.ui.model.MessageSenderUiState
 import org.gaziz.birgram.feature.chat.domain.usecase.GetPhotoBySizes
 import org.gaziz.birgram.feature.chat.ui.model.MediaUiState
 import org.gaziz.birgram.feature.chat.ui.model.MessageContentUiState
 import org.gaziz.birgram.feature.chat.ui.model.MessageUiState
 import java.io.File
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class MessageUiMapper @Inject constructor(
     private val getPhotoBySizes: GetPhotoBySizes,
     private val downloadMessageMedia: DownloadMessageMedia,
+    private val messageSenderUiMapper: MessageSenderUiMapper,
+    private val messageContentUiMapper: MessageContentUiMapper
 ) {
+    private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+    private fun LocalDateTime.toTimeString(): String = format(timeFormatter)
+
     fun map(
         msg: Message,
         prevMsg: Message? = null,
         nextMsg: Message? = null,
-        senderInfo: MessageSenderUiState? = null,
-        chatById: Map<Long, Chat>,
-        userById: Map<Long, User>,
+        chatsById: Map<Long, Chat>,
+        usersById: Map<Long, User>,
         propertiesById: Map<Long, MessageProperties>
     ): MessageUiState {
-        val chat = chatById[msg.chatId]
+        val chat = chatsById[msg.chatId]
         val sender = run {
-            var newData = senderInfo?.copy(name = null, avatar = null)
+            val sender = messageSenderUiMapper(msg.sender,chatsById,usersById)
+            var newSender = sender?.copy(name = null, avatar = null)
             if(prevMsg != null) {
                 if(msg.sender != prevMsg.sender) {
-                    newData = newData?.copy(name = senderInfo?.name)
+                    newSender = newSender?.copy(name = sender?.name)
                 }
             } else {
-                newData = newData?.copy(name = senderInfo?.name)
+                newSender = newSender?.copy(name = sender?.name)
             }
             if(nextMsg != null) {
                 if(msg.sender != nextMsg.sender) {
-                    newData = newData?.copy(avatar = senderInfo?.avatar)
+                    newSender = newSender?.copy(avatar = sender?.avatar)
                 }
             } else {
-                newData = newData?.copy(avatar = senderInfo?.avatar)
+                newSender = newSender?.copy(avatar = sender?.avatar)
             }
             if(chat?.type is ChatType.Private || chat?.type is ChatType.Secret) {
-                newData = null
+                newSender = null
             }
             if(
                 msg.sender is MessageSender.Chat &&
                 (msg.sender as MessageSender.Chat).id == msg.chatId
             ) {
-                newData = null
+                newSender = null
             }
-            newData
+            newSender
         }
         val msgContent = when(val cnt = msg.content) {
             is MessageContent.Photo -> {
                 val photoSize = getPhotoBySizes(cnt.sizes)
                 var width = 150
-                var heigh = 150
+                var height = 150
                 var content: MediaUiState? = null
                 if(cnt.miniThumbnail != null) {
                     val bitmap = BitmapFactory.decodeByteArray(
@@ -97,7 +104,7 @@ class MessageUiMapper @Inject constructor(
                         )
                     }
                     width = photoSize.width
-                    heigh = photoSize.height
+                    height = photoSize.height
                     content = when {
                         photoSize.file.path.isNotBlank() -> {
                             MediaUiState.Image(
@@ -112,10 +119,12 @@ class MessageUiMapper @Inject constructor(
                     content = content,
                     caption = cnt.caption.ifBlank { null },
                     width = width,
-                    height = heigh
+                    height = height
                 )
             }
-            else -> msg.content.toInfo {
+            else -> messageContentUiMapper.map(
+                msg.content
+            ) {
                 downloadMessageMedia(
                     fileId = it,
                     messageId = msg.id
@@ -124,9 +133,9 @@ class MessageUiMapper @Inject constructor(
         }
         val originSenderTitle = when(val cnt = msg.forwardInfo?.origin) {
             is MessageOrigin.HiddenUser -> cnt.name
-            is MessageOrigin.Channel -> chatById[cnt.id]?.title
-            is MessageOrigin.Chat -> chatById[cnt.id]?.title
-            is MessageOrigin.User -> userById[cnt.id]?.firstName
+            is MessageOrigin.Channel -> chatsById[cnt.id]?.title
+            is MessageOrigin.Chat -> chatsById[cnt.id]?.title
+            is MessageOrigin.User -> usersById[cnt.id]?.firstName
             else -> null
         }
 
