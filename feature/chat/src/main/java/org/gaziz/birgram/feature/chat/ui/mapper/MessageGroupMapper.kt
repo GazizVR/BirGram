@@ -36,8 +36,8 @@ class MessageGroupMapper @Inject constructor(
                 val properties = propertiesById[msg.id]
                 messageUiMapper.map(
                     msg = msg,
-                    prevMsg = value.getOrNull(ind-1),
-                    nextMsg = value.getOrNull(ind+1),
+                    prevMsg = value.getOrNull(ind+1),
+                    nextMsg = value.getOrNull(ind-1),
                     chatsById = chatsById,
                     usersById = usersById,
                     properties = properties
