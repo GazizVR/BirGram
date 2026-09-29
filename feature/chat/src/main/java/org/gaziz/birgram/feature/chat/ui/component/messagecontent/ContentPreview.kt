@@ -25,10 +25,23 @@ import org.gaziz.birgram.core.telegram.api.model.message.MessageSendingState
 import org.gaziz.birgram.core.telegram.ui.model.MessageSenderUiState
 import org.gaziz.birgram.feature.chat.R
 import org.gaziz.birgram.feature.chat.ui.ChatViewModel
-import org.gaziz.birgram.feature.chat.ui.mapper.getUriForFile
-import org.gaziz.birgram.feature.chat.ui.mapper.toDurationStr
 import org.gaziz.birgram.feature.chat.ui.model.MessageContentUiState
+import org.gaziz.birgram.feature.chat.ui.util.getUriForFile
 import java.io.File
+import java.util.Locale
+
+fun Int.toDurationStr(): String {
+    val totalSeconds = if (this < 0) 0 else this
+    val hours = totalSeconds / 3600
+    val minutes = (totalSeconds % 3600) / 60
+    val seconds = totalSeconds % 60
+
+    return if (hours > 0) {
+        String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, seconds)
+    } else {
+        String.format(Locale.getDefault(), "%d:%02d", minutes, seconds)
+    }
+}
 
 @Composable
 fun ContentPreview(
@@ -47,7 +60,7 @@ fun ContentPreview(
     val context = LocalContext.current
     val onVideoClick: (File) -> Unit = {
         viewModel.setMediaId(msgId)
-        val uri = getUriForFile(context,it)
+        val uri = context.getUriForFile(it)
         viewModel.setPlayerMedia(uri)
     }
     when(content){

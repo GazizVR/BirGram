@@ -37,8 +37,8 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.ui.icon.arrowDownwardAlt
 import org.gaziz.birgram.core.ui.icon.fileOpen
-import org.gaziz.birgram.feature.chat.ui.mapper.getUriForFile
 import org.gaziz.birgram.feature.chat.ui.model.MessageContentUiState
+import org.gaziz.birgram.feature.chat.ui.util.getUriForFile
 
 @Composable
 fun DocumentPreview(
@@ -83,7 +83,7 @@ fun DocumentPreview(
                                 scope.launch {
                                     val intent = Intent(Intent.ACTION_VIEW).apply {
                                         setDataAndType(
-                                            getUriForFile(context,document.file),
+                                            context.getUriForFile(document.file),
                                             document.mimeType ?: "*/*"
                                         )
                                         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
