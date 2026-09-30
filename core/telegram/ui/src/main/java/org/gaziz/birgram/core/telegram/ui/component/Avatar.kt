@@ -1,5 +1,6 @@
 package org.gaziz.birgram.core.telegram.ui.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.CircleShape
@@ -40,8 +41,8 @@ fun Avatar(
                 LaunchedEffect(Unit) {
                     avatar.onDownload()
                 }
-                AsyncImage(
-                    model = avatar.bitmap,
+                Image(
+                    bitmap = avatar.bitmap,
                     contentDescription = null,
                     modifier = modifier.clip(CircleShape),
                 )
