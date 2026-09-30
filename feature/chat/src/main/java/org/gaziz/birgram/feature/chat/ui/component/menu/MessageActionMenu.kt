@@ -4,6 +4,8 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -28,6 +30,7 @@ fun MessageActionMenu(
         content = {
             Box(
                 modifier = Modifier
+                    .width(IntrinsicSize.Max)
                     .clip(RoundedCornerShape(8.dp))
                     .background(MaterialTheme.colorScheme.secondaryContainer)
             ) {
