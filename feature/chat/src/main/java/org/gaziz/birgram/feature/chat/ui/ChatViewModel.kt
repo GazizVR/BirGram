@@ -27,9 +27,11 @@ import org.gaziz.birgram.core.telegram.api.model.message.DraftMessage
 import org.gaziz.birgram.core.telegram.api.model.message.DraftMessageContent
 import org.gaziz.birgram.feature.chat.domain.usecase.GetChatById
 import org.gaziz.birgram.feature.chat.domain.usecase.GetChatMessagesByDate
+import org.gaziz.birgram.feature.chat.domain.usecase.GetChatMessagesById
 import org.gaziz.birgram.feature.chat.domain.usecase.LoadChatMessages
 import org.gaziz.birgram.feature.chat.ui.mapper.ChatUiMapper
-import org.gaziz.birgram.feature.chat.ui.mapper.MessageGroupMapper
+import org.gaziz.birgram.feature.chat.ui.mapper.MessageGroupUiMapper
+import org.gaziz.birgram.feature.chat.ui.mapper.MessageUiMapper
 import org.gaziz.birgram.feature.chat.ui.model.ChatUiState
 import org.gaziz.birgram.feature.chat.ui.model.MessageUiState
 import java.time.LocalDateTime
@@ -43,14 +45,16 @@ class ChatViewModel @Inject constructor(
     getChatById: GetChatById,
     getChatMessagesByDate: GetChatMessagesByDate,
     private val loadChatMessages: LoadChatMessages,
+    private val getChatMessagesById: GetChatMessagesById,
 
-    userService: UserService,
     groupService: GroupService,
+    userService: UserService,
     private val chatService: ChatService,
     private val messageService: MessageService,
 
     private val chatUiMapper: ChatUiMapper,
-    private val messageGroupMapper: MessageGroupMapper
+    private val messageGroupUiMapper: MessageGroupUiMapper,
+    private val messageUiMapper: MessageUiMapper
 ): ViewModel() {
     private val chatId = checkNotNull<Long>(savedStateHandle["chatId"])
     private var historyLoading = false
@@ -83,6 +87,22 @@ class ChatViewModel @Inject constructor(
             null
         )
 
+    fun getMessagesById(): StateFlow<Map<Long, MessageUiState>> {
+        return combine(
+            getChatMessagesById(chatId),
+            messageService.messageProperties
+        ) { messagesById, propertiesById ->
+            messagesById.mapValues { (_, msg) ->
+                val properties = propertiesById[msg.id]
+                messageUiMapper.map(msg, properties)
+            }
+        }
+            .stateIn(
+                viewModelScope,
+                SharingStarted.Eagerly,
+                emptyMap()
+            )
+    }
     val messages: StateFlow<Map<String, List<MessageUiState>>> =
         combine(
             getChatMessagesByDate(chatId),
@@ -90,7 +110,7 @@ class ChatViewModel @Inject constructor(
             userService.users,
             messageService.messageProperties
         ) { messagesByDate, chatsById, usersById, propertiesById ->
-            messageGroupMapper.map(messagesByDate,chatsById,usersById,propertiesById)
+            messageGroupUiMapper.map(messagesByDate,chatsById,usersById,propertiesById)
         }.stateIn(
             viewModelScope,
             SharingStarted.Eagerly,

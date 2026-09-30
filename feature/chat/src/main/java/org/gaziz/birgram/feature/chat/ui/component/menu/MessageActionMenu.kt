@@ -16,41 +16,39 @@ import org.gaziz.birgram.feature.chat.ui.model.MessageUiState
 
 @Composable
 fun MessageActionMenu(
-    msg: MessageUiState?,
+    msg: MessageUiState,
     onDismissRequest: () -> Unit,
     onDelete: (Long) -> Unit,
     onRetry: (Long) -> Unit
 ) {
-    if (msg != null) {
-        Popup(
-            alignment = Alignment.Center,
-            onDismissRequest = onDismissRequest,
-            properties = PopupProperties(focusable = true),
-            content = {
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colorScheme.surfaceContainerLow)
-                ) {
-                    Column {
-                        RetryButtonWrapper(
-                            sendingState = msg.sendingState,
-                            onRetry = { onRetry(msg.id) }
-                        )
-                        CopyButtonWrapper(
-                            msgCnt = msg.content,
-                            onClick = onDismissRequest
-                        )
-                        DeleteButtonWrapper(
-                            message = msg,
-                            onClick = {
-                                onDismissRequest()
-                                onDelete(msg.id)
-                            }
-                        )
-                    }
+    Popup(
+        alignment = Alignment.Center,
+        onDismissRequest = onDismissRequest,
+        properties = PopupProperties(focusable = true),
+        content = {
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.surfaceContainerLow)
+            ) {
+                Column {
+                    RetryButtonWrapper(
+                        sendingState = msg.sendingState,
+                        onRetry = { onRetry(msg.id) }
+                    )
+                    CopyButtonWrapper(
+                        msgCnt = msg.content,
+                        onClick = onDismissRequest
+                    )
+                    DeleteButtonWrapper(
+                        message = msg,
+                        onClick = {
+                            onDismissRequest()
+                            onDelete(msg.id)
+                        }
+                    )
                 }
             }
-        )
-    }
+        }
+    )
 }

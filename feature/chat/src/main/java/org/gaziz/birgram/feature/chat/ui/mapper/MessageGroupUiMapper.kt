@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import javax.inject.Inject
 
-class MessageGroupMapper @Inject constructor(
+class MessageGroupUiMapper @Inject constructor(
     private val messageUiMapper: MessageUiMapper
 ) {
     private fun LocalDate.formatMonthDay(locale: Locale = Locale.getDefault()): String {
