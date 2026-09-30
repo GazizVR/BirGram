@@ -1,6 +1,8 @@
 package org.gaziz.birgram.feature.chat.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -211,25 +214,38 @@ fun ChatScreen(
             derivedStateOf { messagesById[selectedMessageId] }
         }
         if(selectedMessage != null) {
-            MessageActionMenu(
-                msg = selectedMessage!!,
-                onDismissRequest = { selectedMessageId = null },
-                onDelete = { msgId ->
-                    if(selectedMessage!!.sendingState is MessageSendingState.Pending) {
-                        viewModel.deleteMessages(
-                            LongArray(1){ msgId },
-                            selectedMessage!!.canDeleteForAll
-                        )
-                    } else {
-                        deleteMessageIds = LongArray(1) { msgId }
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .zIndex(1f)
+                    .background(MaterialTheme.colorScheme.background.copy(0.15f))
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                        selectedMessageId = null
                     }
-                },
-                onRetry = { msgId ->
-                    viewModel.resendMessages(
-                        LongArray(1){ msgId }
-                    )
-                }
-            )
+            ) {
+                MessageActionMenu(
+                    msg = selectedMessage!!,
+                    onDismissRequest = { selectedMessageId = null },
+                    onDelete = { msgId ->
+                        if (selectedMessage!!.sendingState is MessageSendingState.Pending) {
+                            viewModel.deleteMessages(
+                                LongArray(1) { msgId },
+                                selectedMessage!!.canDeleteForAll
+                            )
+                        } else {
+                            deleteMessageIds = LongArray(1) { msgId }
+                        }
+                    },
+                    onRetry = { msgId ->
+                        viewModel.resendMessages(
+                            LongArray(1) { msgId }
+                        )
+                    }
+                )
+            }
         }
     }
     val othersStr = stringResource(R.string.others)

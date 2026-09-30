@@ -29,7 +29,7 @@ fun MessageActionMenu(
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(8.dp))
-                    .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                    .background(MaterialTheme.colorScheme.secondaryContainer)
             ) {
                 Column {
                     RetryButtonWrapper(
