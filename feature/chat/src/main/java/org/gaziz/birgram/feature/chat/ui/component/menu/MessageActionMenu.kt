@@ -1,5 +1,6 @@
 package org.gaziz.birgram.feature.chat.ui.component.menu
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
-import androidx.compose.ui.window.PopupProperties
 import org.gaziz.birgram.feature.chat.ui.model.MessageUiState
 
 @Composable
@@ -21,10 +21,10 @@ fun MessageActionMenu(
     onDelete: (Long) -> Unit,
     onRetry: (Long) -> Unit
 ) {
+    BackHandler(onBack = onDismissRequest)
     Popup(
         alignment = Alignment.Center,
         onDismissRequest = onDismissRequest,
-        properties = PopupProperties(focusable = true),
         content = {
             Box(
                 modifier = Modifier

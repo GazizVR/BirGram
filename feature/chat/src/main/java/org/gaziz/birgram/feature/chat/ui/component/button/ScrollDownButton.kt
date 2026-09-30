@@ -1,5 +1,11 @@
 package org.gaziz.birgram.feature.chat.ui.component.button
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,12 +21,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import org.gaziz.birgram.core.ui.icon.arrowDownwardAlt
 import org.gaziz.birgram.core.ui.theme.BirGramTheme
 
@@ -73,7 +81,7 @@ fun ScrollDownButton(
 
 @Preview
 @Composable
-fun ScrollDownBtnPrv(){
+fun ScrollDownButtonPreview(){
     BirGramTheme(true) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -83,6 +91,34 @@ fun ScrollDownBtnPrv(){
             ScrollDownButton(
                 {},
                 1
+            )
+        }
+    }
+}
+
+@Composable
+fun ScrollDownButtonWrapper(
+    visible: Boolean,
+    unreadCount: Int?,
+    onClick: suspend () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 8.dp, vertical = 12.dp),
+        contentAlignment = Alignment.BottomEnd
+    ) {
+        AnimatedVisibility(
+            visible = visible,
+            enter = slideInVertically(tween()) { it } + scaleIn(),
+            exit = slideOutVertically(tween()) { it } + scaleOut()
+        ) {
+            val scope = rememberCoroutineScope()
+            ScrollDownButton(
+                onClick = {
+                    scope.launch { onClick() }
+                },
+                unreadCount = unreadCount
             )
         }
     }

@@ -87,8 +87,7 @@ class ChatViewModel @Inject constructor(
             null
         )
 
-    fun getMessagesById(): StateFlow<Map<Long, MessageUiState>> {
-        return combine(
+    val messagesById: StateFlow<Map<Long, MessageUiState>> =  combine(
             getChatMessagesById(chatId),
             messageService.messageProperties
         ) { messagesById, propertiesById ->
@@ -102,7 +101,7 @@ class ChatViewModel @Inject constructor(
                 SharingStarted.Eagerly,
                 emptyMap()
             )
-    }
+
     val messages: StateFlow<Map<String, List<MessageUiState>>> =
         combine(
             getChatMessagesByDate(chatId),
