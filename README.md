@@ -46,7 +46,9 @@ The project is a personal/learning build focused on:
 - Archived chats
 - Paginated message history
 - **Sending:** plain text messages, with per-chat draft saving
+- **Message actions:** long-press menu with **Copy text** and **Delete message** (with an "also delete for …" option when deleting for everyone is allowed)
 - **Viewing:** rich rendering and download of photos, videos, voice & video messages, documents, and stickers, with in-app playback for audio/video via Media3 (ExoPlayer)
+- Forwarded messages are displayed with a "Forwarded from" header
 
 ### 🔍 Search
 - Fast local (on-device) chat search and filtering
@@ -58,6 +60,7 @@ The project is a personal/learning build focused on:
 - Type-safe navigation (Navigation Compose + Kotlin Serialization routes)
 
 ### 🧭 Not yet implemented
+- Forwarding, replying to, and editing messages
 - Sending media (photos/files/voice messages)
 - Reactions, stickers picker, calls, stories
 - These are tracked in the [Roadmap](#-roadmap) below.
@@ -66,7 +69,7 @@ The project is a personal/learning build focused on:
 
 ## 🏗 Architecture
 
-BirGram is modularized into 9 Gradle modules split across app, feature, and core layers:
+BirGram is modularized into 10 Gradle modules split across app, feature, and core layers:
 
 ```text
 BirGram
@@ -93,8 +96,12 @@ BirGram
 │   │   └── updaters/          # TDLib update → state reducers
 │   └── di/                    # Hilt modules exposing each service
 │
+├── :core:telegram:ui          → org.gaziz.birgram.core.telegram.ui
+│   └── Telegram-aware UI layer: avatar & chat-type components,
+│       avatar providers, domain → UI-state mappers
+│
 ├── :core:ui                   → org.gaziz.birgram.core.ui
-│   └── Shared Material 3 components, theme, custom vector icons, avatar & sender use cases
+│   └── Shared Material 3 theme and custom vector icons
 │
 ├── :core:navigation           → org.gaziz.birgram.core.navigation
 │   └── Type-safe navigation routes (Navigation Compose + Kotlin Serialization)
@@ -162,7 +169,7 @@ BirGram needs its own Telegram API credentials to talk to TDLib:
 ### Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/BirGram.git
+git clone https://github.com/GazizVR/BirGram.git
 cd BirGram
 ```
 
@@ -195,13 +202,14 @@ Debug builds are intended for development and include extra runtime checks, debu
 
 ## 🗺 Roadmap
 
+- ↪️ Forward messages
+- 💬 Reply to messages
+- ✏️ Edit messages
 - 📤 Sending media (photos, files, voice messages)
 - 😀 Message reactions
 - 🎭 Sticker picker
 - 📸 Stories
 - 📞 Voice & video calls
-- 📱 Tablet-optimized layouts
-- ⌚ Wear OS support
 
 ---
 
